@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Livewire\UsersWire;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -18,5 +20,16 @@ Route::get('/', function () {
 });
 
 
+
+
+
 require __DIR__.'/auth.php';
+
+
+// ADMIN INTERFACE
+
+Route::get('/admin/users', UsersWire::class);
+// Route::get('/admin/roles', RolesWire::class);
+// Route::get('/admin/permissions', PermissionsWire::class);
+
 

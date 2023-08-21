@@ -15,7 +15,7 @@
         @include('components.layouts.pdm-navbar')
 
         {{ $slot }}
-    
+
         @include('components.layouts.pdm-footer')
     </body>
 </html>

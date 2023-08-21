@@ -35,26 +35,24 @@
 
 
 
-                {{-- <div class="navbar-item has-dropdown is-hoverable">
+                <div class="navbar-item has-dropdown is-hoverable">
 
                     <a class="navbar-link">
                         <span class="icon has-text-warning">
-                            <x-carbon-letter-pp />
+                            <x-carbon-letter-aa />
                         </span>
-                        <span class="ml-2">Projects</span>
+                        <span class="ml-2">Admin</span>
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a href="/projects" class="navbar-item">Projects List</a>
-                        <a href="/endproducts" class="navbar-item">Project > End Products</a>
-                        <a href="/dgates" class="navbar-item">Project > Decision Gates</a>
-                        <a href="/phases" class="navbar-item">Project > Project Phases</a>
-                        <a href="/witness" class="navbar-item">Project > Witnesses</a>
+                        <a href="/admin/users" class="navbar-item">Users</a>
+                        <a href="/endproducts" class="navbar-item">Roles</a>
+                        <a href="/dgates" class="navbar-item">Permissions</a>
 
                     </div>
-                </div> --}}
+                </div>
 
-                <a href="/admin/users" class="navbar-item icon-text">
+                {{-- <a href="/admin/users" class="navbar-item icon-text">
                     <span class="icon has-text-warning">
                         <x-carbon-group-access />
                     </span>
@@ -73,7 +71,7 @@
                         <x-carbon-add-comment />
                     </span>
                     <span>Permissions</span>
-                </a>
+                </a> --}}
 
 
 

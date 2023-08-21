@@ -13,7 +13,7 @@ return [
         "subtitle" => "List of all Users",
         "addButton" => [
             "text"=>"Add User",
-            "route"=>"/admin/user/form"
+            "route"=>"/admin/users/form"
         ],
         "filterText" => "Search ...",
         "listCaption" => false,
@@ -110,6 +110,13 @@ return [
             "label" => "E-Mail",
             "name" => "email",
             "placeholder" => "Enter e-mail",
+            "value" => ""
+        ],
+
+        "remarks" => [
+            "label" => "Remarks",
+            "name" => "remarks",
+            "placeholder" => "notes ...",
             "value" => ""
         ]
     ]

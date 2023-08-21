@@ -52,7 +52,7 @@
             {{-- @if (isset($params['roles']['w']))
             @role($params['roles']['w']) --}}
                 <div class="level-item  has-text-centered">
-                    <a href="{{ $configs['list']['actions']['w'] }}" class="button is-dark">
+                    <a href="{{ $configs['list']['addButton']['route'] }}" class="button is-dark">
                         <span class="icon is-small"><x-carbon-add /></span>
                         <span>{{ $configs['list']['addButton']['text'] }}</span>
                     </a>
@@ -224,7 +224,7 @@
     </table>
 
 
-    {{ $items->links('pagination.bulma') }}
+    {{ $items->links('components.pagination.bulma') }}
 
     @else
         <div class="notification is-warning is-light">{{ $configs['list']['noitem'] }}</div>

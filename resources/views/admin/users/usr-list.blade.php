@@ -1,10 +1,10 @@
-<x-pdm-layout title="jskfjsdfd">
+<x-pdm-layout title="Users">
+    
 
     <section class="section container">
 
-        {{-- @livewire('datatable', ['model' => 'User']) --}}
+        @livewire('datatable', ['model' => 'User'])
 
-        dd
 
     </section>
 

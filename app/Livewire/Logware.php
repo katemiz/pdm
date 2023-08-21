@@ -42,6 +42,13 @@ class Logware extends Component
 
     public function render()
     {
+
+
+        if (request('action')) {
+            $this->action = request('action');
+        }
+
+        //dd($this->action);
         return view('admin.log-wire');
     }
 

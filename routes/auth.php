@@ -14,7 +14,6 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Logware;
 
 Route::middleware('guest')->group(function () {
-
     Route::get('/logware/{action?}', function () {
         return view('admin.log-ui');
     });

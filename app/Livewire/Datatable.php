@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -65,10 +65,6 @@ class Datatable extends Component
                 break;
 
 
-
-            default:
-                # code...
-                break;
         }
 
 

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Livewire\UsersWire;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +28,13 @@ require __DIR__.'/auth.php';
 
 // ADMIN INTERFACE
 
-Route::get('/admin/users', UsersWire::class);
+Route::get('/admin/users', function () {
+    return view('admin.users.usr-list');
+});
+
+Route::get('/admin/users/form', [UserController::class,'form']);
+Route::post('/admin/users/store/{id?}', [UserController::class,'store']);
+
 // Route::get('/admin/roles', RolesWire::class);
 // Route::get('/admin/permissions', PermissionsWire::class);
 

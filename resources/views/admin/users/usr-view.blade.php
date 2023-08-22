@@ -1,4 +1,4 @@
-<x-layout>
+<x-pdm-layout>
 
 
     <script>
@@ -26,10 +26,10 @@
     <div class="section container">
 
         <header class="mb-6">
-            <h1 class="title has-text-weight-light is-size-1">{{ config('endproducts.list.title') }}</h1>
+            <h1 class="title has-text-weight-light is-size-1">{{ config('users.list.title') }}</h1>
 
-            @if ( config('endproducts.list.title') )
-                <h2 class="subtitle has-text-weight-light">{{ config('endproducts.list.title') }}</h2>
+            @if ( config('users.list.title') )
+                <h2 class="subtitle has-text-weight-light">{{ config('users.list.title') }}</h2>
             @endif
         </header>
 
@@ -68,14 +68,14 @@
 
                                 @if ($canEdit)
                                 <p class="control ml-1">
-                                    <a href="/endproducts-form/{{ $ep->id }}" class="button is-link is-light is-small">
+                                    <a href="/endproducts-form/{{ $usr->id }}" class="button is-link is-light is-small">
                                       <span class="icon is-small"><x-carbon-edit /></span>
                                       <span>Edit</span>
                                     </a>
                                 </p>
 
                                 <p class="control ml-1">
-                                    <button class="button is-danger is-light is-small" wire:click="deleteConfirm({{ $ep->id }})">
+                                    <button class="button is-danger is-light is-small" wire:click="deleteConfirm({{ $usr->id }})">
                                         <span class="icon is-small"><x-carbon-trash-can /></span>
                                         <span>Delete</span>
                                     </button>
@@ -92,9 +92,9 @@
                         <div class="column has-text-right">
                             <div class="field has-addons is-pulled-right">
 
-                                @if ($ep->status === 'wip')
+                                @if ($usr->status === 'wip')
                                     <p class="control ml-1">
-                                    <button class="button is-dark is-light is-small" wire:click="startRelease({{ $ep->id }})">
+                                    <button class="button is-dark is-light is-small" wire:click="startRelease({{ $usr->id }})">
                                         <span class="icon has-text-warning is-small"><x-carbon-stamp /></span>
                                         <span>Release</span>
                                     </button>
@@ -102,7 +102,7 @@
                                 @endif
         
 
-                                @if ($ep->status === 'released')
+                                @if ($usr->status === 'released')
                                 <p class="control ml-1">
                                 <button class="button is-dark is-light is-small" wire:click="addArticle()">
                                     <span class="icon is-small"><x-carbon-change-catalog /></span>
@@ -110,14 +110,10 @@
                                 </button>
                                 </p>
                                 @endif
-
-        
                             </div>
                         </div>
         
                     </div>
-        
-        
         
                 </div>
         
@@ -128,17 +124,14 @@
                       </figure>
                     </div>
                     <div class="media-content">
-                      <p class="title is-4"> {{ $ep->number }}-{{ sprintf('%02d', $ep->version) }}</p>
-                      <p class="subtitle is-6">{{ $ep->description}}</p>
+                      <p class="title is-4"> {{ $usr->number }}-{{ sprintf('%02d', $usr->version) }}</p>
+                      <p class="subtitle is-6">{{ $usr->description}}</p>
                     </div>
                 </div>
         
-        
-
-
-                @if ( strlen($ep->remarks) > 0)
+                @if ( strlen($usr->remarks) > 0)
                 <div class="notification">
-                    {!! $ep->remarks !!}
+                    {!! $usr->remarks !!}
                 </div>
                 @endif
 
@@ -163,56 +156,21 @@
 
                 <div class="field">
 
-                    <label class="label" for="description">
-                        3D Customer Model (in STEP format)
-                    </label>
+                    <label class="label" for="description">Photo</label>
                 
-                    @livewire('attachment-component', [
-                        'model' => 'EndProduct',
-                        'modelId' => $ep ? $ep->id : '' ,
+                    {{-- @livewire('attachment-component', [
+                        'model' => 'User',
+                        'modelId' => $usr ? $usr->id : '' ,
                         'isMultiple'=> false,
-                        'tag' => '3DShell',
-                        'canEdit' => $canEdit], '3DShell')
+                        'tag' => 'Photo',
+                        'canEdit' => $canEdit], 'Photo') --}}
                 </div>
-
-
-                <div class="field">
-
-                    <label class="label" for="description">
-                        Customer Drawing (in PDF format)
-                    </label>
-                
-                    @livewire('attachment-component', [
-                        'model' => 'EndProduct',
-                        'modelId' => $ep ? $ep->id : '' ,
-                        'isMultiple'=> false,
-                        'tag' => 'CustomerData',
-                        'canEdit' => $canEdit], 'CustomerData')
-                </div>
-        
-        
-        
             </div>
         
-        
-        
-        
-        
         </div>
-
-
-
-
-
-
-
-
-
-
-
 </div>
 
-</x-layout>
+</x-pdm-layout>
 
 
 

@@ -32,10 +32,10 @@ div {
 
     <p>{{ $mailData['greeting'] }}</p>
     <p>{{ $mailData['body'] }}</p>
+    <h2>{{ $mailData['password'] }}</h2>
     <p>{{ $mailData['signature'] }}</p>
 
-
-    <p>Thank you</p>
+    <p><a href="{{  url('') }}">{{  config('appconstants.app.name') }}</a></p>
 
 </body>
 

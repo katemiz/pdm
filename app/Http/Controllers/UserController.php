@@ -13,22 +13,22 @@ use Mail;
 use App\Mail\AppMail;
 
 use App\Models\User;
+use App\Models\Attachment;
+
 
 class UserController extends Controller
 {
     public function view()
     {
-        $ep = EndProduct::find(request('id'));
+        $usr = User::find(request('id'));
 
-        $attachments = Attachment::where('model_name','EndProduct')->where('model_item_id',request('id'))->get();
+        //$attachments = Attachment::where('model_name','EndProduct')->where('model_item_id',request('id'))->get();
 
 
-        return view('end_product.ep-view',[
+        return view('admin.users.usr-view',[
 
-            'ep' => $ep,
-            'attachments' => $attachments,
+            'usr' => $usr,
             'canEdit' => true
-
         ]);
 
 
@@ -110,13 +110,13 @@ class UserController extends Controller
             $props['password'] = Str::password(6);
 
 
-            $this->mailUserCreated($props);
 
-
-            dd($props);
             // create
             $user = User::create($props);
             $id = $user->id;
+
+            $this->mailUserCreated($props);
+
         }
 
         // ROLES
@@ -189,7 +189,7 @@ class UserController extends Controller
 
         Mail::to($props['email'])->send(new AppMail($mData));
 
-        dd("Email is sent successfully 2222.");
+        //dd("Email is sent successfully 2222.");
     }
 
 

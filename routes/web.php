@@ -34,6 +34,9 @@ Route::get('/admin/users', function () {
 
 Route::get('/admin/users/form', [UserController::class,'form']);
 Route::post('/admin/users/store/{id?}', [UserController::class,'store']);
+Route::get('/admin/users/view/{id}', [UserController::class,'view']);
+
+
 
 // Route::get('/admin/roles', RolesWire::class);
 // Route::get('/admin/permissions', PermissionsWire::class);

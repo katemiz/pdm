@@ -3,9 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+
+use Mail;
+use App\Mail\AppMail;
 
 use App\Models\User;
 
@@ -15,7 +20,7 @@ class UserController extends Controller
     {
         $ep = EndProduct::find(request('id'));
 
-        $attachments = Attachment::where('model_name','EndProduct')->where('model_item_id',request('id'))->get(); 
+        $attachments = Attachment::where('model_name','EndProduct')->where('model_item_id',request('id'))->get();
 
 
         return view('end_product.ep-view',[
@@ -75,9 +80,9 @@ class UserController extends Controller
         if ( isset($request->id) && !empty($request->id)) {
 
             $validated = $request->validate([
-                'name' => ['required|min:2'],
-                'lastname' => ['required|min:2'],
-                'email' => ['required|email'],
+                'name' => ['required','min:2'],
+                'lastname' => ['required','min:2'],
+                'email' => ['required','email'],
             ]);
 
             // $props['user_id'] = Auth::id();
@@ -94,7 +99,7 @@ class UserController extends Controller
             $validated = $request->validate([
                 'name' => ['required'],
                 'lastname' => ['required'],
-                'email' => ['required|email', 'unique:users'],
+                'email' => ['required','email','unique:users'],
             ]);
 
             // $props['user_id'] = Auth::id();
@@ -102,6 +107,13 @@ class UserController extends Controller
             $props['lastname'] = $request->lastname;
             $props['email'] = $request->email;
 
+            $props['password'] = Str::password(6);
+
+
+            $this->mailUserCreated($props);
+
+
+            dd($props);
             // create
             $user = User::create($props);
             $id = $user->id;
@@ -145,14 +157,52 @@ class UserController extends Controller
 
 
 
-    public function getProductNo() {
+    // public function getProductNo() {
 
-        $counter = Counter::find(1111);
-        $new_no = $counter->product_no+1;
-        $counter->update(['product_no' => $new_no]);         // Update Counter
+    //     $counter = Counter::find(1111);
+    //     $new_no = $counter->product_no+1;
+    //     $counter->update(['product_no' => $new_no]);         // Update Counter
 
-        return $new_no;
+    //     return $new_no;
+    // }
+
+
+
+
+
+    public function mailUserCreated($props)
+    {
+        $mData = [
+            'from_name' => config('appconstants.app.name'),
+            'blade' => 'emails.simple',
+            'title' => 'New User Created / Yeni Kullanıcı Hesabı',
+            'subject' => 'New User Created / Yeni Kullanıcı Hesabı',
+            'greeting' => 'Dear '.$props['name'].' '.$props['lastname'],
+            'salute' => 'Best Regards',
+            'body' => 'Your account has been created with the following password.',
+            'signature' => 'PDM - Product Data management',
+            'password' => $props['password']
+        ];
+
+
+
+
+        Mail::to($props['email'])->send(new AppMail($mData));
+
+        dd("Email is sent successfully 2222.");
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

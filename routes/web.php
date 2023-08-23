@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
@@ -64,6 +66,24 @@ Route::post('/admin/permissions/store/{id?}', [PermissionController::class,'stor
 Route::get('/admin/permissions/view/{id}', [PermissionController::class,'view']);
 Route::get('/admin/permissions/delete/{id}', [PermissionController::class, 'delete']);
 
+// COMPANIES
+Route::get('/admin/companies', function () {
+    return view('admin.companies.company-list');
+});
 
+Route::get('/admin/companies/form/{id?}', [CompanyController::class,'form']);
+Route::post('/admin/companies/store/{id?}', [CompanyController::class,'store']);
+Route::get('/admin/companies/view/{id}', [CompanyController::class,'view']);
+Route::get('/admin/companies/delete/{id}', [CompanyController::class, 'delete']);
+
+// PROJECTS
+Route::get('/admin/projects', function () {
+    return view('admin.projects.project-list');
+});
+
+Route::get('/admin/projects/form/{id?}', [ProjectController::class,'form']);
+Route::post('/admin/projects/store/{id?}', [ProjectController::class,'store']);
+Route::get('/admin/projects/view/{id}', [ProjectController::class,'view']);
+Route::get('/admin/projects/delete/{id}', [ProjectController::class, 'delete']);
 
 

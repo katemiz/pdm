@@ -11,17 +11,17 @@ use Mail;
 use App\Mail\AppMail;
 
 use App\Models\User;
-use App\Models\Company;
+use App\Models\Project;
 
-class CompanyController extends Controller
+class ProjectController extends Controller
 {
     public function view()
     {
-        $company = Company::find(request('id'));
+        $project = Project::find(request('id'));
         //$attachments = Attachment::where('model_name','EndProduct')->where('model_item_id',request('id'))->get();
 
-        return view('admin.companies.company-view',[
-            'company' => $company,
+        return view('admin.projects.project-view',[
+            'project' => $project,
             'canEdit' => true
         ]);
     }
@@ -31,15 +31,15 @@ class CompanyController extends Controller
 
     public function form()
     {
-        $company = false;
+        $project = false;
 
         if (request('id')) {
-            $company = Company::find(request('id'));
+            $project = Project::find(request('id'));
             $action = 'update';
         }
 
-        return view('admin.companies.company-form', [
-            'company' => $company,
+        return view('admin.projects.project-form', [
+            'project' => $project,
         ]);
     }
 
@@ -54,30 +54,32 @@ class CompanyController extends Controller
         $validated = $request->validate([
             'shortname' => ['required','min:2'],
             'fullname' => ['required','min:10'],
+
         ]);
 
         $props['shortname'] = $validated['shortname'];
         $props['fullname'] = $validated['fullname'];
         $props['remarks'] = $request->input('remarks');
 
+
         if ( isset($request->id) && !empty($request->id)) {
             // update
-            Company::find($request->id)->update($props);
-            $company = Company::find($request->id);
+            Project::find($request->id)->update($props);
+            $project = Project::find($request->id);
             $id = $request->id;
         } else {
             // create
-            $company = Company::create($props);
-            $id = $company->id;
+            $project = Project::create($props);
+            $id = $project->id;
         }
 
-        return redirect('/admin/companies/view/'.$id);
+        return redirect('/admin/projects/view/'.$id);
     }
 
     public function delete($id) {
-        Company::find($id)->delete();
-        session()->flash('message','Company deleted successfully!!');
-        return redirect('/admin/companies');
+        Project::find($id)->delete();
+        session()->flash('message','Project deleted successfully!!');
+        return redirect('/admin/projects');
     }
 
 }

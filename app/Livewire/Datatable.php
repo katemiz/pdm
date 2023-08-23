@@ -7,7 +7,9 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 
 use App\Models\Article;
+use App\Models\Company;
 use App\Models\EndProduct;
+use App\Models\Project;
 use App\Models\User;
 
 use Spatie\Permission\Models\Role;
@@ -84,6 +86,26 @@ class Datatable extends Component
                 ->paginate(env('RESULTS_PER_PAGE'));
                 break;
 
+            case 'Company':
+                $this->sortField = 'shortname';
+                $this->configs = config('companies');
+
+                $items = Company::where('shortname', 'LIKE', "%".$this->search."%")
+                ->orWhere('fullname', 'LIKE', "%".$this->search."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+                break;
+
+
+            case 'Project':
+                $this->sortField = 'shortname';
+                $this->configs = config('projects');
+
+                $items = Project::where('shortname', 'LIKE', "%".$this->search."%")
+                ->orWhere('fullname', 'LIKE', "%".$this->search."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+                break;
 
 
         }
@@ -132,6 +154,17 @@ class Datatable extends Component
                 Permission::find($this->idItem)->delete();
                 session()->flash('message','Permission deleted successfully!!');
                 break;
+
+            case 'Company':
+                Company::find($this->idItem)->delete();
+                session()->flash('message','Company deleted successfully!!');
+                break;
+
+            case 'Project':
+                Project::find($this->idItem)->delete();
+                session()->flash('message','Project deleted successfully!!');
+                break;
+
 
         }
 

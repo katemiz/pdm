@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('companies', function (Blueprint $table) {
             $table->id();
+            $table->string('shortname');
+            $table->string('fullname');
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
     }

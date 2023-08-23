@@ -30,18 +30,12 @@
         @csrf
 
 
-        @if ($user)
-        <div class="title">
-            {{ $user->number }}-{{ sprintf('%02d', $user->version) }}
-        </div>
-        @endif
-
         <div class="field">
 
             <label class="label" for="name">Name</label>
-        
+
             <div class="control has-icons-right">
-        
+
                 <input
                     class="input"
                     name="name"
@@ -59,9 +53,9 @@
         <div class="field">
 
             <label class="label" for="lastname">Lastname</label>
-        
+
             <div class="control has-icons-right">
-        
+
                 <input
                     class="input"
                     name="lastname"
@@ -81,9 +75,9 @@
         <div class="field">
 
             <label class="label" for="email">E-Mail</label>
-        
+
             <div class="control has-icons-right">
-        
+
                 <input
                     class="input"
                     name="email"
@@ -106,24 +100,24 @@
 
             <div class="field">
                 <label class="label">User Roles</label>
-            
+
                 <div class="control">
 
                     @if ( count($roles) > 0)
-                    
+
                     @foreach ($roles as $role)
-        
+
                         <label class="checkbox is-block">
-                            <input type="checkbox" name="role{{$role->id}}" value="{{$role->id}}" 
+                            <input type="checkbox" name="role{{$role->id}}" value="{{$role->id}}"
                             @checked(in_array($role->id,$available_usr_roles))> {{ $role->name }}
                         </label>
-        
+
                     @endforeach
-        
-                    @else  
+
+                    @else
                         <p>{{ config('roles.list.noitem') }}</p>
-                    @endif                                       
-                                
+                    @endif
+
                 </div>
             </div>
 
@@ -134,24 +128,24 @@
 
                 <div class="field">
                     <label class="label">User Permissions</label>
-                
+
                     <div class="control">
-                
+
                         @if ( count($permissions) > 0)
-                    
+
                         @foreach ($permissions as $perm)
-            
+
                             <label class="checkbox is-block">
-                                <input type="checkbox" name="perm{{$perm->id}}" value="{{$perm->id}}" 
+                                <input type="checkbox" name="perm{{$perm->id}}" value="{{$perm->id}}"
                                 @checked(in_array($perm->id,$available_usr_perms))> {{ $perm->name }}
                             </label>
-            
+
                         @endforeach
-            
-                        @else  
+
+                        @else
                             <p>{{ config('permissions.list.noitem') }}</p>
-                        @endif          
-                                    
+                        @endif
+
                     </div>
                 </div>
 
@@ -166,7 +160,7 @@
 
 
 
-        
+
         <div class="buttons is-right">
             @if ($user)
             <button class="button is-dark">{{ config('users.update.submitText') }}</button>
@@ -174,7 +168,7 @@
             <button class="button is-dark">{{ config('users.create.submitText') }}</button>
             @endif
         </div>
-    
+
         </form>
 
 

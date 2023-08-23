@@ -77,17 +77,21 @@ class UserController extends Controller
     {
         $id = false;
 
+        $validated = $request->validate([
+            'name' => ['required','min:2'],
+            'lastname' => ['required','min:2'],
+        ]);
+
+        $props['name'] = $request->name;
+        $props['lastname'] = $request->lastname;
+        $props['remarks'] = $request->input('remarks');
+
         if ( isset($request->id) && !empty($request->id)) {
 
             $validated = $request->validate([
-                'name' => ['required','min:2'],
-                'lastname' => ['required','min:2'],
                 'email' => ['required','email'],
             ]);
 
-            // $props['user_id'] = Auth::id();
-            $props['name'] = $request->name;
-            $props['lastname'] = $request->lastname;
             $props['email'] = $request->email;
 
             // update
@@ -97,26 +101,17 @@ class UserController extends Controller
         } else {
 
             $validated = $request->validate([
-                'name' => ['required'],
-                'lastname' => ['required'],
                 'email' => ['required','email','unique:users'],
             ]);
 
-            // $props['user_id'] = Auth::id();
-            $props['name'] = $request->name;
-            $props['lastname'] = $request->lastname;
             $props['email'] = $request->email;
-
-            $props['password'] = Str::password(6);
-
-
+            $props['password'] = Str::password(env('PASSWORD_LENGTH'));
 
             // create
             $user = User::create($props);
             $id = $user->id;
 
             $this->mailUserCreated($props);
-
         }
 
         // ROLES
@@ -166,6 +161,11 @@ class UserController extends Controller
     //     return $new_no;
     // }
 
+    public function delete($id) {
+        User::find($id)->delete();
+        session()->flash('message','User deleted successfully!!');
+        return redirect('/admin/users');
+    }
 
 
 
@@ -183,9 +183,6 @@ class UserController extends Controller
             'signature' => 'PDM - Product Data management',
             'password' => $props['password']
         ];
-
-
-
 
         Mail::to($props['email'])->send(new AppMail($mData));
 

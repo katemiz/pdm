@@ -44,6 +44,11 @@
         @endif
     </header>
 
+
+    @if(session('message'))
+    <div class="notification is-info is-light">{{ session('message') }}</div>
+    @endif
+
     <nav class="level my-6">
 
         <!-- Left side -->
@@ -169,7 +174,7 @@
 
                         @switch($act)
                             @case('r')
-                                <a href="{{ $route}}/{{ $record->id}}">
+                                <a href="{{ $route}}{{ $record->id}}">
                                 <span class="icon"><x-carbon-view/></span>
                                 </a>
                                 @break

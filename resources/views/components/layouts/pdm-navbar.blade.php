@@ -46,9 +46,10 @@
 
                     <div class="navbar-dropdown">
                         <a href="/admin/users" class="navbar-item">Users</a>
-                        <a href="/endproducts" class="navbar-item">Roles</a>
-                        <a href="/dgates" class="navbar-item">Permissions</a>
-
+                        <a href="/admin/roles" class="navbar-item">Roles</a>
+                        <a href="/admin/permissions" class="navbar-item">Permissions</a>
+                        <a href="/admin/companies" class="navbar-item">Companies</a>
+                        <a href="/admin/projects" class="navbar-item">Projects</a>
                     </div>
                 </div>
 

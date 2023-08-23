@@ -10,6 +10,8 @@ use App\Models\Article;
 use App\Models\EndProduct;
 use App\Models\User;
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 
 class Datatable extends Component
@@ -64,6 +66,25 @@ class Datatable extends Component
                 ->paginate(env('RESULTS_PER_PAGE'));
                 break;
 
+            case 'Role':
+                $this->sortField = 'name';
+                $this->configs = config('roles');
+
+                $items = Role::where('name', 'LIKE', "%".$this->search."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+                break;
+
+            case 'Permission':
+                $this->sortField = 'name';
+                $this->configs = config('permissions');
+
+                $items = Permission::where('name', 'LIKE', "%".$this->search."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+                break;
+
+
 
         }
 
@@ -87,7 +108,6 @@ class Datatable extends Component
     #[On('runDelete11')]
     public function deleteItem() {
 
-
         switch ($this->model) {
 
             case 'Article':
@@ -100,11 +120,19 @@ class Datatable extends Component
 
             case 'User':
                 User::find($this->idItem)->delete();
+                session()->flash('message','User deleted successfully!!');
                 break;
 
-            default:
-                # code...
+            case 'Role':
+                Role::find($this->idItem)->delete();
+                session()->flash('message','Role deleted successfully!!');
                 break;
+
+            case 'Permission':
+                Permission::find($this->idItem)->delete();
+                session()->flash('message','Permission deleted successfully!!');
+                break;
+
         }
 
 

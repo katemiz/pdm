@@ -53,6 +53,28 @@
                     </div>
                 </div>
 
+
+                <div class="navbar-item has-dropdown is-hoverable">
+
+                    <a class="navbar-link">
+                        <span class="icon has-text-warning">
+                            <x-carbon-letter-aa />
+                        </span>
+                        <span class="ml-2">Requests</span>
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="/cr" class="navbar-item">DT - CR</a>
+                        <a href="/admin/roles" class="navbar-item">Roles</a>
+                        <a href="/admin/permissions" class="navbar-item">Permissions</a>
+                        <a href="/admin/companies" class="navbar-item">Companies</a>
+                        <a href="/admin/projects" class="navbar-item">Projects</a>
+                    </div>
+                </div>
+
+
+
+
                 {{-- <a href="/admin/users" class="navbar-item icon-text">
                     <span class="icon has-text-warning">
                         <x-carbon-group-access />

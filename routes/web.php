@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\CrController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
@@ -24,66 +25,83 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-
-
-
 require __DIR__.'/auth.php';
-
 
 /*
 ADMIN
 INTERFACE
 */
 
-// USERS
-Route::get('/admin/users', function () {
-    return view('admin.users.usr-list');
+Route::middleware(['auth'])->group(function () {
+
+    // USERS
+    Route::get('/admin/users', function () {
+        return view('admin.users.usr-list');
+    });
+
+    Route::get('/admin/users/form/{id?}', [UserController::class,'form']);
+    Route::post('/admin/users/store/{id?}', [UserController::class,'store']);
+    Route::get('/admin/users/view/{id}', [UserController::class,'view']);
+    Route::get('/admin/users/delete/{id}', [UserController::class, 'delete']);
+
+    // ROLES
+    Route::get('/admin/roles', function () {
+        return view('admin.roles.role-list');
+    });
+
+    Route::get('/admin/roles/form/{id?}', [RoleController::class,'form']);
+    Route::post('/admin/roles/store/{id?}', [RoleController::class,'store']);
+    Route::get('/admin/roles/view/{id}', [RoleController::class,'view']);
+    Route::get('/admin/roles/delete/{id}', [RoleController::class, 'delete']);
+
+    // PERMISSIONS
+    Route::get('/admin/permissions', function () {
+        return view('admin.permissions.permission-list');
+    });
+
+    Route::get('/admin/permissions/form/{id?}', [PermissionController::class,'form']);
+    Route::post('/admin/permissions/store/{id?}', [PermissionController::class,'store']);
+    Route::get('/admin/permissions/view/{id}', [PermissionController::class,'view']);
+    Route::get('/admin/permissions/delete/{id}', [PermissionController::class, 'delete']);
+
+    // COMPANIES
+    Route::get('/admin/companies', function () {
+        return view('admin.companies.company-list');
+    });
+
+    Route::get('/admin/companies/form/{id?}', [CompanyController::class,'form']);
+    Route::post('/admin/companies/store/{id?}', [CompanyController::class,'store']);
+    Route::get('/admin/companies/view/{id}', [CompanyController::class,'view']);
+    Route::get('/admin/companies/delete/{id}', [CompanyController::class, 'delete']);
+
+    // PROJECTS
+    Route::get('/admin/projects', function () {
+        return view('admin.projects.project-list');
+    });
+
+    Route::get('/admin/projects/form/{id?}', [ProjectController::class,'form']);
+    Route::post('/admin/projects/store/{id?}', [ProjectController::class,'store']);
+    Route::get('/admin/projects/view/{id}', [ProjectController::class,'view']);
+    Route::get('/admin/projects/delete/{id}', [ProjectController::class, 'delete']);
 });
 
-Route::get('/admin/users/form/{id?}', [UserController::class,'form']);
-Route::post('/admin/users/store/{id?}', [UserController::class,'store']);
-Route::get('/admin/users/view/{id}', [UserController::class,'view']);
-Route::get('/admin/users/delete/{id}', [UserController::class, 'delete']);
 
-// ROLES
-Route::get('/admin/roles', function () {
-    return view('admin.roles.role-list');
+
+
+
+/*
+PDM FUNCTIONS
+*/
+
+Route::middleware(['auth'])->group(function () {
+
+    // PROJECTS
+    Route::get('/cr', function () {
+        return view('talep.cr.cr-list');
+    });
+
+    Route::get('/cr/form/{id?}', [CrController::class,'form']);
+    Route::post('/cr/store/{id?}', [CrController::class,'store']);
+    Route::get('/cr/view/{id}', [CrController::class,'view']);
+    Route::get('/cr/delete/{id}', [CrController::class, 'delete']);
 });
-
-Route::get('/admin/roles/form/{id?}', [RoleController::class,'form']);
-Route::post('/admin/roles/store/{id?}', [RoleController::class,'store']);
-Route::get('/admin/roles/view/{id}', [RoleController::class,'view']);
-Route::get('/admin/roles/delete/{id}', [RoleController::class, 'delete']);
-
-// PERMISSIONS
-Route::get('/admin/permissions', function () {
-    return view('admin.permissions.permission-list');
-});
-
-Route::get('/admin/permissions/form/{id?}', [PermissionController::class,'form']);
-Route::post('/admin/permissions/store/{id?}', [PermissionController::class,'store']);
-Route::get('/admin/permissions/view/{id}', [PermissionController::class,'view']);
-Route::get('/admin/permissions/delete/{id}', [PermissionController::class, 'delete']);
-
-// COMPANIES
-Route::get('/admin/companies', function () {
-    return view('admin.companies.company-list');
-});
-
-Route::get('/admin/companies/form/{id?}', [CompanyController::class,'form']);
-Route::post('/admin/companies/store/{id?}', [CompanyController::class,'store']);
-Route::get('/admin/companies/view/{id}', [CompanyController::class,'view']);
-Route::get('/admin/companies/delete/{id}', [CompanyController::class, 'delete']);
-
-// PROJECTS
-Route::get('/admin/projects', function () {
-    return view('admin.projects.project-list');
-});
-
-Route::get('/admin/projects/form/{id?}', [ProjectController::class,'form']);
-Route::post('/admin/projects/store/{id?}', [ProjectController::class,'store']);
-Route::get('/admin/projects/view/{id}', [ProjectController::class,'view']);
-Route::get('/admin/projects/delete/{id}', [ProjectController::class, 'delete']);
-
-

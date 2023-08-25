@@ -7,6 +7,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 
 use App\Models\Article;
+use App\Models\CR;
 use App\Models\Company;
 use App\Models\EndProduct;
 use App\Models\Project;
@@ -108,6 +109,21 @@ class Datatable extends Component
                 break;
 
 
+            case 'CR':
+                $this->sortField = 'topic';
+                $this->configs = config('crs');
+
+                $items = CR::where('topic', 'LIKE', "%".$this->search."%")
+                ->orWhere('description', 'LIKE', "%".$this->search."%")
+                ->orWhere('rej_reason_req', 'LIKE', "%".$this->search."%")
+                ->orWhere('rej_reason_eng', 'LIKE', "%".$this->search."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+                break;
+
+
+
+
         }
 
 
@@ -163,6 +179,11 @@ class Datatable extends Component
             case 'Project':
                 Project::find($this->idItem)->delete();
                 session()->flash('message','Project deleted successfully!!');
+                break;
+
+            case 'CR':
+                Project::find($this->idItem)->delete();
+                session()->flash('message','CR deleted successfully!!');
                 break;
 
 

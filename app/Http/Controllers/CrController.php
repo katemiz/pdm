@@ -52,8 +52,13 @@ class CrController extends Controller
             $action = 'update';
         }
 
+        $cr_approvers = User::permission('cr_approver')->get();
+
+        // dd($cr_approvers);
+
         return view('talep.cr.cr-form', [
             'cr' => $cr,
+            'cr_approvers' => $cr_approvers
         ]);
 
 

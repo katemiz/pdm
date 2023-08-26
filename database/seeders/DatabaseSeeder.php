@@ -31,7 +31,19 @@ class DatabaseSeeder extends Seeder
             "password" => 'admin'
         ]);
 
-        $role = Role::create(['name' => 'admin']);
+        $adminRole = Role::create(['name' => 'admin']);
         $admin->assignRole('admin');
+
+
+        $engineeringPerm = Permission::create(['name' => 'engineering']);
+        $crApproverPerm = Permission::create(['name' => 'cr_approver']);
+        $engApproverPerm = Permission::create(['name' => 'eng_approver']);
+        $engCheckerPerm = Permission::create(['name' => 'eng_checker']);
+
+
+
+
+
+        $adminRole->givePermissionTo($engineeringPerm);
     }
 }

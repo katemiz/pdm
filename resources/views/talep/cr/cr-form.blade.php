@@ -53,11 +53,11 @@
 
             <div class="control">
                 <label class="radio">
-                  <input type="radio" name="is_for_ecn" value="1" @checked( $cr->is_for_ecn )>
+                  <input type="radio" name="is_for_ecn" value="1" @checked( $cr && $cr->is_for_ecn )>
                   Yes
                 </label>
                 <label class="radio">
-                  <input type="radio" name="is_for_ecn" value="0" @checked( !$cr->is_for_ecn )>
+                  <input type="radio" name="is_for_ecn" value="0" @checked( $cr && !$cr->is_for_ecn )>
                   No
                 </label>
             </div>
@@ -69,6 +69,62 @@
         @endcan
 
         <x-editor :params="config('crs.form.description')" value="{{ $cr ? $cr->description : '' }}"/>
+
+
+
+
+
+
+        @cannot('cr_approver')
+        <div class="field">
+
+            <label class="label" for="is_new">Onaylayan / CR Request Appprover</label>
+
+            @if ( count($cr_approvers) == 0)
+
+            <div class="notification is-warning">
+                Şu anda tanımlı CR Onaylama Yetkisine sahip kimse bulunmamaktadır.
+            </div>
+                
+            @endif
+
+            @if ( count($cr_approvers) == 1)
+
+            {{ $cr_approvers }}
+                
+            @endif
+
+            @if ( count($cr_approvers) > 1)
+
+            <div class="control">
+                <div class="select">
+                    <select>
+                      <option>Select dropdown</option>
+                      <option>With options</option>
+                    </select>
+                  </div>
+            </div>
+                
+            @endif
+
+
+
+            @error('is_for_ecn')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+        @endcan
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="buttons is-right">
             @if ($cr)

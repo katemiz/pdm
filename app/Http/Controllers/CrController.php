@@ -42,26 +42,30 @@ class CrController extends Controller
     public function form()
     {
         $cr = false;
-
-        $available_usr_perms = [];
-        $available_usr_roles = [];
+        $approver = false;
 
         if (request('id')) {
-
             $cr = CR::find(request('id'));
             $action = 'update';
         }
 
-        $cr_approvers = User::permission('cr_approver')->get();
+        // Does user have CR Approver permission?
+        if ( Auth::user()->can('cr_approver') ) {
+            $approver = Auth::user();
+        } else {
+            $cr_approvers = User::permission('cr_approver')->get();
+            if ($cr_approvers->count() == 1 ) {
+                $approver = $cr_approvers['0'];
+            }
+        }
 
         // dd($cr_approvers);
 
         return view('talep.cr.cr-form', [
             'cr' => $cr,
-            'cr_approvers' => $cr_approvers
+            'cr_approvers' => $cr_approvers,
+            'cr_approver' => $approver
         ]);
-
-
     }
 
 
@@ -81,6 +85,9 @@ class CrController extends Controller
         $props['topic'] = $request->topic;
         $props['description'] = $request->input('description');
         $props['is_for_ecn'] = 0;
+
+        $props['req_app_id'] = $request->input('cr_approver');
+
 
         if ($request->input('is_for_ecn')) {
             $props['is_for_ecn'] = 1;

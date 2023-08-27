@@ -80,34 +80,30 @@
 
             <label class="label" for="is_new">Onaylayan / CR Request Appprover</label>
 
-            @if ( count($cr_approvers) == 0)
+            @if ( count($cr_approvers) > 0)
 
-            <div class="notification is-warning">
-                Şu anda tanımlı CR Onaylama Yetkisine sahip kimse bulunmamaktadır.
-            </div>
-                
+                @if ( $cr_approver )
+
+                    <span class="is-size-4">{{ $cr_approver->name }} {{ $cr_approver->lastname }}</span>
+                    <span class="is-size-6">{{ $cr_approver->email }}</span>
+
+                    <input type="hidden" name="cr_approver" id="cr_approver" value="{{ $cr_approver->id}}">
+                @else
+                    <div class="control">
+                        <div class="select">
+                            <select>
+                            <option>Select dropdown</option>
+                            <option>With options</option>
+                            </select>
+                        </div>
+                    </div>
+                @endif
+
+            @else
+                <div class="notification is-warning">
+                    Şu anda tanımlı CR Onaylama Yetkisine sahip kimse bulunmamaktadır.
+                </div>
             @endif
-
-            @if ( count($cr_approvers) == 1)
-
-            {{ $cr_approvers }}
-                
-            @endif
-
-            @if ( count($cr_approvers) > 1)
-
-            <div class="control">
-                <div class="select">
-                    <select>
-                      <option>Select dropdown</option>
-                      <option>With options</option>
-                    </select>
-                  </div>
-            </div>
-                
-            @endif
-
-
 
             @error('is_for_ecn')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
@@ -119,7 +115,12 @@
 
 
 
-
+        @livewire('attachment-component', [
+            'model' => 'CR',
+            'modelId' => '12',
+            'isMultiple'=> false,
+            'tag' => 'CR',
+            'canEdit' => false], 'CR')
 
 
 

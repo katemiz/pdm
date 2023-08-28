@@ -105,7 +105,7 @@ Route::middleware(['auth'])->group(function () {
     // });
 
     Route::get('/cr/{action?}', Cr::class);
-    
+
     // Route::get('/cr/form/{id?}', [CrController::class,'form']);
     // Route::post('/cr/store/{id?}', [CrController::class,'store']);
     // Route::get('/cr/view/{id}', [CrController::class,'view']);

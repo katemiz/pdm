@@ -7,7 +7,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 
 use App\Models\Article;
-use App\Models\CR;
+use App\Models\CRequest;
 use App\Models\Company;
 use App\Models\EndProduct;
 use App\Models\Project;
@@ -113,7 +113,7 @@ class Datatable extends Component
                 $this->sortField = 'topic';
                 $this->configs = config('crs');
 
-                $items = CR::where('topic', 'LIKE', "%".$this->search."%")
+                $items = CRequest::where('topic', 'LIKE', "%".$this->search."%")
                 ->orWhere('description', 'LIKE', "%".$this->search."%")
                 ->orWhere('rej_reason_req', 'LIKE', "%".$this->search."%")
                 ->orWhere('rej_reason_eng', 'LIKE', "%".$this->search."%")

@@ -15,7 +15,7 @@
             </header>
 
             @if ($cr)
-            <span class="tag is-dark is-large mb-6">CR-{{ $cr->id}}</span>                       
+            <span class="tag is-dark is-large mb-6">CR-{{ $cr->id}}</span>
             @endif
 
         @else
@@ -133,7 +133,12 @@
 
 
 
-
+        @livewire('ck-editor',[
+            'label' => 'Değişiklik İçeriği / CR Content',
+            'varname' => 'cr_content',
+            'placeholder' => 'Değişikliği ayrıntılı bir şekilde tarif ediniz.',
+            'content' => ''
+        ])
 
 
 

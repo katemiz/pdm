@@ -8,7 +8,7 @@
 </header>
 
 @if ($item)
-<span class="tag is-dark is-large mb-6">CR-{{ $item->id}}</span>                       
+<span class="tag is-dark is-large mb-6">CR-{{ $item->id}}</span>
 @endif
 
 {{-- <form action="{{ $constants['cu_route'] }}{{ $cr ? $cr->id : '' }}" method="POST" enctype="multipart/form-data"> --}}
@@ -60,56 +60,38 @@
 
 
 
+    @livewire('ck-editor',[
+        'label' => 'Değişiklik İçeriği / CR Content',
+        'varname' => 'cr_content',
+        'placeholder' => 'Değişikliği ayrıntılı bir şekilde tarif ediniz.',
+        'content' => ''
+    ])
 
 
 
+{{-- <script>
+    ClassicEditor
+      .create( document.querySelector('#cr_content}') )
+      .then( editor => {
+    })
+    .catch( error => {
+      console.error(error);
+    });
+</script> --}}
 
 
-
-
-
-        <div wire:ignore>
-            <textarea wire:model="message"
-                      class="min-h-fit h-48 "
-                      name="message"
-                      id="message"></textarea>
-        </div>
-
-
-
-        <div class="field">
-
-            <div class="field">
-              <label class="label">{{ $constants['form']['description']['label'] }}</label>
-              <div wire:ignore class="control">
-                <textarea class="textarea ckeditor" 
-                    id="{{ $constants['form']['description']['name'] }}" 
-                    name="{{ $constants['form']['description']['name'] }}" 
-                    placeholder="{{ $constants['form']['description']['placeholder'] }}">
-                    {!! $item ? $item->description : '' !!}
-                </textarea>
-              </div>
-            </div>
-          
-            <script>
-                ClassicEditor
-                  .create( document.querySelector('#{{ $constants['form']['description']['name'] }}') )
-                  .then( editor => {
-                })
-                .catch( error => {
-                  console.error(error);
-                });
-            </script>
-          
-            @error($constants['form']['description']['name'])
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
-          
-        </div>
-
-
-
-
+{{-- <script>
+    ClassicEditor
+        .create(document.querySelector('#cr_content'))
+        .then(editor => {
+            editor.model.document.on('change:data', () => {
+            @this.set('cr_content', editor.getData());
+            })
+        })
+        .catch(error => {
+            console.error(error);
+        });
+</script> --}}
 
 
 

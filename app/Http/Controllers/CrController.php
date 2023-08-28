@@ -13,7 +13,7 @@ use Spatie\Permission\Models\Permission;
 use Mail;
 use App\Mail\AppMail;
 
-use App\Models\CR;
+use App\Models\CRequest;
 use App\Models\User;
 use App\Models\Attachment;
 
@@ -22,7 +22,7 @@ class CrController extends Controller
 {
     public function view()
     {
-        $cr = CR::find(request('id'));
+        $cr = CRequest::find(request('id'));
 
         //$attachments = Attachment::where('model_name','EndProduct')->where('model_item_id',request('id'))->get();
 
@@ -45,7 +45,7 @@ class CrController extends Controller
         $approver = false;
 
         if (request('id')) {
-            $cr = CR::find(request('id'));
+            $cr = CRequest::find(request('id'));
             $action = 'update';
         }
 
@@ -95,13 +95,13 @@ class CrController extends Controller
 
         if ( isset($request->id) && !empty($request->id)) {
             // update
-            CR::find($request->id)->update($props);
-            $cr = CR::find($request->id);
+            CRequest::find($request->id)->update($props);
+            $cr = CRequest::find($request->id);
             $id = $cr->id;
         } else {
 
             // create
-            $cr = CR::create($props);
+            $cr = CRequest::create($props);
             $id = $cr->id;
         }
 

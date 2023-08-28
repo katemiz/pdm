@@ -28,26 +28,14 @@ return [
             ],
 
 
-            "name"=> [
-                "title" => "Name",
+            "topic"=> [
+                "title" => "CR Topic / Konu",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
-            "lastname"=> [
-                "title" => "Lastname",
-                "sortable" => true,
-                "align" => "left",
-                "direction" => "asc"
-            ],
 
-            "email"=> [
-                "title" => "E-Mail",
-                "sortable" => true,
-                "align" => "left",
-                "direction" => "asc"
-            ],
 
             "created_at"=> [
                 "title" => "Created On",

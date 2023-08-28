@@ -1,20 +1,15 @@
 <?php
 
-namespace App\Http\Livewire;
+namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Livewire\Attributes\On; 
-use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-
-use App\Models\Article;
 use App\Models\Attachment;
 
 
-class AttachmentComponent extends Component
+
+class AttachComponent extends Component
 {
     public $idAttach;
     public $model;
@@ -22,6 +17,8 @@ class AttachmentComponent extends Component
     public $isMultiple = false;
     public $tag = false;
     public $canEdit = false;
+
+    public $hasItsForm = false; // Does componenet has its own form, independently file uploads
 
     public $dosyalar = [];
 
@@ -41,7 +38,7 @@ class AttachmentComponent extends Component
             ->get(); 
         }
 
-        return view('livewire.attachment-component',[
+        return view('livewire.attach-component',[
             'attachments' => $available_files,
             'isMultiple' => $this->isMultiple,
             'tag' => $this->tag
@@ -67,6 +64,7 @@ class AttachmentComponent extends Component
 
         $this->dispatch('runConfirmDialog', title:'Do you really want to delete this file ?',text:'Once deleted, there is no turning back!');
     }
+
 
     #[On('runDelete')] 
     public function deleteAttach() {
@@ -111,7 +109,7 @@ class AttachmentComponent extends Component
     {
         foreach ($this->dosyalar as $dosya) {
 
-            $props['user_id'] = 1;//Auth::id();
+            $props['user_id'] = Auth::id();
             $props['model_name'] = $this->model;
             $props['model_item_id'] = $this->modelId;
             $props['original_file_name'] = $dosya->getClientOriginalName();
@@ -140,7 +138,5 @@ class AttachmentComponent extends Component
             return false;
         }
     }
-
-
 
 }

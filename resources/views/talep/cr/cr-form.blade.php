@@ -14,6 +14,10 @@
                 @endif
             </header>
 
+            @if ($cr)
+            <span class="tag is-dark is-large mb-6">CR-{{ $cr->id}}</span>                       
+            @endif
+
         @else
             <header class="mb-6">
                 <h1 class="title has-text-weight-light is-size-1">{{ config('crs.create.title') }}</h1>
@@ -71,7 +75,18 @@
         <x-editor :params="config('crs.form.description')" value="{{ $cr ? $cr->description : '' }}"/>
 
 
-
+        <div class="field">
+            <label class="label">Dosyalar / Files</label>
+            <div class="control">
+                @livewire('attach-component',[
+                    'model' => 'CR',
+                    'modelId' => '0',
+                    'isMultiple' => false,
+                    'hasItsForm' => false,
+                    'tag' => 'CR',
+                    'canEdit' => true] , 'CR')
+            </div>
+        </div>
 
 
 
@@ -115,12 +130,8 @@
 
 
 
-        @livewire('attachment-component', [
-            'model' => 'CR',
-            'modelId' => '12',
-            'isMultiple'=> false,
-            'tag' => 'CR',
-            'canEdit' => false], 'CR')
+
+
 
 
 

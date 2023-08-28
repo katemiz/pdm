@@ -15,7 +15,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('attachments', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(9999);
             $table->foreignIdFor(User::class);
             $table->string('model_name');
             $table->integer('model_item_id');

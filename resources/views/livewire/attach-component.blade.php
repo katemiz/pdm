@@ -37,6 +37,7 @@
 
 
 
+
     @if ($attachments->count() > 0)
         <div class="column">
 
@@ -82,7 +83,10 @@
 
         {{-- @role(config('requirements.roles.w')) --}}
 
+        @if ($hasItsForm)
         <form wire:submit="uploadAttach" >
+        @endif
+
 
             <div class="columns">
 
@@ -131,18 +135,22 @@
 
                 </div>
 
+                @if ($hasItsForm)
                 <div class="column is-narrow">
                     <button class="button is-link {{ count($dosyalar) < 1 ? 'is-hidden': ''}}" id="uploadButton">
                         <span class="icon"><x-carbon-upload /></span>
                         <span>Upload</span>
                     </button>
                 </div>
+                @endif
 
             </div>
 
             @error('dosyalar') <span class="error">{{ $message }}</span> @enderror
 
+        @if ($hasItsForm)
         </form>
+        @endif
 
         {{-- @endrole --}}
 

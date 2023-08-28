@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('crequests', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(1001);
             $table->foreignIdFor(User::class);
             $table->string('topic');
             $table->boolean('is_for_ecn')->default(false);

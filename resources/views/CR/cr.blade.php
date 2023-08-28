@@ -1,6 +1,56 @@
 
 <section class="section container">
 
+
+    <script>
+
+        window.addEventListener('runConfirmDialog',function(e) {
+
+            Swal.fire({
+                title: e.detail.title,
+                text: e.detail.text,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Delete',
+                cancelButtonText: 'Ooops ...',
+
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    this.Livewire.dispatch('runDelete')
+                } else {
+                    return false
+                }
+            })
+        });
+
+        window.addEventListener('infoDeleted11',function(e) {
+
+            Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Item has been deleted',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        })
+
+
+
+
+
+
+
+
+
+        
+
+    </script>
+
+
+
+
     @switch($action)
 
         @case('FORM')

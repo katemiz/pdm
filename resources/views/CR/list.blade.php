@@ -8,41 +8,7 @@
 
 <div>
 
-    <script>
 
-        window.addEventListener('runConfirmDialog11',function(e) {
-
-            Swal.fire({
-                title: e.detail.title,
-                text: e.detail.text,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Delete',
-                cancelButtonText: 'Ooops ...',
-
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    this.Livewire.dispatch('runDelete11')
-                } else {
-                    return false
-                }
-            })
-        });
-
-        window.addEventListener('infoDeleted11',function(e) {
-
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'Item has been deleted',
-                showConfirmButton: false,
-                timer: 1500
-            })
-        })
-
-    </script>
 
     <header class="mb-6">
         <h1 class="title has-text-weight-light is-size-1">{{ $constants['list']['title'] }}</h1>
@@ -163,7 +129,7 @@
         <tbody>
 
             @foreach ($items as $record)
-            <tr>
+            <tr wire:key="{{ $record->id }}">
 
                 @foreach (array_keys($constants['list']['headers']) as $col_name)
                     <td>
@@ -176,48 +142,39 @@
                 @endforeach
 
 
-                @if ( isset($constants['list']['actions']) )
+                {{-- @if ( isset($constants['list']['actions']) ) --}}
                 <td class="has-text-right">
-                    @foreach ($constants['list']['actions'] as $act => $route)
+                    {{-- @foreach ($constants['list']['actions'] as $act => $route) --}}
 
-                        @switch($act)
-                            @case('r')
+                        {{-- @switch($act)
+                            @case('r') --}}
                                 <a wire:click="viewItem({{ $record->id}})">
                                     <span class="icon"><x-carbon-view/></span>
                                 </a>
-                                @break
-                            @case('w')
+                                {{-- @break
+                            @case('w') --}}
 
                                 @if ($canEdit)
                                     <a wire:click="editItem({{ $record->id}})">
                                         <span class="icon"><x-carbon-edit /></span>
                                     </a>
                                 @endif
-                                @break
-                            @case('x')
+                                {{-- @break
+                            @case('x') --}}
 
-                                @if (isset($constants['roles']['w']))
-                                @role($constants['roles']['w'])
+                                @if ($canDelete)
                                     <a wire:click.prevent="deleteConfirm({{$record->id}})">
-                                    <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
+                                        <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
                                     </a>
-                                @endrole
                                 @endif
 
-                                @if (isset($constants['perms']['w']))
-                                @can($constants['perms']['w'])
-                                    <a wire:click.prevent="deleteConfirm({{$record->id}})">
-                                    <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
-                                    </a>
-                                @endcan
-                                @endif
+                                <button wire:confirm="Are you sure?" wire:click="delete">DD</button>
+                                {{-- @break
+                        @endswitch --}}
 
-                                @break
-                        @endswitch
-
-                    @endforeach
+                    {{-- @endforeach --}}
                 </td>
-                @endif
+                {{-- @endif --}}
 
             </tr>
             @endforeach

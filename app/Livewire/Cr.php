@@ -22,8 +22,6 @@ class Cr extends Component
     //public $ptitle = 'Değişiklik Talebi - Change Requests';
     public $action = 'LIST'; // LIST,FORM,VIEW
 
-
-    // public $idItem; // 
     public $item = false;
 
     public $isAdd = false;
@@ -45,18 +43,28 @@ class Cr extends Component
 
     //public $isRelease = false;
 
+
+    protected $listeners = [
+        'runDelete'=>'deleteItem'
+    ];
+
+
     public function mount()
     {
         if (request('action')) {
             $this->action = strtoupper(request('action'));
         }
         $this->constants = config('crs');
+    }
 
+
+
+    public function updatedSearch () {
+        $this->resetPage(); // Resets the page to 1
     }
 
     public function render()
     {
-
         $this->sortField = 'topic';
 
         $items = CRequest::where('topic', 'LIKE', "%".$this->search."%")
@@ -76,15 +84,7 @@ class Cr extends Component
     public function viewItem($idItem)
     {
         $this->item = CRequest::find($idItem);
-
         $this->action = strtoupper('VIEW');
-
-
-        // $this->isAdd = false;
-        // $this->isEdit = false;
-        // $this->isList = false;
-        // $this->isView = true;
-
     }
 
 
@@ -92,17 +92,35 @@ class Cr extends Component
     {
         $this->item = CRequest::find($idItem);
         $this->action = strtoupper('FORM');
+    }
 
-        // $this->idItem = $idItem;
-        // $this->isAdd = false;
-        // $this->isEdit = true;
-        // $this->isList = false;
-        // $this->isView = false;
+    public function deleteConfirm($idItem)
+    {
+        $this->item = CRequest::find($idItem);
 
-        // $this->prop1 = $this->article->prop1;
-        // $this->prop2 = $this->article->prop2;
+        $this->dispatch('runConfirmDialog', 
+            title: 'Do you really want to delete this item?',
+            text: 'Once deleted, there is no reverting back!'
+        );
+    }
+
+    // #[On('runDelete')]
+    public function deleteItem($item)
+    {
+        dd('sss');
+
+        $this->item->delete();
+        session()->flash('message','Talep başarıyla silinmiştir.');
+        $this->action = 'LIST';
+    }
+
+
+    public function delete($item)
+    {
+        dd('sss');
 
     }
+
 
 
 

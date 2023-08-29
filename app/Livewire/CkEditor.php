@@ -11,7 +11,7 @@ class CkEditor extends Component
     public $placeholder;
     public $content;
 
-    public $message;
+    // public $message;
 
     public function render()
     {

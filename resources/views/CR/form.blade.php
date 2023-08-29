@@ -22,8 +22,8 @@
 
             <input
                 class="input"
-                name="topic"
                 id="topic"
+                wire:model="topic"
                 type="text"
                 value="{{ $item ? $item->topic : ''}}"
                 placeholder="Konuyu yazınız" required>
@@ -41,11 +41,11 @@
 
         <div class="control">
             <label class="radio">
-                <input type="radio" name="is_for_ecn" value="1" @checked( $item && $item->is_for_ecn )>
+                <input type="radio" wire:model="is_for_ecn" value="1">
                 Yes
             </label>
             <label class="radio">
-                <input type="radio" name="is_for_ecn" value="0" @checked( $item && !$item->is_for_ecn )>
+                <input type="radio" wire:model="is_for_ecn" value="0">
                 No
             </label>
         </div>
@@ -62,9 +62,9 @@
 
     @livewire('ck-editor',[
         'label' => 'Değişiklik İçeriği / CR Content',
-        'varname' => 'cr_content',
+        'varname' => 'description',
         'placeholder' => 'Değişikliği ayrıntılı bir şekilde tarif ediniz.',
-        'content' => ''
+        'content' => '<p>Bakalım bu ne dememk</p>'
     ])
 
 
@@ -165,18 +165,18 @@
 
 
 
-
-
-
-
-
-
-
-
-
     <div class="buttons is-right">
-        <button class="button submit is-dark">{{ $item ? $constants['update']['submitText'] : $constants['create']['submitText'] }}</button>
+
+        @if ($item)
+        <button wire:click.prevent="updateItem()" class="button is-dark">{{ $constants['update']['submitText'] }}</button>
+        @else
+        <button wire:click.prevent="storeItem()" class="button is-dark">{{ $constants['create']['submitText'] }}</button>
+        @endif
     </div>
+
+
+
+
 
 </form>
 

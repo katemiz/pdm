@@ -18,7 +18,7 @@
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    this.Livewire.dispatch('runDelete')
+                    Livewire.dispatch('runDelete')
                 } else {
                     return false
                 }

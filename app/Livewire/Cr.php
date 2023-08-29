@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
+use Livewire\Attributes\Title;
 
 use App\Models\CRequest;
 use App\Models\Company;
@@ -19,7 +20,6 @@ class Cr extends Component
 {
     use WithPagination;
 
-    //public $ptitle = 'Değişiklik Talebi - Change Requests';
     public $action = 'LIST'; // LIST,FORM,VIEW
 
     public $item = false;
@@ -29,6 +29,7 @@ class Cr extends Component
     public $isList = true;
     public $isView = false;
 
+    public $canAdd = true;
     public $canEdit = true;
     public $canDelete = true;
 
@@ -40,6 +41,17 @@ class Cr extends Component
 
     public $cr_approvers = [];
     public $cr_approver = false;
+
+
+    public $topic;
+    public $description;
+    public $is_for_ecn = 0;
+
+    protected $rules = [
+        'topic' => 'required|min:5',
+        'description' => 'required|min:10'
+    ];
+
 
     //public $isRelease = false;
 
@@ -63,6 +75,7 @@ class Cr extends Component
         $this->resetPage(); // Resets the page to 1
     }
 
+    #[Title('Değişiklik Talebi - Change Request')] 
     public function render()
     {
         $this->sortField = 'topic';
@@ -104,21 +117,60 @@ class Cr extends Component
         );
     }
 
-    // #[On('runDelete')]
-    public function deleteItem($item)
+    public function deleteItem()
     {
-        dd('sss');
-
         $this->item->delete();
         session()->flash('message','Talep başarıyla silinmiştir.');
         $this->action = 'LIST';
     }
 
 
-    public function delete($item)
+    public function storeItem()
     {
-        dd('sss');
+        $this->validate();
+        try {
+            $this->article = CrRequest::create([
+                'topic' => $this->topic,
+                'description' => $this->description,
+                'is_for_ecn' => $this->is_for_ecn
+            ]);
+            session()->flash('success','Change Request Created Successfully!');
+            $this->resetFields();
 
+            $this->action = 'VIEW';
+
+
+
+        } catch (\Exception $ex) {
+            session()->flash('error','Something goes wrong!!');
+        }
+    }
+
+
+
+
+
+    public function updateItem()
+    {
+        $this->validate();
+        try {
+            Article::whereId($this->idArticle)->update([
+                'prop1' => $this->prop1,
+                'prop2' => $this->prop2
+            ]);
+            session()->flash('message','Article Updated Successfully!!');
+            $this->resetFields();
+
+            $this->article = Article::find($this->idArticle);
+
+            $this->isAdd = false;
+            $this->isEdit = false;
+            $this->isList = false;
+            $this->isView = true;
+
+        } catch (\Exception $ex) {
+            session()->flash('success','Something goes wrong!!');
+        }
     }
 
 

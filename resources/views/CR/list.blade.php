@@ -28,26 +28,13 @@
         <!-- Left side -->
         <div class="level-left">
 
-            {{-- @if (isset($params['roles']['w']))
-            @role($params['roles']['w']) --}}
+            @if ($canEdit)
                 <div class="level-item  has-text-centered">
                     <a href="{{ $constants['list']['addButton']['route'] }}" class="button is-dark">
                         <span class="icon is-small"><x-carbon-add /></span>
                         <span>{{ $constants['list']['addButton']['text'] }}</span>
                     </a>
                 </div>
-            {{-- @endrole
-            @endif --}}
-
-            @if (isset($constants['perms']['w']))
-            @can($constants['perms']['w'])
-                <div class="level-item  has-text-centered">
-                    <a href="{{ $constants['list']['addButton']['route'] }}" class="button is-dark">
-                        <span class="icon is-small"><x-carbon-add /></span>
-                        <span>{{ $constants['list']['addButton']['text'] }}</span>
-                    </a>
-                </div>
-            @endcan
             @endif
 
         </div>
@@ -141,40 +128,25 @@
                     </td>
                 @endforeach
 
-
-                {{-- @if ( isset($constants['list']['actions']) ) --}}
                 <td class="has-text-right">
-                    {{-- @foreach ($constants['list']['actions'] as $act => $route) --}}
 
-                        {{-- @switch($act)
-                            @case('r') --}}
-                                <a wire:click="viewItem({{ $record->id}})">
-                                    <span class="icon"><x-carbon-view/></span>
-                                </a>
-                                {{-- @break
-                            @case('w') --}}
+                    <a wire:click="viewItem({{ $record->id}})">
+                        <span class="icon"><x-carbon-view/></span>
+                    </a>
 
-                                @if ($canEdit)
-                                    <a wire:click="editItem({{ $record->id}})">
-                                        <span class="icon"><x-carbon-edit /></span>
-                                    </a>
-                                @endif
-                                {{-- @break
-                            @case('x') --}}
+                    @if ($canEdit)
+                        <a wire:click="editItem({{ $record->id}})">
+                            <span class="icon"><x-carbon-edit /></span>
+                        </a>
+                    @endif
 
-                                @if ($canDelete)
-                                    <a wire:click.prevent="deleteConfirm({{$record->id}})">
-                                        <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
-                                    </a>
-                                @endif
+                    @if ($canDelete)
+                        <a wire:click.prevent="deleteConfirm({{$record->id}})">
+                            <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
+                        </a>
+                    @endif
 
-                                <button wire:confirm="Are you sure?" wire:click="delete">DD</button>
-                                {{-- @break
-                        @endswitch --}}
-
-                    {{-- @endforeach --}}
                 </td>
-                {{-- @endif --}}
 
             </tr>
             @endforeach

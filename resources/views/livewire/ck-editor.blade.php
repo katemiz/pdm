@@ -7,22 +7,21 @@
             id="content"
             name="content"
             placeholder="{{ $placeholder }}">
-            {!! $content !!}
         </textarea>
       </div>
     </div>
 
-    <div>
-        <span class="text-lg">You typed: {{ $content }}</span>
-    </div>
 
     <script>
         ClassicEditor
             .create(document.querySelector('#content'))
             .then(editor => {
+
+                editor.setData( document.getElementById('{{$varname}}').value );
+
                 editor.model.document.on('change:data', () => {
                     @this.set('content', editor.getData());
-                    console.log(editor.getData())
+                    document.getElementById('{{$varname}}').value = editor.getData()
                 })
             })
             .catch(error => {

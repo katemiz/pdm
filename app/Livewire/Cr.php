@@ -44,7 +44,9 @@ class Cr extends Component
 
 
     public $topic;
-    public $description;
+    //public $description;
+    public $description="<p>Hadi Deneyelim 22222</p>";
+
     public $is_for_ecn = 0;
 
     protected $rules = [
@@ -127,6 +129,8 @@ class Cr extends Component
 
     public function storeItem()
     {
+
+        dd($this->description);
         $this->validate();
         try {
             $this->article = CrRequest::create([

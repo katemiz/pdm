@@ -56,16 +56,22 @@
     </div>
     @endcan
 
-    {{-- <x-editor :params="config('crs.form.description')" value="{{ $item ? $item->description : '' }}"/> --}}
 
 
-
+    <input type="label" id="description" value="{{$description}}">
     @livewire('ck-editor',[
         'label' => 'Değişiklik İçeriği / CR Content',
         'varname' => 'description',
         'placeholder' => 'Değişikliği ayrıntılı bir şekilde tarif ediniz.',
-        'content' => '<p>Bakalım bu ne dememk</p>'
+        'content' => '{{$description}}'
     ])
+
+
+
+
+    {{-- @livewire('quill-editor', ['content' => 'Hello <strong>Buddy!</strong>']) --}}
+
+
 
 
 

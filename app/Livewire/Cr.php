@@ -13,6 +13,10 @@ use App\Models\Company;
 use App\Models\Project;
 use App\Models\User;
 
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -99,14 +103,14 @@ class Cr extends Component
     public function viewItem($idItem)
     {
         $this->item = CRequest::find($idItem);
-        $this->action = strtoupper('VIEW');
+        $this->action = 'VIEW';
     }
 
 
     public function editItem($idItem)
     {
         $this->item = CRequest::find($idItem);
-        $this->action = strtoupper('FORM');
+        $this->action = 'FORM';
     }
 
     public function deleteConfirm($idItem)
@@ -130,23 +134,26 @@ class Cr extends Component
     public function storeItem()
     {
 
-        dd($this->description);
         $this->validate();
         try {
-            $this->article = CrRequest::create([
+            $this->item = CRequest::create([
                 'topic' => $this->topic,
                 'description' => $this->description,
-                'is_for_ecn' => $this->is_for_ecn
+                'is_for_ecn' => $this->is_for_ecn,
+                'user_id' => Auth::id()
             ]);
             session()->flash('success','Change Request Created Successfully!');
-            $this->resetFields();
+            //$this->resetFields();
+
+            //$this->dispatch('deleteFormDOM');
+
 
             $this->action = 'VIEW';
 
 
 
         } catch (\Exception $ex) {
-            session()->flash('error','Something goes wrong!!');
+            session()->flash('error','Something goes wrong!!'.$ex);
         }
     }
 

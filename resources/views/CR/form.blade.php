@@ -1,3 +1,4 @@
+<div id="formSection">
 
 <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
@@ -11,7 +12,13 @@
 <span class="tag is-dark is-large mb-6">CR-{{ $item->id}}</span>
 @endif
 
-{{-- <form action="{{ $constants['cu_route'] }}{{ $cr ? $cr->id : '' }}" method="POST" enctype="multipart/form-data"> --}}
+
+@if (session()->has('error'))
+    <div class="notification is-danger is-light">
+        {{ session('error') }}
+    </div>
+@endif
+
 <form method="POST" enctype="multipart/form-data">
 @csrf
 
@@ -58,48 +65,29 @@
 
 
 
-    <input type="label" id="description" value="{{$description}}">
-    @livewire('ck-editor',[
-        'label' => 'Değişiklik İçeriği / CR Content',
-        'varname' => 'description',
-        'placeholder' => 'Değişikliği ayrıntılı bir şekilde tarif ediniz.',
-        'content' => '{{$description}}'
-    ])
+
+
+    <livewire:ck-editor
+        edId="ed10"
+        wire:model="description" 
+        label='Değişiklik İçeriği / CR Content' 
+        placeholder='Değişikliği ayrıntılı bir şekilde tarif ediniz.'
+        :content="$description"/> 
+
+
+
+        @error('description')
+        <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+        @enderror
+
+    {{-- @livewire('quill-editor', ['value' => 'Hello <strong>Buddy!</strong>']) --}}
 
 
 
 
-    {{-- @livewire('quill-editor', ['content' => 'Hello <strong>Buddy!</strong>']) --}}
 
 
 
-
-
-
-
-{{-- <script>
-    ClassicEditor
-      .create( document.querySelector('#cr_content}') )
-      .then( editor => {
-    })
-    .catch( error => {
-      console.error(error);
-    });
-</script> --}}
-
-
-{{-- <script>
-    ClassicEditor
-        .create(document.querySelector('#cr_content'))
-        .then(editor => {
-            editor.model.document.on('change:data', () => {
-            @this.set('cr_content', editor.getData());
-            })
-        })
-        .catch(error => {
-            console.error(error);
-        });
-</script> --}}
 
 
 
@@ -169,20 +157,14 @@
     @endcan
 
 
-
-
     <div class="buttons is-right">
-
         @if ($item)
-        <button wire:click.prevent="updateItem()" class="button is-dark">{{ $constants['update']['submitText'] }}</button>
+            <button wire:click.prevent="updateItem()" class="button is-dark">{{ $constants['update']['submitText'] }}</button>
         @else
-        <button wire:click.prevent="storeItem()" class="button is-dark">{{ $constants['create']['submitText'] }}</button>
+            <button wire:click.prevent="storeItem()" class="button is-dark">{{ $constants['create']['submitText'] }}</button>
         @endif
     </div>
 
-
-
-
-
 </form>
 
+</div>

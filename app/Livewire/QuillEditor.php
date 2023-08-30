@@ -9,14 +9,17 @@ class QuillEditor extends Component
 
     public $value;
     
-    public $quillId;
+    // public $quillId;
 
     public function mount($value = ''){
         $this->value = $value;
-        $this->quillId = 'quill-'.uniqid();
+        // $this->quillId = 'quill-'.uniqid();
     }
 
 
+    public function updatedValue($value){
+        dd($value);
+    }
 
     public function render()
     {

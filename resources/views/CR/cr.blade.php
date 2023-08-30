@@ -1,7 +1,6 @@
 
 <section class="section container">
 
-
     <script>
 
         window.addEventListener('runConfirmDialog',function(e) {
@@ -37,7 +36,13 @@
         })
 
 
+        window.addEventListener('deleteFormDOM',function() {
 
+
+            ck5editor.destroy()
+
+
+        })
 
 
 
@@ -66,7 +71,8 @@
             @include('CR.list')
             @break
 
-            
     @endswitch
+
 </section>
+
 

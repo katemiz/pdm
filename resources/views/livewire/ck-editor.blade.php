@@ -11,26 +11,44 @@
       </div>
     </div>
 
+    <input type="hidden" id="{{$edId}}" value="{{ $content }}"> 
 
     <script>
-        ClassicEditor
-            .create(document.querySelector('#content'))
-            .then(editor => {
 
-                editor.setData( document.getElementById('{{$varname}}').value );
+        if (typeof ck5editor == 'object') {
+            ck5editor.destroy()
+        }
 
-                editor.model.document.on('change:data', () => {
-                    @this.set('content', editor.getData());
-                    document.getElementById('{{$varname}}').value = editor.getData()
+        runDo()
+
+
+        function runDo () {
+
+            ClassicEditor
+                .create(document.querySelector('#content'))
+                .then(editor => {
+
+                    window.ck5editor = editor
+
+                    //console.log('ddddd',document.getElementById('{{$varname}}'))
+
+                    editor.setData( document.getElementById('{{$edId}}').value );
+
+                    editor.model.document.on('change:data', () => {
+                        @this.set('content', editor.getData());
+                        //document.getElementById('{{$varname}}').value = editor.getData()
+                    })
                 })
-            })
-            .catch(error => {
-                console.error(error);
-            });
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+
+
     </script>
 
-    @error($varname)
+    {{-- @error('content')
     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-    @enderror
+    @enderror --}}
 
 </div>

@@ -17,7 +17,7 @@
 @endif
 
 @if ($item)
-<span class="tag is-dark is-large">CR-{{ $item->id}}</span>                       
+<span class="tag is-dark is-large">CR-{{ $item->id}}</span>
 @endif
 
 <div class="card">
@@ -37,7 +37,7 @@
                     <div class="field has-addons">
 
                         <p class="control">
-                            <a href="/cr" class="button is-info is-light is-small">
+                            <a href="/cr/list" class="button is-info is-light is-small">
                             <span class="icon is-small"><x-carbon-list /></span>
                             </a>
                         </p>
@@ -52,8 +52,8 @@
 
                         @if ($canEdit)
                         <p class="control ml-1">
-                            {{-- <a href="/cr/form/{{ $item->id }}" class="button is-link is-light is-small"> --}}
-                            <a class="button is-link is-light is-small" wire:click="editItem({{ $item->id }})">
+                            <a href="/cr/form/{{ $item->id }}" class="button is-link is-light is-small">
+                            {{-- <a class="button is-link is-light is-small" wire:click="editItem({{ $item->id }})"> --}}
                                 <span class="icon is-small"><x-carbon-edit /></span>
                                 <span>Edit</span>
                             </a>
@@ -63,11 +63,12 @@
 
                         @if ($canDelete)
                         <p class="control ml-1">
-                            <button class="button is-danger is-light is-small" onclick="deleteConfirm({{ $item->id }})">
+                            <button class="button is-danger is-light is-small" wire:click.prevent="deleteConfirm({{$item->id}})">
                                 <span class="icon is-small"><x-carbon-trash-can /></span>
                                 <span>Delete</span>
                             </button>
                         </p>
+
                         @endif
 
                     </div>
@@ -103,14 +104,17 @@
         </div>
         @endif
 
+        <label class="label">Dosyalar</label>
 
 
-        {{-- @livewire('attachments', [
+
+        @livewire('attach-component', [
+            'hasForm' => false,                      // true when possible to add/remove file otherwise false
             'model' => 'CR',
-            'modelId' => $cr->id,
-            'isMultiple'=> false,
-            'tag' => 'CR',
-            'canEdit' => $canEdit], 'CR') --}}
+            'modelId' => $item->id,
+            'isMultiple'=> false,                   // can multiple files be selected
+            'tag' => 'CR',                          // Any tag other than model name
+            'canEdit' => $canEdit], 'CR')
 
 
 

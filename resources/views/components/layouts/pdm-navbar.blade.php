@@ -64,7 +64,7 @@
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a href="/cr" class="navbar-item">DT - CR</a>
+                        <a href="/cr/list" class="navbar-item">Change Requests</a>
                         <a href="/admin/roles" class="navbar-item">Roles</a>
                         <a href="/admin/permissions" class="navbar-item">Permissions</a>
                         <a href="/admin/companies" class="navbar-item">Companies</a>

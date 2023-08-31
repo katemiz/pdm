@@ -26,7 +26,9 @@ class Cr extends Component
 
     public $action = 'LIST'; // LIST,FORM,VIEW
 
+    public $itemId = false;
     public $item = false;
+
 
     public $isAdd = false;
     public $isEdit = false;
@@ -46,11 +48,9 @@ class Cr extends Component
     public $cr_approvers = [];
     public $cr_approver = false;
 
-
+    // Item Props
     public $topic;
-    //public $description;
-    public $description="<p>Hadi Deneyelim 22222</p>";
-
+    public $description;
     public $is_for_ecn = 0;
 
     protected $rules = [
@@ -72,6 +72,10 @@ class Cr extends Component
         if (request('action')) {
             $this->action = strtoupper(request('action'));
         }
+
+        if (request('id')) {
+            $this->itemId = request('id');
+        }
         $this->constants = config('crs');
     }
 
@@ -81,17 +85,30 @@ class Cr extends Component
         $this->resetPage(); // Resets the page to 1
     }
 
-    #[Title('Değişiklik Talebi - Change Request')] 
+    #[Title('Değişiklik Talebi - Change Request')]
     public function render()
     {
-        $this->sortField = 'topic';
+        $items = false;
 
-        $items = CRequest::where('topic', 'LIKE', "%".$this->search."%")
-        ->orWhere('description', 'LIKE', "%".$this->search."%")
-        ->orWhere('rej_reason_req', 'LIKE', "%".$this->search."%")
-        ->orWhere('rej_reason_eng', 'LIKE', "%".$this->search."%")
-        ->orderBy($this->sortField,$this->sortDirection)
-        ->paginate(env('RESULTS_PER_PAGE'));
+        if ( $this->action === 'VIEW') {
+            $this->setUnsetProps();
+        }
+
+        if ( $this->action === 'FORM' && $this->itemId) {
+            $this->setUnsetProps();
+        }
+
+        if ( $this->action === 'LIST') {
+
+            $this->sortField = 'topic';
+
+            $items = CRequest::where('topic', 'LIKE', "%".$this->search."%")
+            ->orWhere('description', 'LIKE', "%".$this->search."%")
+            ->orWhere('rej_reason_req', 'LIKE', "%".$this->search."%")
+            ->orWhere('rej_reason_eng', 'LIKE', "%".$this->search."%")
+            ->orderBy($this->sortField,$this->sortDirection)
+            ->paginate(env('RESULTS_PER_PAGE'));
+        }
 
         return view('CR.cr',[
             'items' => $items
@@ -99,17 +116,33 @@ class Cr extends Component
     }
 
 
+    public function setUnsetProps($opt = 'set')
+    {
+        $this->item = CRequest::find($this->itemId);
+
+        if ($opt === 'set') {
+            $this->topic = $this->item->topic;
+            $this->description = $this->item->description;
+            $this->is_for_ecn = $this->item->is_for_ecn;
+        } else {
+            $this->topic = '';
+            $this->description = '';
+            $this->is_for_ecn = false;
+        }
+
+    }
+
 
     public function viewItem($idItem)
     {
-        $this->item = CRequest::find($idItem);
+        $this->itemId = $idItem;
         $this->action = 'VIEW';
     }
 
 
     public function editItem($idItem)
     {
-        $this->item = CRequest::find($idItem);
+        $this->itemId = $idItem;
         $this->action = 'FORM';
     }
 
@@ -117,7 +150,7 @@ class Cr extends Component
     {
         $this->item = CRequest::find($idItem);
 
-        $this->dispatch('runConfirmDialog', 
+        $this->dispatch('runConfirmDialog',
             title: 'Do you really want to delete this item?',
             text: 'Once deleted, there is no reverting back!'
         );
@@ -147,6 +180,8 @@ class Cr extends Component
 
             //$this->dispatch('deleteFormDOM');
 
+            $this->itemId = $this->item->id;
+
 
             $this->action = 'VIEW';
 
@@ -165,19 +200,17 @@ class Cr extends Component
     {
         $this->validate();
         try {
-            Article::whereId($this->idArticle)->update([
-                'prop1' => $this->prop1,
-                'prop2' => $this->prop2
+            CRequest::whereId($this->itemId)->update([
+                'topic' => $this->topic,
+                'description' => $this->description,
+                'is_for_ecn' => $this->is_for_ecn,
+                'user_id' => Auth::id()
             ]);
             session()->flash('message','Article Updated Successfully!!');
-            $this->resetFields();
+            //$this->resetFields();
 
-            $this->article = Article::find($this->idArticle);
 
-            $this->isAdd = false;
-            $this->isEdit = false;
-            $this->isList = false;
-            $this->isView = true;
+            $this->action = 'VIEW';
 
         } catch (\Exception $ex) {
             session()->flash('success','Something goes wrong!!');

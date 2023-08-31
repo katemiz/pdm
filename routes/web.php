@@ -104,7 +104,8 @@ Route::middleware(['auth'])->group(function () {
     //     return view('talep.cr.cr-list');
     // });
 
-    Route::get('/cr/{action?}', Cr::class);
+    Route::get('/cr/{action}/{id?}', Cr::class);
+
 
     // Route::get('/cr/form/{id?}', [CrController::class,'form']);
     // Route::post('/cr/store/{id?}', [CrController::class,'store']);

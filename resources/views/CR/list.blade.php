@@ -135,7 +135,9 @@
                     </a>
 
                     @if ($canEdit)
-                        <a wire:click="editItem({{ $record->id}})">
+                        {{-- <a wire:click="editItem({{ $record->id}})"> --}}
+                        <a href="/cr/form/{{ $record->id}}">
+
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
                     @endif

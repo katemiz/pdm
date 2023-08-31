@@ -69,18 +69,15 @@
 
     <livewire:ck-editor
         edId="ed10"
-        wire:model="description" 
-        label='Değişiklik İçeriği / CR Content' 
+        wire:model="description"
+        label='Değişiklik İçeriği / CR Content'
         placeholder='Değişikliği ayrıntılı bir şekilde tarif ediniz.'
-        :content="$description"/> 
-
-
+        :content="$description"/>
 
         @error('description')
         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
         @enderror
 
-    {{-- @livewire('quill-editor', ['value' => 'Hello <strong>Buddy!</strong>']) --}}
 
 
 
@@ -108,13 +105,16 @@
     <div class="field">
         <label class="label">Dosyalar / Files</label>
         <div class="control">
-            @livewire('attach-component',[
+
+            @livewire('attach-component', [
+                'hasForm' => true,                      // true when possible to add/remove file otherwise false
                 'model' => 'CR',
-                'modelId' => '0',
-                'isMultiple' => false,
-                'hasItsForm' => false,
-                'tag' => 'CR',
-                'canEdit' => true] , 'CR')
+                'modelId' => $item->id,
+                'isMultiple'=> true,                   // can multiple files be selected
+                'tag' => 'CR',                          // Any tag other than model name
+                'canEdit' => $canEdit], 'CR')
+
+
         </div>
     </div>
 

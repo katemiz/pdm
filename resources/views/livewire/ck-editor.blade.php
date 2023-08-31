@@ -11,7 +11,7 @@
       </div>
     </div>
 
-    <input type="hidden" id="{{$edId}}" value="{{ $content }}"> 
+    <input type="hidden" id="{{$edId}}" value="{{ $content }}">
 
     <script>
 
@@ -19,10 +19,10 @@
             ck5editor.destroy()
         }
 
-        runDo()
+        initializeEditor()
 
 
-        function runDo () {
+        function initializeEditor () {
 
             ClassicEditor
                 .create(document.querySelector('#content'))

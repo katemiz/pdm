@@ -12,6 +12,7 @@ use App\Models\Attachment;
 class AttachComponent extends Component
 {
     public $idAttach;
+    public $hasForm = false;
     public $model;
     public $modelId;
     public $isMultiple = false;
@@ -31,11 +32,11 @@ class AttachComponent extends Component
             $available_files = Attachment::where('model_name',$this->model)
             ->where('model_item_id',$this->modelId)
             ->where('tag',$this->tag)
-            ->get(); 
+            ->get();
         } else {
             $available_files = Attachment::where('model_name',$this->model)
             ->where('model_item_id',$this->modelId)
-            ->get(); 
+            ->get();
         }
 
         return view('livewire.attach-component',[
@@ -50,7 +51,7 @@ class AttachComponent extends Component
     public function removeFile($fileToRemove) {
 
         foreach ($this->dosyalar as $key => $dosya) {
-            
+
             if ($dosya->getClientOriginalName() == $fileToRemove) {
                 unset($this->dosyalar[$key]);
             }
@@ -66,7 +67,7 @@ class AttachComponent extends Component
     }
 
 
-    #[On('runDelete')] 
+    #[On('runDelete')]
     public function deleteAttach() {
 
         Attachment::find($this->idAttach)->delete();
@@ -102,7 +103,7 @@ class AttachComponent extends Component
         }
     }
 
-    
+
 
 
     public function uploadAttach(Request $request)

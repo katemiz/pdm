@@ -185,6 +185,10 @@ class Cr extends Component
 
             $this->action = 'VIEW';
 
+            $this->dispatch('triggerAttachment',
+                id: $this->itemId
+            );
+
 
 
         } catch (\Exception $ex) {

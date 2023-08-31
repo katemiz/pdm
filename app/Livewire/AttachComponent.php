@@ -105,9 +105,11 @@ class AttachComponent extends Component
 
 
 
-
+    #[On('triggerAttachment')]
     public function uploadAttach(Request $request)
     {
+
+        dd('triggered');
         foreach ($this->dosyalar as $dosya) {
 
             $props['user_id'] = Auth::id();

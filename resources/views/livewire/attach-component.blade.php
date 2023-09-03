@@ -15,6 +15,17 @@
             'canEdit' => $canEdit], 'CR')
         --}}
 
+        <script>
+
+        window.addEventListener('filesUploaded',function(e) {
+
+            console.log('Ahhah')
+
+            //Livewire.dispatch('OnFilesUploaded')
+        })
+     
+        </script>
+
 
         @if ($hasForm)
             <script>
@@ -53,6 +64,11 @@
         @endif
 
 
+        {{-- @php
+            print_r($attachments)
+        @endphp --}}
+
+
         @if ($attachments->count() > 0)
             <div class="column">
 
@@ -63,11 +79,11 @@
                 @foreach ($attachments as $key => $attachment)
                 <tr class="my-0">
                     <td class="is-narrow">
-                        @if ($isMultiple)
+                        {{-- @if ($isMultiple) --}}
                             {{ ++$key }}
-                        @else
-                            <span class="icon"><x-carbon-attachment /></span>
-                        @endif
+                        {{-- @else --}}
+                            {{-- <span class="icon"><x-carbon-attachment /></span>
+                        @endif --}}
                     </td>
                     <td>
                         <a wire:click="downloadFile('{{ $attachment->id }}')">{{ $attachment->original_file_name }}</a>
@@ -77,7 +93,7 @@
 
                     @if ($hasForm && $canEdit)
                     <td class="is-narrow has-text-right">
-                        <a wire:click="deleteAttachConfirm('{{$attachment->id}}')">
+                        <a wire:click="startAttachDelete('{{$attachment->id}}')">
                             <span class="icon is-small has-text-danger"><x-carbon-trash-can /></span>
                         </a>
                     </td>
@@ -96,12 +112,9 @@
         @if ($hasForm && $canEdit)
         <div class="content">
 
-            {{-- @role(config('requirements.roles.w')) --}}
-
             @if ($hasItsForm)
             <form wire:submit="uploadAttach" >
             @endif
-
 
                 <div class="columns">
 
@@ -166,8 +179,6 @@
             @if ($hasItsForm)
             </form>
             @endif
-
-            {{-- @endrole --}}
 
         </div>
         @endif

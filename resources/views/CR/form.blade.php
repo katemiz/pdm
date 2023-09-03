@@ -19,6 +19,12 @@
     </div>
 @endif
 
+@if (session()->has('message'))
+    <div class="notification is-info is-light">
+        {{ session('message') }}
+    </div>
+@endif
+
 <form method="POST" enctype="multipart/form-data">
 @csrf
 
@@ -109,7 +115,7 @@
             @livewire('attach-component', [
                 'hasForm' => true,                      // true when possible to add/remove file otherwise false
                 'model' => 'CR',
-                'modelId' => $item->id,
+                'modelId' => $item ? $item->id : false,
                 'isMultiple'=> true,                   // can multiple files be selected
                 'tag' => 'CR',                          // Any tag other than model name
                 'canEdit' => $canEdit], 'CR')

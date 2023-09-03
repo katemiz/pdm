@@ -3,11 +3,30 @@
 
     <script>
 
-        window.addEventListener('runConfirmDialog',function(e) {
+        window.addEventListener('ConfirmDelete',function(e) {
+
+            let sa_title, sa_text, lw_url
+
+            console.log('e.detail.type',e.detail.type)
+
+            if (e.detail.type === 'cr') {
+                sa_title = 'Do you really want to delete this Change Request?'
+                sa_text = 'Once deleted, there is no reverting back!'
+                lw_url = 'deleteCR'
+            }
+
+            if (e.detail.type == 'attach') {
+                sa_title = 'Do you really want to delete this file/attachment?'
+                sa_text = 'Once deleted, there is no reverting back!'
+                lw_url = 'deleteAttach'
+            }
+
+            console.log('lw_url',lw_url)
+
 
             Swal.fire({
-                title: e.detail.title,
-                text: e.detail.text,
+                title: sa_title,
+                text: sa_text,
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -17,40 +36,36 @@
 
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Livewire.dispatch('runDelete')
+                    Livewire.dispatch(lw_url)
                 } else {
                     return false
                 }
             })
         });
 
-        window.addEventListener('infoDeleted11',function(e) {
+
+
+
+
+        window.addEventListener('attachDeleted',function(e) {
 
             Swal.fire({
                 position: 'top-end',
                 icon: 'success',
-                title: 'Item has been deleted',
+                title: 'File/Attachment has been deleted',
                 showConfirmButton: false,
                 timer: 1500
             })
         })
 
 
-        window.addEventListener('deleteFormDOM',function() {
-
-
-            ck5editor.destroy()
-
-
-        })
+        // window.addEventListener('filesUploaded',function(e) {
 
 
 
-
-
-
-        
-
+        //     Livewire.dispatch('OnFilesUploaded')
+        // })
+     
     </script>
 
 

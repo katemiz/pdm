@@ -2,10 +2,17 @@
 
 namespace App\Livewire;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Livewire\Attributes\On;
 
 use App\Models\Attachment;
+
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -22,28 +29,61 @@ class AttachComponent extends Component
     public $hasItsForm = false; // Does componenet has its own form, independently file uploads
 
     public $dosyalar = [];
+    //public $attachments = [];
+
+    protected $listeners = ['refreshComponent' => '$refresh'];
+
+    public $sayac = 0;
+
+    public $isBirsey = 'OLUMSUZ';
+
 
     use WithFileUploads;
+
+    
+
+    #[On('refreshAttach')]
+    public function deneme()
+    {
+        $this->isBirsey = 'OLUMLU';
+        Log::info('OLUYOR');
+    }
 
     public function render()
     {
 
-        if ($this->tag) {
-            $available_files = Attachment::where('model_name',$this->model)
-            ->where('model_item_id',$this->modelId)
-            ->where('tag',$this->tag)
-            ->get();
-        } else {
-            $available_files = Attachment::where('model_name',$this->model)
-            ->where('model_item_id',$this->modelId)
-            ->get();
+        Log::info($this->isBirsey);
+
+
+        $attachments = $this->getAttachments();
+        return view('livewire.attach-component',[
+            'attachments' => $attachments
+        ]);
+    }
+
+
+    public function getAttachments()
+    {
+        if ($this->modelId) {
+            if ($this->tag) {
+                $attachments = Attachment::where('model_name',$this->model)
+                ->where('model_item_id',$this->modelId)
+                ->where('tag',$this->tag)
+                ->get();
+            } else {
+                $$attachments = Attachment::where('model_name',$this->model)
+                ->where('model_item_id',$this->modelId)
+                ->get();
+            }
+
+            // Log::info($this->sayac++);
+            // Log::info($attachments);
+
+            return $attachments;
+
         }
 
-        return view('livewire.attach-component',[
-            'attachments' => $available_files,
-            'isMultiple' => $this->isMultiple,
-            'tag' => $this->tag
-        ]);
+        return [];
     }
 
 
@@ -59,23 +99,19 @@ class AttachComponent extends Component
     }
 
 
-    public function deleteAttachConfirm($idAttach) {
+    public function startAttachDelete($idAttach) {
 
         $this->idAttach = $idAttach;
-
-        $this->dispatch('runConfirmDialog', title:'Do you really want to delete this file ?',text:'Once deleted, there is no turning back!');
+        $this->dispatch('ConfirmDelete', type:'attach');
     }
 
 
-    #[On('runDelete')]
+    #[On('deleteAttach')]
     public function deleteAttach() {
-
         Attachment::find($this->idAttach)->delete();
-
-        session()->flash('message','File Deleted Successfully!!');
-
-        $this->dispatch('infoDeleted');
+        $this->dispatch('attachDeleted'); 
     }
+
 
     public function downloadFile($idAttach) {
 
@@ -105,11 +141,10 @@ class AttachComponent extends Component
 
 
 
+
     #[On('triggerAttachment')]
     public function uploadAttach(Request $request)
     {
-
-        dd('triggered');
         foreach ($this->dosyalar as $dosya) {
 
             $props['user_id'] = Auth::id();
@@ -129,7 +164,22 @@ class AttachComponent extends Component
             Attachment::create($props);
         }
 
+        // Log::info($this->attachments);
+
+
+        // $this->getAttachments();
+        // Log::info($this->attachments);
+
+        // dd(json_encode($this->attachments));
+        // session()->put('after', json_encode($this->attachments));
+        // session()->flash('success','Change Request Created Successfully!');
+
         $this->reset('dosyalar');
+
+        $this->dispatch('refreshAttachments'); 
+        //$this->mount();
+        //return redirect('/admin/companies/view/'.$id);
+
     }
 
 

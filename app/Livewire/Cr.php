@@ -29,7 +29,6 @@ class Cr extends Component
     public $itemId = false;
     public $item = false;
 
-
     public $isAdd = false;
     public $isEdit = false;
     public $isList = true;
@@ -62,9 +61,9 @@ class Cr extends Component
     //public $isRelease = false;
 
 
-    protected $listeners = [
-        'runDelete'=>'deleteItem'
-    ];
+    // protected $listeners = [
+    //     'runDelete'=>'deleteItem'
+    // ];
 
 
     public function mount()
@@ -86,6 +85,7 @@ class Cr extends Component
     }
 
     #[Title('Değişiklik Talebi - Change Request')]
+    #[On('refreshAttachments')]
     public function render()
     {
         $items = false;
@@ -146,27 +146,31 @@ class Cr extends Component
         $this->action = 'FORM';
     }
 
-    public function deleteConfirm($idItem)
+    public function startCRDelete($idItem)
     {
         $this->item = CRequest::find($idItem);
-
-        $this->dispatch('runConfirmDialog',
-            title: 'Do you really want to delete this item?',
-            text: 'Once deleted, there is no reverting back!'
-        );
+        $this->dispatch('ConfirmDelete', type:'cr');
     }
 
-    public function deleteItem()
+    #[On('deleteCR')]
+    public function deleteCR()
     {
         $this->item->delete();
-        session()->flash('message','Talep başarıyla silinmiştir.');
+        session()->flash('message','Değişiklik Talebi başarıyla silinmiştir.');
         $this->action = 'LIST';
+        $this->resetPage();
+    }
+
+    //#[On('filesUploaded')]
+    public function OnFilesUploaded() {
+
+        dd(('OnFilesUploaded'));
+
     }
 
 
     public function storeItem()
     {
-
         $this->validate();
         try {
             $this->item = CRequest::create([
@@ -176,20 +180,15 @@ class Cr extends Component
                 'user_id' => Auth::id()
             ]);
             session()->flash('success','Change Request Created Successfully!');
-            //$this->resetFields();
-
-            //$this->dispatch('deleteFormDOM');
 
             $this->itemId = $this->item->id;
 
 
-            $this->action = 'VIEW';
-
             $this->dispatch('triggerAttachment',
-                id: $this->itemId
+                modelId: $this->itemId
             );
 
-
+            $this->action = 'VIEW';
 
         } catch (\Exception $ex) {
             session()->flash('error','Something goes wrong!!'.$ex);
@@ -203,6 +202,7 @@ class Cr extends Component
     public function updateItem()
     {
         $this->validate();
+
         try {
             CRequest::whereId($this->itemId)->update([
                 'topic' => $this->topic,
@@ -210,9 +210,14 @@ class Cr extends Component
                 'is_for_ecn' => $this->is_for_ecn,
                 'user_id' => Auth::id()
             ]);
-            session()->flash('message','Article Updated Successfully!!');
-            //$this->resetFields();
+            session()->flash('message','Change Request Updated Successfully!!');
 
+
+            $this->dispatch('triggerAttachment',
+                modelId: $this->itemId
+            );
+
+            //$this->dispatch('refreshAttach');
 
             $this->action = 'VIEW';
 

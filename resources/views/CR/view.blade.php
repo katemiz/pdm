@@ -63,7 +63,7 @@
 
                         @if ($canDelete)
                         <p class="control ml-1">
-                            <button class="button is-danger is-light is-small" wire:click.prevent="deleteConfirm({{$item->id}})">
+                            <button class="button is-danger is-light is-small" wire:click.prevent="startCRDelete({{$item->id}})">
                                 <span class="icon is-small"><x-carbon-trash-can /></span>
                                 <span>Delete</span>
                             </button>

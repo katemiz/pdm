@@ -15,35 +15,24 @@
 
     <script>
 
-        if (typeof ck5editor == 'object') {
-            ck5editor.destroy()
-        }
+        ClassicEditor
+            .create(document.querySelector('#content'))
+            .then(editor => {
 
-        initializeEditor()
+                window.ck5editor = editor
 
+                //console.log('ddddd',document.getElementById('{{$varname}}'))
 
-        function initializeEditor () {
+                editor.setData( document.getElementById('{{$edId}}').value );
 
-            ClassicEditor
-                .create(document.querySelector('#content'))
-                .then(editor => {
-
-                    window.ck5editor = editor
-
-                    //console.log('ddddd',document.getElementById('{{$varname}}'))
-
-                    editor.setData( document.getElementById('{{$edId}}').value );
-
-                    editor.model.document.on('change:data', () => {
-                        @this.set('content', editor.getData());
-                        //document.getElementById('{{$varname}}').value = editor.getData()
-                    })
+                editor.model.document.on('change:data', () => {
+                    @this.set('content', editor.getData());
+                    //document.getElementById('{{$varname}}').value = editor.getData()
                 })
-                .catch(error => {
-                    console.error(error);
-                });
-        }
-
+            })
+            .catch(error => {
+                console.error(error);
+            });
 
     </script>
 

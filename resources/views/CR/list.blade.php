@@ -143,7 +143,7 @@
                     @endif
 
                     @if ($canDelete)
-                        <a wire:click.prevent="deleteConfirm({{$record->id}})">
+                        <a wire:click.prevent="startCRDelete({{$record->id}})">
                             <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
                         </a>
                     @endif

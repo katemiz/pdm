@@ -106,6 +106,12 @@
 
         <label class="label">Dosyalar</label>
 
+        @php
+            print_r($attachments)
+        @endphp
+
+        <x-file-list :attachments="$attachments" />
+
 
 
         @livewire('attach-component', [

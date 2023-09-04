@@ -7,6 +7,7 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 
+use App\Models\Attachment;
 use App\Models\CRequest;
 use App\Models\Company;
 // use App\Models\EndProduct;
@@ -24,6 +25,8 @@ class Cr extends Component
 {
     use WithPagination;
 
+    public $model = 'CR';
+    public $tag = false;
     public $action = 'LIST'; // LIST,FORM,VIEW
 
     public $itemId = false;
@@ -51,6 +54,8 @@ class Cr extends Component
     public $topic;
     public $description;
     public $is_for_ecn = 0;
+    public $attachments = [];
+
 
     protected $rules = [
         'topic' => 'required|min:5',
@@ -92,10 +97,12 @@ class Cr extends Component
 
         if ( $this->action === 'VIEW') {
             $this->setUnsetProps();
+            $this->getAttachments();
         }
 
         if ( $this->action === 'FORM' && $this->itemId) {
             $this->setUnsetProps();
+            $this->getAttachments();
         }
 
         if ( $this->action === 'LIST') {
@@ -129,7 +136,6 @@ class Cr extends Component
             $this->description = '';
             $this->is_for_ecn = false;
         }
-
     }
 
 
@@ -223,6 +229,27 @@ class Cr extends Component
 
         } catch (\Exception $ex) {
             session()->flash('success','Something goes wrong!!');
+        }
+    }
+
+
+
+
+    public function getAttachments()
+    {
+        if ($this->itemId) {
+
+            if ($this->tag) {
+                $this->attachments = Attachment::where('model_name',$this->model)
+                ->where('model_item_id',$this->itemId)
+                ->where('tag',$this->tag)
+                ->get();
+            } else {
+                $this->attachments = Attachment::where('model_name',$this->model)
+                ->where('model_item_id',$this->itemId)
+                ->get();
+            }
+
         }
     }
 

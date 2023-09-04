@@ -19,8 +19,7 @@
             .create(document.querySelector('#content'))
             .then(editor => {
 
-                window.ck5editor = editor
-
+                //window.ck5editor = editor
                 //console.log('ddddd',document.getElementById('{{$varname}}'))
 
                 editor.setData( document.getElementById('{{$edId}}').value );

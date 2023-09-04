@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Log;
 
 class AttachComponent extends Component
 {
+    use WithFileUploads;
+
     public $idAttach;
     public $hasForm = false;
     public $model;
@@ -38,9 +40,8 @@ class AttachComponent extends Component
     public $isBirsey = 'OLUMSUZ';
 
 
-    use WithFileUploads;
 
-    
+
 
     #[On('refreshAttach')]
     public function deneme()
@@ -71,7 +72,7 @@ class AttachComponent extends Component
                 ->where('tag',$this->tag)
                 ->get();
             } else {
-                $$attachments = Attachment::where('model_name',$this->model)
+                $attachments = Attachment::where('model_name',$this->model)
                 ->where('model_item_id',$this->modelId)
                 ->get();
             }
@@ -109,7 +110,7 @@ class AttachComponent extends Component
     #[On('deleteAttach')]
     public function deleteAttach() {
         Attachment::find($this->idAttach)->delete();
-        $this->dispatch('attachDeleted'); 
+        $this->dispatch('attachDeleted');
     }
 
 
@@ -176,7 +177,7 @@ class AttachComponent extends Component
 
         $this->reset('dosyalar');
 
-        $this->dispatch('refreshAttachments'); 
+        $this->dispatch('refreshAttachments');
         //$this->mount();
         //return redirect('/admin/companies/view/'.$id);
 

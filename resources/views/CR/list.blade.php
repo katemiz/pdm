@@ -17,7 +17,7 @@
         <div class="level-left">
 
             @if ($canEdit)
-                <div class="level-item  has-text-centered">
+                <div class="level-item has-text-centered">
                     <a href="{{ $constants['list']['addButton']['route'] }}" class="button is-dark">
                         <span class="icon is-small"><x-carbon-add /></span>
                         <span>{{ $constants['list']['addButton']['text'] }}</span>
@@ -110,13 +110,13 @@
                         <span class="icon"><x-carbon-view/></span>
                     </a>
 
-                    @if ($canEdit)
-                        <a wire:click="editItem({{ $record->id}})">
+                    @if ($canEdit && $record->canEdit)
+                        <a href="/cr/form/{{ $record->id}}">
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
                     @endif
 
-                    @if ($canDelete)
+                    @if ($canDelete && $record->canDelete)
                         <a wire:click.prevent="startCRDelete({{$record->id}})">
                             <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
                         </a>

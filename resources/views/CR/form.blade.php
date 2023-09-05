@@ -91,6 +91,8 @@
 
             <div class="control">
 
+                {{ $item ? $item->id  :'YOK'}}
+
                 @livewire('file-upload', [
                     'hasForm' => true,                      // true when possible to add/remove file otherwise false
                     'model' => 'CR',

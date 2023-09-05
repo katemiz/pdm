@@ -53,19 +53,21 @@ class Cr extends Component
     public $topic;
     public $description;
     public $is_for_ecn = 0;
+    public $status;
+    public $rejectReason;
+    public $createdBy;
+    public $engBy;
+
+    public $created_at;
+    public $req_reviewed_at;
+    public $eng_reviewed_at;
+
+
 
     protected $rules = [
         'topic' => 'required|min:5',
         'description' => 'required|min:10'
     ];
-
-
-    //public $isRelease = false;
-
-
-    // protected $listeners = [
-    //     'runDelete'=>'deleteItem'
-    // ];
 
 
     public function mount()
@@ -110,6 +112,16 @@ class Cr extends Component
             ->orWhere('rej_reason_eng', 'LIKE', "%".$this->search."%")
             ->orderBy($this->sortField,$this->sortDirection)
             ->paginate(env('RESULTS_PER_PAGE'));
+
+            foreach ($items as $key => $item) {
+                $items[$key]['canEdit'] = false;
+                $items[$key]['canDelete'] = false;
+
+                if ($item->status == 'wip') {
+                    $items[$key]['canEdit'] = true;
+                    $items[$key]['canDelete'] = true;
+                }
+            }
         }
 
         return view('CR.cr',[
@@ -119,16 +131,37 @@ class Cr extends Component
 
 
     public function setUnsetProps($opt = 'set') {
-        $this->item = CRequest::find($this->itemId);
 
         if ($opt === 'set') {
+            $this->item = CRequest::find($this->itemId);
+
+            $this->item->canEdit = false;
+            $this->item->canDelete = false;
+
+            if ($this->item->status == 'wip') {
+                $this->item->canEdit = true;
+                $this->item->canDelete = true;
+            }
+
+            $this->createdBy = User::find($this->item->user_id);
+            $this->engBy = User::find($this->item->eng_app_id);
+
             $this->topic = $this->item->topic;
             $this->description = $this->item->description;
             $this->is_for_ecn = $this->item->is_for_ecn;
+            $this->rejectReason = $this->item->rej_reason_eng;
+            $this->status = $this->item->status;
+
+            $this->created_at = $this->item->created_at;
+            $this->req_reviewed_at = $this->item->req_reviewed_at;
+            $this->eng_reviewed_at = $this->item->eng_reviewed_at;
+
         } else {
             $this->topic = '';
             $this->description = '';
             $this->is_for_ecn = false;
+            $this->rejectReason = false;
+            $this->status = false;
         }
     }
 
@@ -144,6 +177,38 @@ class Cr extends Component
         $this->itemId = $idItem;
         $this->action = 'FORM';
     }
+
+    public function addNew()
+    {
+        $this->itemId = false;
+        $this->action = 'FORM';
+    }
+
+
+    public function acceptCR($idItem)
+    {
+        CRequest::whereId($this->itemId)->update([
+            'status' => $this->topic,
+            'eng_app_id' => Auth::id(),
+            'status' => 'accepted'
+        ]);
+        session()->flash('message','Change Request has been updated successfully!!');
+        $this->action = 'VIEW';
+    }
+
+    public function rejectCR($idItem)
+    {
+        CRequest::whereId($this->itemId)->update([
+            'status' => $this->topic,
+            'eng_app_id' => Auth::id(),
+            'rej_reason_eng' => 'Reddetme nedeni',
+            'status' => 'rejected'
+        ]);
+        session()->flash('message','Change Request has been updated successfully!!');
+        $this->action = 'VIEW';
+    }
+
+
 
 
     public function startCRDelete($idItem)
@@ -178,7 +243,6 @@ class Cr extends Component
             session()->flash('success','Change Request Created Successfully!');
 
             $this->itemId = $this->item->id;
-
 
             $this->dispatch('triggerAttachment',
                 modelId: $this->itemId

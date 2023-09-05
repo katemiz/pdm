@@ -14,18 +14,18 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('crequests', function (Blueprint $table) {
-            $table->id()->startingValue(1001);
+            $table->id()->startingValue(1071);
             $table->foreignIdFor(User::class);
             $table->string('topic');
             $table->boolean('is_for_ecn')->default(false);
-            //$table->string('req_approver')->nullable();
             $table->foreignId('req_app_id')->nullable();
-            //$table->string('eng_approver')->nullable();
             $table->foreignId('eng_app_id')->nullable();
             $table->string('rej_reason_req')->nullable();
             $table->string('rej_reason_eng')->nullable();
             $table->text('description')->nullable();
             $table->string('status')->default('wip');
+            $table->date('req_reviewed_at');
+            $table->date('eng_reviewed_at');
             $table->timestamps();
         });
     }

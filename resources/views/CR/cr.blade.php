@@ -53,6 +53,10 @@
             })
         })
 
+        function ShowModal() {
+            document.getElementById('rmodal').classList.add('is-active')
+        }
+
     </script>
 
     @switch($action)

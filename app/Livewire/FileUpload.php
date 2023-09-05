@@ -31,42 +31,22 @@ class FileUpload extends Component
     public $hasItsForm = false; // Does component has its own form, independently file uploads
 
     public $dosyalar = [];
-    public $attachments = [];
-
-
-
-
+    //public $attachments = [];
 
 
     public function render()
     {
-        // $this->getAttachments();
         return view('livewire.file-upload');
     }
 
 
-    // public function getAttachments()
-    // {
-    //     if ($this->modelId) {
-    //         if ($this->tag) {
-    //             $this->attachments = Attachment::where('model_name',$this->model)
-    //             ->where('model_item_id',$this->modelId)
-    //             ->where('tag',$this->tag)
-    //             ->get();
-    //         } else {
-    //             $this->attachments = Attachment::where('model_name',$this->model)
-    //             ->where('model_item_id',$this->modelId)
-    //             ->get();
-    //         }
-    //     }
-    // }
+
 
 
 
     public function removeFile($fileToRemove) {
 
         foreach ($this->dosyalar as $key => $dosya) {
-
             if ($dosya->getClientOriginalName() == $fileToRemove) {
                 unset($this->dosyalar[$key]);
             }
@@ -74,51 +54,14 @@ class FileUpload extends Component
     }
 
 
-    // public function startAttachDelete($idAttach) {
-    //     $this->idAttach = $idAttach;
-    //     $this->dispatch('ConfirmDelete', type:'attach');
-    // }
-
-
-    // #[On('deleteAttach')]
-    // public function deleteAttach() {
-    //     Attachment::find($this->idAttach)->delete();
-    //     $this->dispatch('attachDeleted');
-    // }
-
-
-    // public function downloadFile($idAttach) {
-
-    //     $d = Attachment::find($idAttach);
-
-    //     if (!$this->checkPermission()) {
-    //         abort(404, 'No permission!');
-    //     }
-
-    //     $dosya = Storage::path($d->stored_file_as);
-
-    //     if (file_exists($dosya)) {
-    //         $headers = [
-    //             'Content-Type' => $d->mime_type,
-    //         ];
-
-    //         return response()->download(
-    //             $dosya,
-    //             $d->original_file_name,
-    //             $headers,
-    //             'inline'
-    //         );
-    //     } else {
-    //         abort(404, 'File not found!');
-    //     }
-    // }
-
-
-
 
     #[On('triggerAttachment')]
-    public function uploadAttach(Request $request)
+    public function uploadAttach($modelId = false)
     {
+        if ($modelId) {
+            $this->modelId = $modelId;
+        }
+
         foreach ($this->dosyalar as $dosya) {
 
             $props['user_id'] = Auth::id();
@@ -143,13 +86,5 @@ class FileUpload extends Component
     }
 
 
-    // public function checkPermission()
-    // {
-    //     if ( Auth::id() ) {
-    //         return true;
-    //     } else {
-    //         return false;
-    //     }
-    // }
 
 }

@@ -21,12 +21,11 @@ return [
         "headers" => [
 
             "id"=> [
-                "title" => "#",
+                "title" => "CR No",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
-
 
             "topic"=> [
                 "title" => "CR Topic / Konu",
@@ -35,7 +34,12 @@ return [
                 "direction" => "asc"
             ],
 
-
+            "status"=> [
+                "title" => "Status / Durum",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
 
             "created_at"=> [
                 "title" => "Created On",

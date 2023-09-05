@@ -1,13 +1,9 @@
-
-
-
-
 <header class="mb-6">
     <h1 class="title has-text-weight-light is-size-1">{{ $constants['read']['title'] }}</h1>
 
-    {{-- @if ( $constants('read.subtitle') )
-        <h2 class="subtitle has-text-weight-light">{{ $constants('read.subtitle') }}</h2>
-    @endif --}}
+    @if ( $constants['read']['subtitle'] )
+        <h2 class="subtitle has-text-weight-light">{{ $constants['read']['subtitle'] }}</h2>
+    @endif
 </header>
 
 @if (session()->has('message'))
@@ -16,21 +12,11 @@
     </div>
 @endif
 
-@if ($item)
-<span class="tag is-dark is-large">CR-{{ $item->id}}</span>
-@endif
-
 <div class="card">
 
     <div class="card-content">
 
         <div class="content">
-
-
-
-
-
-
             <div class="columns">
 
                 <div class="column is-half">
@@ -49,17 +35,14 @@
                             </a>
                         </p>
 
-
                         @if ($canEdit)
                         <p class="control ml-1">
-                            <a href="/cr/form/{{ $item->id }}" class="button is-link is-light is-small">
-                            {{-- <a class="button is-link is-light is-small" wire:click="editItem({{ $item->id }})"> --}}
+                            <a class="button is-link is-light is-small" wire:click="editItem({{ $item->id }})">
                                 <span class="icon is-small"><x-carbon-edit /></span>
                                 <span>Edit</span>
                             </a>
                         </p>
                         @endif
-
 
                         @if ($canDelete)
                         <p class="control ml-1">
@@ -72,11 +55,9 @@
                         @endif
 
                     </div>
-
                 </div>
 
             </div>
-
         </div>
 
         <div class="media">
@@ -106,15 +87,14 @@
 
         <label class="label">Dosyalar</label>
 
-        @php
-            print_r($attachments)
-        @endphp
+        @livewire('file-list', [
+            'model' => 'CR',
+            'modelId' => $item->id,
+            'tag' => 'CR',                          // Any tag other than model name
+        ], 'CR')
 
-        <x-file-list :attachments="$attachments" />
 
-
-
-        @livewire('attach-component', [
+        @livewire('file-upload', [
             'hasForm' => false,                      // true when possible to add/remove file otherwise false
             'model' => 'CR',
             'modelId' => $item->id,
@@ -122,27 +102,6 @@
             'tag' => 'CR',                          // Any tag other than model name
             'canEdit' => $canEdit], 'CR')
 
-
-
-
-
     </div>
 
-
-
-
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-

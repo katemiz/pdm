@@ -1,4 +1,3 @@
-
 <section class="section container">
 
     <script>
@@ -43,10 +42,6 @@
             })
         });
 
-
-
-
-
         window.addEventListener('attachDeleted',function(e) {
 
             Swal.fire({
@@ -58,18 +53,7 @@
             })
         })
 
-
-        // window.addEventListener('filesUploaded',function(e) {
-
-
-
-        //     Livewire.dispatch('OnFilesUploaded')
-        // })
-     
     </script>
-
-
-
 
     @switch($action)
 
@@ -89,5 +73,3 @@
     @endswitch
 
 </section>
-
-

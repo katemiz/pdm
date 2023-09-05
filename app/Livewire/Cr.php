@@ -7,7 +7,6 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 
-use App\Models\Attachment;
 use App\Models\CRequest;
 use App\Models\Company;
 // use App\Models\EndProduct;
@@ -54,8 +53,6 @@ class Cr extends Component
     public $topic;
     public $description;
     public $is_for_ecn = 0;
-    public $attachments = [];
-
 
     protected $rules = [
         'topic' => 'required|min:5',
@@ -97,12 +94,10 @@ class Cr extends Component
 
         if ( $this->action === 'VIEW') {
             $this->setUnsetProps();
-            $this->getAttachments();
         }
 
         if ( $this->action === 'FORM' && $this->itemId) {
             $this->setUnsetProps();
-            $this->getAttachments();
         }
 
         if ( $this->action === 'LIST') {
@@ -123,8 +118,7 @@ class Cr extends Component
     }
 
 
-    public function setUnsetProps($opt = 'set')
-    {
+    public function setUnsetProps($opt = 'set') {
         $this->item = CRequest::find($this->itemId);
 
         if ($opt === 'set') {
@@ -139,8 +133,7 @@ class Cr extends Component
     }
 
 
-    public function viewItem($idItem)
-    {
+    public function viewItem($idItem) {
         $this->itemId = $idItem;
         $this->action = 'VIEW';
     }
@@ -152,11 +145,13 @@ class Cr extends Component
         $this->action = 'FORM';
     }
 
+
     public function startCRDelete($idItem)
     {
         $this->item = CRequest::find($idItem);
         $this->dispatch('ConfirmDelete', type:'cr');
     }
+
 
     #[On('deleteCR')]
     public function deleteCR()
@@ -167,12 +162,7 @@ class Cr extends Component
         $this->resetPage();
     }
 
-    //#[On('filesUploaded')]
-    public function OnFilesUploaded() {
 
-        dd(('OnFilesUploaded'));
-
-    }
 
 
     public function storeItem()
@@ -196,6 +186,8 @@ class Cr extends Component
 
             $this->action = 'VIEW';
 
+            //return redirect('/cr/view/'.$this->itemId);
+
         } catch (\Exception $ex) {
             session()->flash('error','Something goes wrong!!'.$ex);
         }
@@ -216,16 +208,16 @@ class Cr extends Component
                 'is_for_ecn' => $this->is_for_ecn,
                 'user_id' => Auth::id()
             ]);
-            session()->flash('message','Change Request Updated Successfully!!');
-
+            session()->flash('message','Change Request has been updated successfully!!');
 
             $this->dispatch('triggerAttachment',
                 modelId: $this->itemId
             );
 
-            //$this->dispatch('refreshAttach');
-
             $this->action = 'VIEW';
+
+            //return redirect('/cr/view/'.$this->itemId);
+
 
         } catch (\Exception $ex) {
             session()->flash('success','Something goes wrong!!');
@@ -235,23 +227,6 @@ class Cr extends Component
 
 
 
-    public function getAttachments()
-    {
-        if ($this->itemId) {
-
-            if ($this->tag) {
-                $this->attachments = Attachment::where('model_name',$this->model)
-                ->where('model_item_id',$this->itemId)
-                ->where('tag',$this->tag)
-                ->get();
-            } else {
-                $this->attachments = Attachment::where('model_name',$this->model)
-                ->where('model_item_id',$this->itemId)
-                ->get();
-            }
-
-        }
-    }
 
 
 

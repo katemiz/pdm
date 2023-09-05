@@ -1,15 +1,4 @@
-
-
-
-
-
-
-
-
 <div>
-
-
-
     <header class="mb-6">
         <h1 class="title has-text-weight-light is-size-1">{{ $constants['list']['title'] }}</h1>
 
@@ -18,9 +7,8 @@
         @endif
     </header>
 
-
     @if(session('message'))
-    <div class="notification is-info is-light">{{ session('message') }}</div>
+        <div class="notification is-info is-light">{{ session('message') }}</div>
     @endif
 
     <nav class="level my-6">
@@ -38,7 +26,6 @@
             @endif
 
         </div>
-
 
         <!-- Right side -->
         <div class="level-right">
@@ -63,17 +50,6 @@
         </div>
 
     </nav>
-
-
-
-
-
-
-
-
-
-
-
 
     @if ($items->count() > 0)
     <table class="table is-fullwidth">
@@ -135,9 +111,7 @@
                     </a>
 
                     @if ($canEdit)
-                        {{-- <a wire:click="editItem({{ $record->id}})"> --}}
-                        <a href="/cr/form/{{ $record->id}}">
-
+                        <a wire:click="editItem({{ $record->id}})">
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
                     @endif
@@ -156,16 +130,9 @@
         </tbody>
     </table>
 
-
     {{ $items->links('components.pagination.bulma') }}
 
     @else
         <div class="notification is-warning is-light">{{ $constants['list']['noitem'] }}</div>
     @endif
 </div>
-
-
-
-
-
-

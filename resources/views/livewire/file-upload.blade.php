@@ -15,19 +15,18 @@
             'canEdit' => $canEdit], 'CR')
         --}}
 
-        <script>
+        {{-- <script>
 
         window.addEventListener('filesUploaded',function(e) {
 
             console.log('Ahhah')
 
-            //Livewire.dispatch('OnFilesUploaded')
         })
-     
-        </script>
+
+        </script> --}}
 
 
-        @if ($hasForm)
+        {{-- @if ($hasForm)
             <script>
                 window.addEventListener('runConfirmDialog',function(e) {
 
@@ -61,29 +60,19 @@
                     })
                 })
             </script>
-        @endif
+        @endif --}}
 
 
-        {{-- @php
-            print_r($attachments)
-        @endphp --}}
 
 
-        @if ($attachments->count() > 0)
+        {{-- @if ($attachments->count() > 0)
             <div class="column">
-
-            {{-- <p class="subtitle">Attachments</p> --}}
-
             <table class="table is-fullwidth is-size-7">
 
                 @foreach ($attachments as $key => $attachment)
                 <tr class="my-0">
                     <td class="is-narrow">
-                        {{-- @if ($isMultiple) --}}
-                            {{ ++$key }}
-                        {{-- @else --}}
-                            {{-- <span class="icon"><x-carbon-attachment /></span>
-                        @endif --}}
+                        {{ ++$key }}
                     </td>
                     <td>
                         <a wire:click="downloadFile('{{ $attachment->id }}')">{{ $attachment->original_file_name }}</a>
@@ -106,7 +95,7 @@
             </div>
         @else
         <p>{{ $isMultiple ? 'No files' : 'No file' }}</p>
-        @endif
+        @endif --}}
 
 
         @if ($hasForm && $canEdit)

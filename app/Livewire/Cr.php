@@ -54,7 +54,7 @@ class Cr extends Component
     public $description;
     public $is_for_ecn = 0;
     public $status;
-    public $rejectReason;
+    public $rejectReason='';
     public $createdBy;
     public $engBy;
 
@@ -198,6 +198,11 @@ class Cr extends Component
 
     public function rejectCR($idItem)
     {
+
+
+        dd($rejectReason);
+
+
         CRequest::whereId($this->itemId)->update([
             'status' => $this->topic,
             'eng_app_id' => Auth::id(),

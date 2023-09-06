@@ -53,8 +53,12 @@
             })
         })
 
-        function ShowModal() {
+        function showModal() {
             document.getElementById('rmodal').classList.add('is-active')
+        }
+
+        function hideModal() {
+            document.getElementById('rmodal').classList.remove('is-active')
         }
 
     </script>

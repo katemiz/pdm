@@ -71,8 +71,7 @@
 
                         <p class="control ml-5">
                             {{-- <a wire:click="rejectCR({{ $item->id }})" class="button is-danger is-light is-small"> --}}
-                            <a href="javascript:ShowModal({{ $item->id }})" class="button is-danger is-light is-small">
-
+                            <a href="javascript:showModal({{ $item->id }})" class="button is-danger is-light is-small">
                                 <span class="icon is-small"><x-carbon-thumbs-down /></span>
                                 <span>Reject / Red</span>
                             </a>
@@ -171,27 +170,24 @@
 
 
     <div class="modal" id="rmodal">
-        <div class="modal-background"></div>
+        <div class="modal-background" onclick="hideModal()"></div>
         <div class="modal-card">
+            <form method="POST" enctype="multipart/form-data">
+                @csrf
           <header class="modal-card-head">
             <p class="modal-card-title">Red Nedeni / Rejection Reason</p>
-            <button class="delete" aria-label="close"></button>
+            <a class="delete" aria-label="close" onclick="hideModal()"></a>
           </header>
           <section class="modal-card-body">
-
-
-
             <textarea wire:model='rejectReason' class="textarea" placeholder="Reddetme nedenini yazınız." rows="5"></textarea>
-
-
-
           </section>
           <footer class="modal-card-foot">
-            <button class="button is-success">Red / Reject</button>
-            <button class="button">İptal / Cancel</button>
+            <a onclick="hideModal()" class="button">İptal / Cancel</a>
+            <button wire:click="rejectCR({{ $item->id }})" class="button is-light is-danger">Red / Reject</button>
           </footer>
+            </form>
         </div>
-      </div>
+    </div>
 
 
 

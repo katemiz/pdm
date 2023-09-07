@@ -24,8 +24,8 @@ return new class extends Migration
             $table->string('rej_reason_eng')->nullable();
             $table->text('description')->nullable();
             $table->string('status')->default('wip');
-            $table->date('req_reviewed_at');
-            $table->date('eng_reviewed_at');
+            $table->date('req_reviewed_at')->nullable();
+            $table->date('eng_reviewed_at')->nullable();
             $table->timestamps();
         });
     }

@@ -9,7 +9,7 @@ use Livewire\Attributes\Title;
 
 use App\Models\CRequest;
 use App\Models\Company;
-// use App\Models\EndProduct;
+use App\Models\CNotice;
 use App\Models\Project;
 use App\Models\User;
 
@@ -19,6 +19,8 @@ use Illuminate\Support\Facades\Storage;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+
+
 
 class Cr extends Component
 {
@@ -41,8 +43,8 @@ class Cr extends Component
     public $canDelete = true;
 
     public $search = '';
-    public $sortField;
-    public $sortDirection = 'asc';
+    public $sortField = 'created_at';
+    public $sortDirection;
 
     public $constants;
 
@@ -54,14 +56,13 @@ class Cr extends Component
     public $description;
     public $is_for_ecn = 0;
     public $status;
-    public $rejectReason='';
+    public $rejectReason;
     public $createdBy;
     public $engBy;
 
     public $created_at;
     public $req_reviewed_at;
     public $eng_reviewed_at;
-
 
 
     protected $rules = [
@@ -104,7 +105,7 @@ class Cr extends Component
 
         if ( $this->action === 'LIST') {
 
-            $this->sortField = 'topic';
+            $this->sortDirection = $this->constants['list']['headers'][$this->sortField]['direction'];
 
             $items = CRequest::where('topic', 'LIKE', "%".$this->search."%")
             ->orWhere('description', 'LIKE', "%".$this->search."%")
@@ -128,6 +129,22 @@ class Cr extends Component
             'items' => $items
         ]);
     }
+
+
+
+    public function changeSortDirection ($key) {
+
+        $this->sortField = $key;
+
+        if ($this->constants['list']['headers'][$key]['direction'] == 'asc') {
+            $this->constants['list']['headers'][$key]['direction'] = 'desc';
+        } else {
+            $this->constants['list']['headers'][$key]['direction'] = 'asc';
+        }
+
+        $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
+    }
+
 
 
     public function setUnsetProps($opt = 'set') {
@@ -192,24 +209,29 @@ class Cr extends Component
             'eng_app_id' => Auth::id(),
             'status' => 'accepted'
         ]);
-        session()->flash('message','Change Request has been updated successfully!!');
-        $this->action = 'VIEW';
+
+        $ecn = CNotice::create([
+            'user_id' => Auth::id(),
+            'c_notice_id' => $this->itemId,
+            'pre_description' => $this->topic,
+        ]);
+
+        session()->flash('message','Change Request has been accepted and a new ECN has been created.');
+
+        redirect('/ecn/view/'.$ecn->id);
+        //$this->action = 'VIEW';
+
     }
 
-    public function rejectCR($idItem)
+    public function rejectCR()
     {
-
-
-        dd($rejectReason);
-
-
         CRequest::whereId($this->itemId)->update([
             'status' => $this->topic,
             'eng_app_id' => Auth::id(),
-            'rej_reason_eng' => 'Reddetme nedeni',
+            'rej_reason_eng' => $this->rejectReason,
             'status' => 'rejected'
         ]);
-        session()->flash('message','Change Request has been updated successfully!!');
+        session()->flash('message','Change Request has been rejected!');
         $this->action = 'VIEW';
     }
 

@@ -66,16 +66,16 @@
     @switch($action)
 
         @case('FORM')
-            @include('CR.form')
+            @include('ECN.form')
             @break
 
         @case('VIEW')
-            @include('CR.view')
+            @include('ECN.view')
         @break
 
         @case('LIST')
         @default
-            @include('CR.list')
+            @include('ECN.list')
             @break
 
     @endswitch

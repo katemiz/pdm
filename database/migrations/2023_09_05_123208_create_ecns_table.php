@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(CNotice::class);
             $table->text('pre_description')->nullable();
+            $table->string('status')->default('wip');
             $table->timestamps();
         });
     }

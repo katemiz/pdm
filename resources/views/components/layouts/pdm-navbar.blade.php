@@ -65,6 +65,7 @@
 
                     <div class="navbar-dropdown">
                         <a href="/cr/list" class="navbar-item">Change Requests</a>
+                        <a href="/ecn/list" class="navbar-item">ECNs</a>
                         <a href="/admin/roles" class="navbar-item">Roles</a>
                         <a href="/admin/permissions" class="navbar-item">Permissions</a>
                         <a href="/admin/companies" class="navbar-item">Companies</a>

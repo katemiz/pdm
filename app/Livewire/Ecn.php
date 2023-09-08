@@ -47,8 +47,8 @@ class Ecn extends Component
     // Item Props
     public $c_notice_id;
     public $pre_description;
-    public $is_for_ecn = 0;
     public $createdBy;
+    public $status;
     public $created_at;
 
 
@@ -61,13 +61,84 @@ class Ecn extends Component
         if (request('id')) {
             $this->itemId = request('id');
         }
-        $this->constants = config('ecns');
+        $this->constants = config('ecn');
     }
 
     #[Title('ECN - Engineering Change Notice')]
     #[On('refreshAttachments')]
     public function render()
     {
-        return view('ECN.ecn');
+        $items = false;
+
+        if ( $this->action === 'VIEW') {
+            $this->setUnsetProps();
+        }
+
+        if ( $this->action === 'FORM' && $this->itemId) {
+            $this->setUnsetProps();
+        }
+
+        if ( $this->action === 'LIST') {
+
+            $this->sortDirection = $this->constants['list']['headers'][$this->sortField]['direction'];
+
+            $items = CNotice::where('pre_description', 'LIKE', "%".$this->search."%")
+            ->orWhere('c_notice_id', 'LIKE', "%".$this->search."%")
+            // ->orWhere('rej_reason_req', 'LIKE', "%".$this->search."%")
+            // ->orWhere('rej_reason_eng', 'LIKE', "%".$this->search."%")
+            ->orderBy($this->sortField,$this->sortDirection)
+            ->paginate(env('RESULTS_PER_PAGE'));
+
+            foreach ($items as $key => $item) {
+                $items[$key]['canEdit'] = false;
+                $items[$key]['canDelete'] = false;
+
+                if ($item->status == 'wip') {
+                    $items[$key]['canEdit'] = true;
+                    $items[$key]['canDelete'] = true;
+                }
+            }
+        }
+
+        return view('ECN.ecn',[
+            'items' => $items
+        ]);
     }
+
+
+
+    public function setUnsetProps($opt = 'set') {
+
+        if ($opt === 'set') {
+            $this->item = CNotice::find($this->itemId);
+
+            $this->item->canEdit = false;
+            $this->item->canDelete = false;
+
+            if ($this->item->status == 'wip') {
+                $this->item->canEdit = true;
+                $this->item->canDelete = true;
+            }
+
+            $this->createdBy = User::find($this->item->user_id);
+            $this->engBy = User::find($this->item->eng_app_id);
+
+            $this->c_notice_id = $this->item->c_notice_id;
+            $this->pre_description = $this->item->pre_description;
+            $this->status = $this->item->status;
+
+            $this->created_at = $this->item->created_at;
+
+
+        } else {
+            $this->topic = '';
+            $this->description = '';
+            $this->is_for_ecn = false;
+            $this->rejectReason = false;
+            $this->status = false;
+        }
+    }
+
+
+
 }

@@ -16,14 +16,14 @@
         <!-- Left side -->
         <div class="level-left">
 
-            @if ($canEdit)
+            {{-- @if ($canEdit)
                 <div class="level-item has-text-centered">
                     <a href="{{ $constants['list']['addButton']['route'] }}" class="button is-dark">
                         <span class="icon is-small"><x-carbon-add /></span>
                         <span>{{ $constants['list']['addButton']['text'] }}</span>
                     </a>
                 </div>
-            @endif
+            @endif --}}
 
         </div>
 

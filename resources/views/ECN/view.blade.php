@@ -25,7 +25,7 @@
                     <div class="field has-addons">
 
                         <p class="control">
-                            <a href="/cr/list" class="button is-info is-light is-small">
+                            <a href="/ecn/list" class="button is-info is-light is-small">
                             <span class="icon is-small"><x-carbon-list /></span>
                             </a>
                         </p>
@@ -63,19 +63,18 @@
                     <div class="field has-addons is-pulled-right">
 
                         <p class="control">
-                            <a wire:click="acceptCR({{ $item->id }})" class="button is-success is-light is-small">
-                                <span class="icon is-small"><x-carbon-thumbs-up /></span>
-                                <span>Accept / Kabul</span>
+                            <a wire:click="closeECN({{ $item->id }})" class="button is-success is-light is-small">
+                                <span class="icon is-small"><x-carbon-task-complete /></span>
+                                <span>Finalize / Tamamla</span>
                             </a>
                         </p>
 
-                        <p class="control ml-5">
-                            {{-- <a wire:click="rejectCR({{ $item->id }})" class="button is-danger is-light is-small"> --}}
+                        {{-- <p class="control ml-5">
                             <a onclick="showModal('m20')" class="button is-danger is-light is-small">
                                 <span class="icon is-small"><x-carbon-thumbs-down /></span>
                                 <span>Reject / Red</span>
                             </a>
-                        </p>
+                        </p> --}}
 
                     </div>
                 </div>
@@ -87,35 +86,29 @@
         <div class="media">
             <div class="media-left">
                 <figure class="image is-48x48">
-                <x-carbon-document-epdf />
+                    <x-carbon-message-queue />
                 </figure>
             </div>
             <div class="media-content">
-                <p class="title is-4"> CR-{{ $item->id }}</p>
-                <p class="subtitle is-6">{{ $item->topic}}</p>
+                <p class="title is-4"> ECN-{{ $item->id }}</p>
+                <p class="subtitle is-6">CR-{{ $item->c_notice_id}}</p>
             </div>
         </div>
 
-        @if ( $item->is_for_ecn === 1)
-        <div class="notification is-info is-light">
-            This CR is for new Design
-        </div>
-        @endif
 
+        <label class="label">Yapılacakların Tanımı - Actions List</label>
 
-        @if ( strlen($item->description) > 0)
         <div class="notification">
-            {!! $item->description !!}
+            {!! $item->pre_description !!}
         </div>
-        @endif
 
         <label class="label">Dosyalar</label>
 
         @livewire('file-list', [
-            'model' => 'CR',
+            'model' => 'ECN',
             'modelId' => $item->id,
-            'tag' => 'CR',                          // Any tag other than model name
-        ], 'CR')
+            'tag' => 'Step1',                          // Any tag other than model name
+        ], 'ECN')
 
 
         @livewire('file-upload', [
@@ -167,7 +160,7 @@
             <a class="delete" aria-label="close" onclick="hideModal('m10')"></a>
         </header>
         <section class="modal-card-body">
-            <p>{{ $rejectReason }}</p>
+            <p>rejectReason </p>
         </section>
         </div>
     </div>

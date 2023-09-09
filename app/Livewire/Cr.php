@@ -213,7 +213,7 @@ class Cr extends Component
         $ecn = CNotice::create([
             'user_id' => Auth::id(),
             'c_notice_id' => $this->itemId,
-            'pre_description' => $this->topic,
+            'pre_description' => 'ECN için yapılması gerekenlerin ayrıntılı bir şekilde açıklanması gerekmektedir.',
         ]);
 
         session()->flash('message','Change Request has been accepted and a new ECN has been created.');

@@ -17,6 +17,8 @@ Route::middleware('guest')->group(function () {
     Route::get('/logware/{action?}', function () {
         return view('admin.log-ui');
     });
+
+    Route::get('/logware/login', Logware::class)->name('login');
 });
 
 Route::middleware('auth')->group(function () {

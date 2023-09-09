@@ -15,6 +15,7 @@ class CNotice extends Model
     protected $fillable = [
         'user_id',
         'c_notice_id',
+        'pre_description'
     ];
 
 

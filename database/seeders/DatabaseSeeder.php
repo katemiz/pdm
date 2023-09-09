@@ -10,6 +10,7 @@ use Spatie\Permission\Models\Permission;
 
 use App\Models\User;
 
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -17,12 +18,8 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        // \App\Models\CRequest::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
 
         $admin = User::create([
             "name" => 'admin',
@@ -30,6 +27,9 @@ class DatabaseSeeder extends Seeder
             "email" => 'admin@admin.com',
             "password" => 'admin'
         ]);
+
+        \App\Models\CRequest::factory()->count(50)->create();
+
 
         $adminRole = Role::create(['name' => 'admin']);
         $admin->assignRole('admin');

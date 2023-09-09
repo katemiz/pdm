@@ -51,6 +51,13 @@ class Ecn extends Component
     public $status;
     public $created_at;
 
+    public $isForNewProduct = false; // Is this ECN for NEW or for CHANGE
+
+
+    protected $rules = [
+        'pre_description' => 'required|min:10'
+    ];
+
 
     public function mount()
     {
@@ -130,6 +137,15 @@ class Ecn extends Component
             $this->created_at = $this->item->created_at;
 
 
+            $cr = CRequest::find($this->item->c_notice_id);
+
+            if ($cr->is_for_ecn) {
+                $this->isForNewProduct = true;
+            }
+
+
+
+
         } else {
             $this->topic = '';
             $this->description = '';
@@ -138,6 +154,34 @@ class Ecn extends Component
             $this->status = false;
         }
     }
+
+
+
+
+
+
+    public function updateItem()
+    {
+        $this->validate();
+
+        try {
+            CNotice::whereId($this->itemId)->update([
+                'pre_description' => $this->pre_description,
+            ]);
+            session()->flash('message','ECN has been updated successfully!');
+
+            $this->dispatch('triggerAttachment',
+                modelId: $this->itemId
+            );
+
+            $this->action = 'VIEW';
+
+        } catch (\Exception $ex) {
+            session()->flash('success','Something goes wrong!!');
+        }
+    }
+
+
 
 
 

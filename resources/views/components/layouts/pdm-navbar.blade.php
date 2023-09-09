@@ -58,7 +58,7 @@
 
                     <a class="navbar-link">
                         <span class="icon has-text-warning">
-                            <x-carbon-letter-aa />
+                            <x-carbon-intent-request-scale-in />
                         </span>
                         <span class="ml-2">Requests</span>
                     </a>
@@ -66,10 +66,23 @@
                     <div class="navbar-dropdown">
                         <a href="/cr/list" class="navbar-item">Change Requests</a>
                         <a href="/ecn/list" class="navbar-item">ECNs</a>
-                        <a href="/admin/roles" class="navbar-item">Roles</a>
-                        <a href="/admin/permissions" class="navbar-item">Permissions</a>
-                        <a href="/admin/companies" class="navbar-item">Companies</a>
-                        <a href="/admin/projects" class="navbar-item">Projects</a>
+                    </div>
+                </div>
+
+                <div class="navbar-item has-dropdown is-hoverable">
+
+                    <a class="navbar-link">
+                        <span class="icon has-text-warning">
+                            <x-carbon-barcode />
+                        </span>
+                        <span class="ml-2">Products</span>
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="/products/detail/list" class="navbar-item">Detail Product</a>
+                        <a href="/products/assy/list" class="navbar-item">Assy Product</a>
+                        <a href="/products/end/list" class="navbar-item">End Product</a>
+
                     </div>
                 </div>
 

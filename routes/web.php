@@ -12,6 +12,8 @@ use App\Http\Controllers\UserController;
 
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
+use App\Livewire\Product;
+
 
 
 
@@ -108,6 +110,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/cr/{action}/{id?}', Cr::class);
     Route::get('/ecn/{action}/{id?}', Ecn::class);
+
+    // PRODUCTS
+    Route::get('/products/{ptype}/{action}/{id?}', Product::class);
+
+
 
 
 

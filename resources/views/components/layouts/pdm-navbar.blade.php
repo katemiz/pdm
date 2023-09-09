@@ -69,22 +69,18 @@
                     </div>
                 </div>
 
-                <div class="navbar-item has-dropdown is-hoverable">
 
-                    <a class="navbar-link">
-                        <span class="icon has-text-warning">
-                            <x-carbon-barcode />
-                        </span>
-                        <span class="ml-2">Products</span>
-                    </a>
 
-                    <div class="navbar-dropdown">
-                        <a href="/products/detail/list" class="navbar-item">Detail Product</a>
-                        <a href="/products/assy/list" class="navbar-item">Assy Product</a>
-                        <a href="/products/end/list" class="navbar-item">End Product</a>
+                <a href="/products/list" class="navbar-item">
+                    <span class="icon has-text-warning">
+                        <x-carbon-barcode />
+                    </span>
+                    <span class="ml-2">Products</span>
+                </a>
 
-                    </div>
-                </div>
+
+
+
 
 
 

@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CompanyController;
-// use App\Http\Controllers\CrController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
@@ -103,23 +102,10 @@ PDM FUNCTIONS
 
 Route::middleware(['auth'])->group(function () {
 
-    // PROJECTS
-    // Route::get('/cr', function () {
-    //     return view('talep.cr.cr-list');
-    // });
-
     Route::get('/cr/{action}/{id?}', Cr::class);
     Route::get('/ecn/{action}/{id?}', Ecn::class);
 
     // PRODUCTS
-    Route::get('/products/{ptype}/{action}/{id?}', Product::class);
+    Route::get('/products/{action}/{id?}', Product::class);
 
-
-
-
-
-    // Route::get('/cr/form/{id?}', [CrController::class,'form']);
-    // Route::post('/cr/store/{id?}', [CrController::class,'store']);
-    // Route::get('/cr/view/{id}', [CrController::class,'view']);
-    // Route::get('/cr/delete/{id}', [CrController::class, 'delete']);
 });

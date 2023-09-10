@@ -14,7 +14,7 @@ class Urun extends Model
     protected $fillable = [
         'user_id',
         'c_notice_id',
-        'partno',
+        'product_no',
         'version',
         'description',
         'checker_id',
@@ -23,6 +23,7 @@ class Urun extends Model
         'reject_reason_app',
         'check_reviewed_at',
         'app_reviewed_at',
+        'remarks',
         'status'
     ];
 

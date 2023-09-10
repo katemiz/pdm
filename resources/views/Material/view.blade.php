@@ -25,7 +25,7 @@
                     <div class="field has-addons">
 
                         <p class="control">
-                            <a href="/ecn/list" class="button is-info is-light is-small">
+                            <a href="/cr/list" class="button is-info is-light is-small">
                             <span class="icon is-small"><x-carbon-list /></span>
                             </a>
                         </p>
@@ -39,7 +39,7 @@
 
                         @if ($canEdit && $item->canEdit)
                         <p class="control ml-1">
-                            <a class="button is-link is-light is-small" href='/ecn/form/{{ $item->id }}'>
+                            <a class="button is-link is-light is-small" href='/cr/form/{{ $item->id }}'>
                                 <span class="icon is-small"><x-carbon-edit /></span>
                                 <span>Edit</span>
                             </a>
@@ -63,13 +63,14 @@
                     <div class="field has-addons is-pulled-right">
 
                         <p class="control">
-                            <a wire:click="closeECN({{ $item->id }})" class="button is-success is-light is-small">
-                                <span class="icon is-small"><x-carbon-task-complete /></span>
-                                <span>Finalize / Tamamla</span>
+                            <a wire:click="acceptCR({{ $item->id }})" class="button is-success is-light is-small">
+                                <span class="icon is-small"><x-carbon-thumbs-up /></span>
+                                <span>Accept / Kabul</span>
                             </a>
                         </p>
 
                         <p class="control ml-5">
+                            {{-- <a wire:click="rejectCR({{ $item->id }})" class="button is-danger is-light is-small"> --}}
                             <a onclick="showModal('m20')" class="button is-danger is-light is-small">
                                 <span class="icon is-small"><x-carbon-thumbs-down /></span>
                                 <span>Reject / Red</span>
@@ -86,29 +87,35 @@
         <div class="media">
             <div class="media-left">
                 <figure class="image is-48x48">
-                    <x-carbon-barcode />
+                <x-carbon-document-epdf />
                 </figure>
             </div>
             <div class="media-content">
-                <p class="title is-4"> {{ $item->id }}-{{ $item->version }}</p>
-                <p class="subtitle is-6">{{ $item->description}}</p>
+                <p class="title is-4"> CR-{{ $item->id }}</p>
+                <p class="subtitle is-6">{{ $item->topic}}</p>
             </div>
         </div>
 
-
-        <label class="label">Yapılacakların Tanımı - Actions List</label>
-
-        <div class="notification">
-            {!! $item->pre_description !!}
+        @if ( $item->is_for_ecn === 1)
+        <div class="notification is-info is-light">
+            This CR is for new Design
         </div>
+        @endif
+
+
+        @if ( strlen($item->description) > 0)
+        <div class="notification">
+            {!! $item->description !!}
+        </div>
+        @endif
 
         <label class="label">Dosyalar</label>
 
         @livewire('file-list', [
-            'model' => 'ECN',
+            'model' => 'CR',
             'modelId' => $item->id,
-            'tag' => 'ECN',                          // Any tag other than model name
-        ], 'ECN')
+            'tag' => 'CR',                          // Any tag other than model name
+        ], 'CR')
 
 
         @livewire('file-upload', [
@@ -124,16 +131,16 @@
         <table class="table is-fullwidth">
             <tr>
                 <td class="is-half">
-                    <label class="label">Created By</label>
+                    <label class="label">Başlatan / Created By</label>
                     <p>{{ $createdBy->name }} {{ $createdBy->lastname }}</p>
                     <p>{{ $created_at }}</p>
                 </td>
                 <td class="has-text-right">
-                    <label class="label">Status</label>
+                    <label class="label">Durum / Status</label>
 
                     @switch($status)
                     @case('wip')
-                        <p>Work In Progress</p>
+                        <p class="has-text-info">İncelemede - Work In Progress</p>
                         @break
                     @case('accepted')
                         <p class="has-text-info">Kabul Edildi - Accepted</span>
@@ -160,7 +167,7 @@
             <a class="delete" aria-label="close" onclick="hideModal('m10')"></a>
         </header>
         <section class="modal-card-body">
-            <p>rejectReason </p>
+            <p>{{ $rejectReason }}</p>
         </section>
         </div>
     </div>

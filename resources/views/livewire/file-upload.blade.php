@@ -1,177 +1,87 @@
-
-
-
-
-
 <div class="control">
 
-        {{--
-        @livewire('attach-component', [
-            'hasForm' => false,                     // Default : false, true when possible to add/remove file otherwise false
-            'model' => 'CR',
-            'modelId' => $item->id,
-            'isMultiple'=> false,                   // can multiple files be selected
-            'tag' => 'CR',                          // Any tag other than model name
-            'canEdit' => $canEdit], 'CR')
-        --}}
+    {{--
+    @livewire('attach-component', [
+        'hasForm' => false,                     // Default : false, true when possible to add/remove file otherwise false
+        'model' => 'CR',
+        'modelId' => $item->id,
+        'isMultiple'=> false,                   // can multiple files be selected
+        'tag' => 'CR',                          // Any tag other than model name
+        'canEdit' => $canEdit], 'CR')
+    --}}
 
-        {{-- <script>
+    @if ($hasForm && $canEdit)
+    <div class="content">
 
-        window.addEventListener('filesUploaded',function(e) {
+        @if ($hasItsForm)
+        <form wire:submit="uploadAttach" >
+        @endif
 
-            console.log('Ahhah')
+            <div class="columns">
 
-        })
+                <div class="column is-narrow">
+                    <label class="file-label" id="fileLabelEl">
+                        <input
+                            class="file-input"
+                            type="file"
+                            wire:model="dosyalar"
+                            id="fupload"
+                            {{ $isMultiple ? 'multiple' : '' }} />
+                        <span class="file-cta">
+                            <span class="file-icon"><x-carbon-document-multiple-02 /></span>
+                            <span class="file-label has-text-centered">{{ $isMultiple ? 'Add Files' : 'File' }}</span>
+                        </span>
+                    </label>
+                </div>
 
-        </script> --}}
+                <div class="column">
 
-
-        {{-- @if ($hasForm)
-            <script>
-                window.addEventListener('runConfirmDialog',function(e) {
-
-                    Swal.fire({
-                        title: e.detail.title,
-                        text: e.detail.text,
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                        confirmButtonText: 'Delete',
-                        cancelButtonText: 'Ooops ...',
-
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            this.Livewire.dispatch('runDelete')
-                        } else {
-                            return false
-                        }
-                    })
-                });
-
-                window.addEventListener('infoDeleted',function(e) {
-
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'File has been deleted',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                })
-            </script>
-        @endif --}}
-
-
-
-
-        {{-- @if ($attachments->count() > 0)
-            <div class="column">
-            <table class="table is-fullwidth is-size-7">
-
-                @foreach ($attachments as $key => $attachment)
-                <tr class="my-0">
-                    <td class="is-narrow">
-                        {{ ++$key }}
-                    </td>
-                    <td>
-                        <a wire:click="downloadFile('{{ $attachment->id }}')">{{ $attachment->original_file_name }}</a>
-                    </td>
-                    <td class="is-narrow">{{ $attachment->mime_type }}</td>
-                    <td class="is-narrow">{{ $attachment->file_size }}</td>
-
-                    @if ($hasForm && $canEdit)
-                    <td class="is-narrow has-text-right">
-                        <a wire:click="startAttachDelete('{{$attachment->id}}')">
-                            <span class="icon is-small has-text-danger"><x-carbon-trash-can /></span>
-                        </a>
-                    </td>
+                    @if (count($dosyalar) > 1 && $isMultiple)
+                        <p class="notification is-size-7 has-text-gray p-1">
+                        {{ count($dosyalar) }} files to be uploaded
+                        </p>
                     @endif
 
-                </tr>
-                @endforeach
-
-            </table>
-            </div>
-        @else
-        <p>{{ $isMultiple ? 'No files' : 'No file' }}</p>
-        @endif --}}
-
-
-        @if ($hasForm && $canEdit)
-        <div class="content">
-
-            @if ($hasItsForm)
-            <form wire:submit="uploadAttach" >
-            @endif
-
-                <div class="columns">
-
-                    <div class="column is-narrow">
-                        <label class="file-label" id="fileLabelEl">
-                            <input
-                                class="file-input"
-                                type="file"
-                                wire:model="dosyalar"
-                                id="fupload"
-                                {{ $isMultiple ? 'multiple' : '' }} />
-                            <span class="file-cta">
-                                <span class="file-icon"><x-carbon-document-multiple-02 /></span>
-                                <span class="file-label has-text-centered">{{ $isMultiple ? 'Add Files' : 'File' }}</span>
-                            </span>
-                        </label>
-                    </div>
-
-                    <div class="column">
-
-                        @if (count($dosyalar) > 1 && $isMultiple)
-                            <p class="notification is-size-7 has-text-gray p-1">
-                            {{ count($dosyalar) }} files to be uploaded
-                            </p>
-                        @endif
-
-                        @if (count($dosyalar) < 1 )
-                            <p class="notification is-size-7 has-text-gray p-1">
-                            {{ $isMultiple && count($dosyalar) < 1 ? 'No files to upload!' : 'No file to upload!' }}
-                            </p>
-                        @endif
-
-                        <div id="files_div" class="py-0">
-
-                            @if (count($dosyalar) > 0)
-                                @foreach ($dosyalar as $dosya)
-
-                                <div class="tags has-addons my-0">
-                                    <a wire:click="removeFile('{{$dosya->getClientOriginalName()}}')" class="tag is-danger is-light is-delete"></a>
-                                    <span class="tag is-black is-light">{{$dosya->getClientOriginalName()}}</span>
-                                </div>
-
-                                @endforeach
-                            @endif
-                        </div>
-
-                    </div>
-
-                    @if ($hasItsForm)
-                    <div class="column is-narrow">
-                        <button class="button is-link {{ count($dosyalar) < 1 ? 'is-hidden': ''}}" id="uploadButton">
-                            <span class="icon"><x-carbon-upload /></span>
-                            <span>Upload</span>
-                        </button>
-                    </div>
+                    @if (count($dosyalar) < 1 )
+                        <p class="notification is-size-7 has-text-gray p-1">
+                        {{ $isMultiple && count($dosyalar) < 1 ? 'No files to upload!' : 'No file to upload!' }}
+                        </p>
                     @endif
+
+                    <div id="files_div" class="py-0">
+
+                        @if (count($dosyalar) > 0)
+                            @foreach ($dosyalar as $dosya)
+
+                            <div class="tags has-addons my-0">
+                                <a wire:click="removeFile('{{$dosya->getClientOriginalName()}}')" class="tag is-danger is-light is-delete"></a>
+                                <span class="tag is-black is-light">{{$dosya->getClientOriginalName()}}</span>
+                            </div>
+
+                            @endforeach
+                        @endif
+                    </div>
 
                 </div>
 
-                @error('dosyalar') <span class="error">{{ $message }}</span> @enderror
+                @if ($hasItsForm)
+                <div class="column is-narrow">
+                    <button class="button is-link {{ count($dosyalar) < 1 ? 'is-hidden': ''}}" id="uploadButton">
+                        <span class="icon"><x-carbon-upload /></span>
+                        <span>Upload</span>
+                    </button>
+                </div>
+                @endif
 
-            @if ($hasItsForm)
-            </form>
-            @endif
+            </div>
 
-        </div>
+            @error('dosyalar') <span class="error">{{ $message }}</span> @enderror
+
+        @if ($hasItsForm)
+        </form>
         @endif
 
-
+    </div>
+    @endif
 
 </div>

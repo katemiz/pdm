@@ -80,7 +80,20 @@
 
 
 
+                <div class="navbar-item has-dropdown is-hoverable">
 
+                    <a class="navbar-link">
+                        <span class="icon has-text-warning">
+                            <x-carbon-industry />
+                        </span>
+                        <span class="ml-2">Materials & Processes</span>
+                    </a>
+
+                    <div class="navbar-dropdown">
+                        <a href="/material/list" class="navbar-item">Materials</a>
+                        <a href="/process/list" class="navbar-item">Processes</a>
+                    </div>
+                </div>
 
 
 

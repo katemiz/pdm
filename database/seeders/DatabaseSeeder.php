@@ -8,7 +8,9 @@ use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
+use App\Models\Counter;
 use App\Models\User;
+
 
 
 class DatabaseSeeder extends Seeder
@@ -19,6 +21,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\CRequest::factory(10)->create();
+
+
+        Counter::create([
+            "id" => 69,
+            "product_no" => 102729,
+        ]);
 
 
         $admin = User::create([

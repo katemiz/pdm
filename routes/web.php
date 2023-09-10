@@ -11,7 +11,10 @@ use App\Http\Controllers\UserController;
 
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
+use App\Livewire\Material;
+use App\Livewire\Process;
 use App\Livewire\Product;
+
 
 
 
@@ -107,5 +110,9 @@ Route::middleware(['auth'])->group(function () {
 
     // PRODUCTS
     Route::get('/products/{action}/{id?}', Product::class);
+
+    // MATERIAL and PROCESS
+    Route::get('/material/{action}/{id?}', Material::class);
+    Route::get('/process/{action}/{id?}', Process::class);
 
 });

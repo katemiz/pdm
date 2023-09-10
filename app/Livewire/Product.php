@@ -8,8 +8,16 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 
 use App\Models\CNotice;
+use App\Models\Counter;
 use App\Models\Urun;
 use App\Models\User;
+
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 
 class Product extends Component
@@ -41,10 +49,14 @@ class Product extends Component
     // Item Props
     public $description;
     public $ecn_id;
+    public $version;
     public $status;
-    public $rejectReason;
+
     public $createdBy;
-    public $engBy;
+    public $checkedBy;
+    public $approvedBy;
+
+
 
     public $created_at;
     public $req_reviewed_at;
@@ -54,7 +66,10 @@ class Product extends Component
 
 
 
-
+    protected $rules = [
+        'description' => 'required|min:10',
+        'ecn_id' => 'required'
+    ];
 
 
     public function mount()
@@ -75,11 +90,7 @@ class Product extends Component
 
     public function render()
     {
-
-        $ecns = CNotice::where('status','wip');
-
-
-
+        $ecns = CNotice::where('status','wip')->get();
         $items = false;
 
         if ( $this->action === 'VIEW') {
@@ -87,9 +98,6 @@ class Product extends Component
         }
 
         if ( $this->action === 'FORM' && $this->itemId) {
-
-
-
             $this->setUnsetProps();
         }
 
@@ -97,7 +105,7 @@ class Product extends Component
 
             $this->sortDirection = $this->constants['list']['headers'][$this->sortField]['direction'];
 
-            $items = Urun::where('partno', 'LIKE', "%".$this->search."%")
+            $items = Urun::where('product_no', 'LIKE', "%".$this->search."%")
             ->orWhere('description', 'LIKE', "%".$this->search."%")
             ->orderBy($this->sortField,$this->sortDirection)
             ->paginate(env('RESULTS_PER_PAGE'));
@@ -113,33 +121,108 @@ class Product extends Component
             }
         }
 
-
         return view('products.products',[
             'items' => $items,
             'ecns' => $ecns
         ]);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        return view('products.product');
     }
+
+
+
+
+
+
+    public function setUnsetProps($opt = 'set') {
+
+        if ($opt === 'set') {
+            $this->item = Urun::find($this->itemId);
+
+            $this->item->canEdit = false;
+            $this->item->canDelete = false;
+
+            if ($this->item->status == 'wip') {
+                $this->item->canEdit = true;
+                $this->item->canDelete = true;
+            }
+
+            $this->createdBy = User::find($this->item->user_id);
+            $this->checkedBy = User::find($this->item->checker_id);
+            $this->approvedBy = User::find($this->item->approver_id);
+
+            $this->product_no = $this->item->product_no;
+            $this->version = $this->item->version;
+            $this->description = $this->item->description;
+            $this->ecn_id = $this->item->c_notice_id;
+            $this->remarks = $this->item->remarks;
+
+            $this->status = $this->item->status;
+
+            $this->created_at = $this->item->created_at;
+            $this->check_reviewed_at = $this->item->check_reviewed_at;
+            $this->app_reviewed_at = $this->item->app_reviewed_at;
+
+        } else {
+            $this->topic = '';
+            $this->description = '';
+            $this->is_for_ecn = false;
+            $this->rejectReason = false;
+            $this->status = false;
+        }
+    }
+
+    public function viewItem($idItem) {
+        $this->itemId = $idItem;
+        $this->action = 'VIEW';
+    }
+
+
+    public function storeItem()
+    {
+        $this->validate();
+        try {
+            $this->item = Urun::create([
+                'description' => $this->description,
+                'product_no' => $this->getProductNo(),
+                'c_notice_id' => $this->ecn_id,
+                'remarks' => $this->remarks,
+                'user_id' => Auth::id()
+            ]);
+            session()->flash('success','Product has been created successfully!');
+
+            $this->itemId = $this->item->id;
+
+            $this->dispatch('triggerAttachment',
+                modelId: $this->itemId
+            );
+
+            $this->action = 'VIEW';
+
+            //return redirect('/cr/view/'.$this->itemId);
+
+        } catch (\Exception $ex) {
+            session()->flash('error','Something goes wrong!!'.$ex);
+        }
+    }
+
+
+
+
+
+
+    public function getProductNo() {
+
+        $counter = Counter::find(69);
+        $new_no = $counter->product_no+1;
+        $counter->update(['product_no' => $new_no]);         // Update Counter
+
+        return $new_no;
+    }
+
+
+
+
+
+
+
+
 }

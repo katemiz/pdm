@@ -19,8 +19,8 @@ return new class extends Migration
             $table->id()->startingValue(102729);
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(CNotice::class);
-            $table->integer('partno');
-            $table->integer('version');
+            $table->integer('product_no');
+            $table->integer('version')->default(0);
             $table->text('description')->nullable();
 
             $table->foreignId('checker_id')->nullable();
@@ -30,7 +30,7 @@ return new class extends Migration
 
             $table->date('check_reviewed_at')->nullable();
             $table->date('app_reviewed_at')->nullable();
-
+            $table->text('remarks')->nullable();
             $table->string('status')->default('wip');
 
             $table->timestamps();

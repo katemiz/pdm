@@ -9,11 +9,11 @@ return [
     ],
 
     "list" => [
-        "title" => "Products",
-        "subtitle" => "List of all products (detail parts, assemblies, buy items etc.)",
+        "title" => "Materials",
+        "subtitle" => "List of all raw materials",
         "addButton" => [
-            "text"=>"Add Product",
-            "route"=>"/products/form"
+            "text"=>"Add Material",
+            "route"=>"/material/form"
         ],
         "filterText" => "Search ...",
         "listCaption" => false,
@@ -21,21 +21,21 @@ return [
         "headers" => [
 
             "id"=> [
-                "title" => "Product No",
+                "title" => "Material No",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
-            "version"=> [
-                "title" => "Version",
+            "family"=> [
+                "title" => "Family",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
             "description"=> [
-                "title" => "Product Description",
+                "title" => "Material Description",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
@@ -50,35 +50,35 @@ return [
 
         ],
         "actions" => [
-            "r" => "/products/view/",
-            "w" => "/products/form/",
-            "x" => "/products/delete/"
+            "r" => "/material/view/",
+            "w" => "/material/form/",
+            "x" => "/material/delete/"
         ],
-        "noitem" => "No products found in database yet!",
+        "noitem" => "No material definition found in database yet!",
         "delete_confirm" => [
-            "question" => "Do you want to delete this product from database?",
+            "question" => "Do you want to delete this material from database?",
             "last_warning" => "When done, it is not possible to revert back."
         ]
     ],
 
     "create" => [
-        "title" => "Products",
-        "subtitle" => "Create a Product (detail parts, assemblies, buy items etc.)",
-        "submitText" => "Add Product",
+        "title" => "Materials",
+        "subtitle" => "Create a Material (detail parts, assemblies, buy items etc.)",
+        "submitText" => "Add Material",
     ],
 
     "read" => [
-        "title" => "Products",
-        "subtitle" => "View Product Parameters",
+        "title" => "Materials",
+        "subtitle" => "View Material Parameters",
     ],
 
     "update" => [
-        "title" => "Products",
-        "subtitle" => "Edit Product Properties",
-        "submitText" => "Edit Product",
+        "title" => "Materials",
+        "subtitle" => "Edit Material Properties",
+        "submitText" => "Edit Material",
     ],
 
-    "cu_route" => "/ecn/store/",
+    "cu_route" => "/material/store/",
 
     "form" => [
 
@@ -110,6 +110,22 @@ return [
             "placeholder" => "Talebi detaylı olarak tarif ediniz ...",
             "value" => ""
         ]
+    ],
+
+    "family" => [
+
+        "100" => "Aluminum",
+        "200" => "Steel",
+        "300" => "Composite",
+        "400" => "Plastics",
+        "500" => "Other"
+    ],
+
+    "form" => [
+
+        "100" => "Sheet/Plate",
+        "200" => "Rod",
+        "300" => "Tube",
     ]
 ];
 

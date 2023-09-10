@@ -7,23 +7,8 @@
     </header>
 
     @if ($item)
-    <div class="control">
-        <div class="tags has-addons">
-            <span class="tag is-dark is-large mb-6">ECN-{{ $item->id}}</span>
-
-            @if ($isForNewProduct)
-                <span class="tag is-success is-large mb-6">New</span>
-            @else
-                <span class="tag is-warning is-large mb-6">Change</span>
-            @endif
-
-        </div>
-    </div>
+        <span class="tag is-dark is-large mb-6">CR-{{ $item->id}}</span>
     @endif
-
-
-
-
 
     @if (session()->has('error'))
         <div class="notification is-danger is-light">
@@ -41,9 +26,57 @@
     @csrf
 
 
+
         <div class="field">
 
-            <label class="label" for="topic">Part/Product/Item Description/Title</label>
+            <label class="label" for="topic">Material Family</label>
+            <div class="control">
+                <div class="select">
+                    <select wire:model='family'>
+                    <option>Select Family</option>
+
+                    @foreach ($constants['family'] as $key => $value)
+                        <option value="{{$key}}">{{$value}}</option>
+                    @endforeach
+                    </select>
+                </div>
+            </div>
+
+            @error('family')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
+
+
+
+        <div class="field">
+
+            <label class="label" for="topic">Material Form</label>
+            <div class="control">
+                <div class="select">
+                    <select wire:model='form'>
+                    <option>Select Form</option>
+
+                    @foreach ($constants['form'] as $key => $value)
+                        <option value="{{$key}}">{{$value}}</option>
+                    @endforeach
+                    </select>
+                </div>
+            </div>
+
+            @error('form')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
+
+
+
+
+        <div class="field">
+
+            <label class="label" for="description">Material Descriptionu</label>
             <div class="control">
 
                 <input
@@ -51,8 +84,8 @@
                     id="description"
                     wire:model="description"
                     type="text"
-                    value="{{ $item ? $item->topic : ''}}"
-                    placeholder="Write part descrition/title" required>
+                    value="{{ $item ? $item->description : ''}}"
+                    placeholder="eg 6061 T6" required>
             </div>
 
             @error('description')
@@ -61,59 +94,14 @@
         </div>
 
 
-
-
-
-
-
-        <div class="field">
-            <label class="label">Available ECNs</label>
-
-            <div class="control">
-
-                @if ( $ecns->count() > 0)
-
-                    @foreach ($ecns as $ecn)
-
-                        <label class="checkbox is-block">
-                            <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
-                            @checked($item && in_array($item->c_notice_id,$ecns))> ECN-{{ $ecn->id }}
-                        </label>
-
-                    @endforeach
-
-                @else
-                    <p>No usable ECNs found in database</p>
-                @endif
-
-            </div>
-
-            @error('ecn_id')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
-        </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <livewire:ck-editor
             edId="ed10"
             wire:model="remarks"
-            label='Notes and/or remarks'
-            placeholder='Any kind of remarks/notes about part/product.'
-            :content="$remarks"/>
+            label='Notes and/or Remarks'
+            placeholder='Enter remarks/notes here'
+            :content="$description"/>
 
-        @error('remarks')
+        @error('description')
         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
         @enderror
 
@@ -123,59 +111,57 @@
             @if ($item)
             @livewire('file-list', [
                 'canDelete' => true,
-                'model' => 'ECN',
+                'model' => 'CR',
                 'modelId' => $item->id,
-                'tag' => 'ECN',                          // Any tag other than model name
-            ], 'ECN')
+                'tag' => 'CR',                          // Any tag other than model name
+            ], 'CR')
             @endif
 
             <div class="control">
 
                 @livewire('file-upload', [
                     'hasForm' => true,                      // true when possible to add/remove file otherwise false
-                    'model' => 'ECN',
+                    'model' => 'CR',
                     'modelId' => $item ? $item->id : false,
                     'isMultiple'=> true,                   // can multiple files be selected
-                    'tag' => 'ECN',                          // Any tag other than model name
-                    'canEdit' => $canEdit], 'ECN')
+                    'tag' => 'CR',                          // Any tag other than model name
+                    'canEdit' => $canEdit], 'CR')
             </div>
         </div>
 
-        {{-- @cannot('cr_approver')
         <div class="field">
 
-            <label class="label" for="is_new">Onaylayan / CR Request Appprover</label>
+            <label class="label" for="is_new">Status</label>
 
-            @if ( count($cr_approvers) > 0)
+            {{-- @if ( count($cr_approvers) > 0) --}}
 
-                @if ( $cr_approver )
+                {{-- @if ( $cr_approver )
 
                     <span class="is-size-4">{{ $cr_approver->name }} {{ $cr_approver->lastname }}</span>
                     <span class="is-size-6">{{ $cr_approver->email }}</span>
 
                     <input type="hidden" name="cr_approver" id="cr_approver" value="{{ $cr_approver->id}}">
-                @else
+                @else --}}
                     <div class="control">
                         <div class="select">
-                            <select>
-                            <option>Select dropdown</option>
-                            <option>With options</option>
+                            <select wire:model='status'>
+                            <option value="A">Active</option>
+                            <option value="I">Inactive</option>
                             </select>
                         </div>
                     </div>
-                @endif
+                {{-- @endif --}}
 
-            @else
+            {{-- @else
                 <div class="notification is-warning">
                     Şu anda tanımlı CR Onaylama Yetkisine sahip kimse bulunmamaktadır.
                 </div>
-            @endif
+            @endif --}}
 
             @error('is_for_ecn')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
-        @endcan --}}
 
         <div class="buttons is-right">
             @if ($item)

@@ -4,6 +4,9 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use App\Models\User;
+
+
 return new class extends Migration
 {
     /**
@@ -13,12 +16,11 @@ return new class extends Migration
     {
         Schema::create('materials', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(User::class);
             $table->text('form');
             $table->text('family');
             $table->text('description');
-            $table->float('density');
             $table->text('specification');
-            $table->text('link');
             $table->text('remarks');
             $table->string('status')->default('wip');
             $table->timestamps();

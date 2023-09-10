@@ -76,7 +76,7 @@
 
         <div class="field">
 
-            <label class="label" for="description">Material Descriptionu</label>
+            <label class="label" for="description">Material Description</label>
             <div class="control">
 
                 <input
@@ -92,6 +92,29 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
+
+
+
+        <div class="field">
+
+            <label class="label" for="specification">Material Specification</label>
+            <div class="control">
+
+                <input
+                    class="input"
+                    id="specification"
+                    wire:model="specification"
+                    type="text"
+                    value="{{ $item ? $item->specification : ''}}"
+                    placeholder="eg 6061 T6" required>
+            </div>
+
+            @error('specification')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
+
 
 
         <livewire:ck-editor

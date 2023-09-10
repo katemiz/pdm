@@ -46,19 +46,19 @@
                         </p>
                         @endif
 
-                        @if ($canDelete && $item->canDelete)
+                        {{-- @if ($canDelete && $item->canDelete)
                         <p class="control ml-1">
                             <button class="button is-danger is-light is-small" wire:click.prevent="startCRDelete({{$item->id}})">
                                 <span class="icon is-small"><x-carbon-trash-can /></span>
                                 <span>Delete</span>
                             </button>
                         </p>
-                        @endif
+                        @endif --}}
 
                     </div>
                 </div>
 
-                @if (in_array($status,['wip']))
+                {{-- @if (in_array($status,['wip']))
                 <div class="column">
                     <div class="field has-addons is-pulled-right">
 
@@ -70,7 +70,6 @@
                         </p>
 
                         <p class="control ml-5">
-                            {{-- <a wire:click="rejectCR({{ $item->id }})" class="button is-danger is-light is-small"> --}}
                             <a onclick="showModal('m20')" class="button is-danger is-light is-small">
                                 <span class="icon is-small"><x-carbon-thumbs-down /></span>
                                 <span>Reject / Red</span>
@@ -79,7 +78,7 @@
 
                     </div>
                 </div>
-                @endif
+                @endif --}}
 
             </div>
         </div>
@@ -87,20 +86,14 @@
         <div class="media">
             <div class="media-left">
                 <figure class="image is-48x48">
-                <x-carbon-document-epdf />
+                    <x-carbon-cube />
                 </figure>
             </div>
             <div class="media-content">
-                <p class="title is-4"> CR-{{ $item->id }}</p>
-                <p class="subtitle is-6">{{ $item->topic}}</p>
+                <p class="title is-4"> {{ $item->description }}</p>
+                <p class="subtitle is-6">{{ $item->specification}}</p>
             </div>
         </div>
-
-        @if ( $item->is_for_ecn === 1)
-        <div class="notification is-info is-light">
-            This CR is for new Design
-        </div>
-        @endif
 
 
         @if ( strlen($item->description) > 0)
@@ -131,24 +124,19 @@
         <table class="table is-fullwidth">
             <tr>
                 <td class="is-half">
-                    <label class="label">Başlatan / Created By</label>
+                    <label class="label">Created By</label>
                     <p>{{ $createdBy->name }} {{ $createdBy->lastname }}</p>
                     <p>{{ $created_at }}</p>
                 </td>
                 <td class="has-text-right">
-                    <label class="label">Durum / Status</label>
+                    <label class="label">Status</label>
 
                     @switch($status)
                     @case('wip')
-                        <p class="has-text-info">İncelemede - Work In Progress</p>
+                        <p>Active</p>
                         @break
                     @case('accepted')
-                        <p class="has-text-info">Kabul Edildi - Accepted</span>
-                        @break
-                    @case('rejected')
-                        <a onclick="showModal('m10')">Red Edildi - Rejected</a>
-                        <p>{{ $engBy->name }} {{ $engBy->lastname }}</p>
-                        <p>{{ $created_at }}</p>
+                        <p>Inactive</span>
                         @break
                     @endswitch
 
@@ -159,38 +147,9 @@
     </div>
 
 
-    <div class="modal" id="m10">
-        <div class="modal-background" onclick="hideModal('m10')"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Red Nedeni / Rejection Reason</p>
-            <a class="delete" aria-label="close" onclick="hideModal('m10')"></a>
-        </header>
-        <section class="modal-card-body">
-            <p>{{ $rejectReason }}</p>
-        </section>
-        </div>
-    </div>
 
 
 
-    <div class="modal" id="m20">
-        <div class="modal-background" onclick="hideModal('m20')"></div>
-        <div class="modal-card">
-            <form wire:submit="rejectCR">
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Red Nedeni / Rejection Reason</p>
-                    <a class="delete" aria-label="close" onclick="hideModal('m20')"></a>
-                </header>
-                <section class="modal-card-body">
-                    <textarea type="text" wire:model='rejectReason' class="textarea" placeholder="Reddetme nedenini yazınız." rows="5"></textarea>
-                </section>
-                <footer class="modal-card-foot">
-                    <a onclick="hideModal('m20')" class="button">İptal / Cancel</a>
-                    <button class="button is-light is-danger">Red / Reject</button>
-                </footer>
-            </form>
-        </div>
-    </div>
+
 
 </div>

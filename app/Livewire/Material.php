@@ -26,11 +26,6 @@ class Material extends Component
     public $itemId = false;
     public $item = false;
 
-    public $isAdd = false;
-    public $isEdit = false;
-    public $isList = true;
-    public $isView = false;
-
     public $canAdd = true;
     public $canEdit = true;
     public $canDelete = true;
@@ -41,8 +36,6 @@ class Material extends Component
 
     public $constants;
 
-
-
     // Item Props
     public $family;
     public $form;
@@ -50,8 +43,8 @@ class Material extends Component
     public $specification;
     public $remarks;
     public $status="A";
-
-
+    public $created_at;
+    public $createdBy;
 
 
     protected $rules = [
@@ -63,11 +56,16 @@ class Material extends Component
 
     public function mount()
     {
+        if (request('id')) {
+            $this->itemId = request('id');
+        }
+
         $this->action = strtoupper(request('action'));
         $this->constants = config('material');
     }
 
-
+    #[Title('Materials')]
+    #[On('refreshAttachments')]
     public function render()
     {
         $items = false;
@@ -103,7 +101,89 @@ class Material extends Component
         return view('Material.material',[
             'items' => $items,
         ]);
-
-
     }
+
+
+
+    public function setUnsetProps($opt = 'set') {
+
+        if ($opt === 'set') {
+            $this->item = Malzeme::find($this->itemId);
+
+            $this->item->canEdit = false;
+            $this->item->canDelete = false;
+
+            if ($this->item->status == 'wip') {
+                $this->item->canEdit = true;
+                $this->item->canDelete = true;
+            }
+
+
+            $this->form = $this->item->form;
+            $this->family = $this->item->family;
+            $this->description = $this->item->description;
+            $this->specification = $this->item->specification;
+            $this->remarks = $this->item->remarks;
+            $this->status = $this->item->status;
+            $this->created_at = $this->item->created_at;
+            $this->createdBy = User::find($this->item->user_id);
+
+
+        } else {
+            $this->topic = '';
+            $this->description = '';
+            $this->is_for_ecn = false;
+            $this->rejectReason = false;
+            $this->status = false;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public function storeItem()
+    {
+        $this->validate();
+        try {
+            $this->item = Malzeme::create([
+                'user_id' => Auth::id(),
+                'form' => $this->form,
+                'family' => $this->family,
+                'description' => $this->description,
+                'specification' => $this->specification,
+                'remarks' => $this->remarks,
+            ]);
+            session()->flash('success','Material has been created successfully!');
+
+            $this->itemId = $this->item->id;
+
+            $this->dispatch('triggerAttachment',
+                modelId: $this->itemId
+            );
+
+            $this->action = 'VIEW';
+
+            //return redirect('/cr/view/'.$this->itemId);
+
+        } catch (\Exception $ex) {
+            session()->flash('error','Something goes wrong!!'.$ex);
+        }
+    }
+
+
+
+
 }

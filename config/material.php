@@ -63,7 +63,7 @@ return [
 
     "create" => [
         "title" => "Materials",
-        "subtitle" => "Create a Material (detail parts, assemblies, buy items etc.)",
+        "subtitle" => "Create a Material Definition",
         "submitText" => "Add Material",
     ],
 

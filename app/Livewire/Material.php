@@ -28,7 +28,6 @@ class Material extends Component
 
     public $canAdd = true;
     public $canEdit = true;
-    public $canDelete = true;
 
     public $search = '';
     public $sortField = 'created_at';
@@ -87,15 +86,6 @@ class Material extends Component
             ->orderBy($this->sortField,$this->sortDirection)
             ->paginate(env('RESULTS_PER_PAGE'));
 
-            foreach ($items as $key => $item) {
-                $items[$key]['canEdit'] = false;
-                $items[$key]['canDelete'] = false;
-
-                if ($item->status == 'wip') {
-                    $items[$key]['canEdit'] = true;
-                    $items[$key]['canDelete'] = true;
-                }
-            }
         }
 
         return view('Material.material',[
@@ -105,19 +95,27 @@ class Material extends Component
 
 
 
+    public function changeSortDirection ($key) {
+
+        $this->sortField = $key;
+
+        if ($this->constants['list']['headers'][$key]['direction'] == 'asc') {
+            $this->constants['list']['headers'][$key]['direction'] = 'desc';
+        } else {
+            $this->constants['list']['headers'][$key]['direction'] = 'asc';
+        }
+
+        $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
+    }
+
+
+
     public function setUnsetProps($opt = 'set') {
 
         if ($opt === 'set') {
             $this->item = Malzeme::find($this->itemId);
 
-            $this->item->canEdit = false;
-            $this->item->canDelete = false;
-
-            if ($this->item->status == 'wip') {
-                $this->item->canEdit = true;
-                $this->item->canDelete = true;
-            }
-
+            $this->item->canEdit = true;
 
             $this->form = $this->item->form;
             $this->family = $this->item->family;
@@ -185,6 +183,42 @@ class Material extends Component
             session()->flash('error','Something goes wrong!!'.$ex);
         }
     }
+
+
+
+
+    public function updateItem()
+    {
+        $this->validate();
+
+        try {
+
+            $this->item = Malzeme::whereId($this->itemId)->update([
+                'user_id' => Auth::id(),
+                'form' => $this->form,
+                'family' => $this->family,
+                'description' => $this->description,
+                'specification' => $this->specification,
+                'remarks' => $this->remarks,
+                'status' => $this->status,
+
+            ]);
+
+
+            session()->flash('message','Material has been updated successfully!');
+
+            $this->dispatch('triggerAttachment',
+                modelId: $this->itemId
+            );
+
+            $this->action = 'VIEW';
+
+        } catch (\Exception $ex) {
+            session()->flash('success','Something goes wrong!!');
+        }
+    }
+
+
 
 
 

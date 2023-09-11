@@ -7,7 +7,7 @@
     </header>
 
     @if ($item)
-        <span class="tag is-dark is-large mb-6">CR-{{ $item->id}}</span>
+        <span class="tag is-dark is-large mb-6">M-{{ $item->id}}</span>
     @endif
 
     @if (session()->has('error'))
@@ -156,30 +156,14 @@
 
             <label class="label" for="is_new">Status</label>
 
-            {{-- @if ( count($cr_approvers) > 0) --}}
-
-                {{-- @if ( $cr_approver )
-
-                    <span class="is-size-4">{{ $cr_approver->name }} {{ $cr_approver->lastname }}</span>
-                    <span class="is-size-6">{{ $cr_approver->email }}</span>
-
-                    <input type="hidden" name="cr_approver" id="cr_approver" value="{{ $cr_approver->id}}">
-                @else --}}
-                    <div class="control">
-                        <div class="select">
-                            <select wire:model='status'>
-                            <option value="A">Active</option>
-                            <option value="I">Inactive</option>
-                            </select>
-                        </div>
-                    </div>
-                {{-- @endif --}}
-
-            {{-- @else
-                <div class="notification is-warning">
-                    Şu anda tanımlı CR Onaylama Yetkisine sahip kimse bulunmamaktadır.
+            <div class="control">
+                <div class="select">
+                    <select wire:model='status'>
+                    <option value="A">Active</option>
+                    <option value="I">Inactive</option>
+                    </select>
                 </div>
-            @endif --}}
+            </div>
 
             @error('is_for_ecn')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>

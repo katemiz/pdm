@@ -21,7 +21,7 @@ return [
         "headers" => [
 
             "id"=> [
-                "title" => "Material No",
+                "title" => "No",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
@@ -34,12 +34,27 @@ return [
                 "direction" => "asc"
             ],
 
+            "form"=> [
+                "title" => "Form",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
             "description"=> [
                 "title" => "Material Description",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
+
+            "specification"=> [
+                "title" => "Material Specification",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
 
             "created_at"=> [
                 "title" => "Created On",
@@ -128,5 +143,3 @@ return [
         "300" => "Tube",
     ]
 ];
-
-

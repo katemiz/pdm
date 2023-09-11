@@ -110,17 +110,17 @@
                         <span class="icon"><x-carbon-view/></span>
                     </a>
 
-                    @if ($canEdit && $record->canEdit)
+                    @if ($canEdit)
                         <a href="/material/form/{{ $record->id}}">
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
                     @endif
 
-                    @if ($canDelete && $record->canDelete)
+                    {{-- @if ($canDelete && $record->canDelete)
                         <a wire:click.prevent="startCRDelete({{$record->id}})">
                             <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
                         </a>
-                    @endif
+                    @endif --}}
 
                 </td>
 

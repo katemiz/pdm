@@ -25,13 +25,14 @@
                     <div class="field has-addons">
 
                         <p class="control">
-                            <a href="/cr/list" class="button is-info is-light is-small">
+                            <a href="/material/list" class="button is-info is-light is-small">
                             <span class="icon is-small"><x-carbon-list /></span>
                             </a>
                         </p>
 
                         <p class="control ml-5">
-                            <a wire:click="addNew()" class="button is-info is-light is-small">
+                            <a href="/material/form" class="button is-info is-light is-small">
+                            {{-- <a wire:click="addNew()" class="button is-info is-light is-small"> --}}
                             <span class="icon is-small"><x-carbon-add /></span>
                             <span>Add New</span>
                             </a>
@@ -132,10 +133,10 @@
                     <label class="label">Status</label>
 
                     @switch($status)
-                    @case('wip')
+                    @case('A')
                         <p>Active</p>
                         @break
-                    @case('accepted')
+                    @case('I')
                         <p>Inactive</span>
                         @break
                     @endswitch

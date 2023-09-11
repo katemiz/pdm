@@ -15,14 +15,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('materials', function (Blueprint $table) {
-            $table->id();
+            $table->id()->startingValue(801);
             $table->foreignIdFor(User::class);
             $table->text('form');
             $table->text('family');
             $table->text('description');
             $table->text('specification');
             $table->text('remarks');
-            $table->string('status')->default('wip');
+            $table->string('status')->default('A');
             $table->timestamps();
         });
     }

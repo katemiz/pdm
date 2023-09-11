@@ -9,6 +9,7 @@ use Livewire\Attributes\Title;
 
 use App\Models\CNotice;
 use App\Models\Counter;
+use App\Models\Malzeme;
 use App\Models\Urun;
 use App\Models\User;
 
@@ -46,6 +47,10 @@ class Product extends Component
 
     public $constants;
 
+    public $mat_family;
+    public $mat_form;
+    public $mat_dizin;
+
     // Item Props
     public $description;
     public $ecn_id;
@@ -74,9 +79,11 @@ class Product extends Component
 
     public function mount()
     {
-        // $this->ptype = request('ptype');
-        $this->action = strtoupper(request('action'));
+        if (request('id')) {
+            $this->itemId = request('id');
+        }
 
+        $this->action = strtoupper(request('action'));
         $this->constants = config('product');
 
     }
@@ -86,8 +93,8 @@ class Product extends Component
 
 
 
-
-
+    #[Title('Products')]
+    #[On('refreshAttachments')]
     public function render()
     {
         $ecns = CNotice::where('status','wip')->get();
@@ -206,7 +213,32 @@ class Product extends Component
 
 
 
+    public function updateItem()
+    {
+        $this->validate();
 
+        try {
+
+            $this->item = Urun::whereId($this->itemId)->update([
+                'description' => $this->description,
+                'product_no' => $this->getProductNo(),
+                'c_notice_id' => $this->ecn_id,
+                'remarks' => $this->remarks,
+            ]);
+
+
+            session()->flash('message','Product has been updated successfully!');
+
+            $this->dispatch('triggerAttachment',
+                modelId: $this->itemId
+            );
+
+            $this->action = 'VIEW';
+
+        } catch (\Exception $ex) {
+            session()->flash('success','Something goes wrong!!');
+        }
+    }
 
 
     public function getProductNo() {

@@ -25,13 +25,14 @@
                     <div class="field has-addons">
 
                         <p class="control">
-                            <a href="/ecn/list" class="button is-info is-light is-small">
+                            <a href="/products/list" class="button is-info is-light is-small">
                             <span class="icon is-small"><x-carbon-list /></span>
                             </a>
                         </p>
 
                         <p class="control ml-5">
-                            <a wire:click="addNew()" class="button is-info is-light is-small">
+                            <a href="/products/form" class="button is-info is-light is-small">
+                            {{-- <a wire:click="addNew()" class="button is-info is-light is-small"> --}}
                             <span class="icon is-small"><x-carbon-add /></span>
                             <span>Add New</span>
                             </a>
@@ -39,7 +40,7 @@
 
                         @if ($canEdit && $item->canEdit)
                         <p class="control ml-1">
-                            <a class="button is-link is-light is-small" href='/ecn/form/{{ $item->id }}'>
+                            <a class="button is-link is-light is-small" href='/products/form/{{ $item->id }}'>
                                 <span class="icon is-small"><x-carbon-edit /></span>
                                 <span>Edit</span>
                             </a>
@@ -96,30 +97,35 @@
         </div>
 
 
-        <label class="label">Yapılacakların Tanımı - Actions List</label>
+        <label class="label">Remarks/Notes</label>
 
         <div class="notification">
-            {!! $item->pre_description !!}
+            {!! $item->remarks !!}
         </div>
 
-        <label class="label">Dosyalar</label>
+        <label class="label">CAD Files</label>
 
         @livewire('file-list', [
-            'model' => 'ECN',
+            'model' => 'Product',
             'modelId' => $item->id,
-            'tag' => 'ECN',                          // Any tag other than model name
-        ], 'ECN')
-
-
-        @livewire('file-upload', [
-            'hasForm' => false,                      // true when possible to add/remove file otherwise false
-            'model' => 'CR',
-            'modelId' => $item->id,
-            'isMultiple'=> false,                   // can multiple files be selected
-            'tag' => 'CR',                          // Any tag other than model name
-            'canEdit' => $canEdit], 'CR')
+            'tag' => 'CAD',                          // Any tag other than model name
+        ])
 
         <hr>
+
+
+
+        <label class="label">STEP and DXF Files</label>
+
+        @livewire('file-list', [
+            'model' => 'Product',
+            'modelId' => $item->id,
+            'tag' => 'STEP',                          // Any tag other than model name
+        ])
+
+
+        <hr>
+
 
         <table class="table is-fullwidth">
             <tr>

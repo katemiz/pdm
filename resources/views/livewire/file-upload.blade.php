@@ -2,20 +2,19 @@
 
     {{--
     @livewire('attach-component', [
-        'hasForm' => false,                     // Default : false, true when possible to add/remove file otherwise false
-        'model' => 'CR',
+        'model' => 'CR',                        // ModelName
         'modelId' => $item->id,
         'isMultiple'=> false,                   // can multiple files be selected
         'tag' => 'CR',                          // Any tag other than model name
-        'canEdit' => $canEdit], 'CR')
+        'canEdit' => $canEdit])
     --}}
 
-    @if ($hasForm && $canEdit)
+    @if ($canEdit)
     <div class="content">
 
-        @if ($hasItsForm)
+        {{-- @if ($hasItsForm)
         <form wire:submit="uploadAttach" >
-        @endif
+        @endif --}}
 
             <div class="columns">
 
@@ -64,22 +63,22 @@
 
                 </div>
 
-                @if ($hasItsForm)
+                {{-- @if ($hasItsForm)
                 <div class="column is-narrow">
                     <button class="button is-link {{ count($dosyalar) < 1 ? 'is-hidden': ''}}" id="uploadButton">
                         <span class="icon"><x-carbon-upload /></span>
                         <span>Upload</span>
                     </button>
                 </div>
-                @endif
+                @endif --}}
 
             </div>
 
             @error('dosyalar') <span class="error">{{ $message }}</span> @enderror
 
-        @if ($hasItsForm)
+        {{-- @if ($hasItsForm)
         </form>
-        @endif
+        @endif --}}
 
     </div>
     @endif

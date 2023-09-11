@@ -9,13 +9,13 @@
     @if ($item)
     <div class="control">
         <div class="tags has-addons">
-            <span class="tag is-dark is-large mb-6">ECN-{{ $item->id}}</span>
+            <span class="tag is-dark is-large mb-6">{{ $item->id}}</span>
 
-            @if ($isForNewProduct)
+            {{-- @if ($isForNewProduct)
                 <span class="tag is-success is-large mb-6">New</span>
             @else
                 <span class="tag is-warning is-large mb-6">Change</span>
-            @endif
+            @endif --}}
 
         </div>
     </div>
@@ -77,7 +77,7 @@
 
                         <label class="checkbox is-block">
                             <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
-                            @checked($item && in_array($item->c_notice_id,$ecns))> ECN-{{ $ecn->id }}
+                            @checked($item && $ecn->id == $item->c_notice_id))> ECN-{{ $ecn->id }}
                         </label>
 
                     @endforeach
@@ -92,6 +92,71 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
+
+
+
+
+
+
+
+        <div class="columns">
+
+            <div class="column is-4">
+
+                <div class="field">
+
+                    <label class="label" for="topic">Material Family</label>
+                    <div class="control">
+                        <div class="select">
+                            <select wire:model='mat_family'>
+                            <option>Select Family</option>
+        
+                            @foreach (config('material.family') as $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+        
+                    @error('family')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+            </div>
+
+            <div class="column is-4">
+                <div class="field">
+
+                    <label class="label" for="topic">Material Form</label>
+                    <div class="control">
+                        <div class="select">
+                            <select wire:model='mat_form'>
+                            <option>Select Form</option>
+        
+                            @foreach (config('material.form') as $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+        
+                    @error('form')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="column is-4">
+ddd
+            </div>
+
+        </div>
+
+
+
+
+
 
 
 
@@ -118,64 +183,50 @@
         @enderror
 
         <div class="field">
-            <label class="label">Dosyalar / Files</label>
+            <label class="label">CAD Files</label>
 
             @if ($item)
             @livewire('file-list', [
                 'canDelete' => true,
-                'model' => 'ECN',
+                'model' => 'Product',
                 'modelId' => $item->id,
-                'tag' => 'ECN',                          // Any tag other than model name
-            ], 'ECN')
+                'tag' => 'CAD',                          // Any tag other than model name
+            ])
             @endif
 
             <div class="control">
 
                 @livewire('file-upload', [
-                    'hasForm' => true,                      // true when possible to add/remove file otherwise false
-                    'model' => 'ECN',
+                    'model' => 'Product',
                     'modelId' => $item ? $item->id : false,
                     'isMultiple'=> true,                   // can multiple files be selected
-                    'tag' => 'ECN',                          // Any tag other than model name
-                    'canEdit' => $canEdit], 'ECN')
+                    'tag' => 'CAD',                          // Any tag other than model name
+                    'canEdit' => $canEdit])
             </div>
         </div>
 
-        {{-- @cannot('cr_approver')
         <div class="field">
+            <label class="label">STEP and DXF Files</label>
 
-            <label class="label" for="is_new">Onaylayan / CR Request Appprover</label>
-
-            @if ( count($cr_approvers) > 0)
-
-                @if ( $cr_approver )
-
-                    <span class="is-size-4">{{ $cr_approver->name }} {{ $cr_approver->lastname }}</span>
-                    <span class="is-size-6">{{ $cr_approver->email }}</span>
-
-                    <input type="hidden" name="cr_approver" id="cr_approver" value="{{ $cr_approver->id}}">
-                @else
-                    <div class="control">
-                        <div class="select">
-                            <select>
-                            <option>Select dropdown</option>
-                            <option>With options</option>
-                            </select>
-                        </div>
-                    </div>
-                @endif
-
-            @else
-                <div class="notification is-warning">
-                    Şu anda tanımlı CR Onaylama Yetkisine sahip kimse bulunmamaktadır.
-                </div>
+            @if ($item)
+            @livewire('file-list', [
+                'canDelete' => true,
+                'model' => 'Product',
+                'modelId' => $item->id,
+                'tag' => 'STEP',                          // Any tag other than model name
+            ])
             @endif
 
-            @error('is_for_ecn')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
+            <div class="control">
+
+                @livewire('file-upload', [
+                    'model' => 'Product',
+                    'modelId' => $item ? $item->id : false,
+                    'isMultiple'=> true,                   // can multiple files be selected
+                    'tag' => 'STEP',                          // Any tag other than model name
+                    'canEdit' => $canEdit])
+            </div>
         </div>
-        @endcan --}}
 
         <div class="buttons is-right">
             @if ($item)

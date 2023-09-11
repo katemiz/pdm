@@ -156,6 +156,10 @@ class Ecn extends Component
     }
 
 
+    public function viewItem($idItem) {
+        $this->itemId = $idItem;
+        $this->action = 'VIEW';
+    }
 
 
 

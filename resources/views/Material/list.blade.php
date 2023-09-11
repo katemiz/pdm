@@ -111,7 +111,7 @@
                     </a>
 
                     @if ($canEdit && $record->canEdit)
-                        <a href="/cr/form/{{ $record->id}}">
+                        <a href="/material/form/{{ $record->id}}">
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
                     @endif

@@ -39,7 +39,7 @@
 
                         @if ($canEdit && $item->canEdit)
                         <p class="control ml-1">
-                            <a class="button is-link is-light is-small" href='/cr/form/{{ $item->id }}'>
+                            <a class="button is-link is-light is-small" href='/material/form/{{ $item->id }}'>
                                 <span class="icon is-small"><x-carbon-edit /></span>
                                 <span>Edit</span>
                             </a>

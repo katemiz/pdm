@@ -47,11 +47,12 @@ class Product extends Component
 
     public $constants;
 
-    public $mat_family;
-    public $mat_form;
-    public $mat_dizin;
+    public $mat_family = false;
+    public $mat_form = false;
+    public $materials = [];
 
     // Item Props
+    public $mat_id;
     public $description;
     public $ecn_id;
     public $version;
@@ -137,12 +138,23 @@ class Product extends Component
 
 
 
+    public function getMaterialList() {
+
+        if ($this->mat_family && $this->mat_form) {
+            $this->materials = Malzeme::where('family', $this->mat_family)
+            ->where('form', $this->mat_form)
+            ->orderBy($this->sortField,'asc')->get();
+
+        }
+    }
 
 
     public function setUnsetProps($opt = 'set') {
 
         if ($opt === 'set') {
             $this->item = Urun::find($this->itemId);
+
+            $this->mat_id = $this->item->malzeme_id;
 
             $this->item->canEdit = false;
             $this->item->canDelete = false;
@@ -158,6 +170,20 @@ class Product extends Component
 
             $this->product_no = $this->item->product_no;
             $this->version = $this->item->version;
+
+            $malzeme =  Malzeme::find($this->item->malzeme_id);
+
+            $this->item->material_definition = $malzeme->material_definition;
+            $this->item->family = $malzeme->family;
+            $this->item->form = $malzeme->form;
+
+            $this->mat_family = $malzeme->family;
+            $this->mat_form = $malzeme->form;
+
+
+            $this->getMaterialList();
+
+
             $this->description = $this->item->description;
             $this->ecn_id = $this->item->c_notice_id;
             $this->remarks = $this->item->remarks;
@@ -185,9 +211,21 @@ class Product extends Component
 
     public function storeItem()
     {
+
+        // dd([
+        //     'malzeme_id' => $this->mat_id,
+        //     'description' => $this->description,
+        //     'product_no' => $this->getProductNo(),
+        //     'c_notice_id' => $this->ecn_id,
+        //     'remarks' => $this->remarks,
+        //     'user_id' => Auth::id()
+        // ]);
+
+
         $this->validate();
         try {
             $this->item = Urun::create([
+                'malzeme_id' => $this->mat_id,
                 'description' => $this->description,
                 'product_no' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,
@@ -220,6 +258,7 @@ class Product extends Component
         try {
 
             $this->item = Urun::whereId($this->itemId)->update([
+                'malzeme_id' => $this->mat_id,
                 'description' => $this->description,
                 'product_no' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,

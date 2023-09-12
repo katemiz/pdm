@@ -77,7 +77,7 @@
 
                         <label class="checkbox is-block">
                             <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
-                            @checked($item && $ecn->id == $item->c_notice_id))> ECN-{{ $ecn->id }}
+                            @checked($item && $ecn->id == $item->c_notice_id)> ECN-{{ $ecn->id }}
                         </label>
 
                     @endforeach
@@ -108,16 +108,16 @@
                     <label class="label" for="topic">Material Family</label>
                     <div class="control">
                         <div class="select">
-                            <select wire:model='mat_family'>
+                            <select wire:model='mat_family' wire:change="getMaterialList">
                             <option>Select Family</option>
-        
+
                             @foreach (config('material.family') as $key => $value)
-                                <option value="{{$key}}">{{$value}}</option>
+                                <option value="{{$key}}" @selected( $item && $item->family == $key )>{{$value}}</option>
                             @endforeach
                             </select>
                         </div>
                     </div>
-        
+
                     @error('family')
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
@@ -131,16 +131,16 @@
                     <label class="label" for="topic">Material Form</label>
                     <div class="control">
                         <div class="select">
-                            <select wire:model='mat_form'>
+                            <select wire:model='mat_form' wire:change="getMaterialList">
                             <option>Select Form</option>
-        
+
                             @foreach (config('material.form') as $key => $value)
-                                <option value="{{$key}}">{{$value}}</option>
+                                <option value="{{$key}}" @selected( $item && $item->form == $key )>{{$value}}</option>
                             @endforeach
                             </select>
                         </div>
                     </div>
-        
+
                     @error('form')
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
@@ -148,7 +148,46 @@
             </div>
 
             <div class="column is-4">
-ddd
+
+
+                <div class="field">
+
+                    <label class="label" for="topic">Materials</label>
+
+                    @if (count($materials) > 0)
+
+                        <div class="control">
+                            <div class="select">
+                                <select wire:model='mat_id'>
+                                <option>Select Material</option>
+
+                                @foreach ($materials as $material)
+                                    <option value="{{$material->id}}">{{$material->description}}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    @else
+                        <p>No materials</p>
+                    @endif
+
+
+                    @error('mat_id')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
 
         </div>
@@ -227,6 +266,43 @@ ddd
                     'canEdit' => $canEdit])
             </div>
         </div>
+
+
+
+
+        <div class="field">
+            <label class="label">Drawing and BOM in PDF Format</label>
+
+            @if ($item)
+            @livewire('file-list', [
+                'canDelete' => true,
+                'model' => 'Product',
+                'modelId' => $item->id,
+                'tag' => 'DWG-PDF',                          // Any tag other than model name
+            ])
+            @endif
+
+            <div class="control">
+
+                @livewire('file-upload', [
+                    'model' => 'Product',
+                    'modelId' => $item ? $item->id : false,
+                    'isMultiple'=> true,                   // can multiple files be selected
+                    'tag' => 'DWG-PDF',                          // Any tag other than model name
+                    'canEdit' => $canEdit])
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
 
         <div class="buttons is-right">
             @if ($item)

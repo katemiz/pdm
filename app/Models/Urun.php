@@ -14,6 +14,7 @@ class Urun extends Model
     protected $fillable = [
         'user_id',
         'c_notice_id',
+        'malzeme_id',
         'product_no',
         'version',
         'description',
@@ -26,7 +27,6 @@ class Urun extends Model
         'remarks',
         'status'
     ];
-
 
 
 

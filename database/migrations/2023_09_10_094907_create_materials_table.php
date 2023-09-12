@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('family');
             $table->text('description');
             $table->text('specification');
-            $table->text('remarks');
+            $table->text('remarks')->nullable();
             $table->string('status')->default('A');
             $table->timestamps();
         });

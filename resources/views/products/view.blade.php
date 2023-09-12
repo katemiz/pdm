@@ -96,12 +96,13 @@
             </div>
         </div>
 
+        <label class="label">Material</label>
+        {{ $item->material_definition }}
 
-        <label class="label">Remarks/Notes</label>
 
-        <div class="notification">
-            {!! $item->remarks !!}
-        </div>
+
+
+        {{-- ATTACHMENTS --}}
 
         <label class="label">CAD Files</label>
 
@@ -125,6 +126,28 @@
 
 
         <hr>
+
+        <label class="label">Drawing and BOM in PDF Format</label>
+
+        @livewire('file-list', [
+            'model' => 'Product',
+            'modelId' => $item->id,
+            'tag' => 'DWG-PDF',                          // Any tag other than model name
+        ])
+
+
+        <hr>
+
+
+
+
+        <label class="label">Remarks/Notes</label>
+
+        <div class="notification">
+            {!! $item->remarks !!}
+        </div>
+
+
 
 
         <table class="table is-fullwidth">

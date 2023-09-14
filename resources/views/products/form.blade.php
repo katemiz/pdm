@@ -198,7 +198,44 @@
 
 
 
+        <div class="field">
+            <label class="label">Notes, Select All Applicable</label>
 
+            <div class="control">
+
+
+                @foreach (config('notes') as $note_category => $notes)
+
+
+
+
+                    <article class="message">
+
+                        <div class="message-body">
+                            <p class="subtitle has-text-info">{{ $note_category }}</p>
+
+                            @foreach ($notes as $note)
+
+
+                            <label class="checkbox is-block">
+                                <input type="checkbox" wire:model="notes" value="{{$note['id']}}"
+                                @checked($item && $item->notes)> {{ $note['note'] }}
+                            </label>
+                            @endforeach
+                        </div>
+                      </article>
+
+
+                @endforeach
+
+
+
+            </div>
+
+            @error('notes')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
 
 
 

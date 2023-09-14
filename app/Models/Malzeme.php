@@ -25,20 +25,37 @@ class Malzeme extends Model
     ];
 
 
-    protected function familyName(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value, array $attributes) => config('material')['family'][$attributes['family']],
-        );
+    // protected function familyName(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn (string $value) => config('material')['family'][$value],
+    //     );
+    // }
+
+    // protected function formName(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn (string $value) => config('material')['form'][$value],
+    //     );
+    // }
+
+
+
+    // protected function family(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: fn (string $value) => $value*$value,
+    //     );
+    // }
+
+
+    public function getFamilyNameAttribute($value) {
+        return config('material')['family'][$this->family];
     }
 
-    protected function formName(): Attribute
-    {
-        return Attribute::make(
-            get: fn (string $value) => config('material')['form'][$value],
-        );
+    public function getFormNameAttribute($value) {
+        return config('material')['form'][$this->form];
     }
-
 
 
     public function getMaterialDefinitionAttribute($value) {

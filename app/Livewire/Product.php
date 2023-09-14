@@ -62,8 +62,6 @@ class Product extends Component
     public $checkedBy;
     public $approvedBy;
 
-
-
     public $created_at;
     public $req_reviewed_at;
     public $eng_reviewed_at;

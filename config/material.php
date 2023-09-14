@@ -27,14 +27,14 @@ return [
                 "direction" => "asc"
             ],
 
-            "family"=> [
+            "family_name"=> [
                 "title" => "Family",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
-            "form"=> [
+            "form_name"=> [
                 "title" => "Form",
                 "sortable" => true,
                 "align" => "left",

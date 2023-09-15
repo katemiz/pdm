@@ -203,32 +203,23 @@
 
             <div class="control">
 
-
                 @foreach (config('notes') as $note_category => $notes)
-
-
-
 
                     <article class="message">
 
                         <div class="message-body">
                             <p class="subtitle has-text-info">{{ $note_category }}</p>
-
                             @foreach ($notes as $note)
-
-
                             <label class="checkbox is-block">
-                                <input type="checkbox" wire:model="notes" value="{{$note['id']}}"
+                                <input type="checkbox" wire:model="notes" value="{{ $note['id'] }}"
                                 @checked($item && $item->notes)> {{ $note['note'] }}
                             </label>
                             @endforeach
                         </div>
-                      </article>
 
+                    </article>
 
                 @endforeach
-
-
 
             </div>
 

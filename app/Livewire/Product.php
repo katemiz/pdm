@@ -57,6 +57,7 @@ class Product extends Component
     public $ecn_id;
     public $version;
     public $status;
+    public $notes = [];
 
     public $createdBy;
     public $checkedBy;
@@ -67,8 +68,6 @@ class Product extends Component
     public $eng_reviewed_at;
 
     public $remarks;
-
-
 
     protected $rules = [
         'description' => 'required|min:10',
@@ -84,12 +83,7 @@ class Product extends Component
 
         $this->action = strtoupper(request('action'));
         $this->constants = config('product');
-
     }
-
-
-
-
 
 
     #[Title('Products')]
@@ -185,6 +179,8 @@ class Product extends Component
             $this->description = $this->item->description;
             $this->ecn_id = $this->item->c_notice_id;
             $this->remarks = $this->item->remarks;
+            $this->notes = explode(',',$this->item->notes);
+
 
             $this->status = $this->item->status;
 
@@ -227,6 +223,7 @@ class Product extends Component
                 'description' => $this->description,
                 'product_no' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,
+                'notes' => implode(',',$this->notes),
                 'remarks' => $this->remarks,
                 'user_id' => Auth::id()
             ]);
@@ -253,6 +250,8 @@ class Product extends Component
     {
         $this->validate();
 
+        dd($this->notes);
+
         try {
 
             $this->item = Urun::whereId($this->itemId)->update([
@@ -261,8 +260,11 @@ class Product extends Component
                 'product_no' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,
                 'remarks' => $this->remarks,
+                'notes' => implode(',',$this->notes)
             ]);
 
+            // dd($this->notes);
+            // dd(implode(',',$this->notes));
 
             session()->flash('message','Product has been updated successfully!');
 

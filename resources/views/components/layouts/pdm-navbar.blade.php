@@ -92,6 +92,8 @@
                     <div class="navbar-dropdown">
                         <a href="/material/list" class="navbar-item">Materials</a>
                         <a href="/process/list" class="navbar-item">Processes</a>
+                        <a href="/notes/list" class="navbar-item">Product Notes</a>
+
                     </div>
                 </div>
 

@@ -1,15 +1,23 @@
 <x-pdm-layout title="{{ config('appconstants.app.name') }}">
 
-    <section class="hero section is-medium has-background-grey-lighter">
-        <div class="hero-body">
-            <p class="title has-text-weight-light is-size-1">{{ config('appconstants.app.motto') }}</p>
-            <p class="subtitle is-size-4">{{ config('appconstants.app.name') }}</p>
+    <section class="section">
 
-            <figure class="image my-0 mx-6">
-                <img src="images/hero.svg" alt="relevant illusturation">
-            </figure>
+        <div class="columns">
 
+            <div class="column is-4 ">
+                <p class="title has-text-weight-light is-size-1">{{ config('appconstants.app.motto') }}</p>
+                <p class="subtitle is-size-4">{{ config('appconstants.app.name') }}</p>
+            </div>
+
+
+            <div class="column has-background-grey-lighter">
+                <figure class="image my-0 mx-6">
+                    <img src="images/hero.svg" alt="relevant illusturation">
+                </figure>
+            </div>
         </div>
+
+
     </section>
 
 </x-pdm-layout>

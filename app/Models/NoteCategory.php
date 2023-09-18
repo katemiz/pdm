@@ -4,19 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class UrunNotu extends Model
+use App\Models\Yaptirga;
+
+
+class NoteCategory extends Model
 {
     use HasFactory;
 
-    protected $table = 'pnotes';
+    protected $table = 'ncategories';
 
     protected $fillable = [
         'user_id',
-        'category',
         'text_tr',
         'text_en',
         'status'
     ];
+
+
+    public function productNotes()
+    {
+        return $this->hasMany(Yaptirga::class);
+    }
 
 }

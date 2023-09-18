@@ -10,6 +10,8 @@ return [
         'welcome_header' => 'Be Agile',
         'welcome_subtitle' => 'No need for complex and expensive software',
         'favicon' => '/images/favicon.svg',
+        'copyright' => 'All Rights Reserved',
+        'version' => '&copy; 2023.01'
     ],
 
     'kapkara' => [

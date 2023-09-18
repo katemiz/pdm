@@ -7,7 +7,8 @@ use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 
-use App\Models\UrunNotu;
+use App\Models\NoteCategory;
+use App\Models\Yaptirga;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,6 @@ use Spatie\Permission\Models\Permission;
 
 class ProductNote extends Component
 {
-
     use WithPagination;
 
     public $action = 'LIST'; // LIST,FORM,VIEW
@@ -33,10 +33,13 @@ class ProductNote extends Component
     public $sortField = 'created_at';
     public $sortDirection;
 
+    public $categories;
     public $constants;
 
     // Item Props
-    public $category;
+    public $category_id;
+    public $category_tr;
+    public $category_en;
     public $text_tr;
     public $text_en;
     public $remarks;
@@ -46,6 +49,7 @@ class ProductNote extends Component
 
 
     protected $rules = [
+        'category_id' => 'required',
         'text_tr' => 'required',
         'text_en' => 'required',
     ];
@@ -59,6 +63,7 @@ class ProductNote extends Component
 
         $this->action = strtoupper(request('action'));
         $this->constants = config('notes');
+        $this->categories = NoteCategory::all();
     }
 
     #[Title('Product Notes')]
@@ -79,11 +84,16 @@ class ProductNote extends Component
 
             $this->sortDirection = $this->constants['list']['headers'][$this->sortField]['direction'];
 
-            $items = UrunNotu::where('text_tr', 'LIKE', "%".$this->search."%")
-            ->orWhere('text_en', 'LIKE', "%".$this->search."%")
-            ->orWhere('category', 'LIKE', "%".$this->search."%")
-            ->orderBy($this->sortField,$this->sortDirection)
-            ->paginate(env('RESULTS_PER_PAGE'));
+            if (strlen($this->search) > 0) {
+
+                $items = Yaptirga::where('text_tr', 'LIKE', "%".$this->search."%")
+                ->orWhere('text_en', 'LIKE', "%".$this->search."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+
+            } else {
+                $items = Yaptirga::orderBy($this->sortField,$this->sortDirection)->paginate(env('RESULTS_PER_PAGE'));
+            }
         }
 
         return view('Notes.notes',[
@@ -111,11 +121,13 @@ class ProductNote extends Component
     public function setUnsetProps($opt = 'set') {
 
         if ($opt === 'set') {
-            $this->item = UrunNotu::find($this->itemId);
+            $this->item = Yaptirga::find($this->itemId);
 
             $this->item->canEdit = true;
 
-            $this->category = $this->item->category;
+            $this->category_id = $this->item->note_category_id;
+            $this->category_tr = $this->item->noteCategory->text_tr;
+            $this->category_en = $this->item->noteCategory->text_en;
             $this->text_tr = $this->item->text_tr;
             $this->text_en = $this->item->text_en;
             $this->remarks = $this->item->remarks;
@@ -156,11 +168,11 @@ class ProductNote extends Component
     {
         $this->validate();
         try {
-            $this->item = UrunNotu::create([
+            $this->item = Yaptirga::create([
                 'user_id' => Auth::id(),
                 'text_tr' => $this->text_tr,
                 'text_en' => $this->text_en,
-                'category' => $this->category,
+                'note_category_id' => $this->category_id,
                 'remarks' => $this->remarks,
             ]);
             session()->flash('success','Material has been created successfully!');
@@ -173,8 +185,6 @@ class ProductNote extends Component
 
             $this->action = 'VIEW';
 
-            //return redirect('/cr/view/'.$this->itemId);
-
         } catch (\Exception $ex) {
             session()->flash('error','Something goes wrong!!'.$ex);
         }
@@ -185,15 +195,16 @@ class ProductNote extends Component
 
     public function updateItem()
     {
+
         $this->validate();
 
         try {
 
-            $this->item = UrunNotu::whereId($this->itemId)->update([
+            $this->item = Yaptirga::whereId($this->itemId)->update([
                 'user_id' => Auth::id(),
+                'note_category_id' => $this->category_id,
                 'text_tr' => $this->text_tr,
                 'text_en' => $this->text_en,
-                'category' => $this->category,
                 'remarks' => $this->remarks,
                 'status' => $this->status,
             ]);

@@ -9,7 +9,9 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 use App\Models\Counter;
+use App\Models\NoteCategory;
 use App\Models\User;
+
 
 
 
@@ -48,10 +50,41 @@ class DatabaseSeeder extends Seeder
         $engApproverPerm = Permission::create(['name' => 'eng_approver']);
         $engCheckerPerm = Permission::create(['name' => 'eng_checker']);
 
-
-
-
-
         $adminRole->givePermissionTo($engineeringPerm);
+
+        // Note Categories
+        NoteCategory::create([
+            'user_id' => 1,
+            'text_tr' => 'General Notes',
+            'text_en' => 'Genel Notlar',
+        ]);
+
+        NoteCategory::create([
+            'user_id' => 1,
+            'text_tr' => 'Surface Protection',
+            'text_en' => 'Yüzey Koruma',
+        ]);
+
+        NoteCategory::create([
+            'user_id' => 1,
+            'text_tr' => 'Surface Protection - Painting',
+            'text_en' => 'Yüzey Koruma - Boyama',
+        ]);
+
+
+        NoteCategory::create([
+            'user_id' => 1,
+            'text_tr' => 'Mechanical Fastening',
+            'text_en' => 'Mekanik Bağlayıcılar',
+        ]);
+
+        NoteCategory::create([
+            'user_id' => 1,
+            'text_tr' => 'Bonding',
+            'text_en' => 'Yapıştırma',
+        ]);
+
+
     }
 }
+

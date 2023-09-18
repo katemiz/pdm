@@ -91,25 +91,30 @@
                 </figure>
             </div>
             <div class="media-content">
-                <p class="title is-4"> {{ $item->text_tr }}</p>
-                <p class="subtitle is-6">{{ $item->text_en}}</p>
+                <p class="title is-4"> N-{{ $item->id }}</p>
             </div>
         </div>
 
+        <label class="label">Not (Türkçe)</label>
 
-        @if ( strlen($item->description) > 0)
+        <p class="mb-3"> {{ $item->text_tr }}</p>
+
+        <label class="label">Note (in English)</label>
+        <p> {{ $item->text_en }}</p>
+
+        @if ( strlen($item->remarks) > 0)
         <div class="notification">
-            {!! $item->description !!}
+            <label class="label">Remarks</label>
+            {!! $item->remarks !!}
         </div>
         @endif
 
-        <label class="label">Dosyalar</label>
 
         @livewire('file-list', [
-            'model' => 'CR',
+            'model' => 'UrunNotu',
             'modelId' => $item->id,
-            'tag' => 'CR',                          // Any tag other than model name
-        ], 'CR')
+            'tag' => 'UrunNotu',                          // Any tag other than model name
+        ])
 
 
 

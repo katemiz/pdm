@@ -9,14 +9,12 @@
                 <p class="subtitle is-size-4">{{ config('appconstants.app.name') }}</p>
             </div>
 
-
-            <div class="column has-background-grey-lighter">
+            <div class="column">
                 <figure class="image my-0 mx-6">
                     <img src="images/hero.svg" alt="relevant illusturation">
                 </figure>
             </div>
         </div>
-
 
     </section>
 

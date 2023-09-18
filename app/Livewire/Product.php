@@ -11,8 +11,8 @@ use App\Models\CNotice;
 use App\Models\Counter;
 use App\Models\Malzeme;
 use App\Models\Urun;
+use App\Models\NoteCategory;
 use App\Models\User;
-
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -50,6 +50,9 @@ class Product extends Component
     public $mat_family = false;
     public $mat_form = false;
     public $materials = [];
+    public $ncategories = [];
+    public $notes = [];
+
 
     // Item Props
     public $mat_id;
@@ -57,7 +60,6 @@ class Product extends Component
     public $ecn_id;
     public $version;
     public $status;
-    public $notes = [];
 
     public $createdBy;
     public $checkedBy;
@@ -68,6 +70,8 @@ class Product extends Component
     public $eng_reviewed_at;
 
     public $remarks;
+    public $existing_notes_id = [];
+
 
     protected $rules = [
         'description' => 'required|min:10',
@@ -83,6 +87,7 @@ class Product extends Component
 
         $this->action = strtoupper(request('action'));
         $this->constants = config('product');
+        $this->ncategories = NoteCategory::all();
     }
 
 
@@ -136,7 +141,6 @@ class Product extends Component
             $this->materials = Malzeme::where('family', $this->mat_family)
             ->where('form', $this->mat_form)
             ->orderBy($this->sortField,'asc')->get();
-
         }
     }
 
@@ -144,6 +148,7 @@ class Product extends Component
     public function setUnsetProps($opt = 'set') {
 
         if ($opt === 'set') {
+
             $this->item = Urun::find($this->itemId);
 
             $this->mat_id = $this->item->malzeme_id;
@@ -172,21 +177,24 @@ class Product extends Component
             $this->mat_family = $malzeme->family;
             $this->mat_form = $malzeme->form;
 
-
             $this->getMaterialList();
-
 
             $this->description = $this->item->description;
             $this->ecn_id = $this->item->c_notice_id;
             $this->remarks = $this->item->remarks;
-            $this->notes = explode(',',$this->item->notes);
-
 
             $this->status = $this->item->status;
 
             $this->created_at = $this->item->created_at;
             $this->check_reviewed_at = $this->item->check_reviewed_at;
             $this->app_reviewed_at = $this->item->app_reviewed_at;
+
+            foreach ($this->item->notes as $dizin) {
+
+dd($dizin);
+                array_push($this->existing_notes_id,$dizin->id);
+            }
+
 
         } else {
             $this->topic = '';
@@ -205,17 +213,6 @@ class Product extends Component
 
     public function storeItem()
     {
-
-        // dd([
-        //     'malzeme_id' => $this->mat_id,
-        //     'description' => $this->description,
-        //     'product_no' => $this->getProductNo(),
-        //     'c_notice_id' => $this->ecn_id,
-        //     'remarks' => $this->remarks,
-        //     'user_id' => Auth::id()
-        // ]);
-
-
         $this->validate();
         try {
             $this->item = Urun::create([
@@ -223,11 +220,13 @@ class Product extends Component
                 'description' => $this->description,
                 'product_no' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,
-                'notes' => implode(',',$this->notes),
                 'remarks' => $this->remarks,
                 'user_id' => Auth::id()
             ]);
             session()->flash('success','Product has been created successfully!');
+
+            // Attach Notes to Product
+            $this->item->notes->attach($this->notes);
 
             $this->itemId = $this->item->id;
 
@@ -236,8 +235,6 @@ class Product extends Component
             );
 
             $this->action = 'VIEW';
-
-            //return redirect('/cr/view/'.$this->itemId);
 
         } catch (\Exception $ex) {
             session()->flash('error','Something goes wrong!!'.$ex);
@@ -250,21 +247,30 @@ class Product extends Component
     {
         $this->validate();
 
-        dd($this->notes);
-
         try {
 
-            $this->item = Urun::whereId($this->itemId)->update([
+            Urun::whereId($this->itemId)->update([
                 'malzeme_id' => $this->mat_id,
                 'description' => $this->description,
                 'product_no' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,
-                'remarks' => $this->remarks,
-                'notes' => implode(',',$this->notes)
+                'remarks' => $this->remarks
             ]);
 
-            // dd($this->notes);
+            $aaa = Urun::find($this->itemId);
+
+
+            // dd($aaa->notes);
             // dd(implode(',',$this->notes));
+
+            // Update Notes to Product
+            $aaa->notes()->detach();
+            $aaa->notes()->attach($this->notes);
+
+            // dd($this->notes);
+
+
+            // dd($this->item->notes());
 
             session()->flash('message','Product has been updated successfully!');
 

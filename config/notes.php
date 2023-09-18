@@ -28,6 +28,7 @@ return [
             ],
 
             "category"=> [
+                "is_object" => true,
                 "title" => "Category",
                 "sortable" => true,
                 "align" => "left",
@@ -114,42 +115,4 @@ return [
 
 
 
-
-    "categories" => [
-        [
-            'id' => 100,
-            'text_tr' => 'General Notes',
-            'text_en' => 'General Notes',
-            'status' => 'Active'
-        ],
-
-        [
-            'id' => 200,
-            'text_tr' => 'Surface Protection',
-            'text_en' => 'Surface Protection',
-            'status' => 'Active'
-        ],
-
-        [
-            'id' => 300,
-            'text_tr' => 'Surface Protection - Painting',
-            'text_en' => 'Surface Protection - Painting',
-            'status' => 'Active'
-        ],
-
-        [
-            'id' => 400,
-            'text_tr' => 'Mechanical Fastening',
-            'text_en' => 'Mechanical Fastening',
-            'status' => 'Active'
-        ],
-
-        [
-            'id' => 500,
-            'text_tr' => 'Bonding',
-            'text_en' => 'Bonding',
-            'status' => 'Active'
-        ],
-
-    ]
 ];

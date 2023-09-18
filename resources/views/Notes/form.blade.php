@@ -29,20 +29,22 @@
 
         <div class="field">
 
-            <label class="label" for="topic">Notes Categrory</label>
+            <label class="label" for="topic">Notes Category</label>
             <div class="control">
                 <div class="select">
-                    <select wire:model='category'>
+                    <select wire:model='category_id'>
                     <option>Select Category</option>
 
-                    @foreach ($constants['categories'] as $key => $value)
-                        <option value="{{$value['id']}}" @selected( $item && $item->category == $value['id'] )>{{$value['text_tr']}}</option>
+                    @foreach ($categories as $category)
+                        <option value="{{$category->id}}" @selected( $item && $item->category_id == $category->id )>
+                            {{$category->text_en}} / {{$category->text_tr}}
+                        </option>
                     @endforeach
                     </select>
                 </div>
             </div>
 
-            @error('category')
+            @error('category_id')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
@@ -61,7 +63,7 @@
                     wire:model="text_tr"
                     type="text"
                     value="{{ $item ? $item->text_tr : ''}}"
-                    placeholder="eg 6061 T6" required>
+                    placeholder="Parça ve işleme notunu buraya yazınız" required>
             </div>
 
             @error('text_tr')
@@ -83,7 +85,7 @@
                     wire:model="text_en"
                     type="text"
                     value="{{ $item ? $item->text_en : ''}}"
-                    placeholder="eg 6061 T6" required>
+                    placeholder="Write here product and/or process note" required>
             </div>
 
             @error('text_en')
@@ -108,21 +110,21 @@
             @if ($item)
             @livewire('file-list', [
                 'canDelete' => true,
-                'model' => 'CR',
+                'model' => 'UrunNotu',
                 'modelId' => $item->id,
-                'tag' => 'CR',                          // Any tag other than model name
-            ], 'CR')
+                'tag' => 'UrunNotu',                          // Any tag other than model name
+            ])
             @endif
 
             <div class="control">
 
                 @livewire('file-upload', [
                     'hasForm' => true,                      // true when possible to add/remove file otherwise false
-                    'model' => 'CR',
+                    'model' => 'UrunNotu',
                     'modelId' => $item ? $item->id : false,
                     'isMultiple'=> true,                   // can multiple files be selected
-                    'tag' => 'CR',                          // Any tag other than model name
-                    'canEdit' => $canEdit], 'CR')
+                    'tag' => 'UrunNotu',                          // Any tag other than model name
+                    'canEdit' => $canEdit])
             </div>
         </div>
 

@@ -94,15 +94,11 @@
             @foreach ($items as $record)
             <tr wire:key="{{ $record->id }}">
 
-                @foreach (array_keys($constants['list']['headers']) as $col_name)
-                    <td>
-                        @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
-                            {!! $record[$col_name] !!}
-                        @else
-                            {{ $record[$col_name] }}
-                        @endif
-                    </td>
-                @endforeach
+
+                <td>{{ $record->id }}</td>
+                <td>{{ $record->noteCategory->text_tr }}</td>
+                <td>{{ $record->text_tr }}</td>
+                <td>{{ $record->created_at }}</td>
 
                 <td class="has-text-right">
 

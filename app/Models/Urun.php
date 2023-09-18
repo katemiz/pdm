@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Yaptirga;
+
+
 class Urun extends Model
 {
     use HasFactory;
@@ -28,6 +31,11 @@ class Urun extends Model
         'status'
     ];
 
+
+    public function notes()
+    {
+        return $this->belongsToMany(Yaptirga::class)->withTimestamps();
+    }
 
 
 }

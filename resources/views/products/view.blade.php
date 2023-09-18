@@ -101,13 +101,14 @@
         {{ $item->material_definition }}
         </div>
 
-        <div class="block">
+        <div class="block content">
             <label class="label">Product and Process Notes</label>
-            {{ $item->material_definition }}
+            <ul class="menu-list">
+                @foreach ($item->notes as $note)
+                <li><a>{{ $note->text_tr }}</a></li>
+                @endforeach
+            </ul>
         </div>
-
-
-
 
 
         {{-- ATTACHMENTS --}}
@@ -121,7 +122,6 @@
         </div>
 
 
-        <hr>
 
 
 
@@ -149,12 +149,13 @@
 
 
 
-
+        @if ($item->remarks)
         <label class="label">Remarks/Notes</label>
-
         <div class="notification">
             {!! $item->remarks !!}
         </div>
+        @endif
+
 
 
 

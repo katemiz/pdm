@@ -191,7 +191,6 @@ class Product extends Component
 
             foreach ($this->item->notes as $dizin) {
 
-dd($dizin);
                 array_push($this->existing_notes_id,$dizin->id);
             }
 
@@ -226,7 +225,8 @@ dd($dizin);
             session()->flash('success','Product has been created successfully!');
 
             // Attach Notes to Product
-            $this->item->notes->attach($this->notes);
+            $this->item->notes()->attach($this->notes);
+
 
             $this->itemId = $this->item->id;
 

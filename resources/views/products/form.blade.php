@@ -204,20 +204,23 @@
             <div class="control">
 
                 @foreach ($ncategories as $ncategory)
+                {{-- @php
+                    print_r($existing_notes_id)
+                @endphp --}}
 
-                    <article class="message">
+                    {{-- <article class="message"> --}}
 
-                        <div class="message-body">
-                            <p class="subtitle has-text-info">{{ $ncategory->text_en }}</p>
+                        {{-- <div class="message-body"> --}}
+                            <p class="has-text-grey has-text-7">{{ $ncategory->text_en }}</p>
                             @foreach ($ncategory->productNotes as $note)
-                            <label wire:key="{{ $note->id }}" class="checkbox is-block">
+                            <label wire:key="{{ $note->id }}" class="checkbox is-block ml-6">
                                 <input type="checkbox" wire:model="notes" value="{{ $note->id }}"
-                                @checked($item && in_array($note->id,$existing_notes_id))> {{ $note->text_en }}
+                                > {{ $note->text_en }}
                             </label>
                             @endforeach
-                        </div>
+                        {{-- </div> --}}
 
-                    </article>
+                    {{-- </article> --}}
 
                 @endforeach
 

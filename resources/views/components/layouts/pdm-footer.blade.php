@@ -1,4 +1,4 @@
-<div class="has-background-grey has-text-white has-text-right pr-3 is-size-7 py-3">
+<div class="has-background-grey has-text-white has-text-right pr-3 is-size-7 py-1 my-0">
     {{config('constants.company.motto')}} {{ config('appconstants.app.motto') }}
 </div>
 

@@ -1,8 +1,6 @@
 <div>
     @if ($attachments->count() > 0)
 
-    <label class="label mt-2">Files</label>
-
     <table class="table is-fullwidth is-size-7">
 
         @foreach ($attachments as $key => $attachment)
@@ -13,8 +11,14 @@
             <td>
                 <a wire:click="downloadFile('{{ $attachment->id }}')">{{ $attachment->original_file_name }}</a>
             </td>
+
+            @if ($showMime)
             <td class="is-narrow">{{ $attachment->mime_type }}</td>
+            @endif
+
+            @if ($showSize)
             <td class="is-narrow">{{ $attachment->file_size }}</td>
+            @endif
 
             @if ($canDelete)
             <td class="is-narrow has-text-right">

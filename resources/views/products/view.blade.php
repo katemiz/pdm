@@ -85,7 +85,7 @@
         </div>
 
         <div class="media">
-            <div class="media-left">
+            <div class="media-left has-text-centered">
                 <figure class="image is-48x48">
                     <x-carbon-barcode />
                 </figure>
@@ -97,62 +97,93 @@
         </div>
 
         <div class="block">
+            <label class="label">Engineering Change Notice Number</label>
+            <a href="/ecn/view/{{ $item->c_notice_id }}">ECN-{{ $item->c_notice_id }}</a>
+        </div>
+
+        <div class="block">
         <label class="label">Material</label>
         {{ $item->material_definition }}
         </div>
 
         <div class="block content">
             <label class="label">Product and Process Notes</label>
-            <ul class="menu-list">
+            <ul>
                 @foreach ($item->notes as $note)
-                <li><a>{{ $note->text_tr }}</a></li>
+                <li>{{ $note->text_tr }}</li>
                 @endforeach
             </ul>
         </div>
 
 
-        {{-- ATTACHMENTS --}}
-        <div class="block">
-        <label class="label">CAD Files</label>
-        @livewire('file-list', [
-            'model' => 'Product',
-            'modelId' => $item->id,
-            'tag' => 'CAD',                          // Any tag other than model name
-        ])
+
+        <div class="columns">
+
+            <div class="column">
+
+                {{-- ATTACHMENTS --}}
+                <div class="block">
+                <label class="label">CAD Files</label>
+                @livewire('file-list', [
+                    'model' => 'Product',
+                    'modelId' => $item->id,
+                    'showMime' => false,
+                    'showSize' => false,
+                    'tag' => 'CAD',                          // Any tag other than model name
+                ])
+                </div>
+
+            </div>
+
+            <div class="column">
+
+                <div class="block">
+                    <label class="label">STEP/DXF Files</label>
+                    @livewire('file-list', [
+                        'model' => 'Product',
+                        'modelId' => $item->id,
+                        'showMime' => false,
+                        'showSize' => false,
+                        'tag' => 'STEP',                          // Any tag other than model name
+                    ])
+                </div>
+            </div>
+
+            <div class="column">
+                <div class="block">
+                    <label class="label">Drawing and BOM</label>
+                    @livewire('file-list', [
+                        'model' => 'Product',
+                        'modelId' => $item->id,
+                        'showMime' => false,
+                        'showSize' => false,
+                        'tag' => 'DWG-PDF',                          // Any tag other than model name
+                    ])
+                </div>
+
+            </div>
+
+
         </div>
 
 
 
 
 
-        <label class="label">STEP and DXF Files</label>
-
-        @livewire('file-list', [
-            'model' => 'Product',
-            'modelId' => $item->id,
-            'tag' => 'STEP',                          // Any tag other than model name
-        ])
 
 
-        <hr>
-
-        <label class="label">Drawing and BOM in PDF Format</label>
-
-        @livewire('file-list', [
-            'model' => 'Product',
-            'modelId' => $item->id,
-            'tag' => 'DWG-PDF',                          // Any tag other than model name
-        ])
 
 
-        <hr>
+
 
 
 
         @if ($item->remarks)
-        <label class="label">Remarks/Notes</label>
-        <div class="notification">
-            {!! $item->remarks !!}
+        <div class="block">
+            <label class="label">Remarks/Notes</label>
+            <div class="notification">
+                {!! $item->remarks !!}
+            </div>
         </div>
         @endif
 
@@ -160,70 +191,29 @@
 
 
 
-        <table class="table is-fullwidth">
-            <tr>
-                <td class="is-half">
-                    <label class="label">Created By</label>
-                    <p>{{ $createdBy->name }} {{ $createdBy->lastname }}</p>
-                    <p>{{ $created_at }}</p>
-                </td>
-                <td class="has-text-right">
-                    <label class="label">Status</label>
+        @livewire('tolerances')
 
-                    @switch($status)
-                    @case('wip')
-                        <p>Work In Progress</p>
-                        @break
-                    @case('accepted')
-                        <p class="has-text-info">Kabul Edildi - Accepted</span>
-                        @break
-                    @case('rejected')
-                        <a onclick="showModal('m10')">Red Edildi - Rejected</a>
-                        <p>{{ $engBy->name }} {{ $engBy->lastname }}</p>
-                        <p>{{ $created_at }}</p>
-                        @break
-                    @endswitch
 
-                </td>
-            </tr>
-        </table>
+
+
+
+        @livewire('info-box', [
+            'createdBy' => $createdBy,
+            'status' => $status,
+            'created_at' => $created_at
+        ])
+
+
+
+
+
+
+
+
 
     </div>
 
 
-    <div class="modal" id="m10">
-        <div class="modal-background" onclick="hideModal('m10')"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Red Nedeni / Rejection Reason</p>
-            <a class="delete" aria-label="close" onclick="hideModal('m10')"></a>
-        </header>
-        <section class="modal-card-body">
-            <p>rejectReason </p>
-        </section>
-        </div>
-    </div>
-
-
-
-    <div class="modal" id="m20">
-        <div class="modal-background" onclick="hideModal('m20')"></div>
-        <div class="modal-card">
-            <form wire:submit="rejectCR">
-                <header class="modal-card-head">
-                    <p class="modal-card-title">Red Nedeni / Rejection Reason</p>
-                    <a class="delete" aria-label="close" onclick="hideModal('m20')"></a>
-                </header>
-                <section class="modal-card-body">
-                    <textarea type="text" wire:model='rejectReason' class="textarea" placeholder="Reddetme nedenini yazınız." rows="5"></textarea>
-                </section>
-                <footer class="modal-card-foot">
-                    <a onclick="hideModal('m20')" class="button">İptal / Cancel</a>
-                    <button class="button is-light is-danger">Red / Reject</button>
-                </footer>
-            </form>
-        </div>
-    </div>
 
 
 

@@ -51,7 +51,9 @@ class Product extends Component
     public $mat_form = false;
     public $materials = [];
     public $ncategories = [];
-    public $notes = [];
+    //public $notes = [];
+    public $notes_id_array = [];
+
 
 
     // Item Props
@@ -70,7 +72,6 @@ class Product extends Component
     public $eng_reviewed_at;
 
     public $remarks;
-    public $existing_notes_id = [];
 
 
     protected $rules = [
@@ -104,6 +105,8 @@ class Product extends Component
 
         if ( $this->action === 'FORM' && $this->itemId) {
             $this->setUnsetProps();
+
+            //dd($this->notes_id_array);
         }
 
         if ( $this->action === 'LIST') {
@@ -190,8 +193,7 @@ class Product extends Component
             $this->app_reviewed_at = $this->item->app_reviewed_at;
 
             foreach ($this->item->notes as $dizin) {
-
-                array_push($this->existing_notes_id,$dizin->id);
+                array_push($this->notes_id_array,$dizin->id);
             }
 
 
@@ -245,6 +247,7 @@ class Product extends Component
 
     public function updateItem()
     {
+
         $this->validate();
 
         try {
@@ -260,12 +263,13 @@ class Product extends Component
             $aaa = Urun::find($this->itemId);
 
 
+
             // dd($aaa->notes);
             // dd(implode(',',$this->notes));
 
             // Update Notes to Product
             $aaa->notes()->detach();
-            $aaa->notes()->attach($this->notes);
+            $aaa->notes()->attach($this->notes_id_array);
 
             // dd($this->notes);
 

@@ -19,6 +19,9 @@ class FileList extends Component
     public $modelId;
     public $tag = false;
 
+    public $showMime = true;
+    public $showSize = true;
+
     public $attachments = [];
     public $canDelete = false;
 

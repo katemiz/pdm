@@ -214,7 +214,7 @@
                             <p class="has-text-grey has-text-7">{{ $ncategory->text_en }}</p>
                             @foreach ($ncategory->productNotes as $note)
                             <label wire:key="{{ $note->id }}" class="checkbox is-block ml-6">
-                                <input type="checkbox" wire:model="notes" value="{{ $note->id }}"
+                                <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"
                                 > {{ $note->text_en }}
                             </label>
                             @endforeach
@@ -226,7 +226,7 @@
 
             </div>
 
-            @error('notes')
+            @error('notes_id_array')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>

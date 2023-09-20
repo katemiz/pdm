@@ -70,7 +70,7 @@
                     <div class="field has-addons is-pulled-right">
 
                         <p class="control">
-                            <a wire:click="$dispatch('showReleaseModal', { id: {{ $item->id }} })" class="button is-success is-light is-small">
+                            <a wire:click='releaseStart' class="button is-success is-light is-small">
                                 <span class="icon is-small"><x-carbon-send /></span>
                                 <span>Start Release</span>
                             </a>
@@ -228,19 +228,19 @@
 
 
 
-    <div class="modal">
-        <div class="modal-background"></div>
+    <div class="modal" id="m10">
+        <div class="modal-background" onclick="hideModal('m10')"></div>
         <div class="modal-card">
           <header class="modal-card-head">
             <p class="modal-card-title">Modal title</p>
-            <button class="delete" aria-label="close"></button>
+            <button class="delete" aria-label="close" onclick="hideModal('m10')"></button>
           </header>
           <section class="modal-card-body">
             <!-- Content ... -->
           </section>
           <footer class="modal-card-foot">
             <button class="button is-success">Save changes</button>
-            <button class="button">Cancel</button>
+            <button class="button" onclick="hideModal('m10')">Cancel</button>
           </footer>
         </div>
       </div>

@@ -298,9 +298,32 @@ class Product extends Component
 
 
 
+    public function integrityCheck() {
+        return true;
+    }
 
-    public function showReleaseModal($id) {
-        $this->js("console.log('dsfdf')");
+
+
+    public function releaseStart() {
+
+        if ($this->integrityCheck()) {
+
+            // $this->js("showModal('m10')");
+            $this->js("console.log('m10true')");
+
+            $this->dispatch('show-select-approvers',
+                modelId: $this->itemId
+            );
+
+        } else {
+            $this->js("showModal('m10')");
+            $this->js("console.log('m10false')");
+
+
+
+        }
+
+
     }
 
 

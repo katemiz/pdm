@@ -51,7 +51,6 @@ class Product extends Component
     public $mat_form = false;
     public $materials = [];
     public $ncategories = [];
-    //public $notes = [];
     public $notes_id_array = [];
 
 
@@ -62,6 +61,9 @@ class Product extends Component
     public $ecn_id;
     public $version;
     public $status;
+    public $unit = 'mm';
+    public $weight;
+
 
     public $createdBy;
     public $checkedBy;
@@ -105,8 +107,6 @@ class Product extends Component
 
         if ( $this->action === 'FORM' && $this->itemId) {
             $this->setUnsetProps();
-
-            //dd($this->notes_id_array);
         }
 
         if ( $this->action === 'LIST') {
@@ -170,6 +170,10 @@ class Product extends Component
 
             $this->product_no = $this->item->product_no;
             $this->version = $this->item->version;
+            $this->weight = $this->item->weight;
+            $this->unit = $this->item->unit;
+
+
 
             $malzeme =  Malzeme::find($this->item->malzeme_id);
 
@@ -221,13 +225,15 @@ class Product extends Component
                 'description' => $this->description,
                 'product_no' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,
+                'weight' => $this->weight,
+                'unit' => $this->unit,
                 'remarks' => $this->remarks,
                 'user_id' => Auth::id()
             ]);
             session()->flash('success','Product has been created successfully!');
 
             // Attach Notes to Product
-            $this->item->notes()->attach($this->notes);
+            $this->item->notes()->attach($this->notes_id_array);
 
 
             $this->itemId = $this->item->id;
@@ -247,7 +253,6 @@ class Product extends Component
 
     public function updateItem()
     {
-
         $this->validate();
 
         try {
@@ -257,24 +262,16 @@ class Product extends Component
                 'description' => $this->description,
                 'product_no' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,
+                'weight' => $this->weight,
+                'unit' => $this->unit,
                 'remarks' => $this->remarks
             ]);
 
             $aaa = Urun::find($this->itemId);
 
-
-
-            // dd($aaa->notes);
-            // dd(implode(',',$this->notes));
-
             // Update Notes to Product
             $aaa->notes()->detach();
             $aaa->notes()->attach($this->notes_id_array);
-
-            // dd($this->notes);
-
-
-            // dd($this->item->notes());
 
             session()->flash('message','Product has been updated successfully!');
 
@@ -302,6 +299,9 @@ class Product extends Component
 
 
 
+    public function showReleaseModal($id) {
+        $this->js("console.log('dsfdf')");
+    }
 
 
 

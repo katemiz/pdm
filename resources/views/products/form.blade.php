@@ -10,20 +10,9 @@
     <div class="control">
         <div class="tags has-addons">
             <span class="tag is-dark is-large mb-6">{{ $item->id}}</span>
-
-            {{-- @if ($isForNewProduct)
-                <span class="tag is-success is-large mb-6">New</span>
-            @else
-                <span class="tag is-warning is-large mb-6">Change</span>
-            @endif --}}
-
         </div>
     </div>
     @endif
-
-
-
-
 
     @if (session()->has('error'))
         <div class="notification is-danger is-light">
@@ -39,6 +28,24 @@
 
     <form method="POST" enctype="multipart/form-data">
     @csrf
+
+        <div class="field">
+            <label class="label">Part Unit</label>
+
+            <div class="control">
+                <label class="checkbox is-block">
+                    <input type="radio" wire:model="unit" value="mm"> Metric (mm)
+                </label>
+
+                <label class="checkbox is-block">
+                    <input type="radio" wire:model="unit" value="in"> Imperial (in)
+                </label>
+            </div>
+
+            @error('unit')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
 
 
         <div class="field">
@@ -59,11 +66,6 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
-
-
-
-
-
 
 
         <div class="field">
@@ -92,11 +94,6 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
-
-
-
-
-
 
 
         <div class="columns">
@@ -149,7 +146,6 @@
 
             <div class="column is-4">
 
-
                 <div class="field">
 
                     <label class="label" for="topic">Materials</label>
@@ -171,31 +167,14 @@
                         <p>No materials</p>
                     @endif
 
-
                     @error('mat_id')
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
 
-
-
-
-
-
-
-
-
-
-
-
             </div>
 
         </div>
-
-
-
-
-
 
 
         <div class="field">
@@ -204,23 +183,14 @@
             <div class="control">
 
                 @foreach ($ncategories as $ncategory)
-                {{-- @php
-                    print_r($existing_notes_id)
-                @endphp --}}
 
-                    {{-- <article class="message"> --}}
-
-                        {{-- <div class="message-body"> --}}
-                            <p class="has-text-grey has-text-7">{{ $ncategory->text_en }}</p>
-                            @foreach ($ncategory->productNotes as $note)
-                            <label wire:key="{{ $note->id }}" class="checkbox is-block ml-6">
-                                <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"
-                                > {{ $note->text_en }}
-                            </label>
-                            @endforeach
-                        {{-- </div> --}}
-
-                    {{-- </article> --}}
+                    <p class="has-text-info has-text-7">{{ $ncategory->text_en }}</p>
+                    @foreach ($ncategory->productNotes as $note)
+                    <label wire:key="{{ $note->id }}" class="checkbox is-block ">
+                        <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"
+                        > {{ $note->text_en }}
+                    </label>
+                    @endforeach
 
                 @endforeach
 
@@ -232,13 +202,24 @@
         </div>
 
 
+        <div class="field">
 
+            <label class="label" for="topic">Part Weight [kg]</label>
+            <div class="control">
 
+                <input
+                    class="input"
+                    id="weight"
+                    wire:model="weight"
+                    type="text"
+                    value="{{ $item ? $item->weight : ''}}"
+                    placeholder="Estimated weight of part/product in kg" required>
+            </div>
 
-
-
-
-
+            @error('weight')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
 
 
         <livewire:ck-editor
@@ -251,6 +232,7 @@
         @error('remarks')
         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
         @enderror
+
 
         <div class="field">
             <label class="label">CAD Files</label>
@@ -299,8 +281,6 @@
         </div>
 
 
-
-
         <div class="field">
             <label class="label">Drawing and BOM in PDF Format</label>
 
@@ -323,16 +303,6 @@
                     'canEdit' => $canEdit])
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
 
 
         <div class="buttons is-right">

@@ -12,6 +12,12 @@
     </div>
 @endif
 
+<script>
+    function showReleaseModal(id) {
+        alert(id)
+    }
+</script>
+
 
 
 <div class="card">
@@ -64,18 +70,18 @@
                     <div class="field has-addons is-pulled-right">
 
                         <p class="control">
-                            <a wire:click="closeECN({{ $item->id }})" class="button is-success is-light is-small">
-                                <span class="icon is-small"><x-carbon-task-complete /></span>
-                                <span>Finalize / Tamamla</span>
+                            <a wire:click="$dispatch('showReleaseModal', { id: {{ $item->id }} })" class="button is-success is-light is-small">
+                                <span class="icon is-small"><x-carbon-send /></span>
+                                <span>Start Release</span>
                             </a>
                         </p>
 
-                        <p class="control ml-5">
+                        {{-- <p class="control ml-5">
                             <a onclick="showModal('m20')" class="button is-danger is-light is-small">
                                 <span class="icon is-small"><x-carbon-thumbs-down /></span>
                                 <span>Reject / Red</span>
                             </a>
-                        </p>
+                        </p> --}}
 
                     </div>
                 </div>
@@ -96,23 +102,51 @@
             </div>
         </div>
 
-        <div class="block">
-            <label class="label">Engineering Change Notice Number</label>
-            <a href="/ecn/view/{{ $item->c_notice_id }}">ECN-{{ $item->c_notice_id }}</a>
+
+
+
+
+        <div class="columns">
+            <div class="column block">
+                <label class="label">Engineering Change Notice Number</label>
+                <a href="/ecn/view/{{ $item->c_notice_id }}">ECN-{{ $item->c_notice_id }}</a>
+            </div>
+
+            <div class="column block has-text-right">
+                <label class="label">Part Unit</label>
+                {{ $item->unit }}
+            </div>
         </div>
 
-        <div class="block">
-        <label class="label">Material</label>
-        {{ $item->material_definition }}
+        <div class="columns">
+            <div class="column block">
+                <label class="label">Material</label>
+                {{ $item->material_definition }}
+            </div>
+
+            <div class="column block has-text-right">
+                <label class="label">Part Weight [kg]</label>
+                {{ $item->weight }}
+            </div>
         </div>
 
         <div class="block content">
-            <label class="label">Product and Process Notes</label>
-            <ul>
+            <label class="label">General Part Notes</label>
+            <ol>
                 @foreach ($item->notes as $note)
                 <li>{{ $note->text_tr }}</li>
                 @endforeach
-            </ul>
+            </ol>
+        </div>
+
+
+        <div class="block content">
+            <label class="label">Special Part Notes</label>
+            <ol>
+                @foreach ($item->notes as $note)
+                <li>{{ $note->text_tr }}</li>
+                @endforeach
+            </ol>
         </div>
 
 
@@ -163,18 +197,7 @@
 
             </div>
 
-
         </div>
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -188,28 +211,13 @@
         @endif
 
 
-
-
-
         @livewire('tolerances')
-
-
-
-
 
         @livewire('info-box', [
             'createdBy' => $createdBy,
             'status' => $status,
             'created_at' => $created_at
         ])
-
-
-
-
-
-
-
-
 
     </div>
 
@@ -218,6 +226,24 @@
 
 
 
+
+
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Modal title</p>
+            <button class="delete" aria-label="close"></button>
+          </header>
+          <section class="modal-card-body">
+            <!-- Content ... -->
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success">Save changes</button>
+            <button class="button">Cancel</button>
+          </footer>
+        </div>
+      </div>
 
 
 

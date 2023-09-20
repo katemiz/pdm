@@ -44,32 +44,7 @@ use function Livewire\Volt\{state};
 
 
 
-    <nav class="level">
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">X</p>
-            <p class="title">&plusmn;2</p>
-          </div>
-        </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">X.X</p>
-            <p class="title">&plusmn;0.8</p>
-          </div>
-        </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">X.XX</p>
-            <p class="title">456K</p>
-          </div>
-        </div>
-        <div class="level-item has-text-centered">
-          <div>
-            <p class="heading">Likes</p>
-            <p class="title">789</p>
-          </div>
-        </div>
-    </nav>
+
 
 
 

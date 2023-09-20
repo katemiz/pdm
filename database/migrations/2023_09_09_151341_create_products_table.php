@@ -21,9 +21,11 @@ return new class extends Migration
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(CNotice::class);
             $table->foreignIdFor(Malzeme::class);
+            $table->string('unit')->default('mm');
             $table->integer('product_no');
             $table->integer('version')->default(0);
             $table->text('description')->nullable();
+            $table->float('weight')->nullable();
             $table->foreignId('checker_id')->nullable();
             $table->foreignId('approver_id')->nullable();
             $table->string('reject_reason_check')->nullable();

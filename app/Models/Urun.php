@@ -19,6 +19,8 @@ class Urun extends Model
         'c_notice_id',
         'malzeme_id',
         'product_no',
+        'unit',
+        'weight',
         'version',
         'description',
         'checker_id',

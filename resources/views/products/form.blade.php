@@ -29,7 +29,7 @@
     <form method="POST" enctype="multipart/form-data">
     @csrf
 
-        <div class="field">
+        <div class="field block">
             <label class="label">Part Unit</label>
 
             <div class="control">
@@ -48,7 +48,7 @@
         </div>
 
 
-        <div class="field">
+        <div class="field block">
 
             <label class="label" for="topic">Part/Product/Item Description/Title</label>
             <div class="control">
@@ -68,7 +68,7 @@
         </div>
 
 
-        <div class="field">
+        <div class="field block">
             <label class="label">Available ECNs</label>
 
             <div class="control">
@@ -96,7 +96,7 @@
         </div>
 
 
-        <div class="columns">
+        <div class="columns block">
 
             <div class="column is-4">
 
@@ -177,7 +177,7 @@
         </div>
 
 
-        <div class="field">
+        <div class="field block">
             <label class="label">Notes, Select All Applicable</label>
 
             <div class="control">
@@ -202,7 +202,7 @@
         </div>
 
 
-        <div class="field">
+        <div class="field block">
 
             <label class="label" for="topic">Part Weight [kg]</label>
             <div class="control">
@@ -234,7 +234,7 @@
         @enderror
 
 
-        <div class="field">
+        <div class="field block">
             <label class="label">CAD Files</label>
 
             @if ($item)
@@ -257,7 +257,7 @@
             </div>
         </div>
 
-        <div class="field">
+        <div class="field block">
             <label class="label">STEP and DXF Files</label>
 
             @if ($item)
@@ -281,7 +281,7 @@
         </div>
 
 
-        <div class="field">
+        <div class="field block">
             <label class="label">Drawing and BOM in PDF Format</label>
 
             @if ($item)

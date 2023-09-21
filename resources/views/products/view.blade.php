@@ -228,22 +228,6 @@
 
 
 
-    <div class="modal" id="m10">
-        <div class="modal-background" onclick="hideModal('m10')"></div>
-        <div class="modal-card">
-          <header class="modal-card-head">
-            <p class="modal-card-title">Modal title</p>
-            <button class="delete" aria-label="close" onclick="hideModal('m10')"></button>
-          </header>
-          <section class="modal-card-body">
-            <!-- Content ... -->
-          </section>
-          <footer class="modal-card-foot">
-            <button class="button is-success">Save changes</button>
-            <button class="button" onclick="hideModal('m10')">Cancel</button>
-          </footer>
-        </div>
-      </div>
 
 
 
@@ -256,3 +240,21 @@
 
 
 </div>
+
+<div class="modal" id="m10">
+    <div class="modal-background" onclick="hideModal('m10')"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Modal title</p>
+        <button class="delete" aria-label="close" onclick="hideModal('m10')"></button>
+      </header>
+      <section class="modal-card-body">
+        <!-- Content ... -->
+      </section>
+      <footer class="modal-card-foot">
+        <button class="button is-success">Save changes</button>
+        <button class="button" onclick="hideModal('m10')">Cancel</button>
+      </footer>
+    </div>
+  </div>
+

@@ -56,15 +56,17 @@
 
         window.addEventListener('show-select-approvers',function(e) {
 
+            console.log(document.getElementById('m10').classList)
 
             document.getElementById('m10').classList.add('is-active')
+
 
             console.log('slfkslfgfkg')
 
         })
 
 
-        
+
 
 
 

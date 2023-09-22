@@ -29,7 +29,7 @@
     <form method="POST" enctype="multipart/form-data">
     @csrf
 
-        <div class="field block">
+        <div class="field">
             <label class="label">Part Unit</label>
 
             <div class="control">
@@ -48,7 +48,7 @@
         </div>
 
 
-        <div class="field block">
+        <div class="field">
 
             <label class="label" for="topic">Part/Product/Item Description/Title</label>
             <div class="control">
@@ -68,7 +68,7 @@
         </div>
 
 
-        <div class="field block">
+        <div class="field">
             <label class="label">Available ECNs</label>
 
             <div class="control">
@@ -96,13 +96,15 @@
         </div>
 
 
-        <div class="columns block">
+        <div class="field ">
 
-            <div class="column is-4">
+            <label class="label">Material</label>
+
+            <div class="field-body">
 
                 <div class="field">
 
-                    <label class="label" for="topic">Material Family</label>
+                    <label class="label has-text-weight-normal" for="topic">Material Family</label>
                     <div class="control">
                         <div class="select">
                             <select wire:model='mat_family' wire:change="getMaterialList">
@@ -120,12 +122,9 @@
                     @enderror
                 </div>
 
-            </div>
-
-            <div class="column is-4">
                 <div class="field">
 
-                    <label class="label" for="topic">Material Form</label>
+                    <label class="label has-text-weight-normal" for="topic">Material Form</label>
                     <div class="control">
                         <div class="select">
                             <select wire:model='mat_form' wire:change="getMaterialList">
@@ -142,13 +141,10 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
-            </div>
-
-            <div class="column is-4">
 
                 <div class="field">
 
-                    <label class="label" for="topic">Materials</label>
+                    <label class="label has-text-weight-normal" for="topic">Material Description</label>
 
                     @if (count($materials) > 0)
 
@@ -173,18 +169,17 @@
                 </div>
 
             </div>
-
         </div>
 
 
-        <div class="field block">
+        <div class="field">
             <label class="label">Notes, Select All Applicable</label>
 
             <div class="control">
 
                 @foreach ($ncategories as $ncategory)
 
-                    <p class="has-text-info has-text-7">{{ $ncategory->text_en }}</p>
+                    <p class="has-text-info has-text-7 ml-4 mt-3">{{ $ncategory->text_en }}</p>
                     @foreach ($ncategory->productNotes as $note)
                     <label wire:key="{{ $note->id }}" class="checkbox is-block ">
                         <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"
@@ -200,6 +195,57 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
+
+
+        <div class="field ">
+
+            <label class="label">Special Part Notes (Flag Notes)</label>
+
+
+            <div class="field-body">
+              <div class="field is-narrow">
+                <label class="label has-text-weight-normal">Flag Note No</label>
+                <p class="control">
+                  <input class="input" type="text" placeholder="No">
+                </p>
+              </div>
+              <div class="field">
+                <label class="label has-text-weight-normal">Flag Note</label>
+
+                <p class="control">
+                  <input class="input" type="email" placeholder="Specific part note">
+                </p>
+              </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         <div class="field block">

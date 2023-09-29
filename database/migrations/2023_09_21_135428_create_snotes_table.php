@@ -17,9 +17,9 @@ return new class extends Migration
         Schema::create('snotes', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Urun::class);
-            $table->text('flag_no');
+            $table->text('no');
             $table->text('text_tr');
-            $table->text('text_en');
+            $table->text('text_en')->nullable();
             $table->timestamps();
         });
     }

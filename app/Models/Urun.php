@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use App\Models\Yaptirga;
 
@@ -38,6 +39,11 @@ class Urun extends Model
     public function notes()
     {
         return $this->belongsToMany(Yaptirga::class)->withTimestamps();
+    }
+
+    public function snotes()
+    {
+        return $this->hasMany(Fnote::class);
     }
 
 

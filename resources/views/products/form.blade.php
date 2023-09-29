@@ -198,57 +198,63 @@
 
 
         <div class="field ">
+            <label class="label">Special Part Notes [Flag Notes]</label>
 
-            <label class="label">Special Part Notes (Flag Notes)</label>
+            <div class="columns">
 
+                <div class="column is-1">
+                    <a wire:click='addSNote' class="button is-small is-link"><span class="icon"><x-carbon-add /></span></a>
+                </div>
 
-            <div class="field-body">
-              <div class="field is-narrow">
-                <label class="label has-text-weight-normal">Flag Note No</label>
-                <p class="control">
-                  <input class="input" type="text" placeholder="No">
-                </p>
-              </div>
-              <div class="field">
-                <label class="label has-text-weight-normal">Flag Note</label>
+                <div class="column">
 
-                <p class="control">
-                  <input class="input" type="email" placeholder="Specific part note">
-                </p>
-              </div>
+                    @foreach ($fnotes as $index => $fnote)
+                    <div class="field-body">
+
+                      <div class="field is-narrow">
+                        @if ($index == 0)
+                        <label class="label has-text-weight-normal">No</label>
+                        @endif
+
+                        <p class="control">
+                          <input class="input" type="text" placeholder="No" wire:model="fnotes.{{ $index }}.no">
+                        </p>
+                      </div>
+
+                      <div class="field">
+                        @if ($index == 0)
+                            <label class="label has-text-weight-normal">Flag Note</label>
+                        @endif
+
+                        <div class="columns">
+
+                            <div class="column">
+                                <p class="control">
+                                    <input class="input" type="text" placeholder="Specific part note" wire:model="fnotes.{{ $index }}.text_tr">
+                                </p>
+                            </div>
+
+                            <div class="column is-1">
+                                <p class="control">
+                                    <a wire:click='deleteSNote("{{ $index }}")'><span class="icon is-small has-text-danger"><x-carbon-trash-can /></span></a>
+                                </p>
+                            </div>
+
+                        </div>
+
+                      </div>
+
+                    </div>
+                    @endforeach
+
+                </div>
+
             </div>
+
         </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        <div class="field block">
+        <div class="field">
 
             <label class="label" for="topic">Part Weight [kg]</label>
             <div class="control">

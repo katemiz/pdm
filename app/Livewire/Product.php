@@ -9,6 +9,7 @@ use Livewire\Attributes\Title;
 
 use App\Models\CNotice;
 use App\Models\Counter;
+use App\Models\Fnote;
 use App\Models\Malzeme;
 use App\Models\Urun;
 use App\Models\NoteCategory;
@@ -23,9 +24,7 @@ use Spatie\Permission\Models\Permission;
 
 class Product extends Component
 {
-
     use WithPagination;
-
 
     public $action = 'LIST'; // LIST,FORM,VIEW
 
@@ -53,8 +52,6 @@ class Product extends Component
     public $ncategories = [];
     public $notes_id_array = [];
 
-
-
     // Item Props
     public $mat_id;
     public $description;
@@ -64,7 +61,6 @@ class Product extends Component
     public $unit = 'mm';
     public $weight;
 
-
     public $createdBy;
     public $checkedBy;
     public $approvedBy;
@@ -73,26 +69,30 @@ class Product extends Component
     public $req_reviewed_at;
     public $eng_reviewed_at;
 
-    public $remarks;
+    public $fno     = [];
+    public $fnotes  = [];
 
+    public $remarks;
 
     protected $rules = [
         'description' => 'required|min:10',
         'ecn_id' => 'required'
     ];
 
-
     public function mount()
     {
         if (request('id')) {
             $this->itemId = request('id');
+            $this->item = Urun::find($this->itemId);
+            foreach (Fnote::where('urun_id',$this->itemId)->get() as $r) {
+                $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr];
+            }
         }
 
         $this->action = strtoupper(request('action'));
         $this->constants = config('product');
         $this->ncategories = NoteCategory::all();
     }
-
 
     #[Title('Products')]
     #[On('refreshAttachments')]
@@ -114,9 +114,9 @@ class Product extends Component
             $this->sortDirection = $this->constants['list']['headers'][$this->sortField]['direction'];
 
             $items = Urun::where('product_no', 'LIKE', "%".$this->search."%")
-            ->orWhere('description', 'LIKE', "%".$this->search."%")
-            ->orderBy($this->sortField,$this->sortDirection)
-            ->paginate(env('RESULTS_PER_PAGE'));
+                        ->orWhere('description', 'LIKE', "%".$this->search."%")
+                        ->orderBy($this->sortField,$this->sortDirection)
+                        ->paginate(env('RESULTS_PER_PAGE'));
 
             foreach ($items as $key => $item) {
                 $items[$key]['canEdit'] = false;
@@ -136,8 +136,6 @@ class Product extends Component
     }
 
 
-
-
     public function getMaterialList() {
 
         if ($this->mat_family && $this->mat_form) {
@@ -152,8 +150,7 @@ class Product extends Component
 
         if ($opt === 'set') {
 
-            $this->item = Urun::find($this->itemId);
-
+            // $this->item = Urun::find($this->itemId);
             $this->mat_id = $this->item->malzeme_id;
 
             $this->item->canEdit = false;
@@ -172,8 +169,6 @@ class Product extends Component
             $this->version = $this->item->version;
             $this->weight = $this->item->weight;
             $this->unit = $this->item->unit;
-
-
 
             $malzeme =  Malzeme::find($this->item->malzeme_id);
 
@@ -199,7 +194,6 @@ class Product extends Component
             foreach ($this->item->notes as $dizin) {
                 array_push($this->notes_id_array,$dizin->id);
             }
-
 
         } else {
             $this->topic = '';
@@ -235,8 +229,20 @@ class Product extends Component
             // Attach Notes to Product
             $this->item->notes()->attach($this->notes_id_array);
 
-
             $this->itemId = $this->item->id;
+
+
+            // Flag Notes (Special Notes)
+            foreach ($this->fnotes as $fnote) {
+
+                $props['urun_id'] = $this->itemId;
+                $props['no'] = $fnote['no'];
+                $props['text_tr'] = $fnote['text_tr'];
+
+                Fnote::create($props);
+
+                dd($fnote);
+            }
 
             $this->dispatch('triggerAttachment',
                 modelId: $this->itemId
@@ -273,6 +279,16 @@ class Product extends Component
             $aaa->notes()->detach();
             $aaa->notes()->attach($this->notes_id_array);
 
+            // Flag Notes (Special Notes)
+            Fnote::where('urun_id',$this->itemId)->delete();
+
+            foreach ($this->fnotes as $fnote) {
+                $props['urun_id'] = $this->itemId;
+                $props['no'] = $fnote['no'];
+                $props['text_tr'] = $fnote['text_tr'];
+                Fnote::create($props);
+            }
+
             session()->flash('message','Product has been updated successfully!');
 
             $this->dispatch('triggerAttachment',
@@ -288,11 +304,9 @@ class Product extends Component
 
 
     public function getProductNo() {
-
         $counter = Counter::find(69);
         $new_no = $counter->product_no+1;
         $counter->update(['product_no' => $new_no]);         // Update Counter
-
         return $new_no;
     }
 
@@ -303,14 +317,19 @@ class Product extends Component
     }
 
 
+    public function addSNote() {
+        $this->fnotes[] = [];
+    }
+
+    public function deleteSNote($key) {
+        unset($this->fnotes[$key]);
+    }
+
 
     public function releaseStart() {
 
         if ($this->integrityCheck()) {
-
-            // $this->js("showModal('m10')");
             $this->js("console.log('m10true')");
-
             $this->dispatch('show-select-approvers',
                 modelId: $this->itemId
             );
@@ -318,12 +337,7 @@ class Product extends Component
         } else {
             $this->js("showModal('m10')");
             $this->js("console.log('m10false')");
-
-
-
         }
-
-
     }
 
 

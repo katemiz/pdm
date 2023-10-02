@@ -13,14 +13,11 @@ use App\Models\CNotice;
 use App\Models\Project;
 use App\Models\User;
 
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
-
 
 class Cr extends Component
 {
@@ -89,8 +86,9 @@ class Cr extends Component
         $this->resetPage(); // Resets the page to 1
     }
 
+
     #[Title('Değişiklik Talebi - Change Request')]
-    #[On('refreshAttachments')]
+    // #[On('refreshAttachments')]
     public function render()
     {
         $items = false;
@@ -108,11 +106,11 @@ class Cr extends Component
             $this->sortDirection = $this->constants['list']['headers'][$this->sortField]['direction'];
 
             $items = CRequest::where('topic', 'LIKE', "%".$this->search."%")
-            ->orWhere('description', 'LIKE', "%".$this->search."%")
-            ->orWhere('rej_reason_req', 'LIKE', "%".$this->search."%")
-            ->orWhere('rej_reason_eng', 'LIKE', "%".$this->search."%")
-            ->orderBy($this->sortField,$this->sortDirection)
-            ->paginate(env('RESULTS_PER_PAGE'));
+                ->orWhere('description', 'LIKE', "%".$this->search."%")
+                ->orWhere('rej_reason_req', 'LIKE', "%".$this->search."%")
+                ->orWhere('rej_reason_eng', 'LIKE', "%".$this->search."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
 
             foreach ($items as $key => $item) {
                 $items[$key]['canEdit'] = false;
@@ -219,9 +217,8 @@ class Cr extends Component
         session()->flash('message','Change Request has been accepted and a new ECN has been created.');
 
         redirect('/ecn/view/'.$ecn->id);
-        //$this->action = 'VIEW';
-
     }
+
 
     public function rejectCR()
     {
@@ -293,13 +290,15 @@ class Cr extends Component
         $this->validate();
 
         try {
+
             CRequest::whereId($this->itemId)->update([
                 'topic' => $this->topic,
                 'description' => $this->description,
                 'is_for_ecn' => $this->is_for_ecn,
                 'user_id' => Auth::id()
             ]);
-            session()->flash('message','Change Request has been updated successfully!!');
+
+            session()->flash('message','Change Request has been updated successfully!');
 
             $this->dispatch('triggerAttachment',
                 modelId: $this->itemId
@@ -314,6 +313,7 @@ class Cr extends Component
             session()->flash('success','Something goes wrong!!');
         }
     }
+
 
 
 

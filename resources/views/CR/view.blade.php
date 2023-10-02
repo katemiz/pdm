@@ -118,7 +118,7 @@
         ], 'CR')
 
 
-        @livewire('file-upload', [
+        {{-- @livewire('file-upload', [
             'hasForm' => false,                      // true when possible to add/remove file otherwise false
             'model' => 'CR',
             'modelId' => $item->id,
@@ -126,37 +126,17 @@
             'tag' => 'CR',                          // Any tag other than model name
             'canEdit' => $canEdit], 'CR')
 
-        <hr>
+        <hr> --}}
 
-        <table class="table is-fullwidth">
-            <tr>
-                <td class="is-half">
-                    <label class="label">Başlatan / Created By</label>
-                    <p>{{ $createdBy->name }} {{ $createdBy->lastname }}</p>
-                    <p>{{ $created_at }}</p>
-                </td>
-                <td class="has-text-right">
-                    <label class="label">Durum / Status</label>
 
-                    @switch($status)
-                    @case('wip')
-                        <p class="has-text-info">İncelemede - Work In Progress</p>
-                        @break
-                    @case('accepted')
-                        <p class="has-text-info">Kabul Edildi - Accepted</span>
-                        @break
-                    @case('rejected')
-                        <a onclick="showModal('m10')">Red Edildi - Rejected</a>
-                        <p>{{ $engBy->name }} {{ $engBy->lastname }}</p>
-                        <p>{{ $created_at }}</p>
-                        @break
-                    @endswitch
-
-                </td>
-            </tr>
-        </table>
 
     </div>
+
+
+
+
+
+
 
 
     <div class="modal" id="m10">
@@ -194,3 +174,28 @@
     </div>
 
 </div>
+
+<table class="table is-fullwidth">
+    <tr>
+        <td class="is-half">
+            <p class="is-size-7 has-text-grey">{{ $createdBy->name }} {{ $createdBy->lastname }}</p>
+            <p class="is-size-7 has-text-grey">{{ $created_at }}</p>
+        </td>
+        <td class="has-text-right">
+            @switch($status)
+            @case('wip')
+                <p class="has-text-info">İncelemede - Work In Progress</p>
+                @break
+            @case('accepted')
+                <p class="has-text-info">Kabul Edildi - Accepted</span>
+                @break
+            @case('rejected')
+                <a onclick="showModal('m10')">Red Edildi - Rejected</a>
+                <p>{{ $engBy->name }} {{ $engBy->lastname }}</p>
+                <p>{{ $created_at }}</p>
+                @break
+            @endswitch
+
+        </td>
+    </tr>
+</table>

@@ -33,7 +33,6 @@ class FileUpload extends Component
     public $dosyalar = [];
     //public $attachments = [];
 
-
     public function render()
     {
         return view('livewire.file-upload');
@@ -56,8 +55,8 @@ class FileUpload extends Component
 
 
     #[On('triggerAttachment')]
-    public function uploadAttach($modelId = false)
-    {
+    public function uploadAttach($modelId = false) {
+
         if ($modelId) {
             $this->modelId = $modelId;
         }
@@ -73,9 +72,7 @@ class FileUpload extends Component
             $props['tag'] = $this->tag;
 
             $path = $props['model_name'].'/'.$props['model_item_id'];
-
             $stored_file_as = Storage::disk('local')->put($path, $dosya);
-
             $props['stored_file_as'] = $stored_file_as;
 
             Attachment::create($props);
@@ -84,6 +81,7 @@ class FileUpload extends Component
         $this->reset('dosyalar');
         $this->dispatch('refreshAttachments');
     }
+
 
 
 

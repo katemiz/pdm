@@ -47,16 +47,16 @@
         @can('engineering')
         <div class="field">
 
-            <label class="label" for="is_new">Is this request for an ECN authority?</label>
+            <label class="label" for="is_new">Select ECN Type</label>
 
             <div class="control">
                 <label class="radio">
                     <input type="radio" wire:model="is_for_ecn" value="1">
-                    Yes
+                    New Design
                 </label>
                 <label class="radio">
                     <input type="radio" wire:model="is_for_ecn" value="0">
-                    No
+                    Change/Modification
                 </label>
             </div>
 
@@ -90,9 +90,6 @@
             @endif
 
             <div class="control">
-
-                {{ $item ? $item->id  :'YOK'}}
-
                 @livewire('file-upload', [
                     'hasForm' => true,                      // true when possible to add/remove file otherwise false
                     'model' => 'CR',

@@ -7,6 +7,7 @@
         @endif
     </header>
 
+
     @if(session('message'))
         <div class="notification is-info is-light">{{ session('message') }}</div>
     @endif

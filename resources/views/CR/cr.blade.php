@@ -61,6 +61,20 @@
             document.getElementById(modalNo).classList.remove('is-active')
         }
 
+
+
+
+        document.addEventListener('livewire:load', function () {
+            Livewire.on('refreshAttachments', function (data) {
+                // Handle the event data received from the child component
+                console.log(data);
+
+                Livewire.dispatch('rerenderList')
+            });
+        });
+
+
+
     </script>
 
     @switch($action)

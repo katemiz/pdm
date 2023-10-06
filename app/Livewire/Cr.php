@@ -318,7 +318,10 @@ class Cr extends Component
 
 
 
-
+    #[On('refreshAttachments')]
+    public function deneme() {
+        dd('dee');
+    }
 
 
 

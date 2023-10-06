@@ -25,6 +25,8 @@ class FileList extends Component
     public $attachments = [];
     public $canDelete = false;
 
+
+
     public function render() {
         $this->getAttachments();
         return view('livewire.file-list');
@@ -97,6 +99,14 @@ class FileList extends Component
         } else {
             return false;
         }
+    }
+
+
+    #[On('rerenderList')]
+
+
+    public function deneme() {
+        dd('    rerender       ');
     }
 
 }

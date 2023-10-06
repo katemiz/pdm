@@ -30,8 +30,8 @@ class ProductNote extends Component
     public $canEdit = true;
 
     public $search = '';
-    public $sortField = 'created_at';
-    public $sortDirection;
+    public $sortField = 'text_tr';
+    public $sortDirection = 'ASC';
 
     public $categories;
     public $constants;

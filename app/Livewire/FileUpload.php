@@ -79,8 +79,11 @@ class FileUpload extends Component
         }
 
         $this->reset('dosyalar');
-        $this->dispatch('refreshAttachments');
+        $this->dispatch('refreshAttachments','Data to pass to parent');
     }
+
+
+
 
 
 

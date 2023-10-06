@@ -91,7 +91,7 @@ class Product extends Component
 
         $this->action = strtoupper(request('action'));
         $this->constants = config('product');
-        $this->ncategories = NoteCategory::all();
+        $this->ncategories = NoteCategory::orderBy('text_tr')->get();
     }
 
     #[Title('Products')]
@@ -150,7 +150,6 @@ class Product extends Component
 
         if ($opt === 'set') {
 
-            // $this->item = Urun::find($this->itemId);
             $this->mat_id = $this->item->malzeme_id;
 
             $this->item->canEdit = false;

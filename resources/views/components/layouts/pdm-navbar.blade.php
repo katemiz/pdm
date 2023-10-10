@@ -98,6 +98,14 @@
                 </div>
 
 
+                <a href="/engineering/home" class="navbar-item">
+                    <span class="icon has-text-warning">
+                        <x-carbon-function-math />
+                    </span>
+                    <span class="ml-2">Engineering</span>
+                </a>
+
+
 
 
                 {{-- <a href="/admin/users" class="navbar-item icon-text">

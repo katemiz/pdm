@@ -16,6 +16,9 @@ use App\Livewire\Process;
 use App\Livewire\Product;
 use App\Livewire\ProductNote;
 
+use App\Livewire\Engineering;
+
+
 
 
 
@@ -36,6 +39,11 @@ use App\Livewire\ProductNote;
 Route::get('/', function () {
     return view('welcome');
 });
+
+
+Route::get('/engineering/{action}', Engineering::class);
+
+
 
 require __DIR__.'/auth.php';
 
@@ -117,6 +125,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/material/{action}/{id?}', Material::class);
     Route::get('/process/{action}/{id?}', Process::class);
     Route::get('/notes/{action}/{id?}', ProductNote::class);
+
+
+
 
 
 });

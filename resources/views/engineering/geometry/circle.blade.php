@@ -54,7 +54,7 @@
 
                 <tr>
                     <th>Inertia</th>
-                    <td>{{ $inertia }}</td>
+                    <td>{{ $inertia_xx }}</td>
                     <td>mm<sup>4</sup></td>
                 </tr>
 

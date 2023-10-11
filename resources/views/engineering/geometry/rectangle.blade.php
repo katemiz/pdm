@@ -21,7 +21,7 @@
 
         <div class="column is-4">
             <figure class="image is-fluid">
-                <img src="{{ asset('/images/HollowCircle.png') }}">
+                <img src="{{ asset('/images/Rectangular.png') }}">
             </figure>
         </div>
         <div class="column">
@@ -51,7 +51,7 @@
                     <div class="field">
                         <label class="label">Thickness, thk</label>
                         <div class="control">
-                        <input class="input" type="text" placeholder="Thickness" wire:model.live="thk">
+                        <input class="input" type="text" placeholder="Thickness" wire:model.live="thickness">
                         </div>
                     </div>
 
@@ -75,13 +75,19 @@
             <table class="table is-fullwidth">
                 <tr>
                     <th>Area</th>
-                    <td>{{ $area }}</td>
+                    <td class="has-text-right">{{ $area }}</td>
                     <td>mm<sup>2</sup></td>
                 </tr>
 
                 <tr>
-                    <th>Inertia</th>
-                    <td>{{ $inertia }}</td>
+                    <th>Inertia<sub>xx</sub></th>
+                    <td class="has-text-right">{{ $inertia_xx }}</td>
+                    <td>mm<sup>4</sup></td>
+                </tr>
+
+                <tr>
+                    <th>Inertia<sub>yy</sub></th>
+                    <td class="has-text-right">{{ $inertia_yy }}</td>
                     <td>mm<sup>4</sup></td>
                 </tr>
 

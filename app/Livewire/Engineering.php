@@ -136,6 +136,9 @@ class Engineering extends Component
 
         $inertia_xx = $inertia+$area*pow($d,2);
 
+        $this->js("console.log('kose$inertia_xx')");
+
+
         return $inertia_xx;
     }
 

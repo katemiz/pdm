@@ -128,14 +128,17 @@ class Engineering extends Component
 
     public function quarterCircleInertia($r,$h) {
 
-        $d = $h/2-$r/(3*pi());
+        $d = $h/2-$r/(3*pi())*(3*pi()-4);
 
         $inertia = pi()*pow($r,4)/16;
+
+
 
         $area = pi()*pow($r,2)/4;
 
         $inertia_xx = $inertia+$area*pow($d,2);
 
+        dd($inertia_xx);
         $this->js("console.log('kose$inertia_xx')");
 
 
@@ -146,7 +149,9 @@ class Engineering extends Component
     public function inertiaRectangleWithRadius($w,$h,$r) {
 
         $inertia_a = $w*pow($h-2*$r,3)/12;
-        $inertia_b = 2*($w-2*$r)*pow($r,3)/12+($w-2*$r)*$r*pow($h/2-$r/2,2);
+        $inertia_b = 2*(($w-2*$r)*pow($r,3)/12+($w-2*$r)*$r*pow($h/2-$r/2,2));
+
+
         $inertia_k = 4*$this->quarterCircleInertia($r,$h);
 
 

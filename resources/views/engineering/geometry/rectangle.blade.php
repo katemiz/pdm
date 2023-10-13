@@ -1,18 +1,20 @@
 <section class="section container">
 
-    <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">Rectangular Sections</h1>
-        <h2 class="subtitle has-text-weight-light">Area and Area Inertia Calculations for Rectangular Sections</h2>
-    </header>
-
-
-    <nav class="breadcrumb has-bullet-separator my-5" aria-label="breadcrumbs">
+    <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
         <ul>
           <li><a href='/engineering/home'>Engineering</a></li>
           <li><a href='/engineering/geometry'>Geometry</a></li>
           <li class="is-active"><a href="#" aria-current="page">Rectangular Sections</a></li>
         </ul>
     </nav>
+
+    <header class="mb-6">
+        <h1 class="title has-text-weight-light is-size-1">Rectangular Sections</h1>
+        <h2 class="subtitle has-text-weight-light">Area and Area Inertia Calculations for Rectangular Sections</h2>
+    </header>
+
+
+
 
 
 
@@ -21,8 +23,17 @@
 
         <div class="column is-4">
             <figure class="image is-fluid">
-                <img src="{{ asset('/images/Rectangular.png') }}">
+                @if ($is_hollow)
+                    <img src="{{ asset('/images/RectangleHollow.svg') }}">
+                @else
+                    <img src="{{ asset('/images/RectangleSolid.svg') }}">
+                @endif
             </figure>
+
+            <footer class="card-footer">
+                <a wire:click="$toggle('is_hollow')" class="card-footer-item">Solid Section</a>
+                <a wire:click="$toggle('is_hollow')" class="card-footer-item">Hollow Section</a>
+            </footer>
         </div>
         <div class="column">
 
@@ -31,14 +42,21 @@
                     <div class="field">
                         <label class="label">Width, w</label>
                         <div class="control">
-                        <input class="input" type="text" placeholder="Outside diameter" wire:model.live="width">
+                        <input class="input" type="number" placeholder="Outside diameter" wire:model.live="width">
                         </div>
                     </div>
 
                     <div class="field">
                         <label class="label">Height, h</label>
                         <div class="control">
-                        <input class="input" type="text" wire:model.live="height" placeholder="Height of Section">
+                        <input class="input" type="number" wire:model.live="height" placeholder="Height of Section">
+                        </div>
+                    </div>
+
+                    <div class="field">
+                        <label class="label">{{ $is_hollow ? 'Outer' : '' }} Radius, R<sub>out</sub></label>
+                        <div class="control">
+                        <input class="input" type="number" placeholder="Outside diameter" wire:model.live="rout">
                         </div>
                     </div>
                 </div>
@@ -48,26 +66,29 @@
             <div class="field ">
                 <div class="field-body">
 
-                    <div class="field">
-                        <label class="label">Thickness, thk</label>
-                        <div class="control">
-                        <input class="input" type="text" placeholder="Thickness" wire:model.live="thickness">
-                        </div>
-                    </div>
+                    @if ($is_hollow)
 
-                    <div class="field">
-                        <label class="label">Outer Radius, R<sub>out</sub></label>
-                        <div class="control">
-                        <input class="input" type="text" placeholder="Outside diameter" wire:model.live="rout">
+                        <div class="field">
+                            <label class="label">Thickness, thk</label>
+                            <div class="control">
+                            <input class="input" type="number" placeholder="Thickness" wire:model.live="thickness">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="field">
-                        <label class="label">Inner Radius, R<sub>inn</sub></label>
-                        <div class="control">
-                        <input class="input" type="text" placeholder="Height of Section" wire:model.live="rinn">
+                    @endif
+
+
+
+
+
+                    @if ($is_hollow)
+                        <div class="field">
+                            <label class="label">Inner Radius, R<sub>inn</sub></label>
+                            <div class="control">
+                            <input class="input" type="number" placeholder="Height of Section" wire:model.live="rinn">
+                            </div>
                         </div>
-                    </div>
+                    @endif
                 </div>
             </div>
 

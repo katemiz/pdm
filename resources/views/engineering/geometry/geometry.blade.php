@@ -2,7 +2,12 @@
 
 
 
-
+    <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
+        <ul>
+          <li><a href='/engineering/home'>Engineering</a></li>
+          <li class="is-active"><a href="#" aria-current="page">Geometry</a></li>
+        </ul>
+    </nav>
 
     <header class="mb-6">
         <h1 class="title has-text-weight-light is-size-1">Engineering Utilities : Geometry</h1>
@@ -12,12 +17,7 @@
 
 
 
-    <nav class="breadcrumb has-bullet-separator my-5" aria-label="breadcrumbs">
-        <ul>
-          <li><a href='/engineering/home'>Engineering</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Geometry</a></li>
-        </ul>
-    </nav>
+
 
 
     <div class="card" >

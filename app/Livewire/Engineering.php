@@ -88,6 +88,7 @@ class Engineering extends Component
 
     }
 
+
     public function geometryCircular()
     {
 
@@ -128,7 +129,7 @@ class Engineering extends Component
     }
 
 
-    public function geometryRectangle()
+    public function geometryRectangleOld()
     {
         if ($this->width == 0 || $this->height == 0 ) {
             $this->area     = 'undefined';
@@ -177,6 +178,7 @@ class Engineering extends Component
 
     }
 
+
     function areaRectangleWithRadius ($w,$h,$r) {
 
         return $w*$h-4*pow($r,2)+pi()*pow($r,2);
@@ -208,7 +210,6 @@ class Engineering extends Component
 
         $inertia_a = $w*pow($h-2*$r,3)/12;
         $inertia_b = 2*(($w-2*$r)*pow($r,3)/12+($w-2*$r)*$r*pow($h/2-$r/2,2));
-
 
         $inertia_k = $this->quarterCircleInertia($r,$h);
 
@@ -242,6 +243,115 @@ class Engineering extends Component
 
 
 
+
+
+
+    function IRectangular($a,$b) {
+        // a*b^3/12
+        return ($a*pow($b,3)) / 12;
+    }
+
+    function ICircular($r) {
+        // pi*r^4/4
+        return (pi()*pow($r,4)) / 4;
+    }
+
+    function ICircularQuarter($r) {
+        // pi*r^4/16
+        return $this->ICircular($r)/4;
+    }
+
+    function IAxis($i,$A,$d) {
+        // Ixx = Inertia + Area * d^2
+        return $i+$A*pow($d,2);
+    }
+
+
+    function IRectangleWRadius($a,$b,$r) {
+
+        $inertia_rect_1 = $this->IRectangular($a,$b-2*$r);
+
+        $this->js("console.log('I1a $inertia_rect_1')");
+
+
+        $d1 = $b/2+$r/2;
+        $inertia_rect_2 = $this->IRectangular($a-2*$r,$b-2*$r) + ($a-2*$r)*$r*pow($d1,2);
+
+        $this->js("console.log('I2a $inertia_rect_2')");
+
+
+        $inertia_4_quar = $this->ICircular($r);
+
+        // Four quarter circles, add up to one full circle
+        $d = $b/2-$r;
+
+        $circle_wrt_axis = $this->IAxis( $this->ICircular($r), pi()*pow($r,2), $d );
+
+        return $inertia_rect_1 + $inertia_rect_2 +  $circle_wrt_axis;
+    }
+
+
+
+
+
+
+
+    public function geometryRectangle()
+    {
+        if ($this->width == 0 || $this->height == 0 ) {
+            $this->area     = 'undefined';
+            $this->inertia_xx  = 'undefined';
+            $this->inertia_yy  = 'undefined';
+            return true;
+        }
+
+        $area_outer = $this->width*$this->height + (pi() -4)*pow($this->rout,2);
+
+        $outer_inertia_xx = $this->IRectangleWRadius($this->width,$this->height,$this->rout);
+        $outer_inertia_yy = $this->IRectangleWRadius($this->height,$this->width,$this->rout);
+
+
+
+        if ($this->is_hollow) {
+
+            // AREA
+            $w = $this->width -2*$this->thickness;
+            $h = $this->height-2*$this->thickness;
+
+            $area_inner = $w*$h + (pi() -4)*pow($this->rinn,2);
+
+            $this->area =  round($area_outer- $area_inner,2);
+
+            // INERTIA
+            $inner_inertia_xx = $this->IRectangleWRadius($w,$h,$this->rinn);
+            $inner_inertia_yy = $this->IRectangleWRadius($h,$w,$this->rinn);
+
+            $this->inertia_xx = round($outer_inertia_xx - $inner_inertia_xx,2);
+            $this->inertia_yy = round($outer_inertia_yy - $inner_inertia_yy,2);
+
+            $this->js("console.log('DIS$outer_inertia_xx')");
+            $this->js("console.log('IC$inner_inertia_xx')");
+
+
+        } else {
+
+            // AREA
+            $this->area = round($area_outer);
+
+            $this->inertia_xx = round($outer_inertia_xx,2);
+            $this->inertia_yy = round($outer_inertia_yy,2);
+
+            $this->js("console.log('Ixx$this->inertia_xx')");
+            $this->js("console.log('Iyy$this->inertia_yy')");
+
+
+        }
+
+
+
+
+
+    }
 
 
 

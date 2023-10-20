@@ -59,6 +59,7 @@
 
 
             <table class="table is-fullwidth">
+
                 <tr>
                     <th>Area</th>
                     <td class="has-text-right">{{ $area }}</td>

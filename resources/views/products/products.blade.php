@@ -60,9 +60,7 @@
 
             document.getElementById('m10').classList.add('is-active')
 
-
             console.log('slfkslfgfkg')
-
         })
 
 

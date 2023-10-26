@@ -58,21 +58,27 @@
             </div>
 
 
-            <table class="table is-fullwidth">
 
-                <tr>
-                    <th>Area</th>
-                    <td class="has-text-right">{{ $area }}</td>
-                    <td>mm<sup>2</sup></td>
-                </tr>
 
-                <tr>
-                    <th>Inertia</th>
-                    <td class="has-text-right">{{ $inertia_xx }}</td>
-                    <td>mm<sup>4</sup></td>
-                </tr>
 
-            </table>
+                    <table class="table mt-6 is-fullwidth has-background-grey-lighter">
+                        <caption class="has-text-info mb-4">Results</caption>
+
+
+                        <tr>
+                            <th>Area</th>
+                            <td class="has-text-right">{{ $area }}</td>
+                            <td>mm<sup>2</sup></td>
+                        </tr>
+        
+                        <tr>
+                            <th>Inertia</th>
+                            <td class="has-text-right">{{ $inertia_xx }}</td>
+                            <td>mm<sup>4</sup></td>
+                        </tr>
+        
+                    </table>
+
 
 
 

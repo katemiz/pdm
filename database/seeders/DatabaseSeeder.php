@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use Spatie\Permission\Models\Role;
@@ -13,10 +12,6 @@ use App\Models\NoteCategory;
 use App\Models\User;
 use App\Models\Yaptirga;
 
-
-
-
-
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -25,13 +20,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\CRequest::factory(10)->create();
-
-
         Counter::create([
             "id" => 69,
             "product_no" => 102729,
         ]);
-
 
         $admin = User::create([
             "name" => 'admin',
@@ -42,10 +34,8 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\CRequest::factory()->count(50)->create();
 
-
         $adminRole = Role::create(['name' => 'admin']);
         $admin->assignRole('admin');
-
 
         $engineeringPerm = Permission::create(['name' => 'engineering']);
         $crApproverPerm = Permission::create(['name' => 'cr_approver']);
@@ -57,33 +47,33 @@ class DatabaseSeeder extends Seeder
         // Note Categories
         NoteCategory::create([
             'user_id' => 1,
-            'text_tr' => 'General Notes',
-            'text_en' => 'Genel Notlar',
+            'text_en' => 'General Notes',
+            'text_tr' => 'Genel Notlar',
         ]);
 
         NoteCategory::create([
             'user_id' => 1,
-            'text_tr' => 'Surface Protection',
-            'text_en' => 'Yüzey Koruma',
+            'text_en' => 'Surface Protection',
+            'text_tr' => 'Yüzey Koruma',
         ]);
 
         NoteCategory::create([
             'user_id' => 1,
-            'text_tr' => 'Surface Protection - Painting',
-            'text_en' => 'Yüzey Koruma - Boyama',
+            'text_en' => 'Surface Protection - Painting',
+            'text_tr' => 'Yüzey Koruma - Boyama',
         ]);
 
 
         NoteCategory::create([
             'user_id' => 1,
-            'text_tr' => 'Mechanical Fastening',
-            'text_en' => 'Mekanik Bağlayıcılar',
+            'text_en' => 'Mechanical Fastening',
+            'text_tr' => 'Mekanik Bağlayıcılar',
         ]);
 
         NoteCategory::create([
             'user_id' => 1,
-            'text_tr' => 'Bonding',
-            'text_en' => 'Yapıştırma',
+            'text_en' => 'Bonding',
+            'text_tr' => 'Yapıştırma',
         ]);
 
         // NOTES
@@ -257,13 +247,6 @@ class DatabaseSeeder extends Seeder
             'text_en' => "Metals > Solid Film Lubricate M-46010-2 per MIL-PRF-46010H [Black]",
             'status' => "A"
         ]);
-
-
-
-
-
-
-
     }
 }
 

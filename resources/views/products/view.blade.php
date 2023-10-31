@@ -44,18 +44,18 @@
                             </a>
                         </p>
 
-                        @if ($canEdit && $item->canEdit)
+                        @if ($canUserEdit && $isItemEditable)
                         <p class="control ml-1">
-                            <a class="button is-link is-light is-small" href='/products/form/{{ $item->id }}'>
+                            <a class="button is-link is-light is-small" href='/products/form/{{ $itemId }}'>
                                 <span class="icon is-small"><x-carbon-edit /></span>
                                 <span>Edit</span>
                             </a>
                         </p>
                         @endif
 
-                        @if ($canDelete && $item->canDelete)
+                        @if ($canUserDelete && $isItemDeleteable)
                         <p class="control ml-1">
-                            <button class="button is-danger is-light is-small" wire:click.prevent="startCRDelete({{$item->id}})">
+                            <button class="button is-danger is-light is-small" wire:click.prevent="startCRDelete({{$itemId}})">
                                 <span class="icon is-small"><x-carbon-trash-can /></span>
                                 <span>Delete</span>
                             </button>
@@ -97,8 +97,8 @@
                 </figure>
             </div>
             <div class="media-content">
-                <p class="title is-4"> {{ $item->id }}-{{ $item->version }}</p>
-                <p class="subtitle is-6">{{ $item->description}}</p>
+                <p class="title is-4"> {{ $itemId }}-{{ $version }}</p>
+                <p class="subtitle is-6">{{ $description}}</p>
             </div>
         </div>
 
@@ -109,31 +109,31 @@
         <div class="columns">
             <div class="column block">
                 <label class="label">Engineering Change Notice Number</label>
-                <a href="/ecn/view/{{ $item->c_notice_id }}">ECN-{{ $item->c_notice_id }}</a>
+                <a href="/ecn/view/{{ $ecn_id }}">ECN-{{ $ecn_id }}</a>
             </div>
 
             <div class="column block has-text-right">
                 <label class="label">Part Unit</label>
-                {{ $item->unit }}
+                {{ $unit }}
             </div>
         </div>
 
         <div class="columns">
             <div class="column block">
                 <label class="label">Material</label>
-                {{ $item->material_definition }}
+                {{ $material_definition }}
             </div>
 
             <div class="column block has-text-right">
                 <label class="label">Part Weight [kg]</label>
-                {{ $item->weight }}
+                {{ $weight }}
             </div>
         </div>
 
         <div class="block content">
             <label class="label">General Part Notes</label>
             <ol>
-                @foreach ($item->notes as $note)
+                @foreach ($notes as $note)
                 <li>{{ $note->text_tr }}</li>
                 @endforeach
             </ol>
@@ -142,7 +142,7 @@
 
         <div class="block content">
             <label class="label">Special Part Notes</label>
-                @foreach ($item->snotes as $note)
+                @foreach ($fnotes as $note)
                 <p>{{ $note->no }} - {{ $note->text_tr }}</p>
                 @endforeach
         </div>
@@ -158,7 +158,7 @@
                 <label class="label">CAD Files</label>
                 @livewire('file-list', [
                     'model' => 'Product',
-                    'modelId' => $item->id,
+                    'modelId' => $itemId,
                     'showMime' => false,
                     'showSize' => false,
                     'tag' => 'CAD',                          // Any tag other than model name
@@ -173,7 +173,7 @@
                     <label class="label">STEP/DXF Files</label>
                     @livewire('file-list', [
                         'model' => 'Product',
-                        'modelId' => $item->id,
+                        'modelId' => $itemId,
                         'showMime' => false,
                         'showSize' => false,
                         'tag' => 'STEP',                          // Any tag other than model name
@@ -186,7 +186,7 @@
                     <label class="label">Drawing and BOM</label>
                     @livewire('file-list', [
                         'model' => 'Product',
-                        'modelId' => $item->id,
+                        'modelId' => $itemId,
                         'showMime' => false,
                         'showSize' => false,
                         'tag' => 'DWG-PDF',                          // Any tag other than model name
@@ -199,11 +199,11 @@
 
 
 
-        @if ($item->remarks)
+        @if ($remarks)
         <div class="block">
             <label class="label">Remarks/Notes</label>
             <div class="notification">
-                {!! $item->remarks !!}
+                {!! $remarks !!}
             </div>
         </div>
         @endif

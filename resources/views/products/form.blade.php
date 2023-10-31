@@ -179,11 +179,11 @@
 
                 @foreach ($ncategories as $ncategory)
 
-                    <p class="has-text-info has-text-7 ml-4 mt-3">{{ $ncategory->text_en }}</p>
+                    <p class="has-text-info has-text-7 mt-3">{{ $ncategory->text_tr }} /{{ $ncategory->text_en }}</p>
                     @foreach ($ncategory->productNotes as $note)
                     <label wire:key="{{ $note->id }}" class="checkbox is-block ">
                         <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"
-                        > {{ $note->text_en }}
+                        > {{ $note->text_tr }}
                     </label>
                     @endforeach
 

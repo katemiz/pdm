@@ -6,6 +6,8 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Rule;
+
 
 use App\Models\CNotice;
 use App\Models\Counter;
@@ -29,16 +31,15 @@ class Product extends Component
     public $action = 'LIST'; // LIST,FORM,VIEW
 
     public $itemId = false;
-    public $item = false;
 
     public $isAdd = false;
     public $isEdit = false;
     public $isList = true;
     public $isView = false;
 
-    public $canAdd = true;
-    public $canEdit = true;
-    public $canDelete = true;
+    public $canUserAdd = true;
+    public $canUserEdit = true;
+    public $canUserDelete = true;
 
     public $search = '';
     public $sortField = 'created_at';
@@ -48,14 +49,32 @@ class Product extends Component
 
     public $mat_family = false;
     public $mat_form = false;
+
+    public $material_definition;
+    public $family;
+    public $form;
+
+    public $notes = [];
+
+
+
     public $materials = [];
     public $ncategories = [];
     public $notes_id_array = [];
 
     // Item Props
+    #[Rule('required|numeric', message: 'Please select material')]
     public $mat_id;
+
+    #[Rule('required', message: 'Please write part name/title')]
     public $description;
+
+    #[Rule('required|numeric', message: 'Please select ECN')]
     public $ecn_id;
+
+    public $isItemEditable = false;
+    public $isItemDeleteable = false;
+
     public $version;
     public $status;
     public $unit = 'mm';
@@ -74,16 +93,13 @@ class Product extends Component
 
     public $remarks;
 
-    protected $rules = [
-        'description' => 'required|min:10',
-        'ecn_id' => 'required'
-    ];
+
 
     public function mount()
     {
         if (request('id')) {
             $this->itemId = request('id');
-            $this->item = Urun::find($this->itemId);
+
             foreach (Fnote::where('urun_id',$this->itemId)->get() as $r) {
                 $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr];
             }
@@ -119,12 +135,12 @@ class Product extends Component
                         ->paginate(env('RESULTS_PER_PAGE'));
 
             foreach ($items as $key => $item) {
-                $items[$key]['canEdit'] = false;
-                $items[$key]['canDelete'] = false;
+                $items[$key]['isItemEditable'] = false;
+                $items[$key]['isItemDeleteable'] = false;
 
                 if ($item->status == 'wip') {
-                    $items[$key]['canEdit'] = true;
-                    $items[$key]['canDelete'] = true;
+                    $items[$key]['isItemEditable'] = true;
+                    $items[$key]['isItemDeleteable'] = true;
                 }
             }
         }
@@ -150,48 +166,47 @@ class Product extends Component
 
         if ($opt === 'set') {
 
-            $this->mat_id = $this->item->malzeme_id;
+            $item = Urun::find($this->itemId);
 
-            $this->item->canEdit = false;
-            $this->item->canDelete = false;
+            $this->mat_id = $item->malzeme_id;
 
-            if ($this->item->status == 'wip') {
-                $this->item->canEdit = true;
-                $this->item->canDelete = true;
+            if ($item->status == 'wip') {
+                $this->isItemEditable = true;
+                $this->isItemDeleteable = true;
             }
 
-            $this->createdBy = User::find($this->item->user_id);
-            $this->checkedBy = User::find($this->item->checker_id);
-            $this->approvedBy = User::find($this->item->approver_id);
+            $this->createdBy = User::find($item->user_id);
+            $this->checkedBy = User::find($item->checker_id);
+            $this->approvedBy = User::find($item->approver_id);
 
-            $this->product_no = $this->item->product_no;
-            $this->version = $this->item->version;
-            $this->weight = $this->item->weight;
-            $this->unit = $this->item->unit;
+            $this->product_no = $item->product_no;
+            $this->version = $item->version;
+            $this->weight = $item->weight;
+            $this->unit = $item->unit;
 
-            $malzeme =  Malzeme::find($this->item->malzeme_id);
+            $malzeme =  Malzeme::find($item->malzeme_id);
 
-            $this->item->material_definition = $malzeme->material_definition;
-            $this->item->family = $malzeme->family;
-            $this->item->form = $malzeme->form;
+            $this->material_definition = $malzeme->material_definition;
+            $this->family = $malzeme->family;
+            $this->form = $malzeme->form;
 
             $this->mat_family = $malzeme->family;
             $this->mat_form = $malzeme->form;
 
             $this->getMaterialList();
 
-            $this->description = $this->item->description;
-            $this->ecn_id = $this->item->c_notice_id;
-            $this->remarks = $this->item->remarks;
+            $this->description = $item->description;
+            $this->ecn_id = $item->c_notice_id;
+            $this->remarks = $item->remarks;
 
-            $this->status = $this->item->status;
+            $this->status = $item->status;
 
-            $this->created_at = $this->item->created_at;
-            $this->check_reviewed_at = $this->item->check_reviewed_at;
-            $this->app_reviewed_at = $this->item->app_reviewed_at;
+            $this->created_at = $item->created_at;
+            $this->check_reviewed_at = $item->check_reviewed_at;
+            $this->app_reviewed_at = $item->app_reviewed_at;
 
-            foreach ($this->item->notes as $dizin) {
-                array_push($this->notes_id_array,$dizin->id);
+            foreach ($item->notes as $dizin) {
+                array_push($this->notes,$dizin);
             }
 
         } else {

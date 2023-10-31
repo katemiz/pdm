@@ -26,54 +26,54 @@
     @csrf
 
 
+        <div class="field ">
 
-        <div class="field">
+            <div class="field-body">
 
-            <label class="label" for="topic">Material Family</label>
-            <div class="control">
-                <div class="select">
-                    <select wire:model='family'>
-                    <option>Select Family</option>
+                <div class="field">
 
-                    @foreach ($constants['family'] as $key => $value)
-                        <option value="{{$key}}">{{$value}}</option>
-                    @endforeach
-                    </select>
+                    <label class="label" for="topic">Material Family</label>
+                    <div class="control">
+                        <div class="select">
+                            <select wire:model='family'>
+                            <option>Select Family</option>
+
+                            @foreach ($constants['family'] as $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    @error('family')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
                 </div>
-            </div>
 
-            @error('family')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
+                <div class="field">
+
+                    <label class="label" for="topic">Material Form</label>
+                    <div class="control">
+                        <div class="select">
+                            <select wire:model='form'>
+                            <option>Select Form</option>
+
+                            @foreach ($constants['form'] as $key => $value)
+                                <option value="{{$key}}">{{$value}}</option>
+                            @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    @error('form')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+            </div>
         </div>
 
-
-
-
-        <div class="field">
-
-            <label class="label" for="topic">Material Form</label>
-            <div class="control">
-                <div class="select">
-                    <select wire:model='form'>
-                    <option>Select Form</option>
-
-                    @foreach ($constants['form'] as $key => $value)
-                        <option value="{{$key}}">{{$value}}</option>
-                    @endforeach
-                    </select>
-                </div>
-            </div>
-
-            @error('form')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
-        </div>
-
-
-
-
-
+        
         <div class="field">
 
             <label class="label" for="description">Material Description</label>

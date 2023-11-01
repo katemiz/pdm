@@ -22,37 +22,32 @@ class FileList extends Component
     public $showMime = true;
     public $showSize = true;
 
+    public $attachments = [];
     public $canDelete = false;
 
 
-    #[On('refreshFileList')]
-    public function render() {
 
-        return view('components.elements.file-list',[
-            'attachments' => $this->getAttachments()
-        ]);
+    public function render() {
+        $this->getAttachments();
+        return view('livewire.file-list');
     }
 
 
     public function getAttachments() {
-
         if ($this->modelId) {
             if ($this->tag) {
-                $attachments = Attachment::where('model_name',$this->model)
+                $this->attachments = Attachment::where('model_name',$this->model)
                 ->where('model_item_id',$this->modelId)
                 ->where('tag',$this->tag)
                 ->get();
             } else {
-                $attachments = Attachment::where('model_name',$this->model)
+                $this->attachments = Attachment::where('model_name',$this->model)
                 ->where('model_item_id',$this->modelId)
                 ->get();
             }
-
-            return $attachments;
         }
-
-        return [];
     }
+
 
 
     public function downloadFile($idAttach) {
@@ -82,17 +77,19 @@ class FileList extends Component
     }
 
 
+
+
     public function startAttachDelete($idAttach) {
         $this->idAttach = $idAttach;
         $this->dispatch('ConfirmDelete', type:'attach');
     }
-
 
     #[On('deleteAttach')]
     public function deleteAttach() {
         Attachment::find($this->idAttach)->delete();
         $this->dispatch('attachDeleted');
     }
+
 
 
     public function checkPermission()
@@ -102,6 +99,14 @@ class FileList extends Component
         } else {
             return false;
         }
+    }
+
+
+    #[On('rerenderList')]
+
+
+    public function deneme() {
+        dd('    rerender       ');
     }
 
 }

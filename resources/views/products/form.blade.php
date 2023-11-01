@@ -2,14 +2,14 @@
     <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
     <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">{{ $item ? $constants['update']['title'] : $constants['create']['title'] }}</h1>
-        <h2 class="subtitle has-text-weight-light">{{ $item ? $constants['update']['subtitle'] : $constants['create']['subtitle']}}</h2>
+        <h1 class="title has-text-weight-light is-size-1">{{ $itemId ? $constants['update']['title'] : $constants['create']['title'] }}</h1>
+        <h2 class="subtitle has-text-weight-light">{{ $itemId ? $constants['update']['subtitle'] : $constants['create']['subtitle']}}</h2>
     </header>
 
-    @if ($item)
+    @if ($itemId)
     <div class="control">
         <div class="tags has-addons">
-            <span class="tag is-dark is-large mb-6">{{ $item->id}}</span>
+            <span class="tag is-dark is-large mb-6">{{ $itemId}}</span>
         </div>
     </div>
     @endif
@@ -58,7 +58,7 @@
                     id="description"
                     wire:model="description"
                     type="text"
-                    value="{{ $item ? $item->topic : ''}}"
+                    value="{{ $itemId ? $description : ''}}"
                     placeholder="Write part descrition/title" required>
             </div>
 
@@ -79,7 +79,7 @@
 
                         <label class="checkbox is-block">
                             <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
-                            @checked($item && $ecn->id == $item->c_notice_id)> ECN-{{ $ecn->id }}
+                            @checked($itemId && $ecn->id == $ecn_id)> ECN-{{ $ecn->id }}
                         </label>
 
                     @endforeach
@@ -111,7 +111,7 @@
                             <option>Select Family</option>
 
                             @foreach (config('material.family') as $key => $value)
-                                <option value="{{$key}}" @selected( $item && $item->family == $key )>{{$value}}</option>
+                                <option value="{{$key}}" @selected( $itemId && $family == $key )>{{$value}}</option>
                             @endforeach
                             </select>
                         </div>
@@ -131,7 +131,7 @@
                             <option>Select Form</option>
 
                             @foreach (config('material.form') as $key => $value)
-                                <option value="{{$key}}" @selected( $item && $item->form == $key )>{{$value}}</option>
+                                <option value="{{$key}}" @selected( $itemId && $form == $key )>{{$value}}</option>
                             @endforeach
                             </select>
                         </div>
@@ -264,7 +264,7 @@
                     id="weight"
                     wire:model="weight"
                     type="text"
-                    value="{{ $item ? $item->weight : ''}}"
+                    value="{{ $itemId ? $weight : ''}}"
                     placeholder="Estimated weight of part/product in kg" required>
             </div>
 
@@ -289,11 +289,11 @@
         <div class="field block">
             <label class="label">CAD Files</label>
 
-            @if ($item)
+            @if ($itemId)
             @livewire('file-list', [
                 'canDelete' => true,
                 'model' => 'Product',
-                'modelId' => $item->id,
+                'modelId' => $itemId,
                 'tag' => 'CAD',                          // Any tag other than model name
             ])
             @endif
@@ -302,21 +302,21 @@
 
                 @livewire('file-upload', [
                     'model' => 'Product',
-                    'modelId' => $item ? $item->id : false,
+                    'modelId' => $itemId ? $itemId : false,
                     'isMultiple'=> true,                   // can multiple files be selected
                     'tag' => 'CAD',                          // Any tag other than model name
-                    'canEdit' => $canEdit])
+                    'canEdit' => $canUserEdit])
             </div>
         </div>
 
         <div class="field block">
             <label class="label">STEP and DXF Files</label>
 
-            @if ($item)
+            @if ($itemId)
             @livewire('file-list', [
                 'canDelete' => true,
                 'model' => 'Product',
-                'modelId' => $item->id,
+                'modelId' => $itemId,
                 'tag' => 'STEP',                          // Any tag other than model name
             ])
             @endif
@@ -325,10 +325,10 @@
 
                 @livewire('file-upload', [
                     'model' => 'Product',
-                    'modelId' => $item ? $item->id : false,
+                    'modelId' => $itemId ? $itemId : false,
                     'isMultiple'=> true,                   // can multiple files be selected
                     'tag' => 'STEP',                          // Any tag other than model name
-                    'canEdit' => $canEdit])
+                    'canEdit' => $canUserEdit])
             </div>
         </div>
 
@@ -336,11 +336,11 @@
         <div class="field block">
             <label class="label">Drawing and BOM in PDF Format</label>
 
-            @if ($item)
+            @if ($itemId)
             @livewire('file-list', [
                 'canDelete' => true,
                 'model' => 'Product',
-                'modelId' => $item->id,
+                'modelId' => $itemId,
                 'tag' => 'DWG-PDF',                          // Any tag other than model name
             ])
             @endif
@@ -349,16 +349,16 @@
 
                 @livewire('file-upload', [
                     'model' => 'Product',
-                    'modelId' => $item ? $item->id : false,
+                    'modelId' => $itemId ? $itemId : false,
                     'isMultiple'=> true,                   // can multiple files be selected
                     'tag' => 'DWG-PDF',                          // Any tag other than model name
-                    'canEdit' => $canEdit])
+                    'canEdit' => $canUserEdit])
             </div>
         </div>
 
 
         <div class="buttons is-right">
-            @if ($item)
+            @if ($itemId)
                 <button wire:click.prevent="updateItem()" class="button is-dark">{{ $constants['update']['submitText'] }}</button>
             @else
                 <button wire:click.prevent="storeItem()" class="button is-dark">{{ $constants['create']['submitText'] }}</button>

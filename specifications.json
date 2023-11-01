@@ -1,0 +1,64 @@
+{
+
+    "product_type" :"mast",
+    "nomenclature":"EML-AL MAST 1-2.5M LOCKING",
+    "family_mt":"MTX",
+    "family_wb":"EML",
+
+    "drive_family": {
+
+        "nomenclature":"electromechanical",
+        "type":"manual,pneumatic,hydraulic,electrical"
+    },
+
+
+
+    "specifications":{
+        "extended_height_mm":"2512",
+        "extended_height_in":"99",
+        "nested_height_mm":"1000",
+        "nested_height_in":"39",
+        "product_weight_kg":"50",
+        "product_weight_lb":"110",
+        "max_payload_kg":"170",
+        "max_payload_lb":"374",
+        "design_sail_area":"0.8",
+        "max_operational_wind_speed":"80",
+        "max_survival_wind_speed":"120",
+        "locking_type":true,
+    },
+
+    "interfaces":{
+        "mechanical":{
+            "payload":true,
+            "roof":false,
+            "side":true,
+            "bottom":true,
+            "guying":true,
+            "hoisting":true,
+            "lubrication":true,
+            "manual_override":true
+        },
+
+        "electrical":{
+
+            "12vdc" :false,
+            "24vdc" :false,
+            "28vdc" :true,
+            "110ac" :false,
+            "220ac" :false,
+            "power" :"550W"
+        },
+
+        "digital":{
+        }
+
+    },
+
+    "material":{
+    },
+
+    "finish":{
+    }
+
+}

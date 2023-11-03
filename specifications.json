@@ -1,17 +1,12 @@
 {
 
+    "part_number":293884,
+    "version":1,
     "product_type" :"mast",
     "nomenclature":"EML-AL MAST 1-2.5M LOCKING",
     "family_mt":"MTX",
     "family_wb":"EML",
-
-    "drive_family": {
-
-        "nomenclature":"electromechanical",
-        "type":"manual,pneumatic,hydraulic,electrical"
-    },
-
-
+    "type":"manual,pneumatic,hydraulic,electromechanical",
 
     "specifications":{
         "extended_height_mm":"2512",
@@ -23,21 +18,24 @@
         "max_payload_kg":"170",
         "max_payload_lb":"374",
         "design_sail_area":"0.8",
+        "design_drag_coefficient":1.5,
         "max_operational_wind_speed":"80",
         "max_survival_wind_speed":"120",
-        "locking_type":true,
+        "number_of_sections":5,
+        "has_locking":true,
+        "max_pressure_in_bar":2
     },
 
     "interfaces":{
         "mechanical":{
-            "payload":true,
-            "roof":false,
-            "side":true,
-            "bottom":true,
-            "guying":true,
-            "hoisting":true,
-            "lubrication":true,
-            "manual_override":true
+            "payload_interface":true,
+            "roof_interface":false,
+            "side_interface":true,
+            "bottom_interface":true,
+            "guying_interface":true,
+            "hoisting_interface":true,
+            "lubrication_interface":true,
+            "manual_override_interface":true
         },
 
         "electrical":{
@@ -52,7 +50,6 @@
 
         "digital":{
         }
-
     },
 
     "material":{

@@ -318,11 +318,40 @@ class Product extends Component
 
 
     public function getProductNo() {
-        $counter = Counter::find(69);
+
+        $counter = Counter::find(1);
+
+        if ($counter == null) {
+            Counter::create([
+                'id' => 1,
+                'product_no' => config('appconstants.counters.product_no'),
+                'end_product_no' => config('appconstants.counters.end_product_no')
+            ]);
+
+            return config('appconstants.counters.product_no');
+        }
+
         $new_no = $counter->product_no+1;
         $counter->update(['product_no' => $new_no]);         // Update Counter
         return $new_no;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

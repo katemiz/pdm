@@ -23,4 +23,10 @@ return [
     ],
 
 
+    'counters' => [
+        'product_no' => 102729,
+        'end_product_no' => 38542
+    ]
+
+
 ];

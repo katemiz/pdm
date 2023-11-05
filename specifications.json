@@ -4,9 +4,10 @@
     "version":1,
     "product_type" :"mast",
     "nomenclature":"EML-AL MAST 1-2.5M LOCKING",
-    "family_mt":"MTX",
-    "family_wb":"EML",
-    "type":"manual,pneumatic,hydraulic,electromechanical",
+    "description":"detailed description of end product",
+    "mast_family_mt":"MTX",
+    "mast_family_wb":"EML",
+    "drive_type":"manual,pneumatic,hydraulic,electromechanical",
 
     "specifications":{
         "extended_height_mm":"2512",
@@ -33,19 +34,21 @@
             "side_interface":true,
             "bottom_interface":true,
             "guying_interface":true,
+            "number_of_guying_interfaces":3,
             "hoisting_interface":true,
             "lubrication_interface":true,
-            "manual_override_interface":true
+            "manual_override_interface":true,
+            "wire_management":true,
+            "wire_basket":true
         },
 
         "electrical":{
-
-            "12vdc" :false,
-            "24vdc" :false,
-            "28vdc" :true,
-            "110ac" :false,
-            "220ac" :false,
-            "power" :"550W"
+            "vdc12_interface" :false,
+            "vdc24_interface" :false,
+            "vdc28_interface" :false,
+            "ac110_interface" :false,
+            "ac220_interface" :false,
+            "power_rating" :"550W"
         },
 
         "digital":{
@@ -56,6 +59,14 @@
     },
 
     "finish":{
+    },
+
+    "bag" :{
+
+    },
+
+    "package" :{
+
     }
 
 }

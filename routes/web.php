@@ -13,9 +13,9 @@ use App\Livewire\Cr;
 use App\Livewire\Ecn;
 use App\Livewire\Material;
 use App\Livewire\Process;
+use App\Livewire\EndProduct;
 use App\Livewire\Product;
 use App\Livewire\ProductNote;
-
 use App\Livewire\Engineering;
 
 
@@ -118,8 +118,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cr/{action}/{id?}', Cr::class);
     Route::get('/ecn/{action}/{id?}', Ecn::class);
 
+    // END PRODUCTS
+    Route::get('/endproducts/{action}/{id?}', EndProduct::class);
+
     // PRODUCTS
     Route::get('/products/{action}/{id?}', Product::class);
+
 
     // MATERIAL, PROCESS and NOTES
     Route::get('/material/{action}/{id?}', Material::class);

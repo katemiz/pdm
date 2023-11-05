@@ -70,6 +70,13 @@
                 </div>
 
 
+                <a href="/endproducts/list" class="navbar-item">
+                    <span class="icon has-text-warning">
+                        <x-carbon-box />
+                    </span>
+                    <span class="ml-2">End Products</span>
+                </a>
+
 
                 <a href="/products/list" class="navbar-item">
                     <span class="icon has-text-warning">
@@ -77,6 +84,9 @@
                     </span>
                     <span class="ml-2">Products</span>
                 </a>
+
+
+
 
 
 

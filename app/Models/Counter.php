@@ -11,5 +11,9 @@ class Counter extends Model
 
     protected $fillable = [
         'product_no',
+        'end_product_no'
     ];
+
+
+
 }

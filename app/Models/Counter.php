@@ -10,9 +10,8 @@ class Counter extends Model
     use HasFactory;
 
     protected $fillable = [
-        'product_no',
-        'end_product_no',
-        'document_no'
+        'counter_type',
+        'counter_value'
     ];
 
 

@@ -12,9 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('counters', function (Blueprint $table) {
-            $table->id();
-            $table->integer('product_no');
-            $table->integer('end_product_no');
+            $table->string('counter_type')->primary();
+            $table->integer('counter_value');
             $table->timestamps();
         });
     }

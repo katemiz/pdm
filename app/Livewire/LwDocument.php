@@ -21,13 +21,12 @@ class LwDocument extends Component
 {
     use WithPagination;
 
-    public $action = 'LIST'; // LIST,FORM,VIEW,VERIFICATION
+    public $action = 'LIST'; // LIST,FORM,VIEW
     public $constants;
 
     public $show_latest = true; /// Show only latest revisions
 
     public $uid = false;
-    public $vid = false;    // Verification ID
 
     public $query = '';
     public $sortField = 'created_at';
@@ -35,43 +34,14 @@ class LwDocument extends Component
 
     public $logged_user;
 
-    public $is_user_admin = false;
-    public $is_user_company_admin = false;
-
-    // Verification
-    public $companies = [];
-    public $projects = [];
-    public $endproducts = [];
-
-    public $the_company = false;    // Viewed Phase Company
-    public $the_project = false;    // Viewed Phase Project
-    public $the_endproduct = false; // Viewed Phase EndProduct
-
-    public $project_eproducts = [];
-
     public $all_revs = [];
 
-    public $requirement_no;
+    public $document_no;
     public $revision;
-
-    #[Rule('required|numeric', message: 'Please select company')]
-    public $company_id = false;
-
-    #[Rule('required', message: 'Please select project')]
-    public $project_id = false;
-
-    public $endproduct_id = false;
-
-    public $source;
-    public $xrefno;
-
     public $is_latest;
 
-    #[Rule('required', message: 'Requirement text is missing')]
-    public $text;
-
-    public $remarks;    // Requirement remarks
-    public $vremarks;   // Verification remarks
+    #[Rule('required', message: 'Document title is missing')]
+    public $title;
 
     public $created_by;
     public $updated_by;
@@ -84,7 +54,8 @@ class LwDocument extends Component
         'GR' => 'General Report',
         'TR' => 'Test Report',
         'AR' => 'Analysis Report',
-        'MN' => 'Product Manual'
+        'MN' => 'Product Manual',
+        'PR' => 'Presentation'
     ];
 
     #[Rule('required', message: 'Please select document type')]
@@ -441,7 +412,7 @@ class LwDocument extends Component
 
         $this->validate();
 
-        $props['requirement_no'] = $this->getRequirementNo();
+        $props['document_no'] = $this->getDocumentNo();
         $props['updated_uid'] = Auth::id();
         $props['company_id'] = $this->company_id;
         $props['project_id'] = $this->project_id;
@@ -454,13 +425,13 @@ class LwDocument extends Component
 
         if ( $this->uid ) {
             // update
-            Requirement::find($this->uid)->update($props);
+            Document::find($this->uid)->update($props);
             session()->flash('message','Requirement has been updated successfully.');
 
         } else {
             // create
             $props['user_id'] = Auth::id();
-            $this->uid = Requirement::create($props)->id;
+            $this->uid = Document::create($props)->id;
             session()->flash('message','Requirement has been created successfully.');
         }
 
@@ -524,23 +495,22 @@ class LwDocument extends Component
 
 
 
-    public function getRequirementNo() {
+    public function getDocumentNo() {
 
-        $initial_no = 1000;
-        $counter = Counter::find(1);
+        $initial_no = config('appconstants.counters.document_no');
+        $counter = Counter::find('counter_type','document_no');
 
         if ($counter == null) {
-
             Counter::create([
-                'id' => 1,
-                'requirement_no' => $initial_no]
-            );
+                'counter_type' => 'document_no',
+                'counter_value' => $initial_no
+            ]);
 
             return $initial_no;
         }
 
-        $new_no = $counter->requirement_no+1;
-        $counter->update(['requirement_no' => $new_no]);         // Update Counter
+        $new_no = $counter->counter_value+1;
+        $counter->update(['counter_value' => $new_no]);         // Update Counter
         return $new_no;
     }
 

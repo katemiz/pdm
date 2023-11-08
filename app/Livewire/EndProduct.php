@@ -3,11 +3,15 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\WithPagination;
+
 use Livewire\Attributes\Rule;
 
 
 use App\Models\Counter;
 use App\Models\EProduct;
+use App\Models\User;
+
 
 
 use Illuminate\Support\Facades\Auth;
@@ -15,6 +19,9 @@ use Illuminate\Support\Facades\Storage;
 
 class EndProduct extends Component
 {
+
+    use WithPagination;
+
     public $uid;
     public $action = 'LIST'; // LIST,FORM,VIEW
 
@@ -26,9 +33,7 @@ class EndProduct extends Component
 
 
     // Constants
-
     public $product_types = [
-
         "CMPRS" => "Compressor",
         "MST" => "Mast",
     ];
@@ -47,12 +52,13 @@ class EndProduct extends Component
         "MTH" => "CDL"
     ];
 
-    
+
 
 
     // Item Properties
     public $createdBy;
     public $part_number;
+    public $part_number_wb;
     public $description;
     public $version;
 
@@ -106,8 +112,11 @@ class EndProduct extends Component
     public $remarks;
     public $status;
 
+    public $created_by;
     public $created_at;
+    public $updated_by;
     public $updated_at;
+
 
 
 
@@ -158,15 +167,22 @@ class EndProduct extends Component
 
     public function getEndProducts() {
 
-        if ( $this->action != 'FORM' ) {
+        if ( $this->action == 'FORM'  && !$this->uid) {
             return collect([]);
         }
+
+        return EProduct::orderBy($this->sortField,$this->sortDirection)
+            ->paginate(env('RESULTS_PER_PAGE'));
     }
 
 
 
 
+    public function viewItem($uid) {
 
+        $this->uid = $uid;
+        $this->action = 'VIEW';
+    }
 
 
 
@@ -181,8 +197,9 @@ class EndProduct extends Component
     public function storeUpdateItem () {
 
         $this->validate();
-        
+
         $props['part_number'] = $this->getEProductNo();
+        $props['part_number_wb'] = $this->part_number_wb;
         $props['product_type'] = $this->product_type;
         $props['nomenclature'] = $this->nomenclature;
         $props['description'] = $this->description;
@@ -219,17 +236,19 @@ class EndProduct extends Component
         $props['vdc28_interface'] = $this->vdc28_interface;
         $props['ac110_interface'] = $this->ac110_interface;
         $props['ac220_interface'] = $this->ac220_interface;
-        $props['material'] = $this->ac220_interface;        
+        $props['material'] = $this->material;
         $props['remarks'] = $this->remarks;
 
         if ( $this->uid ) {
             // update
+            $props['updated_uid'] = Auth::id();
             EProduct::find($this->uid)->update($props);
             session()->flash('message','Requirement has been updated successfully.');
 
         } else {
             // create
             $props['user_id'] = Auth::id();
+            $props['updated_uid'] = Auth::id();
             $this->uid = EProduct::create($props)->id;
             session()->flash('message','Requirement has been created successfully.');
         }
@@ -253,6 +272,7 @@ class EndProduct extends Component
             $ep = EProduct::find($this->uid);
 
             $this->part_number = $ep->part_number;
+            $this->part_number_wb = $ep->part_number_wb;
             $this->product_type = $ep->product_type;
             $this->nomenclature = $ep->nomenclature;
             $this->description = $ep->description;
@@ -274,27 +294,29 @@ class EndProduct extends Component
             $this->number_of_sections = $ep->number_of_sections;
             $this->has_locking = $ep->has_locking;
             $this->max_pressure_in_bar = $ep->max_pressure_in_bar;
-            $this->payload_interface = $ep->payload_interface;
-            $this->roof_interface = $ep->roof_interface;
-            $this->side_interface = $ep->side_interface;
-            $this->bottom_interface = $ep->bottom_interface;
-            $this->guying_interface = $ep->guying_interface;
+            $this->payload_interface = $ep->payload_interface ? true : false;
+            $this->roof_interface = $ep->roof_interface ? true : false;
+            $this->side_interface = $ep->side_interface ? true : false;
+            $this->bottom_interface = $ep->bottom_interface ? true : false;
+            $this->guying_interface = $ep->guying_interface ? true : false;
             $this->number_of_guying_interfaces = $ep->number_of_guying_interfaces;
-            $this->hoisting_interface = $ep->hoisting_interface;
-            $this->lubrication_interface = $ep->lubrication_interface;
-            $this->manual_override_interface = $ep->manual_override_interface;
-            $this->wire_management = $ep->wire_management;
-            $this->wire_basket = $ep->wire_basket;
-            $this->vdc12_interface = $ep->vdc12_interface;
-            $this->vdc24_interface = $ep->vdc24_interface;
-            $this->vdc28_interface = $ep->vdc28_interface;
-            $this->ac110_interface = $ep->ac110_interface;
-            $this->ac220_interface = $ep->ac220_interface;
-            $this->material = $ep->ac220_interface;        
+            $this->hoisting_interface = $ep->hoisting_interface ? true : false;
+            $this->lubrication_interface = $ep->lubrication_interface ? true : false;
+            $this->manual_override_interface = $ep->manual_override_interface ? true : false;
+            $this->wire_management = $ep->wire_management ? true : false;
+            $this->wire_basket = $ep->wire_basket ? true : false;
+            $this->vdc12_interface = $ep->vdc12_interface ? true : false;
+            $this->vdc24_interface = $ep->vdc24_interface ? true : false;
+            $this->vdc28_interface = $ep->vdc28_interface ? true : false;
+            $this->ac110_interface = $ep->ac110_interface ? true : false;
+            $this->ac220_interface = $ep->ac220_interface ? true : false;
+            $this->material = $ep->material;
             $this->remarks = $ep->remarks;
             $this->status = $ep->status;
 
+            $this->created_by = User::find($ep->user_id);
             $this->created_at = $ep->created_at;
+            $this->updated_by = User::find($ep->updated_uid);
             $this->updated_at = $ep->updated_at;
         }
 

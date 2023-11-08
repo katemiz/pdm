@@ -9,7 +9,7 @@
     @if ($uid)
         <div class="control">
             <div class="tags has-addons">
-                <span class="tag is-dark is-large mb-6">{{ $uid}}</span>
+                <span class="tag is-dark is-large mb-6">{{ $part_number}}-{{ $version }}</span>
             </div>
         </div>
     @endif
@@ -39,7 +39,7 @@
                     <label class="checkbox is-block">
                         <input type="radio" wire:model="product_type" value="{{ $k }}"> {{ $eptype }}
                     </label>
-                    
+
                 @endforeach
 
             </div>
@@ -48,6 +48,30 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
+
+
+
+
+
+        <div class="field">
+
+            <label class="label" for="topic">Will-Burt Part Number</label>
+            <div class="control">
+
+                <input
+                    class="input"
+                    id="part_number_wb"
+                    wire:model="part_number_wb"
+                    type="text"
+                    value="{{ $uid ? $part_number_wb : ''}}"
+                    placeholder="Write WB Part Number" required>
+            </div>
+
+            @error('part_number_wb')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
 
 
         <div class="field">
@@ -77,7 +101,7 @@
             wire:model="description"
             label='End Product Description'
             placeholder='General description of end product.'
-            :content="$uid"/>
+            :content="$description"/>
 
         @error('description')
         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
@@ -85,10 +109,14 @@
 
 
 
-        <div class="field ">
 
-            <div class="field-body">
 
+
+
+
+        <div class="columns">
+
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Drive Type</label>
@@ -108,7 +136,9 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
 
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">MT Mast Family</label>
@@ -127,8 +157,9 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
 
-
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Number of Sections</label>
@@ -146,67 +177,16 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
-
             </div>
+
         </div>
 
 
 
 
+        <div class="columns">
 
-        <div class="field ">
-
-            <div class="field-body">
-
-                <div class="field">
-
-                    <label class="label">Extended Height (mm)</label>
-                    <div class="control">
-                        <input
-                            class="input"
-                            id="extended_height_mm"
-                            wire:model="extended_height_mm"
-                            type="text"
-                            value="{{ $uid ? $extended_height_mm : ''}}"
-                            placeholder="Extended height in mm" required>
-                    </div>
-
-                    @error('extended_height_mm')
-                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="field">
-
-                    <label class="label">Nested Height (mm)</label>
-                    <div class="control">
-                        <input
-                            class="input"
-                            id="nested_height_mm"
-                            wire:model="nested_height_mm"
-                            type="text"
-                            value="{{ $uid ? $extended_height_mm : ''}}"
-                            placeholder="Nested height in mm" required>
-                    </div>
-
-                    @error('nested_height_mm')
-                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
-
-            </div>
-        </div>
-
-
-
-
-
-
-
-        <div class="field ">
-
-            <div class="field-body">
-
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Maximum Payload Capacity (kg)</label>
@@ -224,7 +204,54 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
 
+            <div class="column is-4">
+                <div class="field">
+
+                    <label class="label">Extended Height (mm)</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            id="extended_height_mm"
+                            wire:model="extended_height_mm"
+                            type="text"
+                            value="{{ $uid ? $extended_height_mm : ''}}"
+                            placeholder="Extended height in mm" required>
+                    </div>
+
+                    @error('extended_height_mm')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="column is-4">
+                <div class="field">
+
+                    <label class="label">Nested Height (mm)</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            id="nested_height_mm"
+                            wire:model="nested_height_mm"
+                            type="text"
+                            value="{{ $uid ? $extended_height_mm : ''}}"
+                            placeholder="Nested height in mm" required>
+                    </div>
+
+                    @error('nested_height_mm')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="columns">
+
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Max Operational Wind Speed (km/h)</label>
@@ -242,10 +269,9 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
 
-
-
-
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Max Survival Wind Speed (km/h)</label>
@@ -263,10 +289,9 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
 
-
-
-
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Has Locking Means ?</label>
@@ -285,27 +310,14 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
-
-
             </div>
+
         </div>
 
 
+        <div class="columns">
 
-
-
-
-
-
-
-
-
-
-
-        <div class="field ">
-
-            <div class="field-body">
-
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Mast Weight (kg)</label>
@@ -323,7 +335,9 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
 
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Design Sail Area (m<sup>2</sup>)</label>
@@ -341,7 +355,9 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
 
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Design Drag Coefficient C<sub>d</sub>[Payload]</label>
@@ -359,10 +375,36 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+            </div>
+
+        </div>
+
+
+        <div class="columns">
+
+            <div class="column is-8">
+                <div class="field">
+
+                    <label class="label">Descriptive Material</label>
+                    <div class="control">
+                        <input
+                            class="input"
+                            id="material"
+                            wire:model="material"
+                            type="text"
+                            value="{{ $uid ? $material : ''}}"
+                            placeholder="Descriptive material of product" required>
+                    </div>
+
+                    @error('material')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
 
 
 
-
+            <div class="column is-4">
                 <div class="field">
 
                     <label class="label">Maximum Pressure (bar)</label>
@@ -380,10 +422,36 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
-
-
             </div>
+
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -456,23 +524,7 @@
 
 
 
-        <div class="field">
 
-            <label class="label">Material</label>
-            <div class="control">
-                <input
-                    class="input"
-                    id="material"
-                    wire:model="material"
-                    type="text"
-                    value="{{ $uid ? $material : ''}}"
-                    placeholder="Weight (kg)" required>
-            </div>
-
-            @error('material')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
-        </div>
 
 
 
@@ -485,7 +537,7 @@
         <livewire:ck-editor
             edId="ed20"
             wire:model="remarks"
-            label='End Product Description'
+            label='Notes and Remarks'
             placeholder='Any kind of remarks/notes about part/product.'
             :content="$uid"/>
 
@@ -538,31 +590,6 @@
                     'canEdit' => true])
             </div>
         </div>
-
-
-        <div class="field block">
-            <label class="label">3d for Web [glb or glTF]</label>
-
-            @if ($uid)
-            @livewire('file-list', [
-                'canDelete' => true,
-                'model' => 'Product',
-                'modelId' => $uid,
-                'tag' => 'DWG-PDF',                          // Any tag other than model name
-            ])
-            @endif
-
-            <div class="control">
-
-                @livewire('file-upload', [
-                    'model' => 'Product',
-                    'modelId' => $uid ? $uid : false,
-                    'isMultiple'=> true,                   // can multiple files be selected
-                    'tag' => 'DWG-PDF',                          // Any tag other than model name
-                    'canEdit' => "canUserEdit"])
-            </div>
-        </div>
-
 
         <div class="buttons is-right">
             @if ($uid)

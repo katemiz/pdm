@@ -15,7 +15,9 @@ class EProduct extends Model
     protected $fillable = [
 
         'user_id',
+        'updated_uid',
         'part_number',
+        'part_number_wb',
         'product_type',
         'nomenclature',
         'description',

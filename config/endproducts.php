@@ -3,8 +3,8 @@
 return [
 
     "list" => [
-        "title" => "End Products",
-        "subtitle" => "List of all End Products",
+        "title" => "End Products / Sellable Items",
+        "subtitle" => "List of all End Products/Sellable Items",
         "addButton" => [
             "text"=>"Add Project",
             "route"=>"/endproducts/form"
@@ -14,15 +14,29 @@ return [
 
         "headers" => [
 
-            "id"=> [
-                "title" => "#",
+            "part_number"=> [
+                "title" => "PN",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
-            "shortname"=> [
-                "title" => "Short Name",
+            "mast_family_mt"=> [
+                "title" => "Family",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
+            "nomenclature"=> [
+                "title" => "Monemclature",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
+            "max_payload_kg"=> [
+                "title" => "Capacity",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
@@ -49,19 +63,19 @@ return [
     ],
 
     "create" => [
-        "title" => "End Products",
-        "subtitle" => "Create a End Product",
+        "title" => "End Products / Sellable Items",
+        "subtitle" => "Create a End Product/Sellable Items",
         "submitText" => "Add End Product",
     ],
 
     "read" => [
-        "title" => "End Products",
+        "title" => "End Products / Sellable Items",
         "subtitle" => "View End Product Parameters",
     ],
 
     "update" => [
-        "title" => "End Products",
-        "subtitle" => "Edit End Product Properties",
+        "title" => "End Products / Sellable Items",
+        "subtitle" => "Edit End Product/Sellable Items Properties",
         "submitText" => "Update End Products",
     ],
 

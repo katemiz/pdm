@@ -26,7 +26,7 @@
 
                 <p class="level-item">
                     <a href="/endproducts/form/">
-                        <span class="icon is-small"><x-carbon-add-large /></span>
+                        <span class="icon is-small"><x-carbon-add /></span>
                         <span>Add</span>
                     </a>
                 </p>
@@ -102,15 +102,15 @@
                     <table class="table is-fullwidth">
                         <tr>
                             <th>End Product Type</th>
-                            <td>{{$product_type}}</td>
+                            <td>{{ $product_types[$product_type]}}</td>
                         </tr>
                         <tr>
-                            <th>Requirement Source</th>
-                            <td>{{$product_type}}</td>
+                            <th>Drive Type</th>
+                            <td>{{$drive_types[$drive_type]}}</td>
                         </tr>
                         <tr>
-                            <th>Cross Ref No</th>
-                            <td>{{$product_type}}</td>
+                            <th>Mast Family</th>
+                            <td>{{$mast_family_mt}} / {{$mast_family_wb}}</td>
                         </tr>
                     </table>
                 </div>
@@ -125,38 +125,138 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
         <div class="column">
-            <div class="columns is-vcentered">
 
-              <div class="column is-half">
-                <p class="has-text-weight-light is-size-6">Project</p>
-                <span class="tag is-black">{{ $product_type }}</span>
-              </div>
+            <table class="table is-fullwidth">
+                <thead>
 
-              <div class="column is-half has-text-right">
-                <p class="has-text-weight-light is-size-6">End Product</p>
+                    <tr>
+                        <th>Maximum Payload Capacity</th>
+                        <td class="has-text-right">{{ $max_payload_kg }}</td>
+                        <td class="is-narrow">kg</td>
+                        <td class="has-text-right">{{ round($max_payload_kg*2.20462,0) }}</td>
+                        <td class="is-narrow">lb</td>
+                    </tr>
 
-                <span class="tag is-dark">{{ $uid > 0 ? $uid : '----' }}</span>
+                    <tr>
+                        <th>Extended Height</th>
+                        <td class="has-text-right">{{ $extended_height_mm }}</td>
+                        <td class="is-narrow">mm</td>
+                        <td class="has-text-right">{{ round($extended_height_mm/25.4,1) }}</td>
+                        <td class="is-narrow">in</td>
+                    </tr>
 
-              </div>
 
-            </div>
+                    <tr>
+                        <th>Nested Height</th>
+                        <td class="has-text-right">{{ $nested_height_mm }}</td>
+                        <td class="is-narrow">mm</td>
+                        <td class="has-text-right">{{ round($nested_height_mm/25.4,1) }}</td>
+                        <td class="is-narrow">in</td>
+                    </tr>
+
+
+
+                    <tr>
+                        <th>Weight</th>
+                        <td class="has-text-right">{{ $product_weight_kg }}</td>
+                        <td>kg</td>
+                        <td class="has-text-right">{{ round($product_weight_kg*2.20462,0) }}</td>
+                        <td>lb</td>
+                    </tr>
+
+                    <tr>
+                        <th>Maximum Operational Wind Speed</th>
+                        <td class="has-text-right">{{ $max_operational_wind_speed }}</td>
+                        <td>km/h</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+
+                    <tr>
+                        <th>Maximum Survival Wind Speed</th>
+                        <td class="has-text-right">{{ $max_survival_wind_speed }}</td>
+                        <td>km/h</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <th>Has Locking ?</th>
+                        <td class="has-text-right">{{ $has_locking ? 'Yes' : 'No' }}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <th>Design Sail Area</th>
+                        <td class="has-text-right">{{ $design_sail_area }}</td>
+                        <td>m<sup>2</sup></td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <th>Design Drag Coefficient (C<sub>d</sub>)</th>
+                        <td class="has-text-right">{{ $design_drag_coefficient }}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+
+                    <tr>
+                        <th>Max Pneumatic Pressure (bar)</th>
+                        <td class="has-text-right">{{ $max_pressure_in_bar }}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
+                        <th>Descriptive Material</th>
+                        <td>&nbsp;</td>
+                        <td colspan="3">{{ $material }}</td>
+                    </tr>
+
+
+
+                </thead>
+
+            </table>
+
         </div>
 
 
-        <div class="column">
-            <strong>Requirement Text</strong>
-            {!! $description !!}
-        </div>
+
+
+
+
+
+
 
 
         <div class="column">
-            <strong>Attachments</strong>
+            <strong>Customer Drawing</strong>
             @livewire('file-list', [
-                'canDelete' => false,
-                'model' => 'Requirement',
+                'canDelete' => true,
+                'model' => 'EndProduct',
                 'modelId' => $uid,
-                'tag' => 'support',                          // Any tag other than model name
+                'tag' => 'CustomerDrawings',                          // Any tag other than model name
             ])
         </div>
 
@@ -185,15 +285,85 @@
         <div class="column">
             <div class="columns is-vcentered">
 
-                <div class="column is-half">
+                <div class="column content is-half">
                     <strong>Mechanical Interfaces</strong>
+
+                    <ul>
+                        @if ($payload_interface)
+                        <li>Has Payload Interface</li>
+                        @endif
+
+                        @if ($roof_interface)
+                        <li>Has Roof Interface (Vehicle)</li>
+                        @endif
+
+                        @if ($side_interface)
+                        <li>Has Side Interface (Vehicle)</li>
+                        @endif
+
+                        @if ($bottom_interface)
+                        <li>Has Bottom Interface</li>
+                        @endif
+
+                        @if ($guying_interface)
+                        <li>Has Guying Interfaces</li>
+                        @endif
+
+                        @if ($hoisting_interface)
+                        <li>Has Hoisting Interface</li>
+                        @endif
+
+                        @if ($lubrication_interface)
+                        <li>Has Lubrication Interface</li>
+                        @endif
+
+                        @if ($manual_override_interface)
+                        <li>Has Manual Override Interface</li>
+                        @endif
+
+                        @if ($wire_management)
+                        <li>Has Wire Management Interface</li>
+                        @endif
+
+                        @if ($wire_basket)
+                        <li>Has Wire Basket Interface</li>
+                        @endif
+
+                    </ul>
+
+
                 </div>
 
-                <div class="column has-text-right is-2">
+                <div class="column content">
 
                     <strong>Electrical Interfaces</strong>
 
 
+                    <ul>
+                        @if ($vdc12_interface)
+                        <li>Has 12 VDC Interface</li>
+                        @endif
+
+                        @if ($vdc24_interface)
+                        <li>Has 12 VDC Interface</li>
+                        @endif
+
+                        @if ($vdc28_interface)
+                        <li>Has 28 VDC Interface</li>
+                        @endif
+
+                        @if ($ac110_interface)
+                        <li>Has 110 AC Interface</li>
+                        @endif
+
+                        @if ($ac220_interface)
+                        <li>Has 220 AC Interface</li>
+                        @endif
+
+
+                    </ul>
+
+
                 </div>
 
             </div>
@@ -210,32 +380,6 @@
 
 
 
-
-
-
-        {{-- VERIFICATIONS --}}
-        <div class="column">
-            <div class="columns is-vcentered">
-
-                <div class="column is-10">
-                    <strong>Verifications</strong>
-                </div>
-
-                <div class="column has-text-right is-2">
-                    @if ($status != 'Frozen')
-                    @role(['admin','company_admin','requirement_engineer'])
-                    <a href="/verifications/{{$uid}}/form" class="button is-link is-small">
-                        <span class="icon is-small">
-                            <x-carbon-add />
-                        </span>
-                        <span>Add</span>
-                    </a>
-                    @endrole
-                    @endif
-                </div>
-
-            </div>
-        </div>
 
 
 
@@ -243,12 +387,12 @@
         <div class="columns is-size-7 has-text-grey mt-6">
 
             <div class="column">
-                <p>{{ $created_at }}</p>
+                <p>{{ $created_by->email }}</p>
                 <p>{{ $created_at }}</p>
             </div>
 
             <div class="column has-text-right">
-                <p>{{ $updated_at }}</p>
+                <p>{{ $updated_by->email }}</p>
                 <p>{{ $updated_at }}</p>
             </div>
 

@@ -16,7 +16,9 @@ return new class extends Migration
         Schema::create('endproducts', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
+            $table->integer('updated_uid');
             $table->integer('part_number');
+            $table->integer('part_number_wb')->nullable();
             $table->text('product_type')->nullable();
             $table->text('nomenclature')->nullable();
             $table->text('description')->nullable();

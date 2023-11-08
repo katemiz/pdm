@@ -85,6 +85,13 @@
                     <span class="ml-2">Products</span>
                 </a>
 
+                <a href="/documents/list" class="navbar-item">
+                    <span class="icon has-text-warning">
+                        <x-carbon-document-attachment />
+                    </span>
+                    <span class="ml-2">Documents</span>
+                </a>
+
 
 
 

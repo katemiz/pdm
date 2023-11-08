@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
+use App\Livewire\LwDocument;
 use App\Livewire\Material;
 use App\Livewire\Process;
 use App\Livewire\EndProduct;
@@ -123,6 +124,10 @@ Route::middleware(['auth'])->group(function () {
 
     // PRODUCTS
     Route::get('/products/{action}/{id?}', Product::class);
+
+
+    // DOCUMENTS
+    Route::get('/documents/{action}/{id?}', LwDocument::class);
 
 
     // MATERIAL, PROCESS and NOTES

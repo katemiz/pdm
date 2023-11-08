@@ -25,7 +25,8 @@ return [
 
     'counters' => [
         'product_no' => 102729,
-        'end_product_no' => 38542
+        'end_product_no' => 38542,
+        'document_no' => 7922
     ]
 
 

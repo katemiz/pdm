@@ -29,7 +29,7 @@ return [
             ],
 
             "nomenclature"=> [
-                "title" => "Monemclature",
+                "title" => "Labeling",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"

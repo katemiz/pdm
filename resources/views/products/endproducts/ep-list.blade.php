@@ -113,7 +113,7 @@
                     </a>
 
                     @role(['admin','company_admin','requirement_engineer'])
-                        <a href="/requirements/form/{{ $record->id }}">
+                        <a href="/endproducts/form/{{ $record->id }}">
                         {{-- <a wire:click="editItem({{ $record->id }})"> --}}
                             <span class="icon"><x-carbon-edit /></span>
                         </a>

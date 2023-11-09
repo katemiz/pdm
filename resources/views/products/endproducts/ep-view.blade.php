@@ -102,11 +102,11 @@
                     <table class="table is-fullwidth">
                         <tr>
                             <th>End Product Type</th>
-                            <td>{{ $product_types[$product_type]}}</td>
+                            <td>{{ !empty($product_type) ? $product_types[$product_type] : ''}}</td>
                         </tr>
                         <tr>
                             <th>Drive Type</th>
-                            <td>{{$drive_types[$drive_type]}}</td>
+                            <td>{{ !empty($drive_type) ? $drive_types[$drive_type] : ''}}</td>
                         </tr>
                         <tr>
                             <th>Mast Family</th>
@@ -117,24 +117,6 @@
 
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         <div class="column">
@@ -158,7 +140,6 @@
                         <td class="is-narrow">in</td>
                     </tr>
 
-
                     <tr>
                         <th>Nested Height</th>
                         <td class="has-text-right">{{ $nested_height_mm }}</td>
@@ -166,8 +147,6 @@
                         <td class="has-text-right">{{ round($nested_height_mm/25.4,1) }}</td>
                         <td class="is-narrow">in</td>
                     </tr>
-
-
 
                     <tr>
                         <th>Weight</th>
@@ -184,7 +163,6 @@
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                     </tr>
-
 
                     <tr>
                         <th>Maximum Survival Wind Speed</th>
@@ -232,8 +210,6 @@
                         <td>&nbsp;</td>
                         <td colspan="3">{{ $material }}</td>
                     </tr>
-
-
 
                 </thead>
 
@@ -337,7 +313,6 @@
                 <div class="column content">
 
                     <strong>Electrical Interfaces</strong>
-
 
                     <ul>
                         @if ($vdc12_interface)

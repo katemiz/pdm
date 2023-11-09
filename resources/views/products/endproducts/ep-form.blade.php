@@ -500,16 +500,7 @@
                         <input type="checkbox" wire:model="ac220_interface" wire:click="$toggle('ac220_interface')"> 220 AC Interface<br>
                     </div>
 
-                    @error('design_sail_area')
-                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                    @enderror
                 </div>
-
-
-
-
-
-
 
             </div>
         </div>
@@ -539,7 +530,7 @@
             wire:model="remarks"
             label='Notes and Remarks'
             placeholder='Any kind of remarks/notes about part/product.'
-            :content="$uid"/>
+            :content="$remarks"/>
 
         @error('remarks')
         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>

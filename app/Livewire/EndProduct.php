@@ -52,9 +52,6 @@ class EndProduct extends Component
         "MTH" => "CDL"
     ];
 
-
-
-
     // Item Properties
     public $createdBy;
     public $part_number;
@@ -72,17 +69,33 @@ class EndProduct extends Component
     public $mast_family_mt;
     public $mast_family_wb;
     public $drive_type;
+
+    #[Rule('sometimes|numeric', message: 'Extended height should be numeric')]
     public $extended_height_mm;
     public $extended_height_in;
+
+    #[Rule('sometimes|numeric', message: 'Nested height should be numeric')]
     public $nested_height_mm;
     public $nested_height_in;
+
+    #[Rule('sometimes|numeric', message: 'Weight should be numeric')]
     public $product_weight_kg;
+
+    #[Rule('sometimes|numeric', message: 'Load capacity should be numeric')]
     public $max_payload_kg;
     public $max_payload_lb;
+
+    #[Rule('sometimes|numeric', message: 'Sail area should be numeric')]
     public $design_sail_area = 1.5;
     public $design_drag_coefficient = 1.5;
+
+    #[Rule('sometimes|numeric', message: 'Operational wind speed should be numeric')]
     public $max_operational_wind_speed;
+
+    #[Rule('sometimes|numeric', message: 'Survival wind speed should be numeric')]
     public $max_survival_wind_speed;
+
+    #[Rule('sometimes|numeric', message: 'Number of sections should be numeric')]
     public $number_of_sections;
 
     #[Rule('required', message: 'Please indicate whether product has locking capability')]
@@ -120,28 +133,6 @@ class EndProduct extends Component
     public $updated_at;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     public function mount()
     {
         if (request('action')) {
@@ -150,16 +141,14 @@ class EndProduct extends Component
 
         if (request('id')) {
             $this->uid = request('id');
+            $this->getEPPops();
         }
 
         $this->constants = config('endproducts');
     }
 
 
-
     public function render() {
-
-        $this->getEPPops();
 
         return view('products.endproducts.ep',[
             'endproducts' => $this->getEndProducts()
@@ -184,15 +173,9 @@ class EndProduct extends Component
 
         $this->uid = $uid;
         $this->action = 'VIEW';
+
+        $this->getEPPops();
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -245,14 +228,14 @@ class EndProduct extends Component
             // update
             $props['updated_uid'] = Auth::id();
             EProduct::find($this->uid)->update($props);
-            session()->flash('message','Requirement has been updated successfully.');
+            session()->flash('message','End Product / Sellable Item has been updated successfully.');
 
         } else {
             // create
             $props['user_id'] = Auth::id();
             $props['updated_uid'] = Auth::id();
             $this->uid = EProduct::create($props)->id;
-            session()->flash('message','Requirement has been created successfully.');
+            session()->flash('message','End Product / Sellable Item has been created successfully.');
         }
 
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
@@ -262,12 +245,10 @@ class EndProduct extends Component
 
 
 
-
-
-
-
-
     public function getEPPops () {
+
+
+        // dd([$this->uid,$this->action]);
 
         if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
 
@@ -320,6 +301,9 @@ class EndProduct extends Component
             $this->created_at = $ep->created_at;
             $this->updated_by = User::find($ep->updated_uid);
             $this->updated_at = $ep->updated_at;
+
+            // dd($this->created_by);
+
         }
 
     }

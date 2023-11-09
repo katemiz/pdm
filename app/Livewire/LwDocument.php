@@ -11,7 +11,7 @@ use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-
+use App\Models\Counter;
 use App\Models\Document;
 use App\Models\User;
 
@@ -48,6 +48,7 @@ class LwDocument extends Component
     public $created_at;
     public $updated_at;
 
+    public $remarks;
     public $status;
 
     public $doc_types = [
@@ -497,19 +498,20 @@ class LwDocument extends Component
 
     public function getDocumentNo() {
 
+        $parameter = 'document_no';
         $initial_no = config('appconstants.counters.document_no');
-        $counter = Counter::find('counter_type','document_no');
+        $counter = Counter::find($parameter);
 
         if ($counter == null) {
             Counter::create([
-                'counter_type' => 'document_no',
+                'counter_type' => $parameter,
                 'counter_value' => $initial_no
             ]);
 
             return $initial_no;
         }
 
-        $new_no = $counter->counter_value+1;
+        $new_no = $counter->counter_value + 1;
         $counter->update(['counter_value' => $new_no]);         // Update Counter
         return $new_no;
     }

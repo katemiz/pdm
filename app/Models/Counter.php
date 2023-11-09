@@ -9,6 +9,8 @@ class Counter extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'counter_type';
+
     protected $fillable = [
         'counter_type',
         'counter_value'

@@ -58,6 +58,8 @@ class EndProduct extends Component
     // Item Properties
     public $createdBy;
     public $part_number;
+
+    #[Rule('sometimes|numeric', message: 'WB Part Number should be numeric')]
     public $part_number_wb;
     public $description;
     public $version;

@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\User;
+
 class Document extends Model
 {
     use HasFactory;
@@ -34,6 +36,15 @@ class Document extends Model
 
 
 
+
+    public function getAuthorAttribute($value) {
+        $author = User::find($this->user_id);
+        return $author->name.' '.strtoupper($author->lastname);
+    }
+
+    public function getDocNoAttribute($value) {
+        return 'D'.$this->document_no.' R'.$this->revision;
+    }
 
 
 

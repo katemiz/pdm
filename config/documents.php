@@ -14,36 +14,29 @@ return [
 
         "headers" => [
 
-            "part_number"=> [
-                "title" => "PN",
+            "doc_no"=> [
+                "title" => "Doc No",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
-            "mast_family_mt"=> [
-                "title" => "Family",
+            "title"=> [
+                "title" => "Doc Title",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
-            "nomenclature"=> [
-                "title" => "Monemclature",
-                "sortable" => true,
-                "align" => "left",
-                "direction" => "asc"
-            ],
-
-            "max_payload_kg"=> [
-                "title" => "Capacity",
+            "author"=> [
+                "title" => "Author",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
             "created_at"=> [
-                "title" => "Created On",
+                "title" => "Datetime",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"

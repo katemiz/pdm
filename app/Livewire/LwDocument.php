@@ -11,6 +11,7 @@ use Livewire\Attributes\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
+use App\Models\Attachment;
 use App\Models\Counter;
 use App\Models\Document;
 use App\Models\User;
@@ -80,14 +81,7 @@ class LwDocument extends Component
 
     public function render()
     {
-        // $this->checkUserRoles();
-        // $this->checkCurrentProduct();
-        // $this->getCompaniesList();
-        // $this->getProjectsList();
-
-        // $this->checkSessionVariables();
-
-        // $existing_verifications = $this->setProps();
+        $this->setProps();
 
         return view('documents.docs',[
             'documents' => $this->getDocumentsList()
@@ -125,7 +119,10 @@ class LwDocument extends Component
 
     public function getDocumentsList()  {
 
-        $documents = Document::orderBy($this->sortField,$this->sortDirection)
+        $documents = Document::when($this->show_latest, function ($query) {
+                            $query->where('is_latest', true);
+        })
+        ->orderBy($this->sortField,$this->sortDirection)
         ->paginate(env('RESULTS_PER_PAGE'));
 
         // if ($this->is_user_admin) {
@@ -286,13 +283,6 @@ class LwDocument extends Component
     }
 
 
-    public function getEndProductsList()  {
-
-        if ($this->project_id) {
-            $this->project_eproducts = Endproduct::where('project_id',$this->project_id)->get();
-        }
-    }
-
 
     public function changeSortDirection ($key) {
 
@@ -335,50 +325,33 @@ class LwDocument extends Component
 
     public function setProps() {
 
-        if ($this->uid && in_array($this->action,['VIEW','FORM','VERIFICATION']) ) {
+        if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
 
-            $c = Requirement::find($this->uid);
+            $c = Document::find($this->uid);
 
-            $this->requirement_no = $c->requirement_no;
+            $this->document_no = $c->document_no;
             $this->revision = $c->revision;
-            $this->rtype = $c->rtype;
-            $this->text = $c->text;
+            $this->doc_type = $c->doc_type;
+            $this->title = $c->title;
             $this->is_latest = $c->is_latest;
             $this->remarks = $c->remarks;
-            $this->company_id = $c->company_id;
-            $this->project_id = $c->project_id;
-            $this->endproduct_id = $c->endproduct_id;
-            $this->xrefno = $c->cross_ref_no;
-            $this->source = $c->source;
             $this->status = $c->status;
             $this->created_at = $c->created_at;
             $this->updated_at = $c->updated_at;
             $this->created_by = User::find($c->user_id)->fullname;
             $this->updated_by = User::find($c->updated_uid)->fullname;
 
-            $this->the_company = Company::find($c->company_id);
-            $this->the_project = Project::find($c->project_id);
-
-            if ($c->endproduct_id > 0) {
-                $this->the_endproduct = Endproduct::find($c->endproduct_id);
-            }
-
             // Revisions
-            foreach (Requirement::where('requirement_no',$this->requirement_no)->get() as $req) {
-                $this->all_revs[$req->revision] = $req->id;
+            foreach (Document::where('document_no',$this->document_no)->get() as $doc) {
+                $this->all_revs[$doc->revision] = $doc->id;
             }
-
-            return $c->verifications;
         }
-
-        return false;
-
     }
 
 
     public function triggerDelete($type, $uid) {
 
-        if ($type === 'requirement') {
+        if ($type === 'document') {
             $this->uid = $uid;
         }
 
@@ -386,26 +359,21 @@ class LwDocument extends Component
             $this->vid = $uid;
         }
 
-        $this->dispatch('ConfirmDelete', type:$type);
+        $this->dispatch('ConfirmModal', type:$type);
     }
 
 
     #[On('onDeleteConfirmed')]
     public function deleteItem($type)
     {
-        if ($type === 'requirement') {
-            Requirement::find($this->uid)->delete();
-            Verification::where('requirement_id',$this->uid)->delete();
-            session()->flash('message','Requirement and linked verifications have been deleted successfully.');
+        if ($type === 'document') {
+            Document::find($this->uid)->delete();
+            session()->flash('message','Document have been deleted successfully.');
 
             $this->action = 'LIST';
             $this->resetPage();
         }
 
-        if ($type === 'verification') {
-            Verification::find($this->vid)->delete();
-            session()->flash('message','Verification has been deleted successfully.');
-        }
     }
 
 
@@ -415,25 +383,20 @@ class LwDocument extends Component
 
         $props['document_no'] = $this->getDocumentNo();
         $props['updated_uid'] = Auth::id();
-        $props['company_id'] = $this->company_id;
-        $props['project_id'] = $this->project_id;
-        $props['endproduct_id'] = $this->endproduct_id ? $this->endproduct_id : 0;
-        $props['rtype'] = $this->rtype;
-        $props['source'] = $this->source;
-        $props['cross_ref_no'] = $this->xrefno;
-        $props['text'] = $this->text;
+        $props['doc_type'] = $this->doc_type;
+        $props['title'] = $this->title;
         $props['remarks'] = $this->remarks;
 
         if ( $this->uid ) {
             // update
             Document::find($this->uid)->update($props);
-            session()->flash('message','Requirement has been updated successfully.');
+            session()->flash('message','Document has been updated successfully.');
 
         } else {
             // create
             $props['user_id'] = Auth::id();
             $this->uid = Document::create($props)->id;
-            session()->flash('message','Requirement has been created successfully.');
+            session()->flash('message','Document has been created successfully.');
         }
 
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
@@ -442,57 +405,10 @@ class LwDocument extends Component
     }
 
 
-    public function formVerification ($rid,$vid) {
-
-        $this->uid = $rid;
-        if ($vid) {
-            $this->vid = $vid;
-        }
-        $this->action = 'VERIFICATION';
-    }
 
 
-    public function getVerificationProps () {
-
-        $verification = false;
-
-        $ver_milestones = Gate::where('company_id', $this->logged_user->company_id)
-            ->where('project_id', session('current_project_id'))
-            ->when(session('current_eproduct_id'), function ($query) {
-                $query->where('endproduct_id', session('current_eproduct_id'));
-            })->get();
-
-        $ver_mocs = Moc::where('company_id', $this->logged_user->company_id)
-            ->where('project_id', session('current_project_id'))
-            ->when(session('current_eproduct_id'), function ($query) {
-                $query->where('endproduct_id', session('current_eproduct_id'));
-            })->get();
-
-        $ver_pocs = Poc::where('company_id', $this->logged_user->company_id)
-            ->where('project_id', session('current_project_id'))
-            ->when(session('current_eproduct_id'), function ($query) {
-                $query->where('endproduct_id', session('current_eproduct_id'));
-            })->get();
 
 
-        $ver_witnesses = Witness::where('company_id', $this->logged_user->company_id)
-            ->where('project_id', session('current_project_id'))
-            ->when(session('current_eproduct_id'), function ($query) {
-                $query->where('endproduct_id', session('current_eproduct_id'));
-            })->get();
-
-        if ($this->vid) {
-            $verification = Verification::find($this->vid);
-        }
-
-        return [
-            'verification' => $verification,
-            'ver_milestones' => $ver_milestones,
-            'ver_mocs' => $ver_mocs,
-            'ver_pocs' => $ver_pocs,
-            'ver_witnesses' => $ver_witnesses
-        ];
-    }
 
 
 
@@ -519,42 +435,40 @@ class LwDocument extends Component
 
     public function freezeConfirm($uid) {
         $this->uid = $uid;
-        $this->dispatch('ConfirmDelete', type:'freeze');
+        $this->dispatch('ConfirmModal', type:'freeze');
     }
 
     #[On('onFreezeConfirmed')]
     public function doFreeze() {
-
         $this->action = 'VIEW';
-        Requirement::find($this->uid)->update(['status' =>'Frozen']);
+        Document::find($this->uid)->update(['status' =>'Frozen']);
     }
 
 
     public function reviseConfirm($uid) {
         $this->uid = $uid;
-        $this->dispatch('ConfirmDelete', type:'revise');
+        $this->dispatch('ConfirmModal', type:'revise');
     }
 
 
     #[On('onReviseConfirmed')]
     public function doRevise() {
 
-        $original_requirement = Requirement::find($this->uid);
+        $original_doc = Document::find($this->uid);
 
-        $revised_requirement = $original_requirement->replicate();
-        $revised_requirement->status = 'Verbatim';
-        $revised_requirement->revision = $original_requirement->revision+1;
-        $revised_requirement->save();
+        $revised_doc = $original_doc->replicate();
+        $revised_doc->status = 'Verbatim';
+        $revised_doc->revision = $original_doc->revision+1;
+        $revised_doc->save();
 
-        foreach ($original_requirement->verifications as $verification) {
-            $rev_verification = $verification->replicate();
-            $rev_verification->requirement_id = $revised_requirement->id;
-            $rev_verification->save();
-        }
+        // Do not Copy files!
+        // Delibrate decision
 
-        $original_requirement->update(['is_latest',false]);
+        $original_doc->update(['is_latest' => false]);
 
-        $this->uid = $revised_requirement->id;
+        $this->uid = $revised_doc->id;
         $this->action = 'VIEW';
+
+        $this->dispatch('triggerAttachment',modelId: $this->uid);
     }
 }

@@ -160,16 +160,16 @@
                         <th>Maximum Operational Wind Speed</th>
                         <td class="has-text-right">{{ $max_operational_wind_speed }}</td>
                         <td>km/h</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <td class="has-text-right">{{ round($max_operational_wind_speed*0.5399570136727677,0) }}</td>
+                        <td>knots</td>
                     </tr>
 
                     <tr>
                         <th>Maximum Survival Wind Speed</th>
                         <td class="has-text-right">{{ $max_survival_wind_speed }}</td>
                         <td>km/h</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <td class="has-text-right">{{ round($max_survival_wind_speed*0.5399570136727677,0) }}</td>
+                        <td>knots</td>
                     </tr>
 
                     <tr>
@@ -184,8 +184,10 @@
                         <th>Design Sail Area</th>
                         <td class="has-text-right">{{ $design_sail_area }}</td>
                         <td>m<sup>2</sup></td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <td class="has-text-right">{{ round($design_sail_area*10.7639,1) }}</td>
+                        <td>ft<sup>2</sup></td>
+
+                        
                     </tr>
 
                     <tr>
@@ -198,9 +200,9 @@
 
 
                     <tr>
-                        <th>Max Pneumatic Pressure (bar)</th>
+                        <th>Max Pneumatic Pressure</th>
                         <td class="has-text-right">{{ $max_pressure_in_bar }}</td>
-                        <td>&nbsp;</td>
+                        <td>bar</td>
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                     </tr>

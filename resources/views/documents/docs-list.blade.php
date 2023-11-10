@@ -33,11 +33,17 @@
 
             {{-- @role(['admin','company_admin']) --}}
             <div class="level-item has-text-centered">
-                    <a href="/documents/form" class="button is-dark">
-                        <span class="icon is-small"><x-carbon-add /></span>
-                        <span>{{ $constants['list']['addButton']['text'] }}</span>
-                    </a>
-                </div>
+                <a href="/documents/form" class="button is-dark">
+                    <span class="icon is-small"><x-carbon-add /></span>
+                    <span>{{ $constants['list']['addButton']['text'] }}</span>
+                </a>
+
+                <a href="/documentor/docform" class="button is-success ml-2">
+                    <span class="icon is-small"><x-carbon-add /></span>
+                    <span>Write a Document</span>
+                </a>
+
+            </div>
             {{-- @endrole --}}
 
         </div>

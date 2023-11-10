@@ -8,22 +8,16 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 
-
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
 use App\Livewire\LwDocument;
+use App\Livewire\LwDocumentor;
 use App\Livewire\Material;
 use App\Livewire\Process;
 use App\Livewire\EndProduct;
 use App\Livewire\Product;
 use App\Livewire\ProductNote;
 use App\Livewire\Engineering;
-
-
-
-
-
-
 
 
 /*
@@ -128,6 +122,8 @@ Route::middleware(['auth'])->group(function () {
 
     // DOCUMENTS
     Route::get('/documents/{action}/{id?}', LwDocument::class);
+    Route::get('/documentor/{action}/{id?}', LwDocumentor::class);
+
 
 
     // MATERIAL, PROCESS and NOTES

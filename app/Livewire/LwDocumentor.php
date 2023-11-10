@@ -18,20 +18,17 @@ use App\Models\User;
 
 
 
-class LwDocument extends Component
+class LwDocumentor extends Component
 {
     use WithPagination;
 
-    public $action = 'LIST'; // LIST,FORM,VIEW
+    public $action = 'DOCFORM'; // DOCFORM,DOCVIEW,PAGEFORM,PAGEVIEW
     public $constants;
 
     public $show_latest = true; /// Show only latest revisions
 
     public $uid = false;
 
-    public $query = '';
-    public $sortField = 'created_at';
-    public $sortDirection = 'DESC';
 
     public $logged_user;
 
@@ -72,21 +69,26 @@ class LwDocument extends Component
 
         if (request('id')) {
             $this->uid = request('id');
-            //$this->setProps();
         }
 
-        $this->constants = config('documents');
     }
 
 
     public function render()
     {
+
         $this->setProps();
 
-        return view('documents.docs',[
-            'documents' => $this->getDocumentsList()
-        ]);
+        return view('documents.documentor');
     }
+
+
+    public function addPage() {
+
+        $this->action = 'PAGEFORM';
+
+    }
+
 
 
     public function checkUserRoles() {
@@ -284,18 +286,6 @@ class LwDocument extends Component
 
 
 
-    public function changeSortDirection ($key) {
-
-        $this->sortField = $key;
-
-        if ($this->constants['list']['headers'][$key]['direction'] == 'asc') {
-            $this->constants['list']['headers'][$key]['direction'] = 'desc';
-        } else {
-            $this->constants['list']['headers'][$key]['direction'] = 'asc';
-        }
-
-        $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
-    }
 
 
     public function resetFilter() {

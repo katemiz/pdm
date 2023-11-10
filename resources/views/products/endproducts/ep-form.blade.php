@@ -454,13 +454,6 @@
                 @endswitch
 
 
-                {{-- @if ($manual_doc_number_exists && $manual_doc_number_exists != 'initial')
-                    <div class="notification is-success is-light is-size-7 p-1 mt-1">{{ $manual_doc_number_exists }}</div>
-                @else
-                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">No documents found with this number</div>
-                @endif --}}
-
-
 
 
                 @error('manual_doc_number')
@@ -526,9 +519,7 @@
 
                     </div>
 
-                    @error('product_weight_kg')
-                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                    @enderror
+
                 </div>
 
                 <div class="field">

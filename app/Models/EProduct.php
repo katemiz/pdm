@@ -39,6 +39,7 @@ class EProduct extends Model
         'number_of_sections',
         'has_locking',
         'max_pressure_in_bar',
+        'manual_doc_number',
         'payload_interface',
         'roof_interface',
         'side_interface',

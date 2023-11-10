@@ -103,7 +103,7 @@ class EndProduct extends Component
     public $has_locking;
     public $max_pressure_in_bar = 2.0;
 
-    #[Rule('sometimes|numeric', message: 'Product manual document number of sections should be numeric')]
+    #[Rule('sometimes|numeric', message: 'Product manual document number should be numeric')]
     public $manual_doc_number;
     public $manual_doc_number_exists = 'initial';   // does such a document exist?
 
@@ -233,6 +233,7 @@ class EndProduct extends Component
         $props['number_of_sections'] = $this->number_of_sections;
         $props['has_locking'] = $this->has_locking;
         $props['max_pressure_in_bar'] = $this->max_pressure_in_bar;
+        $props['manual_doc_number'] = $this->manual_doc_number;
         $props['payload_interface'] = $this->payload_interface;
         $props['roof_interface'] = $this->roof_interface;
         $props['side_interface'] = $this->side_interface;
@@ -275,9 +276,6 @@ class EndProduct extends Component
 
     public function getEPPops () {
 
-
-        // dd([$this->uid,$this->action]);
-
         if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
 
             $ep = EProduct::find($this->uid);
@@ -305,6 +303,7 @@ class EndProduct extends Component
             $this->number_of_sections = $ep->number_of_sections;
             $this->has_locking = $ep->has_locking;
             $this->max_pressure_in_bar = $ep->max_pressure_in_bar;
+            $this->manual_doc_number = $ep->manual_doc_number;
             $this->payload_interface = $ep->payload_interface ? true : false;
             $this->roof_interface = $ep->roof_interface ? true : false;
             $this->side_interface = $ep->side_interface ? true : false;
@@ -324,14 +323,10 @@ class EndProduct extends Component
             $this->material = $ep->material;
             $this->remarks = $ep->remarks;
             $this->status = $ep->status;
-
             $this->created_by = User::find($ep->user_id);
             $this->created_at = $ep->created_at;
             $this->updated_by = User::find($ep->updated_uid);
             $this->updated_at = $ep->updated_at;
-
-            // dd($this->created_by);
-
         }
 
     }

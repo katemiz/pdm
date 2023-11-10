@@ -40,6 +40,7 @@ return new class extends Migration
             $table->integer('number_of_sections')->nullable();
             $table->boolean('has_locking')->default(false);
             $table->float('max_pressure_in_bar')->default('2.0');
+            $table->integer('manual_doc_number')->nullable();
             $table->boolean('payload_interface')->default(true);
             $table->boolean('roof_interface')->default(false);
             $table->boolean('side_interface')->default(true);

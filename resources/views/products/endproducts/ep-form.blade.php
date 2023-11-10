@@ -406,7 +406,6 @@
 
             <div class="column is-4">
                 <div class="field">
-
                     <label class="label">Maximum Pressure (bar)</label>
                     <div class="control">
                         <input
@@ -425,6 +424,49 @@
             </div>
 
         </div>
+
+
+            <div class="field">
+                <label class="label">Product Manual Number</label>
+                <div class="control">
+                    <input
+                        class="input"
+                        id="manual_doc_number"
+                        wire:model.live="manual_doc_number"
+                        type="text"
+                        value="{{ $uid ? $manual_doc_number : ''}}"
+                        placeholder="Ender product manual document number" required>
+                </div>
+
+                @switch($manual_doc_number_exists)
+                    @case('initial')
+                        @break
+                    @case('no')
+                        <div class="notification is-danger is-light is-size-7 p-1 mt-1">No documents found with this number</div>
+                        @break
+
+                    @default
+                        <div class="notification is-success is-light is-size-7 p-1 mt-1">{{ $manual_doc_number_exists }}</div>
+                        @break
+
+
+
+                @endswitch
+
+
+                {{-- @if ($manual_doc_number_exists && $manual_doc_number_exists != 'initial')
+                    <div class="notification is-success is-light is-size-7 p-1 mt-1">{{ $manual_doc_number_exists }}</div>
+                @else
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">No documents found with this number</div>
+                @endif --}}
+
+
+
+
+                @error('manual_doc_number')
+                <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                @enderror
+            </div>
 
 
 

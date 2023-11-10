@@ -9,6 +9,7 @@ use Livewire\Attributes\Rule;
 
 
 use App\Models\Counter;
+use App\Models\Document;
 use App\Models\EProduct;
 use App\Models\User;
 
@@ -101,6 +102,12 @@ class EndProduct extends Component
     #[Rule('required', message: 'Please indicate whether product has locking capability')]
     public $has_locking;
     public $max_pressure_in_bar = 2.0;
+
+    #[Rule('sometimes|numeric', message: 'Product manual document number of sections should be numeric')]
+    public $manual_doc_number;
+    public $manual_doc_number_exists = 'initial';   // does such a document exist?
+
+
     public $payload_interface = true;
     public $roof_interface = false;
     public $side_interface = true;
@@ -133,6 +140,7 @@ class EndProduct extends Component
     public $updated_at;
 
 
+
     public function mount()
     {
         if (request('action')) {
@@ -153,6 +161,26 @@ class EndProduct extends Component
         return view('products.endproducts.ep',[
             'endproducts' => $this->getEndProducts()
         ]);
+    }
+
+
+
+    public function updated($property)
+    {
+        // $property: The name of the current property that was updated
+        if ($property === 'manual_doc_number') {
+
+            $this->manual_doc_number_exists = 'no';
+
+            $manual = Document::where(
+                ['document_no' => $this->manual_doc_number],
+                ['is_latest' => true]
+            )->first();
+
+            if ($manual) {
+                $this->manual_doc_number_exists = 'D'.$this->manual_doc_number.' R'.$manual->revision.' '.$manual->title;
+            }
+        }
     }
 
 

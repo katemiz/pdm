@@ -38,7 +38,7 @@
                     <span>{{ $constants['list']['addButton']['text'] }}</span>
                 </a>
 
-                <a href="/documentor/docform" class="button is-success ml-2">
+                <a href="/documents/cform" class="button is-success ml-2">
                     <span class="icon is-small"><x-carbon-add /></span>
                     <span>Write a Document</span>
                 </a>
@@ -127,12 +127,12 @@
 
                 <td class="has-text-right">
 
-                    <a wire:click="viewItem({{ $record->id}})">
+                    <a wire:click="viewItem({{ $record->id}},{{$record->is_html}})">
                         <span class="icon"><x-carbon-view/></span>
                     </a>
 
                     @role(['admin','company_admin','requirement_engineer'])
-                        <a href="/requirements/form/{{ $record->id }}">
+                        <a href="/documents/form/{{ $record->id }}">
                         {{-- <a wire:click="editItem({{ $record->id }})"> --}}
                             <span class="icon"><x-carbon-edit /></span>
                         </a>

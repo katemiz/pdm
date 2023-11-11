@@ -20,10 +20,12 @@ return new class extends Migration
             $table->integer('updated_uid');
             $table->integer('document_no');
             $table->integer('revision')->default(1);
+            $table->boolean('is_html')->default(false);
             $table->boolean('is_latest')->default(true);
             $table->string('doc_type');
             $table->text('title');
             $table->text('remarks')->nullable();
+            $table->json('toc');
             $table->foreignId('checker_id')->nullable();
             $table->foreignId('approver_id')->nullable();
             $table->string('reject_reason_check')->nullable();

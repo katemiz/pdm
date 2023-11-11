@@ -21,6 +21,15 @@ return [
                 "direction" => "asc"
             ],
 
+
+            "is_html"=> [
+                "title" => "HTML",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
+
             "title"=> [
                 "title" => "Doc Title",
                 "sortable" => true,

@@ -18,14 +18,14 @@
             <div class="level-left">
 
                 <p class="level-item">
-                    <a href="/documents/list">
+                    <a href="/documents/file/list">
                         <span class="icon is-small"><x-carbon-table /></span>
                         <span>List All</span>
                     </a>
                 </p>
 
                 <p class="level-item">
-                    <a href="/documents/form/">
+                    <a href="/documents/file/form/">
                         <span class="icon is-small"><x-carbon-add /></span>
                         <span>Add</span>
                     </a>

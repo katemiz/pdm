@@ -1,19 +1,23 @@
-<section class="m-5 ">
-
-
+<div>
 
     @switch($action)
 
-        @case('DOCFORM')
-            @include('documents.documentor-form')
+        @case('CFORM')
+            @include('documents.html-cover-form')
             @break
 
-        @case('DOCVIEW')
-            @include('documents.documentor-view')
+        @case('CVIEW')
+            @include('documents.html-cover-view')
             @break
 
+        @case('PFORM')
+            @include('documents.html-page-form')
+            @break
 
+        @case('PVIEW')
+            @include('documents.html-page-view')
+            @break
 
     @endswitch
 
-</section>
+</div>

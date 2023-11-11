@@ -22,12 +22,17 @@ class LwDocument extends Component
 {
     use WithPagination;
 
-    public $action = 'LIST'; // LIST,FORM,VIEW
+    public $action = 'LIST'; // LIST,FORM,VIEW,CFORM,CVIEW,PFORM,PVIEW
+
+
     public $constants;
 
     public $show_latest = true; /// Show only latest revisions
+    public $is_html = false;
 
     public $uid = false;
+    public $pid = false;
+
 
     public $query = '';
     public $sortField = 'created_at';
@@ -39,7 +44,9 @@ class LwDocument extends Component
 
     public $document_no;
     public $revision;
+    public $toc = [];    /// Table of Contents
     public $is_latest;
+
 
     #[Rule('required', message: 'Document title is missing')]
     public $title;
@@ -66,13 +73,28 @@ class LwDocument extends Component
 
     public function mount()
     {
+
         if (request('action')) {
             $this->action = strtoupper(request('action'));
+
+            if ( in_array($this->action,['LIST','FORM','VIEW']) ) {
+                $this->is_html = false;
+            }
+
+            if ( in_array($this->action,['CFORM','CVIEW','PFORM','PVIEW']) ) {
+                $this->is_html = true;
+            }
         }
 
         if (request('id')) {
-            $this->uid = request('id');
-            //$this->setProps();
+
+            if ( in_array($this->action,['LIST','FORM','VIEW','CFORM','CVIEW']) ) {
+                $this->uid = request('id');
+            }
+
+            if ( in_array($this->action,['PFORM','PVIEW']) ) {
+                $this->pid = request('id');
+            }
         }
 
         $this->constants = config('documents');
@@ -82,6 +104,10 @@ class LwDocument extends Component
     public function render()
     {
         $this->setProps();
+
+        if ($this->is_html) {
+            return view('documents.documentor');
+        }
 
         return view('documents.docs',[
             'documents' => $this->getDocumentsList()
@@ -124,111 +150,6 @@ class LwDocument extends Component
         })
         ->orderBy($this->sortField,$this->sortDirection)
         ->paginate(env('RESULTS_PER_PAGE'));
-
-        // if ($this->is_user_admin) {
-
-        //     if (session('current_project_id')) {
-
-        //         if (strlen(trim($this->query)) < 2 ) {
-
-        //             // ADMIN/PROJECT SET/NO QUERY
-        //             $requirements = Requirement::where('project_id', session('current_project_id'))
-        //                 ->when(session('current_eproduct_id'), function ($query) {
-        //                     $query->where('endproduct_id', session('current_eproduct_id'));
-        //                 })
-        //                 ->when($this->show_latest, function ($query) {
-        //                     $query->where('is_latest', true);
-        //                 })
-        //                 ->orderBy($this->sortField,$this->sortDirection)
-        //                 ->paginate(env('RESULTS_PER_PAGE'));
-
-        //         } else {
-
-        //             // ADMIN/PROJECT SET/QUERY EXISTS
-        //             $requirements = Requirement::where('project_id', session('current_project_id'))
-        //                 ->when(session('current_eproduct_id'), function ($query) {
-        //                     $query->where('endproduct_id', session('current_eproduct_id'));
-        //                 })
-        //                 ->when($this->show_latest, function ($query) {
-        //                     $query->where('is_latest', true);
-        //                 })
-        //                 ->where(function ($sqlquery) {
-        //                     $sqlquery->where('text', 'LIKE', "%".$this->query."%")
-        //                           ->orWhere('remarks', 'LIKE', "%".$this->query."%");
-        //                 })
-        //                 ->orderBy($this->sortField,$this->sortDirection)
-        //                 ->paginate(env('RESULTS_PER_PAGE'));
-        //         }
-
-        //     } else {
-
-        //         if (strlen(trim($this->query)) < 2 ) {
-
-        //             // ADMIN/NO PROJECT/NO QUERY
-        //             $requirements = Requirement::when($this->show_latest, function ($query) {
-        //                 $query->where('is_latest', true);
-        //             })
-        //             ->orderBy($this->sortField,$this->sortDirection)
-        //                 ->paginate(env('RESULTS_PER_PAGE'));
-
-        //         } else {
-
-        //             // ADMIN/NO PROJECT/QUERY EXISTS
-        //             $requirements = Requirement::where('project_id', session('current_project_id'))
-        //                 ->when(session('current_eproduct_id'), function ($query) {
-        //                     $query->where('endproduct_id', session('current_eproduct_id'));
-        //                 })
-        //                 ->when($this->show_latest, function ($query) {
-        //                     $query->where('is_latest', true);
-        //                 })
-        //                 ->where(function ($sqlquery) {
-        //                     $sqlquery->where('text', 'LIKE', "%".$this->query."%")
-        //                           ->orWhere('remarks', 'LIKE', "%".$this->query."%");
-        //                 })
-        //                 ->orderBy($this->sortField,$this->sortDirection)
-        //                 ->paginate(env('RESULTS_PER_PAGE'));
-        //         }
-        //     }
-
-        // } else {
-
-        //     if (strlen(trim($this->query)) < 2 ) {
-
-        //         $requirements = Requirement::where('company_id', $this->logged_user->company_id)
-        //             ->when(session('current_project_id'), function ($query) {
-        //                 $query->where('project_id', session('current_project_id'));
-        //             })
-        //             ->when(session('current_eproduct_id'), function ($query) {
-        //                 $query->where('endproduct_id', session('current_eproduct_id'));
-        //             })
-        //             ->when($this->show_latest, function ($query) {
-        //                 $query->where('is_latest', true);
-        //             })
-        //             ->orderBy($this->sortField,$this->sortDirection)
-        //             ->paginate(env('RESULTS_PER_PAGE'));
-
-
-        //     } else {
-
-        //         $requirements = Requirement::where('company_id', $this->logged_user->company_id)
-        //         ->when(session('current_project_id'), function ($query) {
-        //             $query->where('project_id', session('current_project_id'));
-        //         })
-        //         ->when(session('current_eproduct_id'), function ($query) {
-        //             $query->where('endproduct_id', session('current_project_id'));
-        //         })
-        //         ->when($this->show_latest, function ($query) {
-        //             $query->where('is_latest', true);
-        //         })
-        //         ->where(function ($sqlquery) {
-        //             $sqlquery->where('text', 'LIKE', "%".$this->query."%")
-        //                     ->orWhere('remarks', 'LIKE', "%".$this->query."%");
-        //         })
-        //         ->orderBy($this->sortField,$this->sortDirection)
-        //         ->paginate(env('RESULTS_PER_PAGE'));
-
-        //     }
-        // }
 
         return $documents;
     }
@@ -303,8 +224,9 @@ class LwDocument extends Component
     }
 
 
-    public function viewItem($uid) {
-        $this->action = 'VIEW';
+    public function viewItem($uid,$is_html) {
+        $this->is_html = $is_html;
+        $this->action = $is_html ? 'CVIEW':'VIEW';
         $this->uid = $uid;
     }
 
@@ -322,10 +244,15 @@ class LwDocument extends Component
         $this->reset('code','name');
     }
 
+    #[On('addContent')]
+    public function addContentPage() {
+        $this->paction = 'FORM';
+    }
+
 
     public function setProps() {
 
-        if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
+        if ($this->uid && in_array($this->action,['VIEW','FORM','CVIEW','CFORM']) ) {
 
             $c = Document::find($this->uid);
 
@@ -333,6 +260,7 @@ class LwDocument extends Component
             $this->revision = $c->revision;
             $this->doc_type = $c->doc_type;
             $this->title = $c->title;
+            $this->is_html = $c->is_html;
             $this->is_latest = $c->is_latest;
             $this->remarks = $c->remarks;
             $this->status = $c->status;
@@ -341,11 +269,33 @@ class LwDocument extends Component
             $this->created_by = User::find($c->user_id)->fullname;
             $this->updated_by = User::find($c->updated_uid)->fullname;
 
+            if ($c->is_html) {
+                $this->fileOrHtml = 'HTML';
+            }
+
             // Revisions
             foreach (Document::where('document_no',$this->document_no)->get() as $doc) {
                 $this->all_revs[$doc->revision] = $doc->id;
             }
         }
+
+        if ($this->pid && in_array($this->action,['PVIEW','PFORM']) ) {
+
+            $p = Page::find($this->pid);
+
+            $this->uid = $p->document_id;
+            $this->ptitle = $p->title;
+            $this->pcontent = $p->content;
+            $this->pcreated_at = $p->created_at;
+            $this->pupdated_at = $p->updated_at;
+            $this->pcreated_by = User::find($p->user_id);
+            $this->pupdated_by = User::find($p->updated_uid);
+
+            $c = Document::find($this->uid);
+
+            $this->toc = $c->toc;
+        }
+
     }
 
 
@@ -379,11 +329,17 @@ class LwDocument extends Component
 
     public function storeUpdateItem () {
 
+        if ($this->fileOrHtml === 'HTML') {
+            $this->is_html = true;
+        }
+
         $this->validate();
 
         $props['document_no'] = $this->getDocumentNo();
         $props['updated_uid'] = Auth::id();
         $props['doc_type'] = $this->doc_type;
+        $props['is_html'] = $this->is_html;
+        $props['toc'] = json_encode($this->toc);
         $props['title'] = $this->title;
         $props['remarks'] = $this->remarks;
 

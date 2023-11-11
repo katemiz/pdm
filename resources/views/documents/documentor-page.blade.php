@@ -1,5 +1,6 @@
 <div>
 
+
     @switch($action)
         @case('VIEW')
 
@@ -39,7 +40,7 @@
         
             <div class="buttons is-right">
                 <button wire:click.prevent="storeUpdateItem()" class="button is-dark">
-                    @if ($uid)
+                    @if ($pid)
                         Update
                     @else
                         Add Page

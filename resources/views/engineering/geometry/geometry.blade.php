@@ -12,42 +12,33 @@
       <h2 class="subtitle has-text-weight-light">Geometric Properties of General Sections</h2>
   </header>
 
-    <div class="tile is-ancestor">
-      <div class="tile is-vertical">
-        <div class="tile">
-          <div class="tile is-parent is-vertical">
-            <div class="card" >
-              <div class="card-image">
-                <figure class="image">
-                  <img src="{{ asset('/images/Circle.svg') }}">
-                </figure>
-              </div>
-      
-              <div class="card-content">
-                <div class="content">
-                  <a wire:click="selectAction('geometry-circle')">Circle</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="tile is-parent">
-            <div class="card" >
-              <div class="card-image">
-                <figure class="image">
-                  <img src="{{ asset('/images/Rectangle.svg') }}">
-                </figure>
-              </div>
-      
-              <div class="card-content">
-                <div class="content">
-                  <a wire:click="selectAction('geometry-rectangle')">Rectangle</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
 
-      </div>
+  <div class="columns">
+    <div class="column">
+
+      <a wire:click="selectAction('geometry-circle')" class="has-text-centered is-block">Circle</a>
+
+
+      <a wire:click="selectAction('geometry-circle')">
+        <figure class="image">
+          <img src="{{ asset('/images/Circle.svg') }}">
+        </figure>
+      </a>
 
     </div>
+
+    <div class="column">
+      <a wire:click="selectAction('geometry-rectangle')" class="has-text-centered is-block">Rectangle</a>
+
+      <a wire:click="selectAction('geometry-rectangle')">
+
+      <figure class="image">
+        <img src="{{ asset('/images/Rectangle.svg') }}">
+      </figure>
+      </a>
+    </div>
+
+  </div>
+
+
 </section>

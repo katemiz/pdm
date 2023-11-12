@@ -61,7 +61,7 @@
                         @else
         
                             <p class="level-item">
-                                <a href='/documents/form/{{ $uid }}'>
+                                <a href='/documents/cform/{{ $uid }}'>
                                     <span class="icon"><x-carbon-edit /></span>
                                 </a>
                             </p>

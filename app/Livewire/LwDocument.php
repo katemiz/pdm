@@ -246,7 +246,10 @@ class LwDocument extends Component
 
     #[On('addContent')]
     public function addContentPage() {
-        $this->paction = 'FORM';
+
+        $this->paction = 'PFORM';
+
+        dd($this->uid);
     }
 
 
@@ -329,10 +332,6 @@ class LwDocument extends Component
 
     public function storeUpdateItem () {
 
-        if ($this->fileOrHtml === 'HTML') {
-            $this->is_html = true;
-        }
-
         $this->validate();
 
         $props['document_no'] = $this->getDocumentNo();
@@ -357,7 +356,13 @@ class LwDocument extends Component
 
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
         $this->dispatch('triggerAttachment',modelId: $this->uid);
-        $this->action = 'VIEW';
+
+
+        if ($this->is_html) {
+            $this->action = 'CVIEW';
+        } else {
+            $this->action = 'VIEW';
+        }
     }
 
 

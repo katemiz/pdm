@@ -7,6 +7,10 @@
             <div class="column is-4 ">
                 <p class="title has-text-weight-light is-size-1">{{ config('appconstants.app.motto') }}</p>
                 <p class="subtitle is-size-4">{{ config('appconstants.app.name') }}</p>
+
+                <figure class="image my-4">
+                    <img src="images/masttech_pdm.svg" alt="Company PDM">
+                </figure>
             </div>
 
             <div class="column">

@@ -56,17 +56,11 @@ class User extends Authenticatable
     }
 
 
-
-
     public function getCompanyNameAttribute($value) {
-
-        if ($this->company_id == 0) {
-            return 'App Admin';
-        }
         return Company::find($this->company_id)->name;
     }
 
-    
+
     public function getCompanyProjectsAttribute($value) {
         return Company::find($this->company_id)->projects;
     }

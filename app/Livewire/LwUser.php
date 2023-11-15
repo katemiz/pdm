@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
+use Mail;
+use App\Mail\AppMail;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -74,14 +76,6 @@ class LwUser extends Component
 
         $this->allroles = Role::all();
         $this->permissions = Permission::all();
-
-        if ( $this->action === 'VIEW') {
-            $this->setProps();
-        }
-
-        if ( $this->action === 'FORM' && $this->uid) {
-            $this->setProps();
-        }
     }
 
 
@@ -91,6 +85,8 @@ class LwUser extends Component
 
         $this->getCompaniesList();
         $this->getProjects();
+
+        $this->setProps();
 
         return view('admin.users.lw-users',[
             'users' => $this->getUsersList()
@@ -217,26 +213,29 @@ class LwUser extends Component
 
     public function setProps() {
 
-        $this->user = User::find($this->uid);
+        if ($this->uid && in_array($this->action,['VIEW','FORM'])) {
 
-        $this->name = $this->user->name;
-        $this->lastname = $this->user->lastname;
-        $this->email = $this->user->email;
-        $this->company_id = $this->user->company_id;
+            $this->user = User::find($this->uid);
 
-        // User Roles
-        foreach ($this->user->roles as $role) {
-            array_push($this->user_roles,$role->id);
-        }
+            $this->name = $this->user->name;
+            $this->lastname = $this->user->lastname;
+            $this->email = $this->user->email;
+            $this->company_id = $this->user->company_id;
 
-        // User Permissions
-        foreach ($this->user->permissions as $permission) {
-            array_push($this->user_permissions,$permission->id);
-        }
+            // User Roles
+            foreach ($this->user->roles as $role) {
+                array_push($this->user_roles,$role->id);
+            }
 
-        // User Projects
-        foreach ($this->user->projects as $project) {
-            array_push($this->user_projects,$project->id);
+            // User Permissions
+            foreach ($this->user->permissions as $permission) {
+                array_push($this->user_permissions,$permission->id);
+            }
+
+            // User Projects
+            foreach ($this->user->projects as $project) {
+                array_push($this->user_projects,$project->id);
+            }
         }
     }
 
@@ -258,9 +257,17 @@ class LwUser extends Component
 
         } else {
             // create
-            $props['password'] = Hash::make(Str::password(6));
-            $user = User::create($props);
-            $this->uid = $user->id;
+            $new_password = Str::password(6);
+            $props['password'] = Hash::make($new_password);
+            //$user = User::create($props);
+            //$this->uid = $user->id;
+
+            $msgdata = $props;
+            $msgdata['password'] = $new_password;
+
+            $this->mailUserCreated($msgdata);
+
+            dd($msgdata);
         }
 
         $user->syncRoles($this->user_roles);
@@ -271,5 +278,50 @@ class LwUser extends Component
 
         $this->action = 'VIEW';
     }
+
+
+
+
+
+
+
+
+
+
+
+    public function mailUserCreated($msgdata)
+    {
+        $msgdata['blade'] = 'emails.user_created';  // Blade file to be used
+        $msgdata['subject'] = 'Account Created / Hesabınız Oluşturulmuştur';
+        $msgdata['action_url'] = url('/');
+        $msgdata['action_title'] = 'Go to App / Giriş';
+
+
+        // $msgdata = [
+        //     'from_name' => env('MAIL_FROM_NAME'),
+        //     'blade' => 'emails.user_created',
+        //     'title' => 'New User Created / Yeni Kullanıcı Hesabı',
+        //     'subject' => 'New User Created / Yeni Kullanıcı Hesabı',
+        //     'greeting' => 'Dear '.$props['name'].' '.$props['lastname'],
+        //     'salute' => 'Best Regards',
+        //     'body' => 'Your account has been created with the following password.',
+        //     'signature' => env('MAIL_SIGNATURE'),
+        //     'password' => $props['password']
+        // ];
+
+
+
+
+        Mail::to($msgdata['email'])->send(new AppMail($msgdata));
+
+        //dd("Email is sent successfully 2222.");
+    }
+
+
+
+
+
+
+
 
 }

@@ -9,9 +9,10 @@ class Company extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'shortname',
-        'fullname',
-        'remarks'
-    ];
+    protected $fillable = ['user_id','updated_uid','name', 'fullname','remarks'];
+
+    public function projects(): HasMany
+    {
+        return $this->hasMany(Project::class);
+    }
 }

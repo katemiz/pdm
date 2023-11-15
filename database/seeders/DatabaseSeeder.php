@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 use App\Models\Counter;
+use App\Models\Company;
 use App\Models\NoteCategory;
 use App\Models\User;
 use App\Models\Yaptirga;
@@ -20,12 +21,37 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // \App\Models\CRequest::factory(10)->create();
-        $admin = User::create([
-            "name" => 'admin',
-            "lastname" =>'admin',
-            "email" => 'admin@admin.com',
-            "password" => 'admin'
+
+        Company::create([
+            'user_id' => 1,
+            'updated_uid' =>1,
+            'name' => 'kapkara',
+            'fullname' => 'Web Technologies Company'
         ]);
+
+
+        Company::create([
+            'user_id' => 1,
+            'updated_uid' =>1,
+            'name' => 'Masttech',
+            'fullname' => 'Elektromekanik Sistemler Sanayii ve Ticaret AŞ'
+        ]);
+
+        Company::create([
+            'user_id' => 1,
+            'updated_uid' =>1,
+            'name' => 'Inttow',
+            'fullname' => 'Intelligent Towers Sanayii ve Ticaret AŞ'
+        ]);
+
+        $admin = User::create([
+            "name" => 'Kılıç Ali',
+            "lastname" =>'Temiz',
+            "company_id" => 1,
+            "email" => 'katemiz@kapkara.one',
+            "password" => 'password'
+        ]);
+
 
         \App\Models\CRequest::factory()->count(50)->create();
 
@@ -38,6 +64,14 @@ class DatabaseSeeder extends Seeder
         $engCheckerPerm = Permission::create(['name' => 'eng_checker']);
 
         $adminRole->givePermissionTo($engineeringPerm);
+
+
+
+
+
+
+
+
 
         // Note Categories
         NoteCategory::create([

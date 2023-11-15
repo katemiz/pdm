@@ -12,7 +12,7 @@ class CkEditor extends Component
     public $label;
     public $placeholder;
 
-    #[Modelable] 
+    #[Modelable]
     public $content;
 
     public function mount($content = ''){
@@ -21,6 +21,6 @@ class CkEditor extends Component
 
     public function render()
     {
-        return view('livewire.ck-editor');
+        return view('components.elements.ck-editor');
     }
 }

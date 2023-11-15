@@ -4,6 +4,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
+use App\Models\User;
+
 return new class extends Migration
 {
     /**
@@ -12,8 +14,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->id()->startingValue(10);
-            $table->string('shortname');
+            $table->id();
+            $table->foreignIdFor(User::class);
+            $table->integer('updated_uid')->nullable();
+            $table->string('name');
             $table->string('fullname');
             $table->text('remarks')->nullable();
             $table->timestamps();

@@ -11,7 +11,9 @@ use App\Http\Controllers\UserController;
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
 use App\Livewire\LwDocument;
+use App\Livewire\LwRole;
 use App\Livewire\LwUser;
+
 
 //use App\Livewire\LwDocumentor;
 use App\Livewire\Material;
@@ -69,14 +71,17 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/admin/users/delete/{id}', [UserController::class, 'delete']);
 
     // ROLES
-    Route::get('/admin/roles', function () {
-        return view('admin.roles.role-list');
-    });
 
-    Route::get('/admin/roles/form/{id?}', [RoleController::class,'form']);
-    Route::post('/admin/roles/store/{id?}', [RoleController::class,'store']);
-    Route::get('/admin/roles/view/{id}', [RoleController::class,'view']);
-    Route::get('/admin/roles/delete/{id}', [RoleController::class, 'delete']);
+    Route::get('/admin-roles/{action}/{id?}', LwRole::class);
+
+    // Route::get('/admin/roles', function () {
+    //     return view('admin.roles.role-list');
+    // });
+
+    // Route::get('/admin/roles/form/{id?}', [RoleController::class,'form']);
+    // Route::post('/admin/roles/store/{id?}', [RoleController::class,'store']);
+    // Route::get('/admin/roles/view/{id}', [RoleController::class,'view']);
+    // Route::get('/admin/roles/delete/{id}', [RoleController::class, 'delete']);
 
     // PERMISSIONS
     Route::get('/admin/permissions', function () {

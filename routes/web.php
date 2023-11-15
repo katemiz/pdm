@@ -11,6 +11,8 @@ use App\Http\Controllers\UserController;
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
 use App\Livewire\LwDocument;
+use App\Livewire\LwPermission;
+use App\Livewire\LwProject;
 use App\Livewire\LwRole;
 use App\Livewire\LwUser;
 
@@ -84,14 +86,16 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/admin/roles/delete/{id}', [RoleController::class, 'delete']);
 
     // PERMISSIONS
-    Route::get('/admin/permissions', function () {
-        return view('admin.permissions.permission-list');
-    });
+    Route::get('/admin-permissions/{action}/{id?}', LwPermission::class);
 
-    Route::get('/admin/permissions/form/{id?}', [PermissionController::class,'form']);
-    Route::post('/admin/permissions/store/{id?}', [PermissionController::class,'store']);
-    Route::get('/admin/permissions/view/{id}', [PermissionController::class,'view']);
-    Route::get('/admin/permissions/delete/{id}', [PermissionController::class, 'delete']);
+    // Route::get('/admin/permissions', function () {
+    //     return view('admin.permissions.permission-list');
+    // });
+
+    // Route::get('/admin/permissions/form/{id?}', [PermissionController::class,'form']);
+    // Route::post('/admin/permissions/store/{id?}', [PermissionController::class,'store']);
+    // Route::get('/admin/permissions/view/{id}', [PermissionController::class,'view']);
+    // Route::get('/admin/permissions/delete/{id}', [PermissionController::class, 'delete']);
 
     // COMPANIES
 
@@ -109,6 +113,8 @@ Route::middleware(['auth'])->group(function () {
     // Route::get('/admin/companies/delete/{id}', [CompanyController::class, 'delete']);
 
     // PROJECTS
+    Route::get('/admin-projects/{action}/{id?}', LwProject::class);
+
     Route::get('/admin/projects', function () {
         return view('admin.projects.project-list');
     });

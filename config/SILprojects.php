@@ -2,12 +2,18 @@
 
 return [
 
+    "roles" => [
+        "r" => ['admin'],
+        "w" => ['admin'],
+        "x" => ['admin']
+    ],
+
     "list" => [
         "title" => "Projects",
-        "subtitle" => "List of all projects",
+        "subtitle" => "List of all Projects",
         "addButton" => [
             "text"=>"Add Project",
-            "route"=>"/projects/form"
+            "route"=>"/admin/projects/form"
         ],
         "filterText" => "Search ...",
         "listCaption" => false,
@@ -21,28 +27,12 @@ return [
                 "direction" => "asc"
             ],
 
-            "code"=> [
-                "title" => "Project Code",
+            "shortname"=> [
+                "title" => "Short Name",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
-
-            "title"=> [
-                "title" => "Project Title",
-                "sortable" => true,
-                "align" => "left",
-                "direction" => "asc"
-            ],
-    
-            "company_name"=> [
-                "title" => "Company",
-                "sortable" => true,
-                "align" => "left",
-                "direction" => "asc"
-            ],
-
-
 
             "created_at"=> [
                 "title" => "Created On",
@@ -53,9 +43,9 @@ return [
 
         ],
         "actions" => [
-            "r" => "/projects/view/",
-            "w" => "/projects/form/",
-            "x" => "/projects/delete/"
+            "r" => "/admin/projects/view/",
+            "w" => "/admin/projects/form/",
+            "x" => "/admin/projects/delete/"
         ],
         "noitem" => "No projects found in database yet!",
         "delete_confirm" => [
@@ -64,14 +54,9 @@ return [
         ]
     ],
 
-    "select_current" => [
-        "title" => "Projects",
-        "subtitle" => "Select current project",
-    ],
-
     "create" => [
         "title" => "Projects",
-        "subtitle" => "Create a New Project",
+        "subtitle" => "Create a Project",
         "submitText" => "Add Project",
     ],
 
@@ -87,6 +72,26 @@ return [
         "submitText" => "Update Project",
     ],
 
+    "cu_route" => "/admin/projects/store/",
+
+    "form" => [
+
+        "name" => [
+            "label" => "Name",
+            "name" => "name",
+            "placeholder" => "Enter name",
+            "value" => ""
+        ],
+
+
+        "remarks" => [
+            "label" => "Remarks",
+            "name" => "remarks",
+            "placeholder" => "notes ...",
+            "value" => ""
+        ]
+
+    ]
 ];
 
 

@@ -49,11 +49,11 @@
                         <a href="/admin-users/list" class="navbar-item">Users</a>
 
                         <a href="/admin-roles/list" class="navbar-item">Roles</a>
-                        <a href="/admin/permissions" class="navbar-item">Permissions</a>
+                        <a href="/admin-permissions/list" class="navbar-item">Permissions</a>
                         {{-- <a href="/admin/companies" class="navbar-item">Companies</a> --}}
                         <a href="/admin-companies/list" class="navbar-item">Companies</a>
 
-                        <a href="/admin/projects" class="navbar-item">Projects</a>
+                        <a href="/admin-projects/list" class="navbar-item">Projects</a>
                     </div>
                 </div>
 

@@ -39,7 +39,6 @@ class EndProduct extends Component
         "MST" => "Mast",
     ];
 
-
     public $drive_types = [
         "M" => "Manual",
         "P" => "Pneumatic",
@@ -106,7 +105,6 @@ class EndProduct extends Component
     #[Rule('sometimes|numeric', message: 'Product manual document number should be numeric')]
     public $manual_doc_number;
     public $manual_doc_number_exists = 'initial';   // does such a document exist?
-
 
     public $payload_interface = true;
     public $roof_interface = false;

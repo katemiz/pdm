@@ -449,60 +449,21 @@
                         <div class="notification is-success is-light is-size-7 p-1 mt-1">{{ $manual_doc_number_exists }}</div>
                         @break
 
-
-
                 @endswitch
-
-
-
 
                 @error('manual_doc_number')
                 <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                 @enderror
             </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="field ">
             <label class="label">Interfaces</label>
-
 
             <div class="field-body">
 
                 <div class="field">
 
                     <label class="label">Mechanical Interfaces</label>
-
-
 
                     <div class="control">
 
@@ -537,24 +498,6 @@
 
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

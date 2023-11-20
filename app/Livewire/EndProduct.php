@@ -5,7 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 
 
 use App\Models\Counter;
@@ -56,53 +56,53 @@ class EndProduct extends Component
     public $createdBy;
     public $part_number;
 
-    #[Rule('sometimes|numeric', message: 'WB Part Number should be numeric')]
+    #[Validate('nullable|numeric', message: 'WB Part Number should be numeric')]
     public $part_number_wb;
     public $description;
     public $version;
 
-    #[Rule('required', message: 'Please select product type')]
+    #[Validate('required', message: 'Please select product type')]
     public $product_type;
 
-    #[Rule('required', message: 'End Product nomenclature is required')]
+    #[Validate('required', message: 'End Product nomenclature is required')]
     public $nomenclature;
     public $mast_family_mt;
     public $mast_family_wb;
     public $drive_type;
 
-    #[Rule('sometimes|numeric', message: 'Extended height should be numeric')]
+    #[Validate('nullable|numeric', message: 'Extended height should be numeric')]
     public $extended_height_mm;
     public $extended_height_in;
 
-    #[Rule('sometimes|numeric', message: 'Nested height should be numeric')]
+    #[Validate('nullable|numeric', message: 'Nested height should be numeric')]
     public $nested_height_mm;
     public $nested_height_in;
 
-    #[Rule('sometimes|numeric', message: 'Weight should be numeric')]
+    #[Validate('nullable|numeric', message: 'Weight should be numeric')]
     public $product_weight_kg;
 
-    #[Rule('sometimes|numeric', message: 'Load capacity should be numeric')]
+    #[Validate('nullable|numeric', message: 'Load capacity should be numeric')]
     public $max_payload_kg;
     public $max_payload_lb;
 
-    #[Rule('sometimes|numeric', message: 'Sail area should be numeric')]
+    #[Validate('nullable|numeric', message: 'Sail area should be numeric')]
     public $design_sail_area = 1.5;
     public $design_drag_coefficient = 1.5;
 
-    #[Rule('sometimes|numeric', message: 'Operational wind speed should be numeric')]
+    #[Validate('nullable|numeric', message: 'Operational wind speed should be numeric')]
     public $max_operational_wind_speed;
 
-    #[Rule('sometimes|numeric', message: 'Survival wind speed should be numeric')]
+    #[Validate('nullable|numeric', message: 'Survival wind speed should be numeric')]
     public $max_survival_wind_speed;
 
-    #[Rule('sometimes|numeric', message: 'Number of sections should be numeric')]
+    #[Validate('nullable|numeric', message: 'Number of sections should be numeric')]
     public $number_of_sections;
 
-    #[Rule('required', message: 'Please indicate whether product has locking capability')]
+    #[Validate('nullable|required', message: 'Please indicate whether product has locking capability')]
     public $has_locking;
     public $max_pressure_in_bar = 2.0;
 
-    #[Rule('sometimes|numeric', message: 'Product manual document number should be numeric')]
+    #[Validate('nullable|numeric', message: 'Product manual document number should be numeric')]
     public $manual_doc_number;
     public $manual_doc_number_exists = 'initial';   // does such a document exist?
 
@@ -193,8 +193,6 @@ class EndProduct extends Component
     }
 
 
-
-
     public function viewItem($uid) {
 
         $this->uid = $uid;
@@ -202,7 +200,6 @@ class EndProduct extends Component
 
         $this->getEPPops();
     }
-
 
 
     public function storeUpdateItem () {
@@ -267,6 +264,9 @@ class EndProduct extends Component
 
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
         $this->dispatch('triggerAttachment',modelId: $this->uid);
+
+        $this->getEPPops();
+
         $this->action = 'VIEW';
     }
 
@@ -325,6 +325,8 @@ class EndProduct extends Component
             $this->created_at = $ep->created_at;
             $this->updated_by = User::find($ep->updated_uid);
             $this->updated_at = $ep->updated_at;
+
+            //dd([$this->created_by,$this->updated_by]);
         }
 
     }

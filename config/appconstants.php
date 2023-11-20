@@ -5,7 +5,7 @@ return [
     "app" => [
         "code" => 'PDM',
         "name" => 'Product Data Management',
-        "motto" => 'Be Agile. Run Agile',
+        "motto" => 'Be Agile.Run Agile',
         'title' => 'PDM - Product Data Management',
         'welcome_header' => 'Be Agile',
         'welcome_subtitle' => 'No need for complex and expensive software',

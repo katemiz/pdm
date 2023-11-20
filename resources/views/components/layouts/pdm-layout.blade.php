@@ -12,6 +12,9 @@
         <script src="{{ asset('/SweetAlert/sweetalert2.min.js') }}"></script>
         <link rel="icon" type="image/x-icon" href="{{ asset('/favicon.ico') }}">
 
+        <script src="{{ asset('/js/js.js') }}"></script>
+
+
     </head>
     <body>
         @include('components.layouts.pdm-navbar')

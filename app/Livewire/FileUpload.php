@@ -65,7 +65,7 @@ class FileUpload extends Component
             $props['tag'] = $this->tag;
 
             $path = $props['model_name'].'/'.$props['model_item_id'];
-            $stored_file_as = Storage::disk('local')->put($path, $dosya);
+            $stored_file_as = Storage::disk('MyDisk')->put($path, $dosya);
             $props['stored_file_as'] = $stored_file_as;
 
             Attachment::create($props);

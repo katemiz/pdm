@@ -259,8 +259,8 @@ class LwUser extends Component
             // create
             $new_password = Str::password(6);
             $props['password'] = Hash::make($new_password);
-            //$user = User::create($props);
-            //$this->uid = $user->id;
+            $user = User::create($props);
+            $this->uid = $user->id;
 
             $msgdata = $props;
             $msgdata['password'] = $new_password;
@@ -270,8 +270,13 @@ class LwUser extends Component
             //dd($msgdata);
         }
 
-        $user->syncRoles($this->user_roles);
-        $user->syncPermissions($this->user_permissions);
+        if ( count($this->user_roles) > 0) {
+            $user->syncRoles($this->user_roles);
+        }
+
+        if ( count($this->user_permissions) > 0 ) {
+            $user->syncPermissions($this->user_permissions);
+        }
 
         $user->projects()->detach();
         $user->projects()->attach($this->user_projects);

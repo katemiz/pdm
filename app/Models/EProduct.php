@@ -17,6 +17,7 @@ class EProduct extends Model
         'user_id',
         'updated_uid',
         'part_number',
+        'part_number_mt',
         'part_number_wb',
         'product_type',
         'nomenclature',

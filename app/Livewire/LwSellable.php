@@ -31,19 +31,22 @@ class LwSellable extends Component
 
     // Constants
     public $product_types = [
-        "CMPRS" => "Compressor",
+        "MTPC" => "Compressor",
         "MST" => "Mast",
     ];
 
     public $drive_types = [
         "M" => "Manual",
-        "P" => "Pneumatic",
+        "M-P" => "Manual, Pneumatic",
         'H' => "Hydraulic",
         "E" => "Electrical",
+        "E" => "Pneumatic ",
         "EM" => "Electromechanical"
     ];
 
     public $mast_families = [
+
+        "MTP-M" => "HUPM",
         "MTX" => "EML",
         "MTH" => "CDL"
     ];

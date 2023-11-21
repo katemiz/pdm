@@ -5,11 +5,15 @@
         <nav class="level">
             <!-- Left side -->
             <div class="level-left">
-                <p class="has-text-weight-light my-0">
+                {{-- <p class="has-text-weight-light my-0">
                     <a wire:click="changeAction('forgot')">{{__('ui.links.forgot.text')}}</a>
-                </p>
+                </p> --}}
+
+                <a href="{{config('constants.company.link')}}">
+                    <img src="{{asset('/images/baykus_orange.svg')}}" width="24px" alt="{{config('appconstants.kapkara.name')}}">
+                </a>
             </div>
-            
+
             <nav class="breadcrumb has-bullet-separator is-right level-right" aria-label="breadcrumbs">
                 <ul>
                     <li class="{{ app()->getLocale() == 'tr' ? 'is-active':''}}">
@@ -47,7 +51,7 @@
                         placeholder="{{__('ui.elements.email.placeholder')}}" required >
                 </div>
                 @error('email')
-                <p class="help is-danger">{{ $message }}</p>             
+                <p class="help is-danger">{{ $message }}</p>
                 @enderror
             </div>
             @endif
@@ -57,7 +61,7 @@
             <div class="notification is-info is-light">
                 <p class="subtitle">{{ __('ui.links.forgot.text' )}}</p>
                 <p>{{ __('ui.links.forgot.info' )}}</p>
-            </div> 
+            </div>
 
             @endif
 
@@ -77,7 +81,7 @@
                             placeholder="{{__('ui.elements.name.placeholder')}}" required >
                     </div>
                 </div>
-    
+
                 <div class="column field">
                     <label class="label has-text-weight-light" for="email">{{__('ui.elements.lastname.label')}}</label>
                     <div class="control has-icons-right">
@@ -99,7 +103,7 @@
 
                 <label class="label has-text-weight-light" for="email">{{__('ui.elements.password.label')}}</label>
                 <div class="control has-icons-right">
-            
+
                     <input
                         class="input"
                         type="password"
@@ -109,7 +113,7 @@
                 </div>
 
                 @error('password')
-                <p class="help is-danger">{{ $message }}</p>             
+                <p class="help is-danger">{{ $message }}</p>
                 @enderror
 
             </div>
@@ -121,7 +125,7 @@
 
                 <label class="label has-text-weight-light" for="email">{{__('ui.elements.cur_password.label')}}</label>
                 <div class="control has-icons-right">
-            
+
                     <input
                         class="input"
                         type="password"
@@ -143,9 +147,9 @@
 
                     @if ($action === 'change')
                         <label class="label has-text-weight-light" for="email">{{__('ui.elements.npassword.label')}}</label>
-                    
+
                         <div class="control has-icons-right">
-                    
+
                             <input
                                 class="input"
                                 type="password"
@@ -155,9 +159,9 @@
                         </div>
                     @else
                         <label class="label has-text-weight-light" for="email">{{__('ui.elements.password.label')}}</label>
-                    
+
                         <div class="control has-icons-right">
-                    
+
                             <input
                                 class="input"
                                 type="password"
@@ -167,13 +171,13 @@
                         </div>
                     @endif
                 </div>
-    
+
                 <div class="column field">
 
                     <label class="label has-text-weight-light" for="email">{{__('ui.elements.cpassword.label')}}</label>
-                
+
                     <div class="control has-icons-right">
-                
+
                         <input
                             class="input"
                             type="password"
@@ -237,17 +241,17 @@
         <nav class="level">
             <!-- Left side -->
             <div class="level-left">
-                <a href="{{config('constants.company.link')}}">
+                {{-- <a href="{{config('constants.company.link')}}">
                     <img src="{{asset('/images/baykus_orange.svg')}}" width="24px" alt="{{config('appconstants.kapkara.name')}}">
-                </a>
+                </a> --}}
             </div>
-            
+
             <nav class="breadcrumb has-bullet-separator is-right level-right" aria-label="breadcrumbs">
                 <p class="has-text-right is-size-6 has-text-weight-light my-0">
 
-                    @if (in_array($action,['login','forgot','change']))
+                    {{-- @if (in_array($action,['login','forgot','change']))
                     <a wire:click="changeAction('register')" class="px-0">{{__('ui.links.register.text')}}</a>
-                    @endif
+                    @endif --}}
 
                     @if (in_array($action,['register']))
                     <a wire:click="changeAction('login')" class="px-0">{{__('ui.links.login.text')}}</a>
@@ -264,8 +268,8 @@
 
 
 
-    <a wire:click="changeAction('reset')" class="px-0">reset</a>
-    <a wire:click="changeAction('change')" class="px-0">change</a>
+    {{-- <a wire:click="changeAction('reset')" class="px-0">reset</a>
+    <a wire:click="changeAction('change')" class="px-0">change</a> --}}
 
 
 

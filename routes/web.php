@@ -20,7 +20,7 @@ use App\Livewire\LwUser;
 //use App\Livewire\LwDocumentor;
 use App\Livewire\Material;
 use App\Livewire\Process;
-use App\Livewire\EndProduct;
+use App\Livewire\LwSellable;
 use App\Livewire\Product;
 use App\Livewire\ProductNote;
 use App\Livewire\Engineering;
@@ -139,7 +139,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/ecn/{action}/{id?}', Ecn::class);
 
     // END PRODUCTS
-    Route::get('/endproducts/{action}/{id?}', EndProduct::class);
+    Route::get('/endproducts/{action}/{id?}', LwSellable::class);
 
     // PRODUCTS
     Route::get('/products/{action}/{id?}', Product::class);

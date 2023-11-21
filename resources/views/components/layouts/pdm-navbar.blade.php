@@ -26,15 +26,6 @@
 
             @if(Auth::check())
 
-                {{-- <a href="/companies" class="navbar-item icon-text">
-                    <span class="icon has-text-warning">
-                        <x-carbon-letter-cc />
-                    </span>
-                    <span>Companies</span>
-                </a> --}}
-
-
-
                 <div class="navbar-item has-dropdown is-hoverable">
 
                     <a class="navbar-link">
@@ -45,18 +36,13 @@
                     </a>
 
                     <div class="navbar-dropdown">
-                        {{-- <a href="/admin/users" class="navbar-item">Users</a> --}}
                         <a href="/admin-users/list" class="navbar-item">Users</a>
-
                         <a href="/admin-roles/list" class="navbar-item">Roles</a>
                         <a href="/admin-permissions/list" class="navbar-item">Permissions</a>
-                        {{-- <a href="/admin/companies" class="navbar-item">Companies</a> --}}
                         <a href="/admin-companies/list" class="navbar-item">Companies</a>
-
                         <a href="/admin-projects/list" class="navbar-item">Projects</a>
                     </div>
                 </div>
-
 
                 <div class="navbar-item has-dropdown is-hoverable">
 
@@ -68,26 +54,56 @@
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a href="/cr/list" class="navbar-item">Change Requests</a>
-                        <a href="/ecn/list" class="navbar-item">ECNs</a>
+
+                        <a href="/cr/list" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-change-catalog />
+                            </span>
+                            <span class="ml-2">Change Requests</span>
+                        </a>
+
+                        <a href="/ecn/list" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-scis-control-tower />
+                            </span>
+                            <span class="ml-2">ECNs</span>
+                        </a>
+
                     </div>
                 </div>
 
+                <div class="navbar-item has-dropdown is-hoverable">
 
-                <a href="/endproducts/list" class="navbar-item">
-                    <span class="icon has-text-warning">
-                        <x-carbon-box />
-                    </span>
-                    <span class="ml-2">End Products</span>
-                </a>
+                    <a class="navbar-link">
+                        <span class="icon has-text-warning">
+                            <x-carbon-industry />
+                        </span>
+                        <span class="ml-2">Products</span>
+                    </a>
 
+                    <div class="navbar-dropdown">
+                        <a href="/endproducts/list" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-box />
+                            </span>
+                            <span class="ml-2">Sellable Parts</span>
+                        </a>
 
-                <a href="/products/list" class="navbar-item">
-                    <span class="icon has-text-warning">
-                        <x-carbon-barcode />
-                    </span>
-                    <span class="ml-2">Products</span>
-                </a>
+                        <a href="/products/list" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-barcode />
+                            </span>
+                            <span class="ml-2">Make Parts</span>
+                        </a>
+
+                        <a href="/products/list" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-radio />
+                            </span>
+                            <span class="ml-2">Buy Parts</span>
+                        </a>
+                    </div>
+                </div>
 
                 <a href="/documents/list" class="navbar-item">
                     <span class="icon has-text-warning">
@@ -96,95 +112,42 @@
                     <span class="ml-2">Documents</span>
                 </a>
 
-
-
-
-
-
                 <div class="navbar-item has-dropdown is-hoverable">
 
                     <a class="navbar-link">
                         <span class="icon has-text-warning">
-                            <x-carbon-industry />
+                            <x-carbon-function-math />
                         </span>
-                        <span class="ml-2">Materials & Processes</span>
+                        <span class="ml-2">Engineering</span>
                     </a>
 
                     <div class="navbar-dropdown">
-                        <a href="/material/list" class="navbar-item">Materials</a>
-                        {{-- <a href="/process/list" class="navbar-item">Processes</a> --}}
-                        <a href="/notes/list" class="navbar-item">Product Notes</a>
+
+                        <a href="/engineering/home" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-sigma />
+                            </span>
+                            <span class="ml-2">Engineering Utilities</span>
+                        </a>
+
+                        <hr class="navbar-divider">
+
+                        <a href="/material/list" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-cube />
+                            </span>
+                            <span class="ml-2">Materials</span>
+                        </a>
+
+                        <a href="/notes/list" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-pen-fountain />
+                            </span>
+                            <span class="ml-2">Product Notes</span>
+                        </a>
 
                     </div>
                 </div>
-
-
-                <a href="/engineering/home" class="navbar-item">
-                    <span class="icon has-text-warning">
-                        <x-carbon-function-math />
-                    </span>
-                    <span class="ml-2">Engineering</span>
-                </a>
-
-
-
-
-                {{-- <a href="/admin/users" class="navbar-item icon-text">
-                    <span class="icon has-text-warning">
-                        <x-carbon-group-access />
-                    </span>
-                    <span>Admin</span>
-                </a>
-
-                <a href="/mocs" class="navbar-item icon-text">
-                    <span class="icon has-text-warning">
-                        <x-carbon-user-role />
-                    </span>
-                    <span>Roles</span>
-                </a>
-
-                <a href="/pocs" class="navbar-item icon-text">
-                    <span class="icon has-text-warning">
-                        <x-carbon-add-comment />
-                    </span>
-                    <span>Permissions</span>
-                </a> --}}
-
-
-
-
-
-
-                {{-- <div class="navbar-item has-dropdown is-hoverable">
-                    <p class="navbar-link" href="/Admin">Export</p>
-                    <div class="navbar-dropdown">
-
-                        <a href="/all-requirements" class="navbar-item">All Requirements</a>
-                        <a href="/pocs-vs-requirements" class="navbar-item">POCs vs Requirements</a>
-                        <a href="/dgates-vs-pocs" class="navbar-item">Decision Gates vs POCs</a>
-                        <a href="/compliance-matrix" class="navbar-item">Compliance Matrix</a>
-
-
-
-                    </div>
-                </div> --}}
-
-
-                {{-- <div class="navbar-item has-dropdown is-hoverable">
-
-                    <a href="/projects" class="navbar-link">
-                        <span class="icon has-text-warning">
-                            <x-carbon-letter-aa />
-                        </span>
-                        <span class="ml-2">Adm</span>
-                    </a>
-
-                    <div class="navbar-dropdown">
-                        <a href="/admin/users" class="navbar-item">Users</a>
-                        <a href="/admin/roles" class="navbar-item">Roles</a>
-                        <a href="/admin/permissions" class="navbar-item">Permissions</a>
-                    </div>
-                </div> --}}
 
             @endif
 
@@ -202,8 +165,6 @@
                             {{ Auth::user()->name }} {{ Auth::user()->lastname }}
                         </span>
                     </p>
-
-
 
                     <div class="navbar-dropdown">
 
@@ -225,7 +186,6 @@
             @else
 
                 <div class="navbar-item">
-                    {{-- <a href="{{route('login')}}" class="icon-text"> --}}
                         <a href="/logware/login" class="icon-text">
 
                         <span class="icon has-text-info">

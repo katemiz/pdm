@@ -7,20 +7,16 @@ use Livewire\WithPagination;
 
 use Livewire\Attributes\Validate;
 
-
 use App\Models\Counter;
 use App\Models\Document;
 use App\Models\EProduct;
 use App\Models\User;
 
-
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
-class EndProduct extends Component
+class LwSellable extends Component
 {
-
     use WithPagination;
 
     public $uid;
@@ -56,6 +52,8 @@ class EndProduct extends Component
     public $createdBy;
     public $part_number;
 
+    public $part_number_mt;
+
     #[Validate('nullable|numeric', message: 'WB Part Number should be numeric')]
     public $part_number_wb;
     public $description;
@@ -64,7 +62,7 @@ class EndProduct extends Component
     #[Validate('required', message: 'Please select product type')]
     public $product_type;
 
-    #[Validate('required', message: 'End Product nomenclature is required')]
+    #[Validate('required', message: 'Sellable product nomenclature is required')]
     public $nomenclature;
     public $mast_family_mt;
     public $mast_family_wb;
@@ -207,6 +205,7 @@ class EndProduct extends Component
         $this->validate();
 
         $props['part_number'] = $this->getEProductNo();
+        $props['part_number_mt'] = $this->part_number_mt;
         $props['part_number_wb'] = $this->part_number_wb;
         $props['product_type'] = $this->product_type;
         $props['nomenclature'] = $this->nomenclature;
@@ -252,14 +251,14 @@ class EndProduct extends Component
             // update
             $props['updated_uid'] = Auth::id();
             EProduct::find($this->uid)->update($props);
-            session()->flash('message','End Product / Sellable Item has been updated successfully.');
+            session()->flash('message','Sellable product has been updated successfully.');
 
         } else {
             // create
             $props['user_id'] = Auth::id();
             $props['updated_uid'] = Auth::id();
             $this->uid = EProduct::create($props)->id;
-            session()->flash('message','End Product / Sellable Item has been created successfully.');
+            session()->flash('message','Sellable product has been created successfully.');
         }
 
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
@@ -279,6 +278,7 @@ class EndProduct extends Component
             $ep = EProduct::find($this->uid);
 
             $this->part_number = $ep->part_number;
+            $this->part_number_mt = $ep->part_number_mt;
             $this->part_number_wb = $ep->part_number_wb;
             $this->product_type = $ep->product_type;
             $this->nomenclature = $ep->nomenclature;
@@ -325,8 +325,6 @@ class EndProduct extends Component
             $this->created_at = $ep->created_at;
             $this->updated_by = User::find($ep->updated_uid);
             $this->updated_at = $ep->updated_at;
-
-            //dd([$this->created_by,$this->updated_by]);
         }
 
     }

@@ -30,7 +30,7 @@
     @csrf
 
         <div class="field">
-            <label class="label">End Product Type</label>
+            <label class="label">Sellable Product Type</label>
 
             <div class="control">
 
@@ -51,32 +51,68 @@
 
 
 
+        <div class="columns">
 
+            <div class="column is-half">
 
-        <div class="field">
+                <div class="field">
 
-            <label class="label" for="topic">Will-Burt Part Number</label>
-            <div class="control">
+                    <label class="label" for="topic">Masstech Part Number</label>
+                    <div class="control">
 
-                <input
-                    class="input"
-                    id="part_number_wb"
-                    wire:model="part_number_wb"
-                    type="text"
-                    value="{{ $uid ? $part_number_wb : ''}}"
-                    placeholder="Write WB Part Number" required>
+                        <input
+                            class="input"
+                            id="part_number_mt"
+                            wire:model="part_number_mt"
+                            type="text"
+                            value="{{ $uid ? $part_number_mt : ''}}"
+                            placeholder="Write Masstech Part Number" required>
+                    </div>
+
+                    @error('part_number_mt')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
             </div>
 
-            @error('part_number_wb')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
+
+            <div class="column is-half">
+
+                <div class="field">
+
+                    <label class="label" for="topic">Will-Burt Part Number</label>
+                    <div class="control">
+
+                        <input
+                            class="input"
+                            id="part_number_wb"
+                            wire:model="part_number_wb"
+                            type="text"
+                            value="{{ $uid ? $part_number_wb : ''}}"
+                            placeholder="Write WB Part Number" required>
+                    </div>
+
+                    @error('part_number_wb')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+            </div>
+
         </div>
 
 
 
+
+
+
+
+
+
         <div class="field">
 
-            <label class="label" for="topic">End Product Nomenclature</label>
+            <label class="label" for="topic">Sellable Product Nomenclature</label>
             <div class="control">
 
                 <input
@@ -85,7 +121,7 @@
                     wire:model="nomenclature"
                     type="text"
                     value="{{ $uid ? $nomenclature : ''}}"
-                    placeholder="Write End product Nomenclature (eg EML-AL MAST 1-2.5M LOCKING)" required>
+                    placeholder="Write sellable product Nomenclature (eg EML-AL MAST 1-2.5M LOCKING)" required>
             </div>
 
             @error('nomenclature')
@@ -99,8 +135,8 @@
         <livewire:ck-editor
             edId="ed11"
             wire:model="description"
-            label='End Product Description'
-            placeholder='General description of end product.'
+            label='Sellable product Description'
+            placeholder='General description of Sellable product'
             :content="$description"/>
 
         @error('description')

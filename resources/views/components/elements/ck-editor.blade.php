@@ -1,4 +1,4 @@
-<div class="field">
+<div class="field content">
     <label class="label">{{ $label }}</label>
     <div wire:ignore class="control">
         <textarea wire:model="content" class="textarea ckeditor"
@@ -12,14 +12,53 @@
 
     <script>
 
+        ed_type = '{{$ed_type}}'
+
+        switch (ed_type) {
+            case 'LIGHT':
+
+                edconfig = {
+                    removePlugins: [ 'Heading', 'Link' ],
+                    toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote' ]
+                }
+
+                break;
+
+
+            case 'STANDARD':
+
+                edconfig = {
+                    removePlugins: [ 'Heading', 'Link' ],
+                    toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote' ]
+                }
+
+                break;
+
+            case 'FULL':
+
+                edconfig = {
+                    //removePlugins: [ 'Heading', 'Link' ],
+                    toolbar:
+                        [ 'link','bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote' ,
+                        'FontColor','bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote' ]
+
+
+                }
+
+                break;
+
+            default:
+
+        }
+
         ClassicEditor
-            .create(document.querySelector('#{{$edId}}'))
+            .create(document.querySelector('#{{$edId}}'), edconfig )
             .then(editor => {
 
-                console.log('done');
+                // Prints all available plugins : DO NOT REMOVE
+                //console.log(ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName ));
 
                 editor.setData( document.getElementById('H{{$edId}}').value );
-
                 editor.model.document.on('change:data', () => {
                     @this.set('content', editor.getData());
                 })

@@ -11,3 +11,11 @@ If this app succeeds, other types and workflows shall follow:
 - Requirements Management
 - Change Management
 - Product Data (3D Models, Drawings and attributes) with Sign-Off Workflow
+
+
+# Installation
+
+# Storage area linking
+
+ln -s /TARGER_FOLDER /www/PDM/storage/app
+

@@ -57,7 +57,7 @@
 
                 <div class="field">
 
-                    <label class="label" for="topic">Masstech Part Number</label>
+                    <label class="label" for="topic">Masttech Part Number</label>
                     <div class="control">
 
                         <input

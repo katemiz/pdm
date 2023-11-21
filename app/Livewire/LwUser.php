@@ -267,7 +267,7 @@ class LwUser extends Component
 
             $this->mailUserCreated($msgdata);
 
-            dd($msgdata);
+            //dd($msgdata);
         }
 
         $user->syncRoles($this->user_roles);

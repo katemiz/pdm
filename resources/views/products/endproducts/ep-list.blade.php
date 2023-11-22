@@ -3,7 +3,7 @@
     <div class="column is-8">
 
         <header class="mb-6">
-            <h1 class="title has-text-weight-light is-size-1">List of End Products</h1>
+            <h1 class="title has-text-weight-light is-size-1">List of Sellable Products</h1>
             <h2 class="subtitle has-text-weight-light">List of all sellable items</h2>
         </header>
 

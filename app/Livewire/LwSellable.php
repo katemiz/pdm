@@ -43,8 +43,8 @@ class LwSellable extends Component
     ];
 
     public $mast_families = [
-
         "MTP-M" => "HUPM",
+        "MTT" => "EML-C",
         "MTX" => "EML",
         "MTH" => "CDL"
     ];
@@ -99,6 +99,14 @@ class LwSellable extends Component
 
     #[Validate('nullable|required', message: 'Please indicate whether product has locking capability')]
     public $has_locking;
+
+    public $lock_types = [
+        "N" => "Non-Locking",
+        "ML" => "Manual Lock",
+        "AL" => "Automatic Lock"
+    ];
+
+
     public $max_pressure_in_bar = 2.0;
 
     #[Validate('nullable|numeric', message: 'Product manual document number should be numeric')]

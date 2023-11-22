@@ -76,7 +76,7 @@ class FileList extends Component
                 break;
 
             case '3D':
-                $this->icon_name = 'icon_manual.svg';
+                $this->icon_name = 'icon_3d.svg';
                 break;
 
             case 'Manual':

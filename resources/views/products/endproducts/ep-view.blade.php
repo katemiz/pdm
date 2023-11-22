@@ -131,7 +131,7 @@
                         <th>Maximum Payload Capacity</th>
                         <td class="has-text-right">{{ $max_payload_kg }}</td>
                         <td class="is-narrow">kg</td>
-                        <td class="has-text-right">{{ round($max_payload_kg*2.20462,0) }}</td>
+                        <td class="has-text-right is-narrow">{{ round($max_payload_kg*2.20462,0) }}</td>
                         <td class="is-narrow">lb</td>
                     </tr>
 
@@ -147,7 +147,7 @@
                         <th>Nested Height</th>
                         <td class="has-text-right">{{ $nested_height_mm }}</td>
                         <td class="is-narrow">mm</td>
-                        <td class="has-text-right">{{ round($nested_height_mm/25.4,1) }}</td>
+                        <td class="has-text-right is-narrow">{{ round($nested_height_mm/25.4,1) }}</td>
                         <td class="is-narrow">in</td>
                     </tr>
 
@@ -176,22 +176,6 @@
                     </tr>
 
                     <tr>
-                        <th>Number of Sections</th>
-                        <td class="has-text-right">{{ $number_of_sections }}</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
-
-                    <tr>
-                        <th>Has Locking ?</th>
-                        <td class="has-text-right">{{ $has_locking ? 'Yes' : 'No' }}</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
-
-                    <tr>
                         <th>Design Sail Area</th>
                         <td class="has-text-right">{{ $design_sail_area }}</td>
                         <td>m<sup>2</sup></td>
@@ -200,14 +184,26 @@
                     </tr>
 
                     <tr>
-                        <th>Design Drag Coefficient (C<sub>d</sub>)</th>
-                        <td class="has-text-right">{{ $design_drag_coefficient }}</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
+                        <th>Number of Sections</th>
+                        <td class="has-text-right" colspan="4">{{ $number_of_sections }}</td>
+                    </tr>
+
+                    <tr>
+                        <th>Lock Type</th>
+                        <td class="has-text-right" colspan="4">{{ $lock_types[$has_locking] }}</td>
+
                     </tr>
 
 
+
+                    <tr>
+                        <th>Design Drag Coefficient (C<sub>d</sub>)</th>
+                        <td class="has-text-right" colspan="4">{{ $design_drag_coefficient }}</td>
+
+                    </tr>
+
+
+                    @if ($max_pressure_in_bar)
                     <tr>
                         <th>Max Pneumatic Pressure</th>
                         <td class="has-text-right">{{ $max_pressure_in_bar }}</td>
@@ -215,17 +211,16 @@
                         <td>&nbsp;</td>
                         <td>&nbsp;</td>
                     </tr>
+                    @endif
 
                     <tr>
                         <th>Descriptive Material</th>
-                        <td>&nbsp;</td>
-                        <td colspan="3">{{ $material }}</td>
+                        <td class="has-text-right" colspan="4">{{ $material }}</td>
                     </tr>
 
                     <tr>
                         <th>Finish and Color</th>
-                        <td>&nbsp;</td>
-                        <td colspan="3">{!! $finish !!}</td>
+                        <td colspan="4" class="has-text-right">{!! $finish !!}</td>
                     </tr>
 
                 </thead>

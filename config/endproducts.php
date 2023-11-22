@@ -36,9 +36,9 @@ return [
             ],
 
             "max_payload_kg"=> [
-                "title" => "Capacity",
+                "title" => "Capacity (kg)",
                 "sortable" => true,
-                "align" => "left",
+                "align" => "right",
                 "direction" => "asc"
             ],
 

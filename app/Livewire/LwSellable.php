@@ -241,7 +241,7 @@ class LwSellable extends Component
         $props['max_survival_wind_speed'] = $this->max_survival_wind_speed;
         $props['number_of_sections'] = $this->number_of_sections;
         $props['has_locking'] = $this->has_locking;
-        $props['max_pressure_in_bar'] = $this->max_pressure_in_bar;
+        $props['max_pressure_in_bar'] = $this->max_pressure_in_bar > 0 ? $this->max_pressure_in_bar :null;
         $props['manual_doc_number'] = $this->manual_doc_number;
         $props['payload_interface'] = $this->payload_interface;
         $props['roof_interface'] = $this->roof_interface;
@@ -285,7 +285,6 @@ class LwSellable extends Component
 
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
         $this->dispatch('triggerAttachment',modelId: $this->uid);
-
         $this->getEPPops();
 
         $this->action = 'VIEW';

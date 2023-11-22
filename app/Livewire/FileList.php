@@ -13,30 +13,98 @@ use App\Models\Attachment;
 
 class FileList extends Component
 {
+
+    /*
+    @livewire('file-list', [
+        'with_icons' => true,
+        'icon_type' => 'Drawing',
+        'files_header' => 'Customer Drawings',
+        'model' => 'EndProduct',
+        'modelId' => $uid,
+        'tag' => 'CustomerDrawings',
+    ])
+    */
+
+
     public $idAttach;
+
+    public $getById = false;
 
     public $model;
     public $modelId;
     public $tag = false;
+
+    public $with_icons = false;
+    public $icon_type = 'File';   // File, Drawing, STEP, Manual, 3D
+    public $icon_name;
+
+    public $files_header = 'Files';   // File, Drawing, STEP, Manual, 3D
 
     public $showMime = true;
     public $showSize = true;
 
     public $canDelete = false;
 
-
     #[On('refreshFileList')]
     public function render() {
 
-        return view('components.elements.file-list',[
-            'attachments' => $this->getAttachments()
-        ]);
+        $this->setFileIcon();
+
+        if ($this->with_icons) {
+            return view('components.elements.file-list-w-icons',[
+                'attachments' => $this->getAttachments()
+            ]);
+
+        } else {
+            return view('components.elements.file-list',[
+                'attachments' => $this->getAttachments()
+            ]);
+        }
+    }
+
+
+    public function setFileIcon() {
+
+        switch ($this->icon_type) {
+            case 'File':
+            default:
+                $this->icon_name = 'icon_manual.svg';
+                break;
+
+            case 'Drawing':
+                $this->icon_name = 'icon_manual.svg';
+                break;
+
+            case '3D':
+                $this->icon_name = 'icon_manual.svg';
+                break;
+
+            case 'Manual':
+                $this->icon_name = 'icon_manual.svg';
+                break;
+
+            case 'STEP':
+                $this->icon_name = 'icon_manual.svg';
+                break;
+        }
     }
 
 
     public function getAttachments() {
 
-        if ($this->modelId) {
+        if ( $this->getById ) {
+
+            dd($this->getById);
+
+            $attachments = Attachment::find($this->getById);
+
+                        dd($attachments);
+
+
+            return $attachments;
+
+
+        } else if ($this->modelId) {
             if ($this->tag) {
                 $attachments = Attachment::where('model_name',$this->model)
                 ->where('model_item_id',$this->modelId)

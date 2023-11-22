@@ -44,6 +44,9 @@ class LwSellable extends Component
 
     public $mast_families = [
         "MTP-M" => "HUPM",
+        "MTPQ" => "PMNL",
+        "MTHP-A" => "CDL-A",
+        "MTHP-M" => "CDL-M",
         "MTT" => "EML-C",
         "MTX" => "EML",
         "MTH" => "CDL"
@@ -112,6 +115,7 @@ class LwSellable extends Component
     #[Validate('nullable|numeric', message: 'Product manual document number should be numeric')]
     public $manual_doc_number;
     public $manual_doc_number_exists = 'initial';   // does such a document exist?
+    public $user_manual_attach_id;
 
     public $payload_interface = true;
     public $roof_interface = false;
@@ -124,6 +128,7 @@ class LwSellable extends Component
     public $manual_override_interface = false;
     public $wire_management = false;
     public $wire_basket = false;
+    public $drainage = false;
     public $vdc12_interface = false;
     public $vdc24_interface = false;
     public $vdc28_interface = false;
@@ -136,6 +141,7 @@ class LwSellable extends Component
     public $reject_reason_app;
     public $check_reviewed_at;
     public $app_reviewed_at;
+    public $finish;
     public $remarks;
     public $status;
 
@@ -248,6 +254,7 @@ class LwSellable extends Component
         $props['manual_override_interface'] = $this->manual_override_interface;
         $props['wire_management'] = $this->wire_management;
         $props['wire_basket'] = $this->wire_basket;
+        $props['drainage'] = $this->drainage;
         $props['vdc12_interface'] = $this->vdc12_interface;
         $props['vdc24_interface'] = $this->vdc24_interface;
         $props['vdc28_interface'] = $this->vdc28_interface;
@@ -255,6 +262,14 @@ class LwSellable extends Component
         $props['ac220_interface'] = $this->ac220_interface;
         $props['material'] = $this->material;
         $props['remarks'] = $this->remarks;
+        $props['finish'] = $this->finish;
+
+
+
+        $user_manual = Document::where('is_latest',true)->where('document_no', $this->manual_doc_number)->get();
+
+        $user_manual_attach_id = $user_manual->id;
+
 
         if ( $this->uid ) {
             // update
@@ -322,12 +337,14 @@ class LwSellable extends Component
             $this->manual_override_interface = $ep->manual_override_interface ? true : false;
             $this->wire_management = $ep->wire_management ? true : false;
             $this->wire_basket = $ep->wire_basket ? true : false;
+            $this->drainage = $ep->drainage ? true : false;
             $this->vdc12_interface = $ep->vdc12_interface ? true : false;
             $this->vdc24_interface = $ep->vdc24_interface ? true : false;
             $this->vdc28_interface = $ep->vdc28_interface ? true : false;
             $this->ac110_interface = $ep->ac110_interface ? true : false;
             $this->ac220_interface = $ep->ac220_interface ? true : false;
             $this->material = $ep->material;
+            $this->finish = $ep->finish;
             $this->remarks = $ep->remarks;
             $this->status = $ep->status;
             $this->created_by = User::find($ep->user_id);

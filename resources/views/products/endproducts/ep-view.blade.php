@@ -83,6 +83,9 @@
                     <p class="title has-text-weight-light is-size-2">{{$part_number}}-{{$version}}</p>
                     <p class="subtitle has-text-weight-light is-size-6"><strong>{{$nomenclature}}</strong></p>
 
+                    <p class="subtitle has-text-weight-light is-size-6"><strong>MT</strong> {{ $part_number_mt }} <strong>WB</strong> {{ $part_number_wb }}</p>
+
+
                     {{-- @if (count($all_revs) > 1)
                     <nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
                         <ul>
@@ -173,6 +176,14 @@
                     </tr>
 
                     <tr>
+                        <th>Number of Sections</th>
+                        <td class="has-text-right">{{ $number_of_sections }}</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+
+                    <tr>
                         <th>Has Locking ?</th>
                         <td class="has-text-right">{{ $has_locking ? 'Yes' : 'No' }}</td>
                         <td>&nbsp;</td>
@@ -186,8 +197,6 @@
                         <td>m<sup>2</sup></td>
                         <td class="has-text-right">{{ round($design_sail_area*10.7639,1) }}</td>
                         <td>ft<sup>2</sup></td>
-
-                        
                     </tr>
 
                     <tr>
@@ -213,6 +222,12 @@
                         <td colspan="3">{{ $material }}</td>
                     </tr>
 
+                    <tr>
+                        <th>Finish and Color</th>
+                        <td>&nbsp;</td>
+                        <td colspan="3">{!! $finish !!}</td>
+                    </tr>
+
                 </thead>
 
             </table>
@@ -224,18 +239,44 @@
 
 
 
+        <div class="columns">
 
+            <div class="column">
+                @livewire('file-list', [
+                    'with_icons' => true,
+                    'icon_type' => 'Drawing',
+                    'files_header' => 'Customer Drawing',
+                    'model' => 'EndProduct',
+                    'modelId' => $uid,
+                    'tag' => 'CustomerDrawings',
+                ])
+            </div>
 
+            <div class="column">
+                @livewire('file-list', [
+                    'with_icons' => true,
+                    'icon_type' => 'STEP',
+                    'files_header' => 'STEP Files',
+                    'model' => 'Sellable',
+                    'modelId' => $uid,
+                    'tag' => 'STEP',
+                ])
+            </div>
 
+            <div class="column">
 
-        <div class="column">
-            <strong>Customer Drawing</strong>
-            @livewire('file-list', [
-                'canDelete' => true,
-                'model' => 'EndProduct',
-                'modelId' => $uid,
-                'tag' => 'CustomerDrawings',                          // Any tag other than model name
-            ])
+                @livewire('file-list', [
+                    'getById' => $user_manual_attach_id,
+                    'with_icons' => true,
+                    'icon_type' => 'Manual',
+                    'files_header' => 'User Manual',
+                    'model' => 'Sellable',
+                    'modelId' => $uid,
+                    'tag' => 'STEP',
+                ])
+
+            </div>
+
         </div>
 
 

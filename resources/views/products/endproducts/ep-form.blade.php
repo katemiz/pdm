@@ -330,12 +330,12 @@
             <div class="column is-4">
                 <div class="field">
 
-                    <label class="label">Has Locking Means ?</label>
+                    <label class="label">Locking Type</label>
                     <div class="control">
                         <div class="select">
                             <select wire:model='has_locking'>
-                            <option>Has Locking?</option>
-                            @foreach ( [1 => 'Yes',0 => 'No'] as $key => $opt)
+                            <option>Select Lock Type</option>
+                            @foreach ( $lock_types as $key => $opt)
                                 <option value="{{$key}}">{{$opt}}</option>
                             @endforeach
                             </select>
@@ -462,35 +462,35 @@
         </div>
 
 
-            <div class="field">
-                <label class="label">Product Manual Number</label>
-                <div class="control">
-                    <input
-                        class="input"
-                        id="manual_doc_number"
-                        wire:model.live="manual_doc_number"
-                        type="text"
-                        value="{{ $uid ? $manual_doc_number : ''}}"
-                        placeholder="Ender product manual document number" required>
-                </div>
-
-                @switch($manual_doc_number_exists)
-                    @case('initial')
-                        @break
-                    @case('no')
-                        <div class="notification is-danger is-light is-size-7 p-1 mt-1">No documents found with this number</div>
-                        @break
-
-                    @default
-                        <div class="notification is-success is-light is-size-7 p-1 mt-1">{{ $manual_doc_number_exists }}</div>
-                        @break
-
-                @endswitch
-
-                @error('manual_doc_number')
-                <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                @enderror
+        <div class="field">
+            <label class="label">Product Manual Number</label>
+            <div class="control">
+                <input
+                    class="input"
+                    id="manual_doc_number"
+                    wire:model.live="manual_doc_number"
+                    type="text"
+                    value="{{ $uid ? $manual_doc_number : ''}}"
+                    placeholder="Ender product manual document number" required>
             </div>
+
+            @switch($manual_doc_number_exists)
+                @case('initial')
+                    @break
+                @case('no')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">No documents found with this number</div>
+                    @break
+
+                @default
+                    <div class="notification is-success is-light is-size-7 p-1 mt-1">{{ $manual_doc_number_exists }}</div>
+                    @break
+
+            @endswitch
+
+            @error('manual_doc_number')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
 
         <div class="field ">
             <label class="label">Interfaces</label>
@@ -502,7 +502,6 @@
                     <label class="label">Mechanical Interfaces</label>
 
                     <div class="control">
-
                         <input type="checkbox" wire:model="payload_interface" wire:click="$toggle('payload_interface')"> Payload Interface<br>
                         <input type="checkbox" wire:model="roof_interface" wire:click="$toggle('roof_interface')"> Roof Interface<br>
                         <input type="checkbox" wire:model="side_interface" wire:click="$toggle('side_interface')"> Side Interface<br>
@@ -513,7 +512,7 @@
                         <input type="checkbox" wire:model="manual_override_interface" wire:click="$toggle('manual_override_interface')"> Manual Override Interface<br>
                         <input type="checkbox" wire:model="wire_management" wire:click="$toggle('wire_management')"> Wire Management Interface<br>
                         <input type="checkbox" wire:model="wire_basket" wire:click="$toggle('wire_basket')"> Wire Basket Interface<br>
-
+                        <input type="checkbox" wire:model="drainage" wire:click="$toggle('drainage')"> Drainage Interface<br>
                     </div>
 
 
@@ -535,10 +534,17 @@
             </div>
         </div>
 
+        <livewire:ck-editor
+            wire:model="finish"
+            label='Finish and Color'
+            placeholder='Describe mast finish and color'
+            :content="$finish"/>
 
+        @error('remarks')
+        <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+        @enderror
 
         <livewire:ck-editor
-            edId="ed20"
             wire:model="remarks"
             label='Notes and Remarks'
             placeholder='Any kind of remarks/notes about part/product.'
@@ -555,7 +561,7 @@
             @if ($uid)
             @livewire('file-list', [
                 'canDelete' => true,
-                'model' => 'EndProduct',
+                'model' => 'Sellable',
                 'modelId' => $uid,
                 'tag' => 'CustomerDrawings',                          // Any tag other than model name
             ])
@@ -563,7 +569,7 @@
 
             <div class="control">
                 @livewire('file-upload', [
-                    'model' => 'EndProduct',
+                    'model' => 'Sellable',
                     'modelId' => $uid ? $uid : false,
                     'isMultiple'=> true,                   // can multiple files be selected
                     'tag' => 'CustomerDrawings',                          // Any tag other than model name
@@ -577,7 +583,7 @@
             @if ($uid)
                 @livewire('file-list', [
                     'canDelete' => true,
-                    'model' => 'Product',
+                    'model' => 'Sellable',
                     'modelId' => $uid,
                     'tag' => 'STEP',                          // Any tag other than model name
                 ])
@@ -586,7 +592,7 @@
             <div class="control">
 
                 @livewire('file-upload', [
-                    'model' => 'Product',
+                    'model' => 'Sellable',
                     'modelId' => $uid ? $uid : false,
                     'isMultiple'=> true,                   // can multiple files be selected
                     'tag' => 'STEP',                          // Any tag other than model name

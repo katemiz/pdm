@@ -39,8 +39,8 @@ return new class extends Migration
             $table->integer('max_operational_wind_speed')->nullable();
             $table->integer('max_survival_wind_speed')->nullable();
             $table->integer('number_of_sections')->nullable();
-            $table->boolean('has_locking')->default(false);
-            $table->float('max_pressure_in_bar')->default('2.0');
+            $table->text('has_locking')->nullable();
+            $table->float('max_pressure_in_bar')->nullable();
             $table->integer('manual_doc_number')->nullable();
             $table->boolean('payload_interface')->default(true);
             $table->boolean('roof_interface')->default(false);
@@ -52,6 +52,7 @@ return new class extends Migration
             $table->boolean('lubrication_interface')->default(true);
             $table->boolean('manual_override_interface')->default(true);
             $table->boolean('wire_management')->default(false);
+            $table->boolean('drainage')->default(false);
             $table->boolean('wire_basket')->default(false);
             $table->boolean('vdc12_interface')->default(false);
             $table->boolean('vdc24_interface')->default(false);
@@ -59,6 +60,7 @@ return new class extends Migration
             $table->boolean('ac110_interface')->default(false);
             $table->boolean('ac220_interface')->default(false);
             $table->text('material')->nullable();
+            $table->text('finish')->nullable();
             $table->foreignId('checker_id')->nullable();
             $table->foreignId('approver_id')->nullable();
             $table->string('reject_reason_check')->nullable();

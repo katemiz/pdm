@@ -17,7 +17,7 @@ use App\Livewire\LwRole;
 use App\Livewire\LwUser;
 
 
-//use App\Livewire\LwDocumentor;
+use App\Livewire\ChangePassword;
 use App\Livewire\Material;
 use App\Livewire\Process;
 use App\Livewire\LwSellable;
@@ -61,6 +61,8 @@ Route::middleware(['auth'])->group(function () {
 
     // USERS
     Route::get('/admin-users/{action}/{id?}', LwUser::class);
+    Route::get('/profile', ChangePassword::class);
+
 
 
     // Route::get('/admin/users', function () {

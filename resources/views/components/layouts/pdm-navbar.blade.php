@@ -168,7 +168,7 @@
 
                     <div class="navbar-dropdown">
 
-                        <a href="/profile" class="navbar-item">Profile</a>
+                        <a href="/profile" class="navbar-item">Change Password</a>
 
                         <!-- Authentication -->
                         <form method="POST" action="{{ route('logout') }}">

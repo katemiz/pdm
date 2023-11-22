@@ -37,10 +37,8 @@ class LwSellable extends Component
 
     public $drive_types = [
         "M" => "Manual",
-        "M-P" => "Manual, Pneumatic",
-        'H' => "Hydraulic",
-        "E" => "Electrical",
-        "E" => "Pneumatic ",
+        "MP" => "Manual, Pneumatic",
+        "P" => "Pneumatic",
         "EM" => "Electromechanical"
     ];
 

@@ -264,12 +264,10 @@ class LwSellable extends Component
         $props['remarks'] = $this->remarks;
         $props['finish'] = $this->finish;
 
-
-
-        $user_manual = Document::where('is_latest',true)->where('document_no', $this->manual_doc_number)->get();
-
-        $user_manual_attach_id = $user_manual->id;
-
+        if ($this->manual_doc_number > 0) {
+            $user_manual = Document::where('is_latest',true)->where('document_no', $this->manual_doc_number)->first();
+            $user_manual_attach_id = $user_manual->id;
+        }
 
         if ( $this->uid ) {
             // update

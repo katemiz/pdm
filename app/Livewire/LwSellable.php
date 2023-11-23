@@ -201,8 +201,29 @@ class LwSellable extends Component
             return collect([]);
         }
 
-        return EProduct::orderBy($this->sortField,$this->sortDirection)
-            ->paginate(env('RESULTS_PER_PAGE'));
+
+
+        if ( strlen($this->query) > 2) {
+            return EProduct::where('nomenclature', 'LIKE', "%".$this->query."%")
+                ->orWhere('part_number','LIKE',"%".$this->query."%")
+                ->orWhere('part_number_mt','LIKE',"%".$this->query."%")
+                ->orWhere('part_number_wb','LIKE',"%".$this->query."%")
+                ->orWhere('material','LIKE',"%".$this->query."%")
+                ->orWhere('finish','LIKE',"%".$this->query."%")
+                ->orWhere('remarks','LIKE',"%".$this->query."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+        } else {
+
+            return EProduct::orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+        }
+
+
+
+
+
+
     }
 
 

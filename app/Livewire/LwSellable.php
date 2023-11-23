@@ -43,13 +43,18 @@ class LwSellable extends Component
     ];
 
     public $mast_families = [
-        "MTP-M" => "HUPM",
-        "MTPQ" => "PMNL",
-        "MTHP-A" => "CDL-A",
-        "MTHP-M" => "CDL-M",
+        "MTHP-A" => "CDL",
+        "MTHP-M" => "CDL",
+        "MTP-M" => "PML",
+        "MTP-N" => "PMNL",
+        "MTPQ" => "HUPM",
+        "MTPQ NN" => "PMNL-LD",
+        "MTS-A" => "QEAM",
+        "MTS-M" => "QEAM",
+        "MTSV-A" => "QEAM",
+        "MTSV-M" => "QEAM",
         "MTT" => "EML-C",
-        "MTX" => "EML",
-        "MTH" => "CDL"
+        "MTX" => "EML-AL",
     ];
 
     // Item Properties
@@ -218,12 +223,6 @@ class LwSellable extends Component
             return EProduct::orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
         }
-
-
-
-
-
-
     }
 
 
@@ -233,6 +232,21 @@ class LwSellable extends Component
         $this->action = 'VIEW';
 
         $this->getEPPops();
+    }
+
+
+
+    public function changeSortDirection ($key) {
+
+        $this->sortField = $key;
+
+        if ($this->constants['list']['headers'][$key]['direction'] == 'asc') {
+            $this->constants['list']['headers'][$key]['direction'] = 'desc';
+        } else {
+            $this->constants['list']['headers'][$key]['direction'] = 'asc';
+        }
+
+        $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
     }
 
 

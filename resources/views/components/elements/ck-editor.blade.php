@@ -56,7 +56,7 @@
             .then(editor => {
 
                 // Prints all available plugins : DO NOT REMOVE
-                //console.log(ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName ));
+                console.log(ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName ));
 
                 editor.setData( document.getElementById('H{{$edId}}').value );
                 editor.model.document.on('change:data', () => {

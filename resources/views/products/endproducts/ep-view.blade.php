@@ -404,6 +404,13 @@
                 <p>{{ $created_at }}</p>
             </div>
 
+
+            <div class="column has-text-centered">
+                <p class="subtitle has-text-weight-light is-size-6"><strong>Status</strong><br>{{$status}}</p>
+            </div>
+
+
+
             <div class="column has-text-right">
                 <p>{{ $updated_by->email }}</p>
                 <p>{{ $updated_at }}</p>

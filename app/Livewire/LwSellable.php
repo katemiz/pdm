@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithPagination;
-
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 
 use App\Models\Counter;
@@ -25,6 +25,8 @@ class LwSellable extends Component
     public $query = '';
     public $sortField = 'created_at';
     public $sortDirection = 'DESC';
+
+    public $show_latest = true; /// Show only latest versions
 
     public $constants;
 
@@ -67,6 +69,7 @@ class LwSellable extends Component
     public $part_number_wb;
     public $description;
     public $version;
+    public $is_latest;
 
     #[Validate('required', message: 'Please select product type')]
     public $product_type;
@@ -165,7 +168,6 @@ class LwSellable extends Component
 
         if (request('id')) {
             $this->uid = request('id');
-            $this->getEPPops();
         }
 
         $this->constants = config('endproducts');
@@ -173,6 +175,8 @@ class LwSellable extends Component
 
 
     public function render() {
+
+        $this->getEProps();
 
         return view('products.endproducts.ep',[
             'endproducts' => $this->getEndProducts()
@@ -209,7 +213,10 @@ class LwSellable extends Component
 
 
         if ( strlen($this->query) > 2) {
-            return EProduct::where('nomenclature', 'LIKE', "%".$this->query."%")
+            return EProduct::when($this->show_latest, function ($query) {
+                    $query->where('is_latest', true);
+                })           
+                ->where('nomenclature', 'LIKE', "%".$this->query."%")
                 ->orWhere('part_number','LIKE',"%".$this->query."%")
                 ->orWhere('part_number_mt','LIKE',"%".$this->query."%")
                 ->orWhere('part_number_wb','LIKE',"%".$this->query."%")
@@ -220,8 +227,11 @@ class LwSellable extends Component
                 ->paginate(env('RESULTS_PER_PAGE'));
         } else {
 
-            return EProduct::orderBy($this->sortField,$this->sortDirection)
-                ->paginate(env('RESULTS_PER_PAGE'));
+            return EProduct::when($this->show_latest, function ($query) {
+                $query->where('is_latest', true);
+            })           
+            ->orderBy($this->sortField,$this->sortDirection)
+            ->paginate(env('RESULTS_PER_PAGE'));
         }
     }
 
@@ -230,8 +240,6 @@ class LwSellable extends Component
 
         $this->uid = $uid;
         $this->action = 'VIEW';
-
-        $this->getEPPops();
     }
 
 
@@ -322,14 +330,13 @@ class LwSellable extends Component
 
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
         $this->dispatch('triggerAttachment',modelId: $this->uid);
-        $this->getEPPops();
 
         $this->action = 'VIEW';
     }
 
 
 
-    public function getEPPops () {
+    public function getEProps () {
 
         if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
 
@@ -342,6 +349,7 @@ class LwSellable extends Component
             $this->nomenclature = $ep->nomenclature;
             $this->description = $ep->description;
             $this->version = $ep->version;
+            $this->is_latest = $ep->is_latest;
             $this->mast_family_mt = $ep->mast_family_mt;
             $this->mast_family_wb = $ep->mast_family_wb;
             $this->drive_type = $ep->drive_type;
@@ -427,6 +435,47 @@ class LwSellable extends Component
 
 
 
+
+
+    public function freezeConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'freeze');
+    }
+
+    #[On('onFreezeConfirmed')]
+    public function doFreeze() {
+        EProduct::find($this->uid)->update(['status' =>'Frozen']);
+        $this->action = 'VIEW';
+    }
+
+
+    public function reviseConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'revise');
+    }
+
+
+    #[On('onReviseConfirmed')]
+    public function doRevise() {
+
+        $original_part = EProduct::find($this->uid);
+
+        $revised_part = $original_part->replicate();
+        $revised_part->status = 'WIP';
+        $revised_part->version = $original_part->version+1;
+        $revised_part->save();
+
+        // Do not Copy files!
+        // Delibrate decision
+
+        $original_part->update(['is_latest' => false]);
+
+        $this->uid = $revised_part->id;
+        $this->action = 'VIEW';
+
+        // This refreshes new item attachments
+        $this->dispatch('triggerAttachment',modelId: $this->uid);
+    }
 
 
 

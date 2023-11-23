@@ -2,16 +2,16 @@
 
     <script>
 
-        window.addEventListener('ConfirmDelete',function(e) {
+        window.addEventListener('ConfirmModal',function(e) {
 
             let sa_title, sa_text, confirmText, cancelText
             let dispatchRoute, dispatchData
 
             switch (e.detail.type) {
 
-                case 'requirement':
+                case 'sellable':
 
-                    sa_title = 'Do you really want to delete this requirement and its linked verifications?'
+                    sa_title = 'Do you really want to delete this Sellable Product?'
                     sa_text = 'Once deleted, there is no reverting back!'
                     confirmText = 'Delete'
                     cancelText ='Oops ...'
@@ -20,20 +20,11 @@
                     dispatchData = {type:e.detail.type}
                     break;
 
-                case 'verification':
 
-                    sa_title = 'Do you really want to delete this verification?'
-                    sa_text = 'Once deleted, there is no reverting back!'
-                    confirmText = 'Delete'
-                    cancelText ='Oops ...'
-
-                    dispatchRoute = 'onDeleteConfirmed'
-                    dispatchData = {type:e.detail.type}
-                    break;
 
                 case 'freeze':
 
-                    sa_title = 'Requirement will be frozen!'
+                    sa_title = 'Sellable Product will be frozen!'
                     sa_text = 'Once frozen, no editing is possible.'
                     confirmText = 'Freeze'
                     cancelText ='Cancel'

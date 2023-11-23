@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('nomenclature')->nullable();
             $table->text('description')->nullable();
             $table->integer('version')->default('0');
+            $table->boolean('is_latest')->default(true);
             $table->text('mast_family_mt')->nullable();
             $table->text('mast_family_wb')->nullable();
             $table->text('drive_type')->nullable();
@@ -68,7 +69,7 @@ return new class extends Migration
             $table->date('check_reviewed_at')->nullable();
             $table->date('app_reviewed_at')->nullable();
             $table->text('remarks')->nullable();
-            $table->string('status')->default('wip');
+            $table->string('status')->default('WIP');
             $table->timestamps();
         });
     }

@@ -397,6 +397,9 @@ class LwDocument extends Component
     public function freezeConfirm($uid) {
         $this->uid = $uid;
         $this->dispatch('ConfirmModal', type:'freeze');
+
+        session()->flash('message','Document has been frozen successfully.');
+
     }
 
     #[On('onFreezeConfirmed')]

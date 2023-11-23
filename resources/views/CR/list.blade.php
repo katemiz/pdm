@@ -54,9 +54,7 @@
     @if ($items->count() > 0)
     <table class="table is-fullwidth">
 
-        @if ($constants['list']['listCaption'])
-            <caption>{{ $constants['list']['listCaption'] }}</caption>
-        @endif
+        <caption>{{ $items->total() }} {{ $items->total() > 1 ? ' Records' :' Record' }}</caption>
 
         <thead>
             <tr>

@@ -275,7 +275,9 @@ class LwSellable extends Component
         $props['max_operational_wind_speed'] = $this->max_operational_wind_speed;
         $props['max_survival_wind_speed'] = $this->max_survival_wind_speed;
         $props['number_of_sections'] = $this->number_of_sections;
-        $props['has_locking'] = $this->has_locking;
+        $props['has_locking'] = in_array($this->has_locking, array_keys($this->lock_types)
+
+        ) ? $this->has_locking : '';
         $props['max_pressure_in_bar'] = $this->max_pressure_in_bar > 0 ? $this->max_pressure_in_bar :null;
         $props['manual_doc_number'] = $this->manual_doc_number;
         $props['payload_interface'] = $this->payload_interface;

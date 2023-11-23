@@ -10,7 +10,6 @@ return [
             "route"=>"/endproducts/form"
         ],
         "filterText" => "Search ...",
-        "listCaption" => false,
 
         "headers" => [
 

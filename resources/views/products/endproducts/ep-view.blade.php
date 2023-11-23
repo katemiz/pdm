@@ -190,7 +190,7 @@
 
                     <tr>
                         <th>Lock Type</th>
-                        <td class="has-text-right" colspan="4">{{ $lock_types[$has_locking] }}</td>
+                        <td class="has-text-right" colspan="4">{{ $has_locking ? $lock_types[$has_locking] :'' }}</td>
 
                     </tr>
 

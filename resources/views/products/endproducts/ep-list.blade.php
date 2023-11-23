@@ -22,7 +22,7 @@
             <div class="level-item has-text-centered">
                     <a href="/endproducts/form" class="button is-dark">
                         <span class="icon is-small"><x-carbon-add /></span>
-                        <span>Add End Product</span>
+                        <span>Add Sellable Product</span>
                     </a>
                 </div>
             {{-- @endrole --}}
@@ -56,9 +56,7 @@
     @if ($endproducts->count() > 0)
     <table class="table is-fullwidth">
 
-        @if ($constants['list']['listCaption'])
-            <caption>{{ $constants['list']['listCaption'] }}</caption>
-        @endif
+        <caption>{{ $endproducts->total() }} {{ $endproducts->total() > 1 ? ' Records' :' Record' }}</caption>
 
         <thead>
             <tr>
@@ -97,7 +95,7 @@
             <tr wire:key="{{ $record->id }}">
 
                 @foreach (array_keys($constants['list']['headers']) as $col_name)
-                    <td>
+                    <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
                         @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
                             {!! $record[$col_name] !!}
                         @else
@@ -134,7 +132,7 @@
     {{ $endproducts->links('components.pagination.bulma') }}
 
     @else
-        <div class="notification is-warning is-light">No End Products found in database</div>
+        <div class="notification is-warning is-light">No Sellable Products found in database</div>
     @endif
 </section>
 

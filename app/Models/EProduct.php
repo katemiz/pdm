@@ -23,6 +23,7 @@ class EProduct extends Model
         'nomenclature',
         'description',
         'version',
+        'is_latest',
         'mast_family_mt',
         'mast_family_wb',
         'drive_type',
@@ -70,6 +71,11 @@ class EProduct extends Model
         'status'
 
     ];
+
+
+    public function getPartNoAttribute($value) {
+        return $this->part_number.' V'.$this->version;
+    }
 
 
 

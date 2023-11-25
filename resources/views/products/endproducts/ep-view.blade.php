@@ -130,58 +130,68 @@
                     <tr>
                         <th>Maximum Payload Capacity</th>
                         <td class="has-text-right">{{ $max_payload_kg }}</td>
-                        <td class="is-narrow">kg</td>
+                        <td class="has-text-grey-light is-narrow">kg</td>
                         <td class="has-text-right is-narrow">{{ round($max_payload_kg*2.20462,0) }}</td>
-                        <td class="is-narrow">lb</td>
+                        <td class="has-text-grey-light is-narrow">lb</td>
                     </tr>
 
                     <tr>
                         <th>Extended Height</th>
                         <td class="has-text-right">{{ $extended_height_mm }}</td>
-                        <td class="is-narrow">mm</td>
+                        <td class="has-text-grey-light is-narrow">mm</td>
                         <td class="has-text-right">{{ round($extended_height_mm/25.4,1) }}</td>
-                        <td class="is-narrow">in</td>
+                        <td class="has-text-grey-light is-narrow">in</td>
                     </tr>
 
                     <tr>
                         <th>Nested Height</th>
                         <td class="has-text-right">{{ $nested_height_mm }}</td>
-                        <td class="is-narrow">mm</td>
+                        <td class="has-text-grey-light is-narrow">mm</td>
                         <td class="has-text-right is-narrow">{{ round($nested_height_mm/25.4,1) }}</td>
-                        <td class="is-narrow">in</td>
+                        <td class="has-text-grey-light is-narrow">in</td>
                     </tr>
 
                     <tr>
                         <th>Weight</th>
                         <td class="has-text-right">{{ $product_weight_kg }}</td>
-                        <td>kg</td>
+                        <td class="has-text-grey-light is-narrow">kg</td>
                         <td class="has-text-right">{{ round($product_weight_kg*2.20462,0) }}</td>
-                        <td>lb</td>
+                        <td class="has-text-grey-light">lb</td>
                     </tr>
 
                     <tr>
                         <th>Maximum Operational Wind Speed</th>
                         <td class="has-text-right">{{ $max_operational_wind_speed }}</td>
-                        <td>km/h</td>
+                        <td class="has-text-grey-light">km/h</td>
                         <td class="has-text-right">{{ round($max_operational_wind_speed*0.5399570136727677,0) }}</td>
-                        <td>knots</td>
+                        <td class="has-text-grey-light">knots</td>
                     </tr>
 
                     <tr>
                         <th>Maximum Survival Wind Speed</th>
                         <td class="has-text-right">{{ $max_survival_wind_speed }}</td>
-                        <td>km/h</td>
+                        <td class="has-text-grey-light">km/h</td>
                         <td class="has-text-right">{{ round($max_survival_wind_speed*0.5399570136727677,0) }}</td>
-                        <td>knots</td>
+                        <td class="has-text-grey-light">knots</td>
                     </tr>
 
                     <tr>
                         <th>Design Sail Area</th>
                         <td class="has-text-right">{{ $design_sail_area }}</td>
-                        <td>m<sup>2</sup></td>
+                        <td class="has-text-grey-light">m<sup>2</sup></td>
                         <td class="has-text-right">{{ round($design_sail_area*10.7639,1) }}</td>
-                        <td>ft<sup>2</sup></td>
+                        <td class="has-text-grey-light">ft<sup>2</sup></td>
                     </tr>
+
+                    @if ($max_pressure_in_bar)
+                    <tr>
+                        <th>Max Pneumatic Pressure</th>
+                        <td colspan="2">&nbsp;</td>
+                        <td class="has-text-right">{{ $max_pressure_in_bar }}</td>
+                        <td class="has-text-grey-light">bar</td>
+                    </tr>
+                    @endif
+
 
                     <tr>
                         <th>Number of Sections</th>
@@ -203,15 +213,7 @@
                     </tr>
 
 
-                    @if ($max_pressure_in_bar)
-                    <tr>
-                        <th>Max Pneumatic Pressure</th>
-                        <td class="has-text-right">{{ $max_pressure_in_bar }}</td>
-                        <td>bar</td>
-                        <td>&nbsp;</td>
-                        <td>&nbsp;</td>
-                    </tr>
-                    @endif
+
 
                     <tr>
                         <th>Descriptive Material</th>
@@ -241,7 +243,7 @@
                     'with_icons' => true,
                     'icon_type' => 'Drawing',
                     'files_header' => 'Customer Drawing',
-                    'model' => 'EndProduct',
+                    'model' => 'Sellable',
                     'modelId' => $uid,
                     'tag' => 'CustomerDrawings',
                 ])
@@ -297,7 +299,7 @@
 
         {{-- INTERFACES --}}
         <div class="column">
-            <div class="columns is-vcentered">
+            <div class="columns ">
 
                 <div class="column content is-half">
                     <strong>Mechanical Interfaces</strong>

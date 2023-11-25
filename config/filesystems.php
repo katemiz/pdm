@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DISK', 'local'),
+    'default' => env('FILESYSTEM_DISK', 'MyDisk'),
 
     /*
     |--------------------------------------------------------------------------
@@ -32,7 +32,7 @@ return [
 
         'MyDisk' => [
             'driver' => 'local',
-            'root' => '/STORAGE', 
+            'root' => '/STORAGE/FILES',
         ],
 
 

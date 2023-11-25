@@ -71,6 +71,8 @@ class LwSellable extends Component
     public $version;
     public $is_latest;
 
+    public $all_revs = [];
+
     #[Validate('required', message: 'Please select product type')]
     public $product_type;
 
@@ -215,7 +217,7 @@ class LwSellable extends Component
         if ( strlen($this->query) > 2) {
             return EProduct::when($this->show_latest, function ($query) {
                     $query->where('is_latest', true);
-                })           
+                })
                 ->where('nomenclature', 'LIKE', "%".$this->query."%")
                 ->orWhere('part_number','LIKE',"%".$this->query."%")
                 ->orWhere('part_number_mt','LIKE',"%".$this->query."%")
@@ -229,7 +231,7 @@ class LwSellable extends Component
 
             return EProduct::when($this->show_latest, function ($query) {
                 $query->where('is_latest', true);
-            })           
+            })
             ->orderBy($this->sortField,$this->sortDirection)
             ->paginate(env('RESULTS_PER_PAGE'));
         }
@@ -393,6 +395,12 @@ class LwSellable extends Component
             $this->created_at = $ep->created_at;
             $this->updated_by = User::find($ep->updated_uid);
             $this->updated_at = $ep->updated_at;
+        }
+
+
+        // Revisions
+        foreach (EProduct::where('part_number',$this->part_number)->get() as $sellable) {
+            $this->all_revs[$sellable->version] = $sellable->id;
         }
 
     }

@@ -68,11 +68,11 @@ class FileList extends Component
         switch ($this->icon_type) {
             case 'File':
             default:
-                $this->icon_name = 'icon_manual.svg';
+                $this->icon_name = 'icon_file.svg';
                 break;
 
             case 'Drawing':
-                $this->icon_name = 'icon_manual.svg';
+                $this->icon_name = 'icon_drawing.svg';
                 break;
 
             case '3D':
@@ -84,7 +84,7 @@ class FileList extends Component
                 break;
 
             case 'STEP':
-                $this->icon_name = 'icon_manual.svg';
+                $this->icon_name = 'icon_step.svg';
                 break;
         }
     }
@@ -131,7 +131,9 @@ class FileList extends Component
             abort(404, 'No permission!');
         }
 
-        $dosya = Storage::path($d->stored_file_as);
+        $dosya = Storage::path(config('filesystems.disks.MyDisk.root').'/'.$d->stored_file_as);
+
+        // dd($dosya);
 
         if (file_exists($dosya)) {
             $headers = [

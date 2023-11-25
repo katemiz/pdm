@@ -131,7 +131,7 @@ class FileList extends Component
             abort(404, 'No permission!');
         }
 
-        $dosya = Storage::path(config('filesystems.disks.MyDisk.root').'/'.$d->stored_file_as);
+        $dosya = Storage::path($d->stored_file_as);
 
         // dd($dosya);
 

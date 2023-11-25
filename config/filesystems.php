@@ -33,8 +33,9 @@ return [
         'MyDisk' => [
             'driver' => 'local',
             'root' => '/STORAGE/FILES',
+            'url' => env('APP_URL') . '/storage',
+            'visibility' => 'public',
         ],
-
 
 
         'local' => [

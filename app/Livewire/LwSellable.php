@@ -173,18 +173,16 @@ class LwSellable extends Component
         }
 
         $this->constants = config('endproducts');
+
+        $this->getEProps();
     }
 
 
     public function render() {
-
-        $this->getEProps();
-
         return view('products.endproducts.ep',[
             'endproducts' => $this->getEndProducts()
         ]);
     }
-
 
 
     public function updated($property)
@@ -211,8 +209,6 @@ class LwSellable extends Component
         if ( $this->action == 'FORM'  && !$this->uid) {
             return collect([]);
         }
-
-
 
         if ( strlen($this->query) > 2) {
             return EProduct::when($this->show_latest, function ($query) {
@@ -242,8 +238,8 @@ class LwSellable extends Component
 
         $this->uid = $uid;
         $this->action = 'VIEW';
+        $this->getEProps();
     }
-
 
 
     public function changeSortDirection ($key) {
@@ -311,10 +307,6 @@ class LwSellable extends Component
         $props['remarks'] = $this->remarks;
         $props['finish'] = $this->finish;
 
-        if ($this->manual_doc_number > 0) {
-            $user_manual = Document::where('is_latest',true)->where('document_no', $this->manual_doc_number)->first();
-            $user_manual_attach_id = $user_manual->id;
-        }
 
         if ( $this->uid ) {
             // update
@@ -333,9 +325,11 @@ class LwSellable extends Component
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
         $this->dispatch('triggerAttachment',modelId: $this->uid);
 
-        $this->action = 'VIEW';
-    }
+        $this->getEProps();
 
+        $this->action = 'VIEW';
+
+    }
 
 
     public function getEProps () {
@@ -397,6 +391,13 @@ class LwSellable extends Component
             $this->updated_at = $ep->updated_at;
         }
 
+        if ($this->manual_doc_number > 0) {
+            $user_manual = Document::where('is_latest',true)->where('document_no', $this->manual_doc_number)->first();
+
+            if($user_manual) {
+                $this->user_manual_attach_id = $user_manual->id;
+            }
+        }
 
         // Revisions
         foreach (EProduct::where('part_number',$this->part_number)->get() as $sellable) {
@@ -404,20 +405,6 @@ class LwSellable extends Component
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public function getEProductNo() {
@@ -445,15 +432,57 @@ class LwSellable extends Component
 
 
 
+
+
+    public function deleteConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'delete');
+    }
+
+
+    #[On('onDeleteConfirmed')]
+    public function doDelete() {
+
+        $current_item = EProduct::find($this->uid);
+
+        if ($current_item->version > 0) {
+
+            $previous_item = EProduct::where("part_number",$current_item->part_number)
+            ->where("version",$current_item->version-1)->first();
+
+            //dd($previous_item);
+
+            $previous_item->update(['is_latest' => true]);
+        }
+
+        $current_item->delete();
+        $this->action = 'LIST';
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public function freezeConfirm($uid) {
         $this->uid = $uid;
         $this->dispatch('ConfirmModal', type:'freeze');
     }
 
+
     #[On('onFreezeConfirmed')]
     public function doFreeze() {
         EProduct::find($this->uid)->update(['status' =>'Frozen']);
         $this->action = 'VIEW';
+        $this->getEProps();
     }
 
 
@@ -469,6 +498,7 @@ class LwSellable extends Component
         $original_part = EProduct::find($this->uid);
 
         $revised_part = $original_part->replicate();
+
         $revised_part->status = 'WIP';
         $revised_part->version = $original_part->version+1;
         $revised_part->save();
@@ -480,6 +510,9 @@ class LwSellable extends Component
 
         $this->uid = $revised_part->id;
         $this->action = 'VIEW';
+
+        $this->getEProps();
+
 
         // This refreshes new item attachments
         $this->dispatch('triggerAttachment',modelId: $this->uid);

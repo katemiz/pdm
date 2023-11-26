@@ -27,9 +27,7 @@ class FileList extends Component
 
 
     public $idAttach;
-
-    public $getById = false;
-
+    public $getById;
     public $model;
     public $modelId;
     public $tag = false;
@@ -44,6 +42,13 @@ class FileList extends Component
     public $showSize = true;
 
     public $canDelete = false;
+
+
+
+
+
+
+
 
     #[On('refreshFileList')]
     public function render() {
@@ -94,15 +99,8 @@ class FileList extends Component
 
         if ( $this->getById ) {
 
-            dd($this->getById);
-
-            $attachments = Attachment::find($this->getById);
-
-                        dd($attachments);
-
-
+            $attachments = Attachment::where("model_name",$this->model)->where("model_item_id",$this->getById)->get();
             return $attachments;
-
 
         } else if ($this->modelId) {
             if ($this->tag) {
@@ -131,9 +129,10 @@ class FileList extends Component
             abort(404, 'No permission!');
         }
 
-        $dosya = Storage::path($d->stored_file_as);
+        //$dosya = Storage::path($d->stored_file_as);
 
-        // dd($dosya);
+        $dosya = config('filesystems.disks.MyDisk.root').'/'.$d->stored_file_as;
+
 
         if (file_exists($dosya)) {
             $headers = [
@@ -154,7 +153,7 @@ class FileList extends Component
 
     public function startAttachDelete($idAttach) {
         $this->idAttach = $idAttach;
-        $this->dispatch('ConfirmDelete', type:'attach');
+        $this->dispatch('ConfirmModal', type:'attach');
     }
 
 

@@ -9,7 +9,7 @@
 
             switch (e.detail.type) {
 
-                case 'sellable':
+                case 'delete':
 
                     sa_title = 'Do you really want to delete this Sellable Product?'
                     sa_text = 'Once deleted, there is no reverting back!'

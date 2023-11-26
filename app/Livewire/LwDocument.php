@@ -73,7 +73,6 @@ class LwDocument extends Component
 
     public function mount()
     {
-
         if (request('action')) {
             $this->action = strtoupper(request('action'));
 

@@ -1,6 +1,6 @@
 <header class="mb-6">
-    <h1 class="title has-text-weight-light is-size-1">End Products</h1>
-    <h2 class="subtitle has-text-weight-light">View End Product Properties</h2>
+    <h1 class="title has-text-weight-light is-size-1">Sellable Products</h1>
+    <h2 class="subtitle has-text-weight-light">View Sellable Product Properties</h2>
 </header>
 
 @if (session()->has('message'))
@@ -64,7 +64,7 @@
                     </p>
 
                     <p class="level-item">
-                        <a wire:click="triggerDelete('requirement',{{ $uid }})">
+                        <a wire:click="deleteConfirm({{ $uid }})">
                             <span class="icon has-text-danger"><x-carbon-trash-can /></span>
                         </a>
                     </p>
@@ -231,18 +231,13 @@
 
         </div>
 
-
-
-
-
-
         <div class="columns">
 
             <div class="column">
                 @livewire('file-list', [
                     'with_icons' => true,
                     'icon_type' => 'Drawing',
-                    'files_header' => 'Customer Drawing',
+                    'files_header' => 'Drawings',
                     'model' => 'Sellable',
                     'modelId' => $uid,
                     'tag' => 'CustomerDrawings',
@@ -260,6 +255,7 @@
                 ])
             </div>
 
+
             <div class="column">
 
                 @livewire('file-list', [
@@ -267,9 +263,9 @@
                     'with_icons' => true,
                     'icon_type' => 'Manual',
                     'files_header' => 'User Manual',
-                    'model' => 'Sellable',
+                    'model' => 'Document',
                     'modelId' => $uid,
-                    'tag' => 'STEP',
+                    'tag' => 'document',
                 ])
 
             </div>

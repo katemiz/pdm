@@ -119,6 +119,8 @@
                         <span class="icon"><x-carbon-view/></span>
                     </a>
 
+
+                    @if (in_array($record->status,['WIP']))
                     @role(['admin','company_admin','requirement_engineer'])
                         <a href="/endproducts/form/{{ $record->id }}">
                         {{-- <a wire:click="editItem({{ $record->id }})"> --}}
@@ -129,6 +131,7 @@
                             <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
                         </a> --}}
                     @endrole
+                    @endif
 
                 </td>
 

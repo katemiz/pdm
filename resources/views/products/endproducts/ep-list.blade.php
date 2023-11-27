@@ -141,7 +141,7 @@
         </tbody>
     </table>
 
-    {{ $endproducts->links('components.pagination.bulma') }}
+    {{ $endproducts->withQueryString()->links('components.pagination.bulma') }}
 
     @else
         <div class="notification is-warning is-light">No Sellable Products found in database</div>

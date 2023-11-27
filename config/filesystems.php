@@ -33,10 +33,7 @@ return [
         'MyDisk' => [
             'driver' => 'local',
             'root' => storage_path('files'),
-            // 'url' => env('APP_URL') . '/storage',
-            // 'visibility' => 'public',
         ],
-
 
         'local' => [
             'driver' => 'local',

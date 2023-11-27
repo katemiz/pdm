@@ -430,7 +430,9 @@ class LwSellable extends Component
 
 
 
-
+    public function resetFilter() {
+        $this->query = '';
+    }
 
 
 

@@ -7,6 +7,11 @@
         <h2 class="subtitle has-text-weight-light">{{ $uid ? $constants['update']['subtitle'] : $constants['create']['subtitle'] }}</h2>
     </header>
 
+    @if ($uid)
+    <p class="title has-text-weight-light is-size-2">{{'D'.$document_no. ' R'.$revision }}</p>
+    @endif
+
+
     <form method="POST" enctype="multipart/form-data">
         @csrf
 

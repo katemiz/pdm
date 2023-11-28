@@ -8,6 +8,8 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Rule;
 
+use App\Livewire\FileList;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
@@ -333,7 +335,6 @@ class LwDocument extends Component
 
         $this->validate();
 
-        $props['document_no'] = $this->getDocumentNo();
         $props['updated_uid'] = Auth::id();
         $props['doc_type'] = $this->doc_type;
         $props['is_html'] = $this->is_html;
@@ -349,13 +350,13 @@ class LwDocument extends Component
         } else {
             // create
             $props['user_id'] = Auth::id();
+            $props['document_no'] = $this->getDocumentNo();
             $this->uid = Document::create($props)->id;
             session()->flash('message','Document has been created successfully.');
         }
 
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
         $this->dispatch('triggerAttachment',modelId: $this->uid);
-
 
         if ($this->is_html) {
             $this->action = 'CVIEW';
@@ -428,10 +429,9 @@ class LwDocument extends Component
         // Delibrate decision
 
         $original_doc->update(['is_latest' => false]);
-
         $this->uid = $revised_doc->id;
-        $this->action = 'VIEW';
 
-        $this->dispatch('triggerAttachment',modelId: $this->uid);
+        $this->dispatch('refreshFileListNewId', modelId:$this->uid);
+        $this->action = 'VIEW';
     }
 }

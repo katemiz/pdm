@@ -49,7 +49,6 @@ class FileUpload extends Component
     #[On('triggerAttachment')]
     public function uploadAttach($modelId = false) {
 
-
         if ($modelId) {
             $this->modelId = $modelId;
         }

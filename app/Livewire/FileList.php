@@ -25,7 +25,6 @@ class FileList extends Component
     ])
     */
 
-
     public $idAttach;
     public $getById;
     public $model;
@@ -44,12 +43,6 @@ class FileList extends Component
     public $canDelete = false;
 
 
-
-
-
-
-
-
     #[On('refreshFileList')]
     public function render() {
 
@@ -65,6 +58,12 @@ class FileList extends Component
                 'attachments' => $this->getAttachments()
             ]);
         }
+    }
+
+
+    #[On('refreshFileListNewId')]
+    public function refreshWithNewId($modelId) {
+        $this->modelId = $modelId;
     }
 
 
@@ -98,7 +97,6 @@ class FileList extends Component
     public function getAttachments() {
 
         if ( $this->getById ) {
-
             $attachments = Attachment::where("model_name",$this->model)->where("model_item_id",$this->getById)->get();
             return $attachments;
 
@@ -129,10 +127,7 @@ class FileList extends Component
             abort(404, 'No permission!');
         }
 
-        //$dosya = Storage::path($d->stored_file_as);
-
         $dosya = config('filesystems.disks.MyDisk.root').'/'.$d->stored_file_as;
-
 
         if (file_exists($dosya)) {
             $headers = [
@@ -164,8 +159,7 @@ class FileList extends Component
     }
 
 
-    public function checkPermission()
-    {
+    public function checkPermission() {
         if ( Auth::id() ) {
             return true;
         } else {

@@ -56,8 +56,6 @@
                     dispatchRoute = 'deleteAttach'
                     dispatchData = {}
                     break;
-
-
             }
 
             Swal.fire({
@@ -98,13 +96,13 @@
         // })
 
 
-        document.addEventListener('livewire:initialized', () => {
-            @this.on('done-file-upload', (event) => {
-                console.log('doneFileUpload')
+        // document.addEventListener('livewire:initialized', () => {
+        //     @this.on('done-file-upload', (event) => {
+        //         console.log('doneFileUpload')
 
-                alert(event.detail)
-            });
-        });
+        //         alert(event.detail)
+        //     });
+        // });
 
 
 

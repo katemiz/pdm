@@ -84,15 +84,14 @@
                     <p class="subtitle has-text-weight-light is-size-6">{{ $title }}</p>
 
                     @if (count($all_revs) > 1)
-                    <nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
-                        <ul>
+                    <div class="tags has-addons">
                         @foreach ($all_revs as $key => $revId)
                             @if ($key != $revision)
-                            <li><a href="/documents/view/{{$revId}}">R{{$key}}</a></li>
+                                <a href="/documents/view/{{$revId}}"
+                                    class="tag {{ array_key_last($all_revs) == $key ? 'is-success':'' }} is-light mr-1">R{{$key}}</a>
                             @endif
                         @endforeach
-                        </ul>
-                    </nav>
+                    </div>
                     @endif
                 </div>
 
@@ -103,6 +102,15 @@
             </div>
         </div>
 
+        <div class="column">
+            <strong>Files(s)</strong>
+            @livewire('file-list', [
+                'canDelete' => false,
+                'model' => 'Document',
+                'modelId' => $uid,
+                'tag' => 'document',                          // Any tag other than model name
+            ])
+        </div>
 
 
         @if (strlen(trim($remarks)) > 0)
@@ -111,17 +119,6 @@
             {!! $remarks !!}
         </div>
         @endif
-
-
-        <div class="column">
-            <strong>Original Files(s)</strong>
-            @livewire('file-list', [
-                'canDelete' => false,
-                'model' => 'Document',
-                'modelId' => $uid,
-                'tag' => 'document',                          // Any tag other than model name
-            ])
-        </div>
 
         <div class="columns is-size-7 has-text-grey mt-6">
 

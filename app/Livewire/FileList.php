@@ -147,6 +147,7 @@ class FileList extends Component
 
 
     public function startAttachDelete($idAttach) {
+
         $this->idAttach = $idAttach;
         $this->dispatch('ConfirmModal', type:'attach');
     }
@@ -154,7 +155,11 @@ class FileList extends Component
 
     #[On('deleteAttach')]
     public function deleteAttach() {
-        Attachment::find($this->idAttach)->delete();
+
+        if ($record = Attachment::find($this->idAttach)) {
+            $record->delete();
+        }
+
         $this->dispatch('attachDeleted');
     }
 

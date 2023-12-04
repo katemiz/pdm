@@ -270,8 +270,8 @@ class LwDocument extends Component
             $this->status = $c->status;
             $this->created_at = $c->created_at;
             $this->updated_at = $c->updated_at;
-            $this->created_by = User::find($c->user_id)->fullname;
-            $this->updated_by = User::find($c->updated_uid)->fullname;
+            $this->created_by = User::find($c->user_id)->email;
+            $this->updated_by = User::find($c->updated_uid)->email;
 
             if ($c->is_html) {
                 $this->fileOrHtml = 'HTML';

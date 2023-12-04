@@ -20,8 +20,6 @@
                     dispatchData = {type:e.detail.type}
                     break;
 
-
-
                 case 'freeze':
 
                     sa_title = 'Sellable Product will be frozen!'
@@ -33,7 +31,6 @@
                     dispatchData = {}
 
                     break;
-
 
                 case 'revise':
 
@@ -91,13 +88,13 @@
         })
 
 
-        document.addEventListener('livewire:initialized', () => {
-            @this.on('done-file-upload', (event) => {
-                console.log('doneFileUpload')
+        // document.addEventListener('livewire:initialized', () => {
+        //     @this.on('done-file-upload', (event) => {
+        //         console.log('doneFileUpload')
 
-                alert(event.detail)
-            });
-        });
+        //         alert(event.detail)
+        //     });
+        // });
 
     </script>
 

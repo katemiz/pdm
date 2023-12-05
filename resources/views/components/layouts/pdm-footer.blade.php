@@ -9,7 +9,7 @@
         <div class="column is-4 has-text-centered-mobile">
             <img src="/images/{{config('appconstants.kapkara.logo')}}" width="28px" alt="Company Icon"><br>
 
-            <a href="{{config('constants.company.link')}}" class="has-text-weight-light">{{config('appconstants.kapkara.name')}}</a>
+            <a href="{{config('appconstants.kapkara.link')}}" class="has-text-weight-light">{{config('appconstants.kapkara.name')}}</a>
             <p class="has-text-warning has-text-weight-light is-size-7">{{config('appconstants.kapkara.motto')}}</p>
         </div>
 

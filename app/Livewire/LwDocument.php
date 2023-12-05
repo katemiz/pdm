@@ -72,6 +72,14 @@ class LwDocument extends Component
     #[Rule('required', message: 'Please select document type')]
     public $doc_type = 'GR';
 
+    public $languages = [
+        'EN' => 'English',
+        'TR' => 'Türkçe'
+    ];
+
+    #[Rule('required', message: 'Please select document language')]
+    public $language = 'TR';
+
 
     public function mount()
     {
@@ -263,6 +271,7 @@ class LwDocument extends Component
             $this->document_no = $c->document_no;
             $this->revision = $c->revision;
             $this->doc_type = $c->doc_type;
+            $this->language = $c->language;
             $this->title = $c->title;
             $this->is_html = $c->is_html;
             $this->is_latest = $c->is_latest;
@@ -337,6 +346,7 @@ class LwDocument extends Component
 
         $props['updated_uid'] = Auth::id();
         $props['doc_type'] = $this->doc_type;
+        $props['language'] = $this->language;
         $props['is_html'] = $this->is_html;
         $props['toc'] = json_encode($this->toc);
         $props['title'] = $this->title;

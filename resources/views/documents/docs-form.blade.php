@@ -32,6 +32,26 @@
         </div>
 
 
+
+        <div class="field">
+            <label class="label">Document Language</label>
+            <div class="control">
+                @foreach ($languages as $key => $language)
+                <label class="radio">
+                    <input type="radio" value="{{$key}}" wire:model="language">
+                    {{$language}}
+                    </label>
+                @endforeach
+            </div>
+
+            @error('language')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
+
+
+
         <div class="field">
             <label class="label">Document Title</label>
             <div class="control">

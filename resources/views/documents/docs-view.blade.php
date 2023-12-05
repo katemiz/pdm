@@ -97,6 +97,8 @@
 
                 <div class="column has-text-right is-4">
                     <span class="tag is-black">{{$doc_types[$doc_type]}}</span>
+                    <span class="tag is-warning">{{$language}}</span>
+
                 </div>
 
             </div>
@@ -114,7 +116,7 @@
 
 
         @if (strlen(trim($remarks)) > 0)
-        <div class="column has-text-grey">
+        <div class="column has-text-grey content">
             <strong>Remarks/Notes</strong>
             {!! $remarks !!}
         </div>

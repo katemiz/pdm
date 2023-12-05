@@ -23,6 +23,7 @@ class Document extends Model
         'is_html',
         'is_latest',
         'doc_type',
+        'language',
         'title',
         'remarks',
         'toc',

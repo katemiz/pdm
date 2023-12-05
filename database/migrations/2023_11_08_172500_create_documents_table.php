@@ -23,6 +23,7 @@ return new class extends Migration
             $table->boolean('is_html')->default(false);
             $table->boolean('is_latest')->default(true);
             $table->string('doc_type');
+            $table->string('language')->default('TR');
             $table->text('title');
             $table->text('remarks')->nullable();
             $table->json('toc');

@@ -6,7 +6,7 @@
 
             <header class="mb-6">
                 <h1 class="title has-text-weight-light is-size-1">{{ $constants['list']['title'] }}</h1>
-        
+
                 @if ( $constants['list']['subtitle'] )
                     <h2 class="subtitle has-text-weight-light">{{ $constants['list']['subtitle'] }}</h2>
                 @endif
@@ -73,11 +73,14 @@
     </nav>
 
     @if ($documents->count() > 0)
+
+
+
+
+
     <table class="table is-fullwidth">
 
-        @if ($constants['list']['listCaption'])
-            <caption>{{ $constants['list']['listCaption'] }}</caption>
-        @endif
+        <caption>{{ $documents->total() }} {{ $documents->total() > 1 ? ' Records' :' Record' }}</caption>
 
         <thead>
             <tr>

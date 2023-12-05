@@ -2,13 +2,13 @@
 
     <div class="navbar-brand">
 
-        <a  href="/" class="navbar-item has-text-white has-background-warning">
+        <a href="/" class="navbar-item has-text-white has-background-warning" aria-label="Home">
             <span class="icon has-text-dark">
                 <x-carbon-model-alt />
             </span>
         </a>
 
-        <a  href="/" class="navbar-item has-text-white has-background-link-dark">
+        <a href="/" class="navbar-item has-text-white has-background-link-dark" aria-label="PDM">
             <span class="ml-2">{{ config('appconstants.app.code') }}</span>
         </a>
 

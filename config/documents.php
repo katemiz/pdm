@@ -22,6 +22,13 @@ return [
             ],
 
 
+            "language"=> [
+                "title" => "Lang",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
             "is_html"=> [
                 "title" => "HTML",
                 "sortable" => true,

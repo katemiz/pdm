@@ -20,6 +20,7 @@ use App\Livewire\LwUser;
 use App\Livewire\ChangePassword;
 use App\Livewire\Material;
 use App\Livewire\Process;
+use App\Livewire\LwBuyable;
 use App\Livewire\LwSellable;
 use App\Livewire\Product;
 use App\Livewire\ProductNote;
@@ -142,6 +143,9 @@ Route::middleware(['auth'])->group(function () {
 
     // END PRODUCTS
     Route::get('/endproducts/{action}/{id?}', LwSellable::class);
+
+    // BUYABLES
+    Route::get('/buyables/{action}/{id?}', LwBuyable::class);
 
     // PRODUCTS
     Route::get('/products/{action}/{id?}', Product::class);

@@ -96,11 +96,11 @@
                             <span class="ml-2">Make Parts</span>
                         </a>
 
-                        <a href="/products/list" class="navbar-item">
+                        <a href="/buyables/list" class="navbar-item">
                             <span class="icon has-text-info">
                                 <x-carbon-radio />
                             </span>
-                            <span class="ml-2">Buy Parts</span>
+                            <span class="ml-2">Buyable Parts</span>
                         </a>
                     </div>
                 </div>

@@ -3,8 +3,13 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="Author: Kılıç Ali Temiz katemiz@gmail.com">
+        <meta name="theme-color" content="#317EFB"/>
+
         <title>{{ config('appconstants.app.name') }}</title>
-        <link rel="stylesheet" href="{{ asset('/css/bulma.css')}}">
+        <link rel="stylesheet" href="{{ asset('/css/bulma.min.css')}}">
 
         <style>
             html {height: 100%;}

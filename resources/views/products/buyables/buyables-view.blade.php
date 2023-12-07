@@ -1,6 +1,6 @@
 <header class="mb-6">
-    <h1 class="title has-text-weight-light is-size-1">Sellable Products</h1>
-    <h2 class="subtitle has-text-weight-light">View Sellable Product Properties</h2>
+    <h1 class="title has-text-weight-light is-size-1">Buyable Products</h1>
+    <h2 class="subtitle has-text-weight-light">View Buyable Product Properties</h2>
 </header>
 
 @if (session()->has('message'))
@@ -18,14 +18,14 @@
             <div class="level-left">
 
                 <p class="level-item">
-                    <a href="/endproducts/list">
+                    <a href="/buyables/list">
                         <span class="icon is-small"><x-carbon-table /></span>
                         <span>List All</span>
                     </a>
                 </p>
 
                 <p class="level-item">
-                    <a href="/endproducts/form/">
+                    <a href="/buyables/form/">
                         <span class="icon is-small"><x-carbon-add /></span>
                         <span>Add</span>
                     </a>
@@ -52,7 +52,7 @@
                 @else
 
                     <p class="level-item">
-                        <a href='/endproducts/form/{{ $uid }}'>
+                        <a href='/buyables/form/{{ $uid }}'>
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
                     </p>
@@ -81,7 +81,7 @@
 
                 <div class="column is-8">
                     <p class="title has-text-weight-light is-size-2">{{$part_number}}-{{$version}}</p>
-                    <p class="subtitle has-text-weight-light is-size-6"><strong>{{$nomenclature}}</strong></p>
+                    <p class="subtitle has-text-weight-light is-size-6"><strong>{{$description}}</strong></p>
 
                     <p class="subtitle has-text-weight-light is-size-6"><strong>MT</strong> {{ $part_number_mt }} <strong>WB</strong> {{ $part_number_wb }}</p>
 
@@ -113,7 +113,7 @@
                         </tr>
                         <tr>
                             <th>Mast Family</th>
-                            <td>{{$mast_family_mt}} / {{$mast_family_wb}}</td>
+                            <td>{{$part_number}} / {{$part_number}}</td>
                         </tr>
                     </table>
                 </div>
@@ -128,101 +128,33 @@
                 <thead>
 
                     <tr>
-                        <th>Maximum Payload Capacity</th>
-                        <td class="has-text-right">{{ $max_payload_kg }}</td>
-                        <td class="has-text-grey-light is-narrow">kg</td>
-                        <td class="has-text-right is-narrow">{{ round($max_payload_kg*2.20462,0) }}</td>
-                        <td class="has-text-grey-light is-narrow">lb</td>
+                        <th>Vendor</th>
+                        <td class="has-text-right is-narrow">{{ $vendor }}</td>
                     </tr>
 
                     <tr>
-                        <th>Extended Height</th>
-                        <td class="has-text-right">{{ $extended_height_mm }}</td>
-                        <td class="has-text-grey-light is-narrow">mm</td>
-                        <td class="has-text-right">{{ round($extended_height_mm/25.4,1) }}</td>
-                        <td class="has-text-grey-light is-narrow">in</td>
-                    </tr>
-
-                    <tr>
-                        <th>Nested Height</th>
-                        <td class="has-text-right">{{ $nested_height_mm }}</td>
-                        <td class="has-text-grey-light is-narrow">mm</td>
-                        <td class="has-text-right is-narrow">{{ round($nested_height_mm/25.4,1) }}</td>
-                        <td class="has-text-grey-light is-narrow">in</td>
+                        <th>Vendor Part Number</th>
+                        <td class="has-text-right">{{ $vendor_part_no }}</td>
                     </tr>
 
                     <tr>
                         <th>Weight</th>
-                        <td class="has-text-right">{{ $product_weight_kg }}</td>
-                        <td class="has-text-grey-light is-narrow">kg</td>
-                        <td class="has-text-right">{{ round($product_weight_kg*2.20462,0) }}</td>
-                        <td class="has-text-grey-light">lb</td>
+                        <td class="has-text-right">{{ round($weight,1) }} kg</td>
                     </tr>
 
                     <tr>
-                        <th>Maximum Operational Wind Speed</th>
-                        <td class="has-text-right">{{ $max_operational_wind_speed }}</td>
-                        <td class="has-text-grey-light">km/h</td>
-                        <td class="has-text-right">{{ round($max_operational_wind_speed*0.5399570136727677,0) }}</td>
-                        <td class="has-text-grey-light">knots</td>
+                        <th>Web Site Link / URL</th>
+                        <td class="has-text-right">{{ $url }}</td>
                     </tr>
 
                     <tr>
-                        <th>Maximum Survival Wind Speed</th>
-                        <td class="has-text-right">{{ $max_survival_wind_speed }}</td>
-                        <td class="has-text-grey-light">km/h</td>
-                        <td class="has-text-right">{{ round($max_survival_wind_speed*0.5399570136727677,0) }}</td>
-                        <td class="has-text-grey-light">knots</td>
-                    </tr>
-
-                    <tr>
-                        <th>Design Sail Area</th>
-                        <td class="has-text-right">{{ $design_sail_area }}</td>
-                        <td class="has-text-grey-light">m<sup>2</sup></td>
-                        <td class="has-text-right">{{ round($design_sail_area*10.7639,1) }}</td>
-                        <td class="has-text-grey-light">ft<sup>2</sup></td>
-                    </tr>
-
-                    @if ($max_pressure_in_bar)
-                    <tr>
-                        <th>Max Pneumatic Pressure</th>
-                        <td colspan="2">&nbsp;</td>
-                        <td class="has-text-right">{{ $max_pressure_in_bar }}</td>
-                        <td class="has-text-grey-light">bar</td>
-                    </tr>
-                    @endif
-
-
-                    <tr>
-                        <th>Number of Sections</th>
-                        <td class="has-text-right" colspan="4">{{ $number_of_sections }}</td>
-                    </tr>
-
-                    <tr>
-                        <th>Lock Type</th>
-                        <td class="has-text-right" colspan="4">{{ $has_locking ? $lock_types[$has_locking] :'' }}</td>
-
-                    </tr>
-
-
-
-                    <tr>
-                        <th>Design Drag Coefficient (C<sub>d</sub>)</th>
-                        <td class="has-text-right" colspan="4">{{ $design_drag_coefficient }}</td>
-
-                    </tr>
-
-
-
-
-                    <tr>
-                        <th>Descriptive Material</th>
-                        <td class="has-text-right" colspan="4">{{ $material }}</td>
+                        <th>Material</th>
+                        <td class="has-text-right">{{ $material }}</td>
                     </tr>
 
                     <tr>
                         <th>Finish and Color</th>
-                        <td colspan="4" class="has-text-right">{!! $finish !!}</td>
+                        <td class="has-text-right">{!! $finish !!}</td>
                     </tr>
 
                 </thead>
@@ -238,9 +170,9 @@
                     'with_icons' => true,
                     'icon_type' => 'Drawing',
                     'files_header' => 'Drawings',
-                    'model' => 'Sellable',
+                    'model' => 'Buyable',
                     'modelId' => $uid,
-                    'tag' => 'CustomerDrawings',
+                    'tag' => 'Datasheet',
                 ])
             </div>
 
@@ -249,26 +181,14 @@
                     'with_icons' => true,
                     'icon_type' => 'STEP',
                     'files_header' => 'STEP Files',
-                    'model' => 'Sellable',
+                    'model' => 'Buyable',
                     'modelId' => $uid,
-                    'tag' => 'STEP',
+                    'tag' => '3D',
                 ])
             </div>
 
 
-            <div class="column">
 
-                @livewire('file-list', [
-                    'getById' => $user_manual_attach_id,
-                    'with_icons' => true,
-                    'icon_type' => 'Manual',
-                    'files_header' => 'User Manual',
-                    'model' => 'Document',
-                    'modelId' => $uid,
-                    'tag' => 'document',
-                ])
-
-            </div>
 
         </div>
 
@@ -284,101 +204,13 @@
 
 
 
-        @if (strlen(trim($remarks)) > 0)
+        @if (strlen(trim($notes)) > 0)
         <div class="column has-text-grey">
-            <strong>Remarks/Notes</strong>
-            {!! $remarks !!}
+            <strong>Notes</strong>
+            {!! $notes !!}
         </div>
         @endif
 
-
-
-        {{-- INTERFACES --}}
-        <div class="column">
-            <div class="columns ">
-
-                <div class="column content is-half">
-                    <strong>Mechanical Interfaces</strong>
-
-                    <ul>
-                        @if ($payload_interface)
-                        <li>Has Payload Interface</li>
-                        @endif
-
-                        @if ($roof_interface)
-                        <li>Has Roof Interface (Vehicle)</li>
-                        @endif
-
-                        @if ($side_interface)
-                        <li>Has Side Interface (Vehicle)</li>
-                        @endif
-
-                        @if ($bottom_interface)
-                        <li>Has Bottom Interface</li>
-                        @endif
-
-                        @if ($guying_interface)
-                        <li>Has Guying Interfaces</li>
-                        @endif
-
-                        @if ($hoisting_interface)
-                        <li>Has Hoisting Interface</li>
-                        @endif
-
-                        @if ($lubrication_interface)
-                        <li>Has Lubrication Interface</li>
-                        @endif
-
-                        @if ($manual_override_interface)
-                        <li>Has Manual Override Interface</li>
-                        @endif
-
-                        @if ($wire_management)
-                        <li>Has Wire Management Interface</li>
-                        @endif
-
-                        @if ($wire_basket)
-                        <li>Has Wire Basket Interface</li>
-                        @endif
-
-                    </ul>
-
-
-                </div>
-
-                <div class="column content">
-
-                    <strong>Electrical Interfaces</strong>
-
-                    <ul>
-                        @if ($vdc12_interface)
-                        <li>Has 12 VDC Interface</li>
-                        @endif
-
-                        @if ($vdc24_interface)
-                        <li>Has 12 VDC Interface</li>
-                        @endif
-
-                        @if ($vdc28_interface)
-                        <li>Has 28 VDC Interface</li>
-                        @endif
-
-                        @if ($ac110_interface)
-                        <li>Has 110 AC Interface</li>
-                        @endif
-
-                        @if ($ac220_interface)
-                        <li>Has 220 AC Interface</li>
-                        @endif
-
-
-                    </ul>
-
-
-                </div>
-
-            </div>
-        </div>
 
 
 

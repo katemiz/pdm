@@ -9,7 +9,6 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CkImgController;
 
-
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
 use App\Livewire\LwDocument;
@@ -17,7 +16,6 @@ use App\Livewire\LwPermission;
 use App\Livewire\LwProject;
 use App\Livewire\LwRole;
 use App\Livewire\LwUser;
-
 
 use App\Livewire\ChangePassword;
 use App\Livewire\Material;
@@ -28,10 +26,7 @@ use App\Livewire\Product;
 use App\Livewire\ProductNote;
 use App\Livewire\Engineering;
 
-
 use App\Livewire\LwCompany;
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -48,10 +43,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
 Route::get('/engineering/{action}', Engineering::class);
-
-
 
 require __DIR__.'/auth.php';
 
@@ -67,60 +59,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/profile', ChangePassword::class);
 
     // CK IMG UPLOAD
-
     Route::post('/ckimages', [CkImgController::class, 'store'])->name('ckimages');
 
-
-
-
-    // Route::get('/admin/users', function () {
-    //     return view('admin.users.usr-list');
-    // });
-
-    // Route::get('/admin/users/form/{id?}', [UserController::class,'form']);
-    // Route::post('/admin/users/store/{id?}', [UserController::class,'store']);
-    // Route::get('/admin/users/view/{id}', [UserController::class,'view']);
-    // Route::get('/admin/users/delete/{id}', [UserController::class, 'delete']);
-
     // ROLES
-
     Route::get('/admin-roles/{action}/{id?}', LwRole::class);
-
-    // Route::get('/admin/roles', function () {
-    //     return view('admin.roles.role-list');
-    // });
-
-    // Route::get('/admin/roles/form/{id?}', [RoleController::class,'form']);
-    // Route::post('/admin/roles/store/{id?}', [RoleController::class,'store']);
-    // Route::get('/admin/roles/view/{id}', [RoleController::class,'view']);
-    // Route::get('/admin/roles/delete/{id}', [RoleController::class, 'delete']);
 
     // PERMISSIONS
     Route::get('/admin-permissions/{action}/{id?}', LwPermission::class);
 
-    // Route::get('/admin/permissions', function () {
-    //     return view('admin.permissions.permission-list');
-    // });
-
-    // Route::get('/admin/permissions/form/{id?}', [PermissionController::class,'form']);
-    // Route::post('/admin/permissions/store/{id?}', [PermissionController::class,'store']);
-    // Route::get('/admin/permissions/view/{id}', [PermissionController::class,'view']);
-    // Route::get('/admin/permissions/delete/{id}', [PermissionController::class, 'delete']);
-
     // COMPANIES
-
     Route::get('/admin-companies/{action}/{id?}', LwCompany::class);
-
-
-
-    // Route::get('/admin/companies', function () {
-    //     return view('admin.companies.company-list');
-    // });
-
-    // Route::get('/admin/companies/form/{id?}', [CompanyController::class,'form']);
-    // Route::post('/admin/companies/store/{id?}', [CompanyController::class,'store']);
-    // Route::get('/admin/companies/view/{id}', [CompanyController::class,'view']);
-    // Route::get('/admin/companies/delete/{id}', [CompanyController::class, 'delete']);
 
     // PROJECTS
     Route::get('/admin-projects/{action}/{id?}', LwProject::class);
@@ -157,19 +105,11 @@ Route::middleware(['auth'])->group(function () {
     // PRODUCTS
     Route::get('/products/{action}/{id?}', Product::class);
 
-
     // DOCUMENTS
     Route::get('/documents/{action}/{id?}', LwDocument::class);
-
-
 
     // MATERIAL, PROCESS and NOTES
     Route::get('/material/{action}/{id?}', Material::class);
     Route::get('/process/{action}/{id?}', Process::class);
     Route::get('/notes/{action}/{id?}', ProductNote::class);
-
-
-
-
-
 });

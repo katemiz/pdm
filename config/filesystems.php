@@ -35,6 +35,17 @@ return [
             'root' => storage_path('files'),
         ],
 
+
+        'CkImages' => [
+            'driver' => 'local',
+            'root'   => public_path('media'),
+            'url'    => env('APP_URL').'/media',
+        ],
+
+
+
+
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

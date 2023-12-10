@@ -275,7 +275,6 @@
 
 
         <livewire:ck-editor
-            edId="ed10"
             wire:model="remarks"
             label='Notes and/or remarks'
             placeholder='Any kind of remarks/notes about part/product.'

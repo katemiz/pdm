@@ -41,7 +41,6 @@
     @csrf
 
         <livewire:ck-editor
-            edId="ed10"
             wire:model="pre_description"
             label='Değişiklik İçeriği / CR Content'
             placeholder='Değişikliği ayrıntılı bir şekilde tarif ediniz.'

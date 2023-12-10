@@ -118,7 +118,6 @@
 
 
         <livewire:ck-editor
-            edId="ed10"
             wire:model="remarks"
             label='Notes and/or Remarks'
             placeholder='Enter remarks/notes here'

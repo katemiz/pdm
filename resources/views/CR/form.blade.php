@@ -67,7 +67,6 @@
         @endcan
 
         <livewire:ck-editor
-            edId="ed10"
             wire:model="description"
             label='Değişiklik İçeriği / CR Content'
             placeholder='Değişikliği ayrıntılı bir şekilde tarif ediniz.'

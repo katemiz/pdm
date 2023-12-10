@@ -27,7 +27,6 @@
         
         
             <livewire:ck-editor
-                edId="ed10"
                 wire:model="content"
                 label='Page Contents'
                 placeholder='Write page content here'

@@ -7,6 +7,8 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\CkImgController;
+
 
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
@@ -63,6 +65,11 @@ Route::middleware(['auth'])->group(function () {
     // USERS
     Route::get('/admin-users/{action}/{id?}', LwUser::class);
     Route::get('/profile', ChangePassword::class);
+
+    // CK IMG UPLOAD
+
+    Route::post('/ckimages', [CkImgController::class, 'store'])->name('ckimages');
+
 
 
 

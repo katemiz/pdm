@@ -46,7 +46,6 @@
 
 
         <livewire:ck-editor
-            edId="ed10"
             wire:model="remarks"
             label='Document Synopsis / Notes / Remarks'
             placeholder='Document Synopsis / Notes / Remarks ....'

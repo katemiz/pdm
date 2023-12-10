@@ -254,7 +254,6 @@
 
 
         <livewire:ck-editor
-            edId="ed11"
             wire:model="notes"
             label='Notes and Remarks'
             placeholder='notes ...'

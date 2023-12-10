@@ -133,7 +133,6 @@
 
 
         <livewire:ck-editor
-            edId="ed11"
             wire:model="description"
             label='Sellable product Description'
             placeholder='General description of Sellable product'

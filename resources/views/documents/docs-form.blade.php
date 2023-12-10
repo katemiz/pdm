@@ -71,8 +71,8 @@
 
 
         <livewire:ck-editor
-            edId="ed10"
             wire:model="remarks"
+            cktype="STANDARD"
             label='Document Synopsis / Notes / Remarks'
             placeholder='Document Synopsis / Notes / Remarks ....'
             :content="$remarks"/>
@@ -81,7 +81,16 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
         @enderror
 
+        <livewire:ck-editor
+            wire:model="remarks"
+            cktype="FULL"
+            label='Document Synopsis / Notes / Remarks'
+            placeholder='Document Synopsis / Notes / Remarks ....'
+            :content="$remarks"/>
 
+        @error('remarks')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+        @enderror
 
 
 

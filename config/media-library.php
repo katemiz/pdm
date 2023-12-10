@@ -8,7 +8,7 @@ return [
      */
     // 'disk_name' => env('MEDIA_DISK', 'public'),
 
-    'disk_name' => 'CkImages',
+    'disk_name' => 'media',
 
 
     /*

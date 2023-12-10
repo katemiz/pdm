@@ -14,44 +14,42 @@
 
         cktype = '{{$cktype}}'
 
+        console.log(cktype)
+
         switch (cktype) {
 
             case 'MIN':
 
-                edconfig = {
-                    toolbar: [ 'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote' ]
-                }
+                ck_toolbar = [
+                    'undo', 'redo', '|','link','|',
+                    'bold', 'italic', 'bulletedList', 'numberedList', 'blockQuote' ]
 
                 break;
 
 
             case 'STANDARD':
 
-                edconfig = {
-
-                    toolbar: {
-                        items: [ 
-                            'undo', 'redo', '|',
-                            'bold', 'italic', 'strikethrough','Underline','subscript', 'superscript','code','|','numberedList', 'bulletedList','|',
-                            'link', 'blockQuote','|',
-                            'outdent','indent','alignment','|','insertTable','insertImage'
-                        ],
-                        shouldNotGroupWhenFull: true
-                    }
-
-
-
-
+                ck_toolbar = {
+                    items: [ 
+                        'undo', 'redo', '|',
+                        'bold', 'italic', 'strikethrough','Underline','subscript', 'superscript','code','|','numberedList', 'bulletedList','|',
+                        'link', 'blockQuote','|',
+                        'outdent','indent','alignment','|','insertTable','insertImage'
+                    ],
                 }
 
                 break;
 
             case 'FULL':
 
-                edconfig = {
-                    toolbar: {
-                        shouldNotGroupWhenFull: true
-                    }
+                ck_toolbar = {
+                    items: [ 
+                        'undo', 'redo', '|',
+                        'bold', 'italic', 'strikethrough','Underline','subscript', 'superscript','code','|','numberedList', 'bulletedList','|',
+                        'link', 'blockQuote','|',
+                        'outdent','indent','alignment','|','insertTable','insertImage','|','SpecialCharacters','-','fontSize','fontColor','fontBackgroundColor','|','selectAll','pageBreak','removeFormat','sourceEditing'
+                    ],
+                    shouldNotGroupWhenFull: true
                 }
                 break;
 
@@ -60,11 +58,12 @@
         }
 
 
+        console.log(ck_toolbar)
+
+
         if ( !IsCkUploadAdapterDefined ) {
 
             IsCkUploadAdapterDefined = true
-
-            console.log ('YOK , ekliyorum')
 
             class MyUploadAdapter {
                 constructor( loader ) {
@@ -169,10 +168,7 @@
                 };
             }
 
-        } else {
-            console.log('var bir şey yapmıyorum')
-        }
-
+        } 
 
 
 
@@ -185,12 +181,8 @@
 
         ClassicEditor
             .create(document.querySelector('#{{$edId}}'), {
-                    edconfig,
-
-                    extraPlugins: [ MyCustomUploadAdapterPlugin ],
-
-                    // More configuration options.
-                    // ...
+                toolbar:ck_toolbar,
+                extraPlugins: [ MyCustomUploadAdapterPlugin ],
             })
             .then(editor => {
 

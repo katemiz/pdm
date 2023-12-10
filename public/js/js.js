@@ -2,7 +2,7 @@
 // CKEDITOR
 // ***********************
 
-let edconfig,cktype
+let ck_toolbar,cktype
 let IsCkUploadAdapterDefined = false
 
 

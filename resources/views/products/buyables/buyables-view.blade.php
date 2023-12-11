@@ -76,49 +76,42 @@
             </div>
         </nav>
 
+
+
         <div class="column">
-            <div class="columns">
+            <p class="title has-text-weight-light is-size-2">{{$part_number}}-{{$version}}</p>
+            <p class="subtitle has-text-weight-light is-size-6"><strong>{{$description}}</strong></p>
 
-                <div class="column is-8">
-                    <p class="title has-text-weight-light is-size-2">{{$part_number}}-{{$version}}</p>
-                    <p class="subtitle has-text-weight-light is-size-6"><strong>{{$description}}</strong></p>
+            @if ( strlen($part_number_mt) > 0 || strlen($part_number_wb))
 
-                    <p class="subtitle has-text-weight-light is-size-6"><strong>MT</strong> {{ $part_number_mt }} <strong>WB</strong> {{ $part_number_wb }}</p>
+            <p class="subtitle has-text-weight-light is-size-6">
 
+                @if ($part_number_mt)
+                <strong>MT</strong> {{ $part_number_mt }}
+                @endif
 
-                    {{-- @if (count($all_revs) > 1)
-                    <nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
-                        <ul>
-                        @foreach ($all_revs as $key => $revId)
-                            @if ($key != $revision)
-                            <li><a href="/requirements/view/{{$revId}}">R{{$key}}</a></li>
-                            @endif
-                        @endforeach
-                        </ul>
-                    </nav>
-                    @endif --}}
-                </div>
+                @if ($part_number_wb)
+                <strong>WB</strong> {{ $part_number_wb }}
+                @endif
+            </p>
 
-                <div class="column has-text-right is-4">
+            @endif
 
-                    <table class="table is-fullwidth">
-                        <tr>
-                            <th>End Product Type</th>
-                            <td>{{ !empty($product_type) ? $product_types[$product_type] : ''}}</td>
-                        </tr>
-                        <tr>
-                            <th>Drive Type</th>
-                            <td>{{ !empty($drive_type) ? $drive_types[$drive_type] : ''}}</td>
-                        </tr>
-                        <tr>
-                            <th>Mast Family</th>
-                            <td>{{$part_number}} / {{$part_number}}</td>
-                        </tr>
-                    </table>
-                </div>
-
-            </div>
+            {{-- @if (count($all_revs) > 1)
+            <nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
+                <ul>
+                @foreach ($all_revs as $key => $revId)
+                    @if ($key != $revision)
+                    <li><a href="/requirements/view/{{$revId}}">R{{$key}}</a></li>
+                    @endif
+                @endforeach
+                </ul>
+            </nav>
+            @endif --}}
         </div>
+
+
+
 
 
         <div class="column">
@@ -128,7 +121,7 @@
 
                     <tr>
                         <th>Vendor</th>
-                        <td class="has-text-right is-narrow">{{ $vendor }}</td>
+                        <td class="has-text-right">{{ $vendor }}</td>
                     </tr>
 
                     <tr>
@@ -167,8 +160,8 @@
             <div class="column">
                 @livewire('file-list', [
                     'with_icons' => true,
-                    'icon_type' => 'Datasheets/Drawings',
-                    'files_header' => 'Drawings',
+                    'icon_type' => 'File',
+                    'files_header' => 'Datasheets/Drawings',
                     'model' => 'Buyable',
                     'modelId' => $uid,
                     'tag' => 'Datasheet',
@@ -178,8 +171,8 @@
             <div class="column">
                 @livewire('file-list', [
                     'with_icons' => true,
-                    'icon_type' => '3D Files',
-                    'files_header' => 'STEP Files',
+                    'icon_type' => '3D',
+                    'files_header' => '3D Files',
                     'model' => 'Buyable',
                     'modelId' => $uid,
                     'tag' => '3D',

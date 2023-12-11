@@ -257,7 +257,7 @@
             wire:model="notes"
             label='Notes and Remarks'
             placeholder='notes ...'
-            :content="$description"/>
+            :content="$notes"/>
 
         @error('notes')
         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>

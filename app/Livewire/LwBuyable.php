@@ -161,7 +161,6 @@ class LwBuyable extends Component
 
         $this->validate();
 
-        $props['part_number'] = $this->getBuyableNo();
         $props['part_number_mt'] = $this->part_number_mt;
         $props['part_number_wb'] = $this->part_number_wb;
         $props['vendor'] = $this->vendor;
@@ -184,6 +183,7 @@ class LwBuyable extends Component
             // create
             $props['user_id'] = Auth::id();
             $props['updated_uid'] = Auth::id();
+            $props['part_number'] = $this->getBuyableNo();
             $this->uid = Buyable::create($props)->id;
             session()->flash('message','Buyable product has been created successfully.');
         }

@@ -143,7 +143,7 @@
 
                     <tr>
                         <th>Web Site Link / URL</th>
-                        <td class="has-text-right">{{ $url }}</td>
+                        <td class="has-text-right"><a href="{{ $url }}">Go to Part Web Site</a></td>
                     </tr>
 
                     <tr>
@@ -167,7 +167,7 @@
             <div class="column">
                 @livewire('file-list', [
                     'with_icons' => true,
-                    'icon_type' => 'Drawing',
+                    'icon_type' => 'Datasheets/Drawings',
                     'files_header' => 'Drawings',
                     'model' => 'Buyable',
                     'modelId' => $uid,
@@ -178,7 +178,7 @@
             <div class="column">
                 @livewire('file-list', [
                     'with_icons' => true,
-                    'icon_type' => 'STEP',
+                    'icon_type' => '3D Files',
                     'files_header' => 'STEP Files',
                     'model' => 'Buyable',
                     'modelId' => $uid,

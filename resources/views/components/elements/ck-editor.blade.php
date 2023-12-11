@@ -14,7 +14,7 @@
 
         cktype = '{{$cktype}}'
 
-        console.log(cktype)
+        //console.log(cktype)
 
         switch (cktype) {
 
@@ -30,7 +30,7 @@
             case 'STANDARD':
 
                 ck_toolbar = {
-                    items: [ 
+                    items: [
                         'undo', 'redo', '|',
                         'bold', 'italic', 'strikethrough','Underline','subscript', 'superscript','code','|','numberedList', 'bulletedList','|',
                         'link', 'blockQuote','|',
@@ -43,7 +43,7 @@
             case 'FULL':
 
                 ck_toolbar = {
-                    items: [ 
+                    items: [
                         'undo', 'redo', '|',
                         'bold', 'italic', 'strikethrough','Underline','subscript', 'superscript','code','|','numberedList', 'bulletedList','|',
                         'link', 'blockQuote','|',
@@ -58,7 +58,7 @@
         }
 
 
-        console.log(ck_toolbar)
+        //console.log(ck_toolbar)
 
 
         if ( !IsCkUploadAdapterDefined ) {
@@ -168,7 +168,7 @@
                 };
             }
 
-        } 
+        }
 
 
 
@@ -187,7 +187,7 @@
             .then(editor => {
 
                 // Prints all available plugins : DO NOT REMOVE
-                console.log(ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName ));
+                //console.log(ClassicEditor.builtinPlugins.map( plugin => plugin.pluginName ));
 
                 editor.setData( document.getElementById('H{{$edId}}').value );
                 editor.model.document.on('change:data', () => {

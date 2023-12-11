@@ -36,6 +36,13 @@ class Urun extends Model
     ];
 
 
+    public function getPartNumberAttribute()
+    {
+        return $this->product_no.'-'.$this->version;
+    }
+
+
+
     public function notes()
     {
         return $this->belongsToMany(Yaptirga::class)->withTimestamps();

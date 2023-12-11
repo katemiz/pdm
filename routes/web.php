@@ -22,7 +22,7 @@ use App\Livewire\Material;
 use App\Livewire\Process;
 use App\Livewire\LwBuyable;
 use App\Livewire\LwSellable;
-use App\Livewire\Product;
+use App\Livewire\LwProduct;
 use App\Livewire\ProductNote;
 use App\Livewire\Engineering;
 
@@ -103,7 +103,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/buyables/{action}/{id?}', LwBuyable::class);
 
     // PRODUCTS
-    Route::get('/products/{action}/{id?}', Product::class);
+    Route::get('/products/{action}/{id?}', LwProduct::class);
 
     // DOCUMENTS
     Route::get('/documents/{action}/{id?}', LwDocument::class);

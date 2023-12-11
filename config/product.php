@@ -20,15 +20,8 @@ return [
 
         "headers" => [
 
-            "id"=> [
+            "part_number"=> [
                 "title" => "Product No",
-                "sortable" => true,
-                "align" => "left",
-                "direction" => "asc"
-            ],
-
-            "version"=> [
-                "title" => "Version",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"

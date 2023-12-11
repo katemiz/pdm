@@ -142,9 +142,9 @@
 
         <div class="block content">
             <label class="label">Special Part Notes</label>
-                @foreach ($notes as $note)
-                <p>{{ $note->no }} - {{ $note->text_tr }}</p>
-                @endforeach
+            @foreach ($fnotes as $flag)
+            <p>{{ $flag['no'] }} - {{ $flag['text_tr'] }}</p>
+            @endforeach
         </div>
 
 

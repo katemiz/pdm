@@ -24,7 +24,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
 
-class Product extends Component
+class LwProduct extends Component
 {
     use WithPagination;
 
@@ -55,8 +55,6 @@ class Product extends Component
     public $form;
 
     public $notes = [];
-
-
 
     public $materials = [];
     public $ncategories = [];
@@ -101,8 +99,10 @@ class Product extends Component
             $this->itemId = request('id');
 
             foreach (Fnote::where('urun_id',$this->itemId)->get() as $r) {
-                $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr];
+                $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
             }
+
+            //dd($this->fnotes);
         }
 
         $this->action = strtoupper(request('action'));
@@ -209,6 +209,8 @@ class Product extends Component
                 array_push($this->notes,$dizin);
             }
 
+            //dd($item->notes);
+
         } else {
             $this->topic = '';
             $this->description = '';
@@ -245,7 +247,6 @@ class Product extends Component
 
             $this->itemId = $this->item->id;
 
-
             // Flag Notes (Special Notes)
             foreach ($this->fnotes as $fnote) {
 
@@ -255,7 +256,7 @@ class Product extends Component
 
                 Fnote::create($props);
 
-                dd($fnote);
+                //dd($fnote);
             }
 
             $this->dispatch('triggerAttachment',
@@ -336,24 +337,6 @@ class Product extends Component
         $counter->update(['counter_value' => $new_no]);         // Update Counter
         return $new_no;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public function integrityCheck() {

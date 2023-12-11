@@ -20,22 +20,15 @@ return [
                 "direction" => "asc"
             ],
 
-            "mast_family_mt"=> [
-                "title" => "Family",
+            "description"=> [
+                "title" => "Part Name/Title",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
-            "nomenclature"=> [
-                "title" => "Labeling",
-                "sortable" => true,
-                "align" => "left",
-                "direction" => "asc"
-            ],
-
-            "max_payload_kg"=> [
-                "title" => "Capacity (kg)",
+            "vendor"=> [
+                "title" => "Vendor",
                 "sortable" => true,
                 "align" => "right",
                 "direction" => "asc"

@@ -101,7 +101,6 @@
 
                 <div class="column has-text-right is-4">
 
-
                     <table class="table is-fullwidth">
                         <tr>
                             <th>End Product Type</th>

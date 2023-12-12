@@ -45,6 +45,8 @@ class LwProduct extends Component
     public $sortField = 'created_at';
     public $sortDirection;
 
+    public $product_no;
+
     public $constants;
 
     public $mat_family = false;
@@ -205,11 +207,18 @@ class LwProduct extends Component
             $this->check_reviewed_at = $item->check_reviewed_at;
             $this->app_reviewed_at = $item->app_reviewed_at;
 
-            foreach ($item->notes as $dizin) {
-                array_push($this->notes,$dizin);
-            }
+            $this->notes_id_array = [];
 
             //dd($item->notes);
+
+            $this->notes = $item->notes;
+
+            foreach ($item->notes as $note) {
+                //array_push($this->notes,$note);
+                array_push($this->notes_id_array,$note->id);
+            }
+
+            //dd($this->notes_id_array);
 
         } else {
             $this->topic = '';
@@ -281,7 +290,6 @@ class LwProduct extends Component
             Urun::whereId($this->itemId)->update([
                 'malzeme_id' => $this->mat_id,
                 'description' => $this->description,
-                'product_no' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,
                 'weight' => $this->weight,
                 'unit' => $this->unit,
@@ -292,7 +300,7 @@ class LwProduct extends Component
 
             // Update Notes to Product
             $aaa->notes()->detach();
-            $aaa->notes()->attach($this->notes_id_array);
+            $aaa->notes()->attach(array_unique($this->notes_id_array));
 
             // Flag Notes (Special Notes)
             Fnote::where('urun_id',$this->itemId)->delete();

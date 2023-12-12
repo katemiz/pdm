@@ -97,7 +97,7 @@
                 </figure>
             </div>
             <div class="media-content">
-                <p class="title is-4"> {{ $itemId }}-{{ $version }}</p>
+                <p class="title is-4"> {{ $product_no }}-{{ $version }}</p>
                 <p class="subtitle is-6">{{ $description}}</p>
             </div>
         </div>

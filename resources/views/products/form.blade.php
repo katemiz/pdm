@@ -9,7 +9,7 @@
     @if ($itemId)
     <div class="control">
         <div class="tags has-addons">
-            <span class="tag is-dark is-large mb-6">{{ $itemId}}</span>
+            <span class="tag is-dark is-large mb-6">{{ $product_no }}-{{ $version }}</span>
         </div>
     </div>
     @endif
@@ -179,11 +179,10 @@
 
                 @foreach ($ncategories as $ncategory)
 
-                    <p class="has-text-info has-text-7 mt-3">{{ $ncategory->text_tr }} /{{ $ncategory->text_en }}</p>
+                    <p class="has-text-info has-text-7 mt-3">{{ $ncategory->text_tr }} / {{ $ncategory->text_en }}</p>
                     @foreach ($ncategory->productNotes as $note)
                     <label wire:key="{{ $note->id }}" class="checkbox is-block ">
-                        <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"
-                        > {{ $note->text_tr }}
+                        <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"> {{ $note->text_tr }}
                     </label>
                     @endforeach
 

@@ -1,0 +1,54 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('allparts', function (Blueprint $table) {
+            $table->id();
+            $table->enum('part_type', ['make-part', 'make-assy','standard','chemical', 'make-from','buyable']);
+            $table->foreignIdFor(User::class);
+            $table->foreignIdFor(CNotice::class);
+            $table->foreignIdFor(Malzeme::class);
+            $table->string('unit')->default('mm');
+            $table->integer('part_number');
+            $table->text('description')->nullable();
+            $table->text('part_number_mt')->nullable();
+            $table->text('part_number_wb')->nullable();
+            $table->text('standard_number')->nullable();
+            $table->integer('makefrom_part_number')->nullable();
+            $table->integer('version')->default(0);
+            $table->boolean('is_latest')->default(true);
+            $table->text('vendor')->nullable();
+            $table->text('vendor_part_no')->nullable();
+            $table->text('url')->nullable();
+            $table->float('weight')->nullable();
+            $table->text('material_text')->nullable();
+            $table->text('finish_text')->nullable();
+            $table->text('remarks')->nullable();
+            $table->string('status')->default('wip');
+            $table->foreignId('checker_id')->nullable();
+            $table->foreignId('approver_id')->nullable();
+            $table->string('reject_reason_check')->nullable();
+            $table->string('reject_reason_app')->nullable();
+            $table->date('check_reviewed_at')->nullable();
+            $table->date('app_reviewed_at')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('allparts');
+    }
+};

@@ -27,6 +27,13 @@ return [
                 "direction" => "asc"
             ],
 
+            "c_notice_id"=> [
+                "title" => "ECN",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
             "description"=> [
                 "title" => "Product Description",
                 "sortable" => true,

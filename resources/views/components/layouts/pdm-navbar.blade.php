@@ -102,6 +102,14 @@
                             </span>
                             <span class="ml-2">Buyable Parts</span>
                         </a>
+
+                        <a href="/parts-menu" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-radio />
+                            </span>
+                            <span class="ml-2">Parts</span>
+                        </a>
+
                     </div>
                 </div>
 

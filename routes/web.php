@@ -20,6 +20,7 @@ use App\Livewire\LwUser;
 use App\Livewire\ChangePassword;
 use App\Livewire\Material;
 use App\Livewire\Process;
+use App\Livewire\LwAssy;
 use App\Livewire\LwBuyable;
 use App\Livewire\LwSellable;
 use App\Livewire\LwProduct;
@@ -104,6 +105,12 @@ Route::middleware(['auth'])->group(function () {
 
     // PRODUCTS
     Route::get('/products/{action}/{id?}', LwProduct::class);
+    Route::get('/products-assy/{action}/{id?}', LwAssy::class);
+
+
+    Route::get('/parts-menu', function () {
+        return view('products.parts-menu');
+    });
 
     // DOCUMENTS
     Route::get('/documents/{action}/{id?}', LwDocument::class);

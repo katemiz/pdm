@@ -8,7 +8,6 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Rule;
 
-
 use App\Models\CNotice;
 use App\Models\Counter;
 use App\Models\Fnote;
@@ -99,12 +98,9 @@ class LwProduct extends Component
     {
         if (request('id')) {
             $this->itemId = request('id');
-
             foreach (Fnote::where('urun_id',$this->itemId)->get() as $r) {
                 $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
             }
-
-            //dd($this->fnotes);
         }
 
         $this->action = strtoupper(request('action'));

@@ -9,30 +9,7 @@
 
     <link rel="stylesheet" href="{{ asset('/css/jqtree.css')}}">
 
-    <script>
-    var data = [
-        {
-            name: 'node1',
-            children: [
-                { name: 'child1' },
-                { name: 'child2' }
-            ]
-        },
-        {
-            name: 'node2',
-            children: [
-                { name: 'child3' }
-            ]
-        }
-    ];
 
-    $(function() {
-    $('#doctree').tree({
-        data: data
-    });
-});
-
-    </script>
 
     <header class="mb-6">
         <h1 class="title has-text-weight-light is-size-1">Assemblies</h1>
@@ -77,16 +54,32 @@
                   </li>
 
                 </ul>
-              </nav>
+            </nav>
 
-              <div id="doctree" class="notification" ></div>
 
+            <button wire:click="$toggle('showNodeGui')" class="button is-dark is-small is-fullwidth mb-2">
+                <span class="icon is-small"><x-carbon-add /></span>
+                <span>Add Node</span>
+            </button>
+
+            <livewire:lw-tree
+                :treeData="$treeData"/>
 
 
 
         </div>
 
+
+
+        {{-- ASSEMBLY PROPERTIES --}}
+
+        @if (!$showNodeGui)
         <div class="column">
+
+            <header class="mb-2">
+                <h2 class="subtitle has-text-weight-light has-text-info">Assembly Properties</h2>
+            </header>
+
             <form method="POST" enctype="multipart/form-data">
                 @csrf
 
@@ -111,7 +104,7 @@
 
                     <div class="field">
 
-                        <label class="label" for="topic">Part/Product/Item Description/Title</label>
+                        <label class="label" for="topic">Assy Description</label>
                         <div class="control">
 
                             <input
@@ -120,7 +113,7 @@
                                 wire:model="description"
                                 type="text"
                                 value="{{ $uid ? $description : ''}}"
-                                placeholder="Write part descrition/title" required>
+                                placeholder="Write assy description" required>
                         </div>
 
                         @error('description')
@@ -355,6 +348,122 @@
 
                 </form>
         </div>
+        @endif
+
+        {{-- NODES GUI --}}
+
+        @if ($showNodeGui)
+        <div class="column">
+
+            <header class="mb-2">
+                <h2 class="subtitle has-text-weight-light has-text-info">Assembly Tree Nodes</h2>
+            </header>
+
+
+
+            <nav class="level my-6">
+                <!-- Left side -->
+                <div class="level-left">
+                    <div class="level-item has-text-centered">
+                        <button wire:click="$toggle('showNodeGui')" class="button is-light is-small">
+                            <span class="icon is-small"><x-carbon-chevron-left /></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="level-right">
+
+                    <div class="field has-addons">
+                        <div class="control">
+                        <input class="input is-small" type="text" wire:model.live="query" placeholder="Search ...">
+                        </div>
+                        <div class="control">
+                        <a class="button is-link is-light is-small">
+                            @if ( strlen($query) > 0)
+                                <span class="icon is-small is-left" wire:click="resetFilter">
+                                    <x-carbon-close />
+                                </span>
+                            @else
+                                <span class="icon is-small"><x-carbon-search /></span>
+                            @endif
+                        </a>
+                        </div>
+                    </div>
+
+                </div>
+            </nav>
+
+
+            @if ($nodes->count() > 0)
+            <table class="table is-fullwidth">
+
+                <caption>{{ $nodes->total() }} {{ $nodes->total() > 1 ? ' Records' :' Record' }}</caption>
+
+                <thead>
+                    <tr>
+                        @foreach ($constants['list']['headers'] as $col_name => $headerParams)
+                            <th class="has-text-{{ $headerParams['align'] }}">
+                                {{ $headerParams['title'] }}
+
+                                @if ($headerParams['sortable'])
+
+                                    <a class="{{ $headerParams['direction'] == 'asc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('{{$col_name}}')">
+                                        <span class="icon has-text-link">
+                                            <x-carbon-chevron-sort-up />
+                                        </span>
+                                    </a>
+
+                                    <a class="{{ $headerParams['direction'] == 'desc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('{{$col_name}}')">
+                                        <span class="icon has-text-link">
+                                            <x-carbon-chevron-sort-down />
+                                        </span>
+                                    </a>
+
+                                @endif
+                            </th>
+                        @endforeach
+
+                        <th class="has-text-right"><span class="icon"><x-carbon-user-activity /></span></th>
+
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @foreach ($nodes as $record)
+                    <tr wire:key="{{ $record->id }}">
+
+                        @foreach (array_keys($constants['list']['headers']) as $col_name)
+                            <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
+                                @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
+                                    {!! $record[$col_name] !!}
+                                @else
+                                    {{ $record[$col_name] }}
+                                @endif
+                            </td>
+                        @endforeach
+
+                        <td class="has-text-right">
+
+                            <a href="javascript:addNodeJS({{ $record->id}})">
+                                <span class="icon"><x-carbon-checkmark /></span>
+                            </a>
+
+                        </td>
+
+                    </tr>
+                    @endforeach
+
+                </tbody>
+            </table>
+
+            {{ $nodes->withQueryString()->links('components.pagination.bulma') }}
+
+            @else
+                <div class="notification is-warning is-light">No nodes found in database</div>
+            @endif
+
+        </div>
+        @endif
 
     </div>
 
@@ -367,6 +476,22 @@
 
 
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </section>
 

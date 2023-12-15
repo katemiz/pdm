@@ -6,7 +6,9 @@ use Livewire\Component;
 
 use App\Models\CNotice;
 use App\Models\NoteCategory;
+use App\Models\Urun;
 use App\Models\Yaptirga;
+
 
 
 
@@ -16,12 +18,23 @@ class LwAssy extends Component
 
     public $uid;
 
+    public $query = '';
+    public $sortField = 'product_no';
+    public $sortDirection = 'DESC';
+
+    public $action;
+    public $showNodeGui = false;
+    public $constants;
+
+
+
     public $description;
 
     #[Rule('required|numeric', message: 'Please select ECN')]
     public $ecn_id;
 
 
+    public $treeData;
     public $remarks;
 
     public $unit = 'mm';
@@ -47,14 +60,15 @@ class LwAssy extends Component
         $this->getNotes();
 
         // $this->action = strtoupper(request('action'));
-        // $this->constants = config('product');
+        $this->constants = config('assy_nodes');
     }
 
 
     public function render()
     {
         return view('products.assy.assy-form',[
-            'ecns' => $this->getECNs()
+            'ecns' => $this->getECNs(),
+            'nodes' => $this->getNodes()
         ]);
     }
 
@@ -75,6 +89,64 @@ class LwAssy extends Component
             $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
         }
     }
+
+
+
+
+
+
+
+    public function changeSortDirection ($key) {
+
+        $this->sortField = $key;
+
+        if ($this->constants['list']['headers'][$key]['direction'] == 'asc') {
+            $this->constants['list']['headers'][$key]['direction'] = 'desc';
+        } else {
+            $this->constants['list']['headers'][$key]['direction'] = 'asc';
+        }
+
+        $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
+    }
+
+
+
+
+
+    public function getNodes() {
+
+        if ( strlen($this->query) > 2 ) {
+
+            return Urun::where('product_no', 'LIKE', "%".$this->query."%")
+                ->orWhere('description', 'LIKE', "%".$this->query."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+
+        } else {
+
+            return Urun::orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+        }
+
+    }
+
+
+
+
+    public function addNode($idNode) {
+
+        $p = Urun::find($idNode);
+
+        $this->dispatch('refreshTree',id: $p->id,name: $p->description);
+
+
+
+
+
+
+
+    }
+
 
 
 

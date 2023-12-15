@@ -62,10 +62,11 @@ class LwDocument extends Component
     public $status;
 
     public $doc_types = [
-        'GR' => 'General Report',
+        'GR' => 'General Document',
         'TR' => 'Test Report',
         'AR' => 'Analysis Report',
-        'MN' => 'Product Manual',
+        'MN' => 'User Manual',
+        'ME' => 'Memo',
         'PR' => 'Presentation'
     ];
 

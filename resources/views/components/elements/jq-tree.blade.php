@@ -19,15 +19,7 @@
                 data: @json($treeData),
                 selectable:true,
 
-                icons: {
-                    'leaf': {
-                        'icon': '<x-carbon-dot-mark />'
-                    },
-                },
 
-                // render: function(item) {
-                //     return `${item.name} <span class="qty">${item.qty}</span>`;
-                // },
 
                 onCreateLi: function(node, $li) {
                     // Append a link to the jqtree-element div.

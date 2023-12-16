@@ -22,6 +22,7 @@ use App\Livewire\Material;
 use App\Livewire\Process;
 use App\Livewire\LwAssy;
 use App\Livewire\LwBuyable;
+use App\Livewire\LwHtmlDocument;
 use App\Livewire\LwSellable;
 use App\Livewire\LwProduct;
 use App\Livewire\ProductNote;
@@ -114,6 +115,8 @@ Route::middleware(['auth'])->group(function () {
 
     // DOCUMENTS
     Route::get('/documents/{action}/{id?}', LwDocument::class);
+    Route::get('/documents-html/{action}/{id?}', LwHtmlDocument::class);
+
 
     // MATERIAL, PROCESS and NOTES
     Route::get('/material/{action}/{id?}', Material::class);

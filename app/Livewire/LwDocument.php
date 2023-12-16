@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\Attachment;
 use App\Models\Counter;
+use App\Models\Company;
 use App\Models\Document;
 use App\Models\User;
 
@@ -35,7 +36,6 @@ class LwDocument extends Component
     public $uid = false;
     public $pid = false;
 
-
     public $query = '';
     public $sortField = 'created_at';
     public $sortDirection = 'DESC';
@@ -48,6 +48,13 @@ class LwDocument extends Component
     public $revision;
     public $toc = [];    /// Table of Contents
     public $is_latest;
+
+
+    public $company;
+    public $companies = [];
+
+    #[Validate('required', message: 'Please select company')]
+    public $company_id;
 
 
     #[Rule('required', message: 'Document title is missing')]
@@ -108,6 +115,9 @@ class LwDocument extends Component
         }
 
         $this->constants = config('documents');
+
+        $this->setCompanyProps();
+
     }
 
 
@@ -123,6 +133,15 @@ class LwDocument extends Component
             'documents' => $this->getDocumentsList()
         ]);
     }
+
+
+    public function setCompanyProps()
+    {
+        $this->companies = Company::all();
+        $this->company_id =  Auth::user()->company_id;
+        $this->company =  Company::find($this->company_id);
+    }
+
 
 
     public function checkUserRoles() {
@@ -273,6 +292,7 @@ class LwDocument extends Component
             $this->revision = $c->revision;
             $this->doc_type = $c->doc_type;
             $this->language = $c->language;
+            $this->company_id = $c->company_id;
             $this->title = $c->title;
             $this->is_html = $c->is_html;
             $this->is_latest = $c->is_latest;
@@ -348,6 +368,7 @@ class LwDocument extends Component
         $props['updated_uid'] = Auth::id();
         $props['doc_type'] = $this->doc_type;
         $props['language'] = $this->language;
+        $props['company_id'] = $this->company_id;
         $props['is_html'] = $this->is_html;
         $props['toc'] = json_encode($this->toc);
         $props['title'] = $this->title;

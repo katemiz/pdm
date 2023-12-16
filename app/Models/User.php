@@ -61,6 +61,11 @@ class User extends Authenticatable
     }
 
 
+    public function getCompanyObjectAttribute($value) {
+        return Company::find($this->company_id);
+    }
+
+
     public function getCompanyProjectsAttribute($value) {
         return Company::find($this->company_id)->projects;
     }

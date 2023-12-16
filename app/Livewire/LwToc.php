@@ -9,20 +9,31 @@ use App\Livewire\LwDocument;
 class LwToc extends Component
 {
 
-    public $toc;
+    public $doctree;
+
+    public function mount( $doctree = [])
+    {
+        $this->doctree = $doctree;
+    }
+
 
 
     public function render()
     {
-        return view('documents.documentor-toc');
+        return view('components.elements.toc-tree', [
+            'doctree' => json_encode($this->doctree),
+        ]);
     }
 
 
 
-    public function addPage()
+    public function handleNodeSelect($nodeId)
     {
-        $this->dispatch('addContent')->to(LwDocument::class); // Rerender FileList component
+        // Handle selection of a node with ID $nodeId
+        // You can update state, perform actions, etc.
+        dd($nodeId);
     }
+
 
 
 }

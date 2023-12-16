@@ -17,6 +17,7 @@ class Document extends Model
     protected $fillable = [
 
         'user_id',
+        'company_id',
         'updated_uid',
         'document_no',
         'revision',

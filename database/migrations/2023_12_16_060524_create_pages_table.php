@@ -5,6 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 use App\Models\Document;
+use App\Models\User;
+
+
 
 return new class extends Migration
 {
@@ -15,7 +18,9 @@ return new class extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(User::class);
             $table->foreignIdFor(Document::class);
+            $table->integer('updated_uid');
             $table->text('title');
             $table->text('content')->nullable();
             $table->timestamps();

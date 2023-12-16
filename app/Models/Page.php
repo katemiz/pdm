@@ -11,6 +11,8 @@ class Page extends Model
 
     protected $fillable = [
 
+        'user_id',
+        'updated_uid',
         'document_id',
         'title',
         'content'

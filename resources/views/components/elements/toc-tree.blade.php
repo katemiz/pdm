@@ -15,8 +15,8 @@
 
 
         $(function() {
-            $('#tree').tree({
-                data: @json($treeData),
+            $('#toc').tree({
+                data: @json($doctree),
                 selectable:true,
 
 
@@ -38,20 +38,14 @@
 
 
 
-    // function deleteNode(idNode) {
 
-    //     // Get the node from the tree
-    //     var node = $('#tree').tree('getNodeById', idNode);
-
-    //     $('#tree').tree('removeNode', node);
-    // }
 
 
 
 
 
     // ON NODE SELECT
-    $('#tree').on(
+    $('#toc').on(
         'tree.select',
         function(event) {
             if (event.node) {
@@ -68,12 +62,12 @@
     );
 
     // Handle a click on the edit link
-    $('#tree').on( 'click', '.edit', function(e) {
+    $('#toc').on( 'click', '.edit', function(e) {
         // Get the id from the 'node-id' data property
         var node_id = $(e.target).data('node-id');
 
         // Get the node from the tree
-        var node = $('#tree').tree('getNodeById', node_id);
+        var node = $('#toc').tree('getNodeById', node_id);
 
         if (node) {
 
@@ -99,14 +93,14 @@
                 console.log('aaa',aaa)
 
 
-                $('#tree').tree('updateNode',node, aaa)
+                $('#toc').tree('updateNode',node, aaa)
 
 
 
                 console.log('after update',node)
 
             } else {
-                $('#tree').tree('removeNode', node);
+                $('#toc').tree('removeNode', node);
             }
 
         }
@@ -115,7 +109,7 @@
 
 
 
-    $('#tree').on('tree.contextmenu', function(event) {
+    $('#toc').on('tree.contextmenu', function(event) {
             // The clicked node is 'event.node'
             var node = event.node;
             alert(node.name);
@@ -126,12 +120,9 @@
     window.addEventListener('refreshTree',function(e) {
 
         data = e.detail.data
-
-
-
-
     })
 
+    
     function addNodeJS(idPartSelected) {
 
         // console.log(idPartSelected)
@@ -139,7 +130,7 @@
         //         console.log($('#tree').tree('toJson'));
 
         let qty
-        let node = $('#tree').tree('getNodeById',idPartSelected)
+        let node = $('#toc').tree('getNodeById',idPartSelected)
 
         // console.log("idPartSelected",idPartSelected)
         // console.log("Node check",node)
@@ -150,7 +141,7 @@
 
             // console.log("Node check",node)
 
-            $('#tree').tree('appendNode', {
+            $('#toc').tree('appendNode', {
                 name: idPartSelected.toString(),
                 id: idPartSelected,
                 qty:qty
@@ -163,7 +154,7 @@
 
 
 
-            $('#tree').tree('updateNode',node, {
+            $('#toc').tree('updateNode',node, {
                     name: idPartSelected.toString(),
                     id: idPartSelected,
                     qty:qty

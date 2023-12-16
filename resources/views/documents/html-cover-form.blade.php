@@ -1,14 +1,40 @@
 <section class="section container">
 
-    <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
     <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">HTML Document</h1>
-        <h2 class="subtitle has-text-weight-light">{{ $uid ? 'Edit HTML Document' : 'Write an HTML Docuemnt' }}</h2>
+        <h2 class="subtitle has-text-weight-light has-text-info">{{ $uid ? 'Edit Doc Properties' : 'Doc Details' }}</h2>
     </header>
 
     <form method="POST" enctype="multipart/form-data">
         @csrf
+
+
+
+
+        <div class="field">
+            <label class="label">Select Company</label>
+            <div class="control">
+                @foreach ($companies as $company)
+                <label class="radio">
+                    <input type="radio" value="{{$company->id}}" wire:model="company_id">
+                    {{$company->name}}
+                    </label>
+                @endforeach
+            </div>
+
+            @error('company_id')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
+
+
+
+
+
+
+
+
 
         <div class="field">
             <label class="label">Select Document Type</label>
@@ -105,7 +131,7 @@
 
 
         <div class="buttons is-right">
-            <button wire:click.prevent="storeUpdateItem()" class="button is-dark">
+            <button wire:click.prevent="storeUpdateCover()" class="button is-dark">
                 @if ($uid)
                     {{ $constants['update']['submitText'] }}
                 @else

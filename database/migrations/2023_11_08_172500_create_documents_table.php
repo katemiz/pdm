@@ -5,6 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
 use App\Models\User;
+use App\Models\Company;
 
 
 return new class extends Migration
@@ -17,6 +18,7 @@ return new class extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
+            $table->foreignIdFor(Company::class);
             $table->integer('updated_uid');
             $table->integer('document_no');
             $table->integer('revision')->default(1);

@@ -15,6 +15,26 @@
     <form method="POST" enctype="multipart/form-data">
         @csrf
 
+
+        <div class="field">
+            <label class="label">Select Company</label>
+            <div class="control">
+                @foreach ($companies as $company)
+                <label class="radio">
+                    <input type="radio" value="{{$company->id}}" wire:model="company_id">
+                    {{$company->name}}
+                    </label>
+                @endforeach
+            </div>
+
+            @error('company_id')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
+
+
+
         <div class="field">
             <label class="label">Select Document Type</label>
             <div class="control">

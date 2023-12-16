@@ -38,7 +38,7 @@
                     <span>{{ $constants['list']['addButton']['text'] }}</span>
                 </a>
 
-                <a href="/documents/cform" class="button is-success ml-2">
+                <a href="/documents-html/cover-form" class="button is-success ml-2">
                     <span class="icon is-small"><x-carbon-add /></span>
                     <span>Write a Document</span>
                 </a>
@@ -130,19 +130,35 @@
 
                 <td class="has-text-right">
 
-                    <a wire:click="viewItem({{ $record->id}},{{$record->is_html}})">
-                        <span class="icon"><x-carbon-view/></span>
-                    </a>
+                    @if ($record->is_html)
+                        
+                        <a href="/documents-html/cover-view/{{ $record->id}}">
+                            <span class="icon"><x-carbon-view/></span>
+                        </a>
+                    @else
 
-                    @role(['admin','company_admin','requirement_engineer'])
-                        <a href="/documents/form/{{ $record->id }}">
-                        {{-- <a wire:click="editItem({{ $record->id }})"> --}}
-                            <span class="icon"><x-carbon-edit /></span>
+                        <a wire:click="viewItem({{ $record->id}},{{$record->is_html}})">
+                            <span class="icon"><x-carbon-view/></span>
                         </a>
 
-                        {{-- <a wire:click.prevent="triggerDelete({{$record->id}})">
-                            <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
-                        </a> --}}
+                    @endif
+
+                    @role(['admin','company_admin','requirement_engineer'])
+
+                        @if ($record->is_html)
+
+                            <a href="/documents-html/cover-form/{{ $record->id }}">
+                                <span class="icon"><x-carbon-edit /></span>
+                            </a>
+
+                        @else
+
+                            <a href="/documents/form/{{ $record->id }}">
+                                <span class="icon"><x-carbon-edit /></span>
+                            </a>
+
+                        @endif
+
                     @endrole
 
                 </td>

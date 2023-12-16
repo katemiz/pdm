@@ -37,7 +37,6 @@
             <div class="level-right">
 
                 @role(['admin','company_admin','engineer'])
-
                 @if ($status == 'Frozen')
 
                     @if ($is_latest)
@@ -69,17 +68,22 @@
                         </a>
                     </p>
                 @endif
-
-
                 @endrole
 
             </div>
         </nav>
 
+
         <div class="column">
             <div class="columns">
 
-                <div class="column is-8">
+                <div class="column">
+                    <figure class="image is-64x64">
+                        {!! QrCode::size(64)->generate(url('/').'/documents/view/'.$uid) !!}
+                    </figure>
+                </div>
+
+                <div class="column is-7">
                     <p class="title has-text-weight-light is-size-2">D{{$document_no}} R{{$revision}}</p>
                     <p class="subtitle has-text-weight-light is-size-6">{{ $title }}</p>
 
@@ -141,5 +145,7 @@
         </div>
 
     </div>
+
+    
 
 </div>

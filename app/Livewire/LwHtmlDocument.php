@@ -155,6 +155,7 @@ class LwHtmlDocument extends Component
         } else {
             // create
             $props['user_id'] = Auth::id();
+            $props['toc'] = json_encode([]);
             $props['document_no'] = $this->getDocumentNo();
             $this->uid = Document::create($props)->id;
             session()->flash('message','Document has been created successfully.');
@@ -198,18 +199,14 @@ class LwHtmlDocument extends Component
 
 
 
-    public function addNode()
-    {
-        $this->storeUpdatePage ();
+    // public function addNode()
+    // {
+    //     $this->storeUpdatePage ();
 
-        // $node = [
-        //     'id' => $this->pid,
-        //     'name' => $this->ptitle
-        // ];
 
-        $this->dispatch('addNodeToTree',id: $this->pid,name:$this->ptitle);
+    //     $this->dispatch('addNodeToTree',id: $this->pid,name:$this->ptitle);
 
-    }
+    // }
 
 
 
@@ -233,7 +230,9 @@ class LwHtmlDocument extends Component
             $this->pid = Page::create($props)->id;
             session()->flash('message','Page has been created successfully.');
 
-            $this->dispatch('addNode')->to(LwToc::class); // Rerender FileList component
+            $node = ['id'=> $this->pid,'name' => $this->ptitle];
+
+            $this->dispatch('addNode',$node)->to(LwToc::class);
 
         }
 
@@ -258,9 +257,9 @@ class LwHtmlDocument extends Component
         $this->is_latest = $d->is_latest;
         $this->doc_type = $d->doc_type;
         $this->language = $d->language;
-        $this->company_id = $c->company_id;
+        $this->company_id = $d->company_id;
         $this->title = $d->title;
-        $this->toc = $d->toc;
+        $this->doctree = json_decode($d->toc);
         $this->remarks = $d->remarks;
         $this->status = $d->status;
         $this->created_at = $d->created_at;

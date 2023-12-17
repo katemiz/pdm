@@ -36,13 +36,13 @@ function addNode() {
     @enderror
 
     <div class="buttons is-right">
-        {{-- <button wire:click.prevent="storeUpdatePage()" class="button is-dark">
-            {{ $pid ? 'Update Page' : 'Add Page'}}
-        </button> --}}
-
-        <button wire:click.prevent="addNode()" class="button is-dark">
+        <button wire:click.prevent="storeUpdatePage()" class="button is-dark">
             {{ $pid ? 'Update Page' : 'Add Page'}}
         </button>
+
+        {{-- <button wire:click.prevent="addNode()" class="button is-dark">
+            {{ $pid ? 'Update Page' : 'Add Page'}}
+        </button> --}}
 
 
         {{-- <button wire:click="addNode" class="button is-dark">

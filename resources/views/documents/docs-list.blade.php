@@ -74,10 +74,6 @@
 
     @if ($documents->count() > 0)
 
-
-
-
-
     <table class="table is-fullwidth">
 
         <caption>{{ $documents->total() }} {{ $documents->total() > 1 ? ' Records' :' Record' }}</caption>

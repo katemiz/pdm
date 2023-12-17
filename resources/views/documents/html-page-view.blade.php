@@ -1,41 +1,21 @@
 <div class="columns">
 
     <div class="column">
-        
         <a href='#'>
             <span class="icon "><x-carbon-chevron-left /></span>
         </a>
-        
     </div>
 
-
-
-
-        @role(['admin','company_admin','engineer'])
-
-        <div class="column has-text-centered">
-
-
-            <a wire:click='editPage({{ $pid }})'>
-              <span class="icon "><x-carbon-edit /></span>
-            </a>
-            <a  wire:click="triggerDelete('document',{{ $uid }})">
-              <span class="icon has-text-danger"><x-carbon-trash-can /></span>
-            </a>
-
-        
-
-        </div>
-
-
-        @endrole
-
-
-
-
-
-
-
+    @role(['admin','company_admin','engineer'])
+    <div class="column has-text-centered">
+        <a wire:click='editPage({{ $pid }})'>
+            <span class="icon "><x-carbon-edit /></span>
+        </a>
+        <a  wire:click="triggerDelete('document',{{ $uid }})">
+            <span class="icon has-text-danger"><x-carbon-trash-can /></span>
+        </a>   
+    </div>
+    @endrole
 
     <div class="column has-text-right">
         <a href='#'>

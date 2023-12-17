@@ -1,5 +1,7 @@
 <div>
     <div id="tree" class="notification mt-4" ></div>
+
+    {{ $doctree }}
 </div>
 
 
@@ -10,27 +12,48 @@
 
 <script>
 
+    let doctree
+
+
+    function initializeTree(doctree) {
+
+        $('#toc').tree({
+            data: doctree,
+            selectable:true,
+            onCreateLi: function(node, $li) {
+                // Append a link to the jqtree-element div.
+                // The link has an url '#node-[id]' and a data property 'node-id'.
+                $li.find('.jqtree-element').append(
+                    '<span class="mx-1" data-node-id="'+ node.qty +'">['+ node.qty +']</span><a href="#node-'+ node.id +'" class="edit mx-1 has-text-danger" data-node-id="'+ node.id +'"> x</a>'
+                );
+            }
+        });
+
+        console.log('Jqtree Initialized',$('#toc').tree('toJson'))
+    }
+
+
+
+
+
+
+
+
+
 
     $(document).ready(function () {
 
+        doctree = @json($doctree)
 
-        $(function() {
-            $('#toc').tree({
-                data: @json($doctree),
-                selectable:true,
+        console.log('AAAAAAAAAA',doctree)
 
+        if (doctree) {
+            initializeTree(doctree)
+            console.log('BBBBB',doctree)
 
+        }
+        
 
-                onCreateLi: function(node, $li) {
-                    // Append a link to the jqtree-element div.
-                    // The link has an url '#node-[id]' and a data property 'node-id'.
-                    $li.find('.jqtree-element').append(
-                        '<span class="mx-1" data-node-id="'+ node.qty +'">['+ node.qty +']</span><a href="#node-'+ node.id +'" class="edit mx-1 has-text-danger" data-node-id="'+ node.id +'"> x</a>'
-                    );
-                }
-            });
-
-        });
     });
 
 
@@ -120,7 +143,73 @@
     window.addEventListener('refreshTree',function(e) {
 
         data = e.detail.data
+
+
+
+
+        
     })
+
+
+
+
+
+
+
+    window.addEventListener('nodeAddedUpdateTree',function(e) {
+
+        console.log('javascripte ulaştık',e.detail)
+
+        let node = {
+            id: e.detail.id,
+            name: e.detail.name
+        }
+
+
+
+        if ( $('#toc').tree('getTree') ) {
+
+            alert('VAR')
+
+        } else {
+
+            doctree = [ node ]
+
+            initializeTree(doctree)
+
+
+            alert('YOK')
+        }
+
+        if (e.detail.parentId) {
+
+            console.log('yes parent')
+
+
+            let parentNode = $('#toc').tree('getNodeById',e.detail.parentId)
+
+            $('#toc').tree('appendNode', {
+                    name: e.detail.name,
+                    id: e.detail.id,
+                },
+                parentNode
+            )
+        } else {
+
+            console.log('no parent')
+
+            $('#toc').tree('appendNode', {
+                name: e.detail.name,
+                id: e.detail.id,
+            })
+        }
+
+    })
+
+
+
+
+
 
     
     function addNodeJS(idPartSelected) {
@@ -167,6 +256,7 @@
 
 
         }
+
 
 
 

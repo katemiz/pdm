@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 
 use App\Models\CNotice;
 use App\Models\Counter;
@@ -62,13 +62,13 @@ class LwProduct extends Component
     public $notes_id_array = [];
 
     // Item Props
-    #[Rule('required|numeric', message: 'Please select material')]
+    #[Validate('required|numeric', message: 'Please select material')]
     public $mat_id;
 
-    #[Rule('required', message: 'Please write part name/title')]
+    #[Validate('required', message: 'Please write part name/title')]
     public $description;
 
-    #[Rule('required|numeric', message: 'Please select ECN')]
+    #[Validate('required|numeric', message: 'Please select ECN')]
     public $ecn_id;
 
     public $isItemEditable = false;

@@ -1,4 +1,3 @@
-<section class="section container">
 
 
     <header class="mb-6">
@@ -156,4 +155,3 @@
     @endif --}}
 
 
-</section>

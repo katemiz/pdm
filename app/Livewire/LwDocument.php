@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 
 use App\Livewire\FileList;
 
@@ -57,7 +57,7 @@ class LwDocument extends Component
     public $company_id;
 
 
-    #[Rule('required', message: 'Document title is missing')]
+    #[Validate('required', message: 'Document title is missing')]
     public $title;
 
     public $created_by;
@@ -77,7 +77,7 @@ class LwDocument extends Component
         'PR' => 'Presentation'
     ];
 
-    #[Rule('required', message: 'Please select document type')]
+    #[Validate('required', message: 'Please select document type')]
     public $doc_type = 'GR';
 
     public $languages = [
@@ -85,7 +85,7 @@ class LwDocument extends Component
         'TR' => 'Türkçe'
     ];
 
-    #[Rule('required', message: 'Please select document language')]
+    #[Validate('required', message: 'Please select document language')]
     public $language = 'TR';
 
 

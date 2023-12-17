@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{{ asset('/css/jqtree.css')}}">
 
 
-    <script>
+    {{-- <script>
 
 
     window.addEventListener('addNodeToTree',function(e) {
@@ -31,7 +31,7 @@
 
 
 
-    </script>
+    </script> --}}
 
 
     <div class="columns">
@@ -97,18 +97,23 @@
 
         <div class="column is-3">
 
-            <h2 class="subtitle has-text-weight-light">Table of Contents</h2>
-
-            <button wire:click="addPage()" class="button is-dark is-small is-fullwidth mb-2">
-                <span class="icon is-small"><x-carbon-add /></span>
-                <span>Add Page</span>
-            </button>
 
             @if ($uid)
+
+                <h2 class="subtitle has-text-weight-light">Table of Contents</h2>
+
+
+                <button wire:click="addPage()" class="button is-dark is-small is-fullwidth mb-2">
+                    <span class="icon is-small"><x-carbon-add /></span>
+                    <span>Add Page</span>
+                </button>
+
                 <a wire:click='viewCover()'>Cover Page</a>
+
+                <livewire:lw-toc uid="{{ $uid }}"/>
+
             @endif
 
-            <livewire:lw-toc :doctree="$doctree"/>
         </div>
 
         <div class="column">

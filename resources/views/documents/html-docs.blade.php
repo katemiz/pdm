@@ -49,12 +49,12 @@
                     <span>List All</span>
                 </a>
 
-                
+
 
                 @role(['admin','company_admin','engineer'])
 
                 <div class="buttons mt-3">
-    
+
                 @if ($status == 'Frozen')
 
                     @if ($is_latest)
@@ -112,6 +112,12 @@
 
                 <livewire:lw-toc uid="{{ $uid }}"/>
 
+            @else
+
+            <figure class="image">
+                <img src="{{ asset('images/toc_icon.svg') }}">
+            </figure>
+
             @endif
 
         </div>
@@ -124,19 +130,19 @@
                     @break
 
                 @case("cover-view")
-                    @include('documents.html-cover-view')                    
+                    @include('documents.html-cover-view')
                     @break
 
                 @case("page-form")
-                    @include('documents.html-page-form')                    
+                    @include('documents.html-page-form')
                     @break
 
                 @case("page-view")
-                    @include('documents.html-page-view')                   
+                    @include('documents.html-page-view')
                     @break
 
                 @default
-                    
+
             @endswitch
         </div>
 

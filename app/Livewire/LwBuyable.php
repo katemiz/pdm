@@ -9,7 +9,7 @@ use Livewire\Attributes\Validate;
 
 use App\Models\Counter;
 use App\Models\Document;
-use App\Models\Buyable;
+use App\Models\Item;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Storage;
 class LwBuyable extends Component
 {
     use WithPagination;
+
+    const PART_TYPE = 'Buyable';
 
     public $uid;
     public $action = 'LIST'; // LIST,FORM,VIEW
@@ -112,7 +114,7 @@ class LwBuyable extends Component
         }
 
         if ( strlen($this->query) > 2) {
-            return Buyable::when($this->show_latest, function ($query) {
+            return Item::when($this->show_latest, function ($query) {
                     $query->where('is_latest', true);
                 })
                 ->where('description', 'LIKE', "%".$this->query."%")
@@ -126,7 +128,7 @@ class LwBuyable extends Component
                 ->paginate(env('RESULTS_PER_PAGE'));
         } else {
 
-            return Buyable::when($this->show_latest, function ($query) {
+            return Item::when($this->show_latest, function ($query) {
                 $query->where('is_latest', true);
             })
             ->orderBy($this->sortField,$this->sortDirection)
@@ -161,6 +163,10 @@ class LwBuyable extends Component
 
         $this->validate();
 
+        $props['updated_uid'] = Auth::id();
+        $props['part_type'] = self::PART_TYPE;
+
+
         $props['part_number_mt'] = $this->part_number_mt;
         $props['part_number_wb'] = $this->part_number_wb;
         $props['vendor'] = $this->vendor;
@@ -175,16 +181,14 @@ class LwBuyable extends Component
 
         if ( $this->uid ) {
             // update
-            $props['updated_uid'] = Auth::id();
-            Buyable::find($this->uid)->update($props);
+            Item::find($this->uid)->update($props);
             session()->flash('message','Buyable product has been updated successfully.');
 
         } else {
             // create
             $props['user_id'] = Auth::id();
-            $props['updated_uid'] = Auth::id();
             $props['part_number'] = $this->getBuyableNo();
-            $this->uid = Buyable::create($props)->id;
+            $this->uid = Item::create($props)->id;
             session()->flash('message','Buyable product has been created successfully.');
         }
 
@@ -202,7 +206,7 @@ class LwBuyable extends Component
 
         if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
 
-            $buyable = Buyable::find($this->uid);
+            $buyable = Item::find($this->uid);
 
             $this->part_number = $buyable->part_number;
             $this->part_number_mt = $buyable->part_number_mt;
@@ -234,7 +238,7 @@ class LwBuyable extends Component
         // }
 
         // Revisions
-        foreach (Buyable::where('part_number',$this->part_number)->get() as $sellable) {
+        foreach (Item::where('part_number',$this->part_number)->get() as $sellable) {
             $this->all_revs[$sellable->version] = $sellable->id;
         }
 
@@ -279,11 +283,11 @@ class LwBuyable extends Component
     #[On('onDeleteConfirmed')]
     public function doDelete() {
 
-        $current_item = Buyable::find($this->uid);
+        $current_item = Item::find($this->uid);
 
         if ($current_item->version > 0) {
 
-            $previous_item = Buyable::where("part_number",$current_item->part_number)
+            $previous_item = Item::where("part_number",$current_item->part_number)
             ->where("version",$current_item->version-1)->first();
 
             $previous_item->update(['is_latest' => true]);
@@ -314,7 +318,7 @@ class LwBuyable extends Component
 
     #[On('onFreezeConfirmed')]
     public function doFreeze() {
-        Buyable::find($this->uid)->update(['status' =>'Frozen']);
+        Item::find($this->uid)->update(['status' =>'Frozen']);
         $this->action = 'VIEW';
         $this->getProps();
     }
@@ -329,7 +333,7 @@ class LwBuyable extends Component
     #[On('onReviseConfirmed')]
     public function doRevise() {
 
-        $original_part = Buyable::find($this->uid);
+        $original_part = Item::find($this->uid);
 
         $revised_part = $original_part->replicate();
 

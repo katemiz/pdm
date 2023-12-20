@@ -16,18 +16,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('allparts', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
-            $table->enum('part_type', ['make-part', 'make-assy','standard','chemical', 'make-from','buyable']);
+            $table->integer('updated_uid');
+            $table->string('part_type');
             $table->foreignIdFor(User::class);
-            $table->foreignIdFor(CNotice::class);
-            $table->foreignIdFor(Malzeme::class);
+            $table->foreignIdFor(CNotice::class)->nullable();
+            $table->foreignIdFor(Malzeme::class)->nullable();
             $table->string('unit')->default('mm');
             $table->integer('part_number');
             $table->text('description')->nullable();
             $table->text('part_number_mt')->nullable();
             $table->text('part_number_wb')->nullable();
             $table->text('standard_number')->nullable();
+            $table->json('bom')->nullable();
             $table->integer('makefrom_part_number')->nullable();
             $table->integer('version')->default(0);
             $table->boolean('is_latest')->default(true);
@@ -54,6 +56,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('allparts');
+        Schema::dropIfExists('items');
     }
 };

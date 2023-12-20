@@ -55,6 +55,16 @@ class DatabaseSeeder extends Seeder
 
         \App\Models\CRequest::factory()->count(50)->create();
 
+        Role::create(['name' => 'EngineeringDept']);
+        Role::create(['name' => 'OperationsDept']);
+        Role::create(['name' => 'ProcurementDept']);
+        Role::create(['name' => 'QualityDept']);
+        Role::create(['name' => 'SalesDept']);
+
+        Role::create(['name' => 'Approver']);
+        Role::create(['name' => 'Checker']);
+        Role::create(['name' => 'Viewer']);
+
         $adminRole = Role::create(['name' => 'admin']);
         $admin->assignRole('admin');
 
@@ -64,14 +74,6 @@ class DatabaseSeeder extends Seeder
         $engCheckerPerm = Permission::create(['name' => 'eng_checker']);
 
         $adminRole->givePermissionTo($engineeringPerm);
-
-
-
-
-
-
-
-
 
         // Note Categories
         NoteCategory::create([

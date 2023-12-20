@@ -20,8 +20,10 @@ use App\Livewire\LwUser;
 use App\Livewire\ChangePassword;
 use App\Livewire\Material;
 use App\Livewire\Process;
+use App\Livewire\LwItem;
 use App\Livewire\LwAssy;
 use App\Livewire\LwBuyable;
+use App\Livewire\LwDetail;
 use App\Livewire\LwHtmlDocument;
 use App\Livewire\LwSellable;
 use App\Livewire\LwProduct;
@@ -101,12 +103,18 @@ Route::middleware(['auth'])->group(function () {
     // END PRODUCTS
     Route::get('/endproducts/{action}/{id?}', LwSellable::class);
 
+    // DETAIL PARTS
+    Route::get('/details/{action}/{id?}', LwDetail::class);
+
     // BUYABLES
     Route::get('/buyables/{action}/{id?}', LwBuyable::class);
 
     // PRODUCTS
     Route::get('/products/{action}/{id?}', LwProduct::class);
     Route::get('/products-assy/{action}/{id?}', LwAssy::class);
+
+    Route::get('/parts/{action}/{id?}', LwItem::class);
+
 
 
     Route::get('/parts-menu', function () {

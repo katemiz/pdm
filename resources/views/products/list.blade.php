@@ -134,6 +134,6 @@
     {{ $items->links('components.pagination.bulma') }}
 
     @else
-        <div class="notification is-warning is-light">{{ $constants['list']['noitem'] }}</div>
+        <div class="notification is-warning is-light">No item yet</div>
     @endif
 </div>

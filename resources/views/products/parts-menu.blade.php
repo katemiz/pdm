@@ -31,7 +31,7 @@
                 'icon' : '<x-carbon-qr-code />',
                 'header':'Detail (Single) Parts',
                 'explanation':'For products that are bought from other vendors. Equipments.',
-                'route':'/products-add',
+                'route':'/details/form',
                 'button_text':'Add Single Part'
             },
 
@@ -145,7 +145,7 @@
 
     </script>
 
-    <section class="section">
+    <section class="section container">
         <p class="title has-text-weight-light is-size-1">Products</p>
         <p class="subtitle is-size-4">Products Menu - Select Type of Product</p>
 

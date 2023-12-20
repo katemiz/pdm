@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-class Part extends Model
+class Item extends Model
 {
     use HasFactory;
 
-    protected $table = 'allparts';
+    protected $table = 'items';
 
     protected $fillable = [
-        'part_type',
         'user_id',
+        'updated_uid',
+        'part_type',
         'c_notice_id',
         'malzeme_id',
         'unit',
@@ -43,14 +44,14 @@ class Part extends Model
         'app_reviewed_at',
     ];
 
-    public function getPartNumberAttribute()
+    public function getFullPartNumberAttribute()
     {
         return $this->part_number.'-'.$this->version;
     }
 
-    public function notes()
+    public function pnotes()
     {
-        return $this->belongsToMany(Yaptirga::class)->withTimestamps();
+        return $this->belongsToMany(Pnote::class)->withTimestamps();
     }
 
     public function flagnotes()

@@ -2,12 +2,6 @@
 
 return [
 
-    "roles" => [
-        "r" => ['admin'],
-        "w" => ['admin'],
-        "x" => ['admin']
-    ],
-
     "list" => [
         "title" => "Products",
         "subtitle" => "List of all products (detail parts, assemblies, buy items etc.)",
@@ -21,9 +15,18 @@ return [
         "headers" => [
 
             "part_number"=> [
-                "title" => "Product No",
+                "title" => "Part Number",
                 "sortable" => true,
                 "align" => "left",
+                "column_name" => "part_number",
+                "direction" => "asc"
+            ],
+
+            "part_type"=> [
+                "title" => "Type",
+                "sortable" => true,
+                "align" => "left",
+                "column_name" => "part_type",
                 "direction" => "asc"
             ],
 
@@ -31,6 +34,7 @@ return [
                 "title" => "ECN",
                 "sortable" => true,
                 "align" => "left",
+                "column_name" => "c_notice_id",
                 "direction" => "asc"
             ],
 
@@ -38,6 +42,7 @@ return [
                 "title" => "Product Description",
                 "sortable" => true,
                 "align" => "left",
+                "column_name" => "description",
                 "direction" => "asc"
             ],
 
@@ -45,70 +50,9 @@ return [
                 "title" => "Created On",
                 "sortable" => true,
                 "align" => "left",
+                "column_name" => "created_at",
                 "direction" => "asc"
             ]
-
-        ],
-        "actions" => [
-            "r" => "/products/view/",
-            "w" => "/products/form/",
-            "x" => "/products/delete/"
-        ],
-        "noitem" => "No products found in database yet!",
-        "delete_confirm" => [
-            "question" => "Do you want to delete this product from database?",
-            "last_warning" => "When done, it is not possible to revert back."
-        ]
-    ],
-
-    "create" => [
-        "title" => "Products",
-        "subtitle" => "Create a Product (detail parts, assemblies, buy items etc.)",
-        "submitText" => "Add Product",
-    ],
-
-    "read" => [
-        "title" => "Products",
-        "subtitle" => "View Product Parameters",
-    ],
-
-    "update" => [
-        "title" => "Products",
-        "subtitle" => "Edit Product Properties",
-        "submitText" => "Edit Product",
-    ],
-
-    "cu_route" => "/ecn/store/",
-
-    "form" => [
-
-        "name" => [
-            "label" => "Name",
-            "name" => "name",
-            "placeholder" => "Enter name",
-            "value" => ""
-        ],
-
-
-        "lastname" => [
-            "label" => "Lastname",
-            "name" => "lastname",
-            "placeholder" => "Enter lastname",
-            "value" => ""
-        ],
-
-        "email" => [
-            "label" => "E-Mail",
-            "name" => "email",
-            "placeholder" => "Enter e-mail",
-            "value" => ""
-        ],
-
-        "description" => [
-            "label" => "Talep Tanımı / Request Description",
-            "name" => "description",
-            "placeholder" => "Talebi detaylı olarak tarif ediniz ...",
-            "value" => ""
         ]
     ]
 ];

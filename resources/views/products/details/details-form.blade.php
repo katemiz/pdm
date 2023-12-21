@@ -9,7 +9,7 @@
     @if ($uid)
     <div class="control">
         <div class="tags has-addons">
-            <span class="tag is-dark is-large mb-6">{{ $product_no }}-{{ $version }}</span>
+            <span class="tag is-dark is-large mb-6">{{ $part_number }}-{{ $version }}</span>
         </div>
     </div>
     @endif

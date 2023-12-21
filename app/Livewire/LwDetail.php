@@ -27,7 +27,7 @@ class LwDetail extends Component
 {
     use WithPagination;
 
-    const PART_TYPE = 'Detail-Make';
+    const PART_TYPE = 'Detail';
 
 
     public $action = 'LIST'; // LIST,FORM,VIEW

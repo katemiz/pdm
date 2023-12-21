@@ -40,7 +40,7 @@ return new class extends Migration
             $table->text('material_text')->nullable();
             $table->text('finish_text')->nullable();
             $table->text('remarks')->nullable();
-            $table->string('status')->default('wip');
+            $table->string('status')->default('WIP');
             $table->foreignId('checker_id')->nullable();
             $table->foreignId('approver_id')->nullable();
             $table->string('reject_reason_check')->nullable();

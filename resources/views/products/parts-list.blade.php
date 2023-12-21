@@ -29,7 +29,7 @@
 
             <header class="mb-6">
                 <h1 class="title has-text-weight-light is-size-1">List of Products</h1>
-                <h2 class="subtitle has-text-weight-light">List of all products/items ['Detail-Make','Assy','Buyable']</h2>
+                <h2 class="subtitle has-text-weight-light">List of all products/items ['Detail','Assy','Buyable']</h2>
             </header>
 
         </div>
@@ -182,9 +182,6 @@
 
                 <td class="has-text-right">
 
-
-
-
                     @switch($record->part_type)
                         @case('Buyable')
                             <a href="/buyables/view/{{ $record->id}}">
@@ -197,7 +194,7 @@
                                 <span class="icon"><x-carbon-view/></span>
                             </a>
 
-                        @case('Detail-Make')
+                        @case('Detail')
                             <a href="/details/view/{{ $record->id}}">
                                 <span class="icon"><x-carbon-view/></span>
                             </a>
@@ -207,24 +204,9 @@
 
                     @endswitch
 
-                    {{-- <a wire:click="viewItem({{ $record->id}})"> --}}
-
 
                     @if (in_array($record->status,['WIP']))
                     @role(['admin','EngineeringDepartment'])
-
-
-
-                        {{-- <a href="/endproducts/form/{{ $record->id }}"> --}}
-                        {{-- <a wire:click="editItem({{ $record->id }})"> --}}
-                            {{-- <span class="icon"><x-carbon-edit /></span>
-                        </a> --}}
-
-                        {{-- <a wire:click.prevent="triggerDelete({{$record->id}})">
-                            <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
-                        </a> --}}
-
-
 
                         @switch($record->part_type)
                             @case('Buyable')
@@ -238,7 +220,7 @@
                                     <span class="icon"><x-carbon-edit /></span>
                                 </a>
 
-                            @case('Detail-Make')
+                            @case('Detail')
                                 <a href="/details/form/{{ $record->id}}">
                                     <span class="icon"><x-carbon-edit /></span>
                                 </a>
@@ -246,16 +228,6 @@
 
                             @default
                         @endswitch
-
-
-
-
-
-
-
-
-
-
 
                     @endrole
                     @endif

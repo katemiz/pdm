@@ -73,7 +73,7 @@
             </div>
         </div>
 
-        
+
         <div class="field">
 
             <label class="label" for="description">Material Description</label>
@@ -121,9 +121,9 @@
             wire:model="remarks"
             label='Notes and/or Remarks'
             placeholder='Enter remarks/notes here'
-            :content="$description"/>
+            :content="$remarks"/>
 
-        @error('description')
+        @error('remarks')
         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
         @enderror
 

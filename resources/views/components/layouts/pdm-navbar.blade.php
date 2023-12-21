@@ -107,7 +107,7 @@
                             <span class="icon has-text-info">
                                 <x-carbon-radio />
                             </span>
-                            <span class="ml-2">Products List</span>
+                            <span class="ml-2">Kullanma</span>
                         </a>
 
                     </div>

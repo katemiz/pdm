@@ -97,9 +97,9 @@
         </div>
 
 
-        @if ( strlen($item->description) > 0)
+        @if ( strlen($item->remarks) > 0)
         <div class="notification">
-            {!! $item->description !!}
+            {!! $item->remarks !!}
         </div>
         @endif
 

@@ -79,7 +79,9 @@
 
                 <div class="column">
                     <figure class="image is-64x64">
-                        {!! QrCode::size(64)->generate(url('/').'/documents/view/'.$uid) !!}
+                        {{-- {!! QrCode::size(64)->generate(url('/').'/documents/view/'.$uid) !!} --}}
+
+                        <img src="data:image/png;base64, {!! base64_encode(QrCode::format('png')->size(64)->generate(url('/').'/documents/view/'.$uid)) !!} ">
                     </figure>
                 </div>
 
@@ -146,6 +148,6 @@
 
     </div>
 
-    
+
 
 </div>

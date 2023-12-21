@@ -100,26 +100,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/cr/{action}/{id?}', Cr::class);
     Route::get('/ecn/{action}/{id?}', Ecn::class);
 
-    // END PRODUCTS
+    // SELLABLES
     Route::get('/endproducts/{action}/{id?}', LwSellable::class);
-
-    // DETAIL PARTS
-    Route::get('/details/{action}/{id?}', LwDetail::class);
-
-    // BUYABLES
-    Route::get('/buyables/{action}/{id?}', LwBuyable::class);
 
     // PRODUCTS
     Route::get('/products/{action}/{id?}', LwProduct::class);
-    Route::get('/products-assy/{action}/{id?}', LwAssy::class);
+    Route::get('/parts/{action}/{id?}', LwItem::class);         // List All Items
+    Route::get('/details/{action}/{id?}', LwDetail::class);     // Detil Parts
+    Route::get('/products-assy/{action}/{id?}', LwAssy::class); // Assy Parts
+    Route::get('/buyables/{action}/{id?}', LwBuyable::class);   // Buyable Parts
 
-    Route::get('/parts/{action}/{id?}', LwItem::class);
 
 
 
-    Route::get('/parts-menu', function () {
-        return view('products.parts-menu');
-    });
+
+    // Route::get('/parts-menu', function () {
+    //     return view('products.parts-menu');
+    // });
 
     // DOCUMENTS
     Route::get('/documents/{action}/{id?}', LwDocument::class);

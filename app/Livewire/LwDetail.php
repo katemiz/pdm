@@ -84,11 +84,13 @@ class LwDetail extends Component
     #[Validate('required|numeric', message: 'Weight should be numeric')]
     public $weight;
 
-    public $createdBy;
-    public $checkedBy;
+    public $created_by;
+    public $updated_by;
+    public $checked_by;
     public $approvedBy;
 
     public $created_at;
+    public $updated_at;
     public $req_reviewed_at;
     public $eng_reviewed_at;
 
@@ -204,7 +206,16 @@ class LwDetail extends Component
 
             $this->status = $item->status;
 
+
+            $this->created_by = User::find($item->user_id);
             $this->created_at = $item->created_at;
+            $this->updated_by = User::find($item->updated_uid);
+            $this->updated_at = $item->updated_at;
+
+
+
+
+
             $this->check_reviewed_at = $item->check_reviewed_at;
             $this->app_reviewed_at = $item->app_reviewed_at;
 
@@ -286,7 +297,9 @@ class LwDetail extends Component
 
     public function updateItem()
     {
+
         $this->validate();
+
 
         try {
 
@@ -299,11 +312,13 @@ class LwDetail extends Component
                 'remarks' => $this->remarks
             ]);
 
+
+
             $aaa = Item::find($this->uid);
 
             // Update Notes to Product
-            $aaa->notes()->detach();
-            $aaa->notes()->attach(array_unique($this->notes_id_array));
+            $aaa->pnotes()->detach();
+            $aaa->pnotes()->attach(array_unique($this->notes_id_array));
 
             // Flag Notes (Special Notes)
             Fnote::where('urun_id',$this->uid)->delete();
@@ -322,6 +337,8 @@ class LwDetail extends Component
             );
 
             $this->action = 'VIEW';
+
+
 
         } catch (\Exception $ex) {
             session()->flash('success','Something goes wrong!!');

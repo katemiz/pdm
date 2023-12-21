@@ -21,76 +21,91 @@
 
     <div class="card-content">
 
-        <div class="content">
-            <div class="columns">
 
-                <div class="column is-half">
-                    <div class="field has-addons">
 
-                        <p class="control">
-                            <a href="/products/list" class="button is-info is-light is-small">
-                            <span class="icon is-small"><x-carbon-list /></span>
-                            </a>
-                        </p>
 
-                        <p class="control ml-5">
-                            <a href="/products/form" class="button is-info is-light is-small">
-                            {{-- <a wire:click="addNew()" class="button is-info is-light is-small"> --}}
-                            <span class="icon is-small"><x-carbon-add /></span>
-                            <span>Add New</span>
-                            </a>
-                        </p>
 
-                        @if ($canUserEdit && $isItemEditable)
-                        <p class="control ml-1">
-                            <a class="button is-link is-light is-small" href='/details/form/{{ $uid }}'>
-                                <span class="icon is-small"><x-carbon-edit /></span>
-                                <span>Edit</span>
-                            </a>
-                        </p>
-                        @endif
+        <nav class="level mb-6">
+            <!-- Left side -->
+            <div class="level-left">
 
-                        @if ($canUserDelete && $isItemDeleteable)
-                        <p class="control ml-1">
-                            <button class="button is-danger is-light is-small" wire:click.prevent="startCRDelete({{$uid}})">
-                                <span class="icon is-small"><x-carbon-trash-can /></span>
-                                <span>Delete</span>
-                            </button>
-                        </p>
-                        @endif
+                {{-- <p class="control"> --}}
+                    <a href="/parts/list" class="button is-outlined mr-2">
+                        <span class="icon is-small"><x-carbon-show-data-cards /></span>
+                        <span>List All</span>
+                    </a>
+                {{-- </p> --}}
 
-                    </div>
-                </div>
-
-                @if (in_array($status,['wip']))
-                <div class="column">
-                    <div class="field has-addons is-pulled-right">
-
-                        <p class="control">
-                            <a wire:click='releaseStart' class="button is-success is-light is-small">
-                                <span class="icon is-small"><x-carbon-send /></span>
-                                <span>Start Release</span>
-                            </a>
-                        </p>
-
-                        {{-- <p class="control ml-5">
-                            <a onclick="showModal('m20')" class="button is-danger is-light is-small">
-                                <span class="icon is-small"><x-carbon-thumbs-down /></span>
-                                <span>Reject / Red</span>
-                            </a>
-                        </p> --}}
-
-                    </div>
-                </div>
-                @endif
+                {{-- <p class="control ml-5"> --}}
+                    <x-add-button />
+                {{-- </p> --}}
 
             </div>
-        </div>
+          
+            <!-- Right side -->
+            <div class="level-right">
+
+                @role(['admin','EngineeringDept'])
+
+                @if ($status == 'Frozen')
+
+                    @if ($is_latest)
+                    <p class="level-item">
+                        <a wire:click='reviseConfirm({{ $uid }})'>
+                            <span class="icon"><x-carbon-version /></span>
+                            <span>Revise</span>
+                        </a>
+                    </p>
+                    @endif
+
+                @else
+
+                    <p class="level-item">
+                        <a href='/details/form/{{ $uid }}'>
+                            <span class="icon"><x-carbon-edit /></span>
+                        </a>
+                    </p>
+
+                    <p class="level-item">
+                        <a wire:click='freezeConfirm({{ $uid }})'>
+                            <span class="icon"><x-carbon-stamp /></span>
+                        </a>
+                    </p>
+
+                    <p class="level-item">
+                        <a wire:click="deleteConfirm({{ $uid }})">
+                            <span class="icon has-text-danger"><x-carbon-trash-can /></span>
+                        </a>
+                    </p>
+                @endif
+
+
+                @endrole
+
+            </div>
+          </nav>
+
+
+
+
+
+
+
+
+
+
+
+        
+
+        <div class="content">
+
 
         <div class="media">
-            <div class="media-left has-text-centered">
+            <div class="media-left">
                 <figure class="image is-48x48">
-                    <x-carbon-barcode />
+                    {{-- <x-carbon-barcode /> --}}
+                    {!! QrCode::size(64)->generate(url('/').'/details/view/'.$uid) !!}
+
                 </figure>
             </div>
             <div class="media-content">
@@ -206,13 +221,32 @@
         @endif
 
 
-        @livewire('tolerances')
+        {{-- @livewire('tolerances') --}}
 
-        @livewire('info-box', [
+        {{-- @livewire('info-box', [
             'createdBy' => $createdBy,
             'status' => $status,
             'created_at' => $created_at
-        ])
+        ]) --}}
+
+        <div class="columns is-size-7 has-text-grey mt-6">
+
+            <div class="column">
+                <p>{{ $created_by->email }}</p>
+                <p>{{ $created_at }}</p>
+            </div>
+
+            <div class="column has-text-centered">
+                <p class="subtitle has-text-weight-light is-size-6"><strong>Status</strong><br>{{$status}}</p>
+            </div>
+
+            <div class="column has-text-right">
+                <p>{{ $updated_by->email }}</p>
+                <p>{{ $updated_at }}</p>
+            </div>
+
+        </div>
+
 
     </div>
 
@@ -236,20 +270,5 @@
 
 </div>
 
-<div class="modal" id="m10">
-    <div class="modal-background" onclick="hideModal('m10')"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Modal title</p>
-        <button class="delete" aria-label="close" onclick="hideModal('m10')"></button>
-      </header>
-      <section class="modal-card-body">
-        <!-- Content ... -->
-      </section>
-      <footer class="modal-card-foot">
-        <button class="button is-success">Save changes</button>
-        <button class="button" onclick="hideModal('m10')">Cancel</button>
-      </footer>
-    </div>
-  </div>
+
 

@@ -17,26 +17,24 @@
             <!-- Left side -->
             <div class="level-left">
 
-                <p class="level-item">
-                    <a href="/buyables/list">
-                        <span class="icon is-small"><x-carbon-table /></span>
+                    <a href="/parts/list" class="button is-outlined mr-2">
+                        <span class="icon is-small"><x-carbon-show-data-cards /></span>
                         <span>List All</span>
                     </a>
-                </p>
 
-                <p class="level-item">
-                    <a href="/buyables/form/">
+                    {{-- <a href="/buyables/form/">
                         <span class="icon is-small"><x-carbon-add /></span>
                         <span>Add</span>
-                    </a>
-                </p>
+                    </a> --}}
+
+                    <x-add-button />
 
             </div>
 
             <!-- Right side -->
             <div class="level-right">
 
-                @role(['admin','company_admin','requirement_engineer'])
+                @role(['admin','EngineeringDept'])
 
                 @if ($status == 'Frozen')
 
@@ -226,12 +224,9 @@
                 <p>{{ $created_at }}</p>
             </div>
 
-
             <div class="column has-text-centered">
                 <p class="subtitle has-text-weight-light is-size-6"><strong>Status</strong><br>{{$status}}</p>
             </div>
-
-
 
             <div class="column has-text-right">
                 <p>{{ $updated_by->email }}</p>

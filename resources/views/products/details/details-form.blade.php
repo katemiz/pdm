@@ -2,7 +2,7 @@
     <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
     <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">Detail (Make) Parts</h1>
+        <h1 class="title has-text-weight-light is-size-1">Detail Parts</h1>
         <h2 class="subtitle has-text-weight-light">{{ $uid ? 'Update Detail Part' : 'New Detail Part' }}</h2>
     </header>
 
@@ -47,7 +47,6 @@
             @enderror
         </div>
 
-
         <div class="field">
 
             <label class="label" for="topic">Part/Product/Item Description/Title</label>
@@ -76,12 +75,10 @@
                 @if ( $ecns->count() > 0)
 
                     @foreach ($ecns as $ecn)
-
                         <label class="checkbox is-block">
                             <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
                             @checked($uid && $ecn->id == $ecn_id)> ECN-{{ $ecn->id }}
                         </label>
-
                     @endforeach
 
                 @else
@@ -129,10 +126,9 @@
                         <div class="select">
                             <select wire:model='mat_form' wire:change="getMaterialList">
                             <option>Select Form</option>
-
-                            @foreach (config('material.form') as $key => $value)
-                                <option value="{{$key}}" @selected( $uid && $form == $key )>{{$value}}</option>
-                            @endforeach
+                                @foreach (config('material.form') as $key => $value)
+                                    <option value="{{$key}}" @selected( $uid && $form == $key )>{{$value}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -357,9 +353,9 @@
 
         <div class="buttons is-right">
             @if ($uid)
-                <button wire:click.prevent="updateItem()" class="button is-dark">Update Make Part</button>
+                <button wire:click.prevent="updateItem()" class="button is-dark">Update Detail Part</button>
             @else
-                <button wire:click.prevent="storeItem()" class="button is-dark">New Make Part</button>
+                <button wire:click.prevent="storeItem()" class="button is-dark">New Detail Part</button>
             @endif
         </div>
 

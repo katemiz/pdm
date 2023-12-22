@@ -11,7 +11,7 @@
                 dd.classList.add('is-active')
             }
 
-            console.log(event.target)
+            //console.log(event.target)
 
 
         }
@@ -25,9 +25,9 @@
 
         <div class="dropdown" id="dmenu">
             <div class="dropdown-trigger">
-              <button class="button is-outlined" aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleDropdown()">
+              <button class="button {{ $class }}" aria-haspopup="true" aria-controls="dropdown-menu" onclick="toggleDropdown()">
                 <span class="icon is-small"><x-carbon-add /></span>
-                <span>Add</span>
+                <span>Add Component</span>
                 <span class="icon is-small"><x-carbon-chevron-down /></span>
               </button>
             </div>

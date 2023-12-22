@@ -89,7 +89,7 @@
                             <span class="ml-2">Sellable Parts</span>
                         </a>
 
-                        <a href="/products/list" class="navbar-item">
+                        {{-- <a href="/products/list" class="navbar-item">
                             <span class="icon has-text-info">
                                 <x-carbon-barcode />
                             </span>
@@ -101,13 +101,13 @@
                                 <x-carbon-radio />
                             </span>
                             <span class="ml-2">Buyable Parts</span>
-                        </a>
+                        </a> --}}
 
                         <a href="/parts/list" class="navbar-item">
                             <span class="icon has-text-info">
                                 <x-carbon-radio />
                             </span>
-                            <span class="ml-2">Kullanma</span>
+                            <span class="ml-2">Components</span>
                         </a>
 
                     </div>

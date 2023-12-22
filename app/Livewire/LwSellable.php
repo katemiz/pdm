@@ -214,7 +214,7 @@ class LwSellable extends Component
             return EProduct::when($this->show_latest, function ($query) {
                     $query->where('is_latest', true);
                 })
-                ->where('nomenclature', 'LIKE', "%".$this->query."%")
+                ->orwhere('nomenclature', 'LIKE', "%".$this->query."%")
                 ->orWhere('part_number','LIKE',"%".$this->query."%")
                 ->orWhere('part_number_mt','LIKE',"%".$this->query."%")
                 ->orWhere('part_number_wb','LIKE',"%".$this->query."%")

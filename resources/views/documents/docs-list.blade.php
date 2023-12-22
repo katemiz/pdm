@@ -127,7 +127,7 @@
                 <td class="has-text-right">
 
                     @if ($record->is_html)
-                        
+
                         <a href="/documents-html/cover-view/{{ $record->id}}">
                             <span class="icon"><x-carbon-view/></span>
                         </a>
@@ -139,21 +139,26 @@
 
                     @endif
 
-                    @role(['admin','company_admin','requirement_engineer'])
+                    @role(['admin','EngineeringDept'])
 
-                        @if ($record->is_html)
+                        @if ($record->status != 'Frozen')
 
-                            <a href="/documents-html/cover-form/{{ $record->id }}">
-                                <span class="icon"><x-carbon-edit /></span>
-                            </a>
+                            @if ($record->is_html)
 
-                        @else
+                                <a href="/documents-html/cover-form/{{ $record->id }}">
+                                    <span class="icon"><x-carbon-edit /></span>
+                                </a>
 
-                            <a href="/documents/form/{{ $record->id }}">
-                                <span class="icon"><x-carbon-edit /></span>
-                            </a>
+                            @else
+
+                                <a href="/documents/form/{{ $record->id }}">
+                                    <span class="icon"><x-carbon-edit /></span>
+                                </a>
+
+                            @endif
 
                         @endif
+
 
                     @endrole
 

@@ -1,6 +1,6 @@
 <header class="mb-6">
-    <h1 class="title has-text-weight-light is-size-1">Detail (Make) Parts</h1>
-    <h2 class="subtitle has-text-weight-light">Detail (Make) Part Properties</h2>
+    <h1 class="title has-text-weight-light is-size-1">Detail Parts</h1>
+    <h2 class="subtitle has-text-weight-light">Detail Part Properties</h2>
 </header>
 
 @if (session()->has('message'))
@@ -27,21 +27,15 @@
 
         <nav class="level mb-6">
             <!-- Left side -->
-            <div class="level-left">
 
-                {{-- <p class="control"> --}}
+            <div class="level-left">
                     <a href="/parts/list" class="button is-outlined mr-2">
                         <span class="icon is-small"><x-carbon-show-data-cards /></span>
                         <span>List All</span>
                     </a>
-                {{-- </p> --}}
-
-                {{-- <p class="control ml-5"> --}}
                     <x-add-button />
-                {{-- </p> --}}
-
             </div>
-          
+
             <!-- Right side -->
             <div class="level-right">
 
@@ -79,7 +73,6 @@
                     </p>
                 @endif
 
-
                 @endrole
 
             </div>
@@ -95,7 +88,7 @@
 
 
 
-        
+
 
         <div class="content">
 

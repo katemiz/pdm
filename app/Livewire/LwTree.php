@@ -49,7 +49,7 @@ class LwTree extends Component
 
     public function render()
     {
-        return view('components.elements.jq-tree', [
+        return view('components.elements.bom-tree', [
             'treeData' => json_encode($this->treeData),
         ]);
     }

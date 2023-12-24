@@ -180,10 +180,6 @@ class LwDetail extends Component
                 $this->isItemDeleteable = true;
             }
 
-            $this->createdBy = User::find($item->user_id);
-            $this->checkedBy = User::find($item->checker_id);
-            $this->approvedBy = User::find($item->approver_id);
-
             $this->part_number = $item->part_number;
             $this->version = $item->version;
             $this->weight = $item->weight;
@@ -206,31 +202,23 @@ class LwDetail extends Component
 
             $this->status = $item->status;
 
-
             $this->created_by = User::find($item->user_id);
             $this->created_at = $item->created_at;
             $this->updated_by = User::find($item->updated_uid);
             $this->updated_at = $item->updated_at;
-
-
-
-
+            $this->checked_by = User::find($item->checker_id);
+            $this->approved_by = User::find($item->approver_id);
 
             $this->check_reviewed_at = $item->check_reviewed_at;
             $this->app_reviewed_at = $item->app_reviewed_at;
 
             $this->notes_id_array = [];
 
-            //dd($item->notes);
-
             $this->notes = $item->pnotes;
 
             foreach ($item->pnotes as $note) {
-                //array_push($this->notes,$note);
                 array_push($this->notes_id_array,$note->id);
             }
-
-            //dd($this->notes_id_array);
 
         } else {
             $this->topic = '';

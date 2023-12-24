@@ -88,13 +88,51 @@
         })
 
 
-        // document.addEventListener('livewire:initialized', () => {
-        //     @this.on('done-file-upload', (event) => {
-        //         console.log('doneFileUpload')
+        window.addEventListener('saveTree',function(e) {
 
-        //         alert(event.detail)
-        //     });
-        // });
+            console.log('saveTree is running')
+            console.log($('#tree').tree('toJson'))
+
+            alert(e.detail.idAssy)
+
+            Livewire.dispatch('addTreeToDB', { idAssy:e.detail.idAssy, bomData: $('#tree').tree('toJson')});
+
+        })
+
+
+        function addNodeJS(idAssy,idPartSelected,partNumber) {
+
+            let qty
+            let node = $('#tree').tree('getNodeById',idPartSelected)
+
+            if (node === null) {
+                qty = 1
+
+                $('#tree').tree('appendNode', {
+                    name: partNumber.toString(),
+                    id: idPartSelected,
+                    qty:qty
+                });
+
+            } else {
+
+                qty = node.qty +1
+
+                $('#tree').tree('updateNode',node, {
+                        name: partNumber.toString(),
+                        id: idPartSelected,
+                        qty:qty
+                    }
+                );
+            }
+
+            console.log('addNodeJS function',$('#tree').tree('toJson'))
+            //Livewire.dispatch('addTreeToDB', $('#tree').tree('toJson'))
+
+            Livewire.dispatch('addTreeToDB', { idAssy:idAssy, bomData: $('#tree').tree('toJson')});
+
+        }
+
 
     </script>
 
@@ -108,10 +146,10 @@
             @include('products.assy.assy-view')
             @break
 
-        @case('LIST')
+        {{-- @case('LIST')
         @default
             @include('products.assy.assy-list')
-            @break
+            @break --}}
 
     @endswitch
 

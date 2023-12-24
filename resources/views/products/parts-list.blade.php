@@ -141,6 +141,7 @@
                             <a href="/products-assy/view/{{ $record->id}}">
                                 <span class="icon"><x-carbon-view/></span>
                             </a>
+                            @break
 
                         @case('Detail')
                             <a href="/details/view/{{ $record->id}}">
@@ -167,6 +168,7 @@
                                 <a href="/products-assy/form/{{ $record->id}}">
                                     <span class="icon"><x-carbon-edit /></span>
                                 </a>
+                                @break
 
                             @case('Detail')
                                 <a href="/details/form/{{ $record->id}}">

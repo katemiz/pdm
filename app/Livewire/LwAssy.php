@@ -3,10 +3,15 @@
 namespace App\Livewire;
 
 use Livewire\Component;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
+use App\Livewire\LwTree;
+
 
 use App\Models\CNotice;
 use App\Models\Counter;
@@ -21,6 +26,8 @@ use App\Models\User;
 
 class LwAssy extends Component
 {
+    const PART_TYPE = 'Assy';
+
 
     public $uid;
 
@@ -32,6 +39,9 @@ class LwAssy extends Component
     public $showNodeGui = false;
     public $constants;
 
+    public $bom;
+
+    #[Validate('required', message: 'Please enter description')]
     public $description;
 
     #[Validate('required|numeric', message: 'Please select ECN')]
@@ -80,7 +90,7 @@ class LwAssy extends Component
 
     public function render()
     {
-        $this->getItemProps();
+        $this->setProps();
 
         return view('products.assy.assy',[
             'nodes' => $this->getNodes()
@@ -157,49 +167,118 @@ class LwAssy extends Component
 
 
 
+    public function setProps() {
+
+        if ( !$this->uid || !in_array($this->action,['VIEW','FORM']) ) {
+            return true;
+        }
+
+
+
+        $item = Item::find($this->uid);
+
+        if ($item->status == 'WIP') {
+            $this->isItemEditable = true;
+            $this->isItemDeleteable = true;
+        }
+
+        $this->part_number = $item->part_number;
+        $this->version = $item->version;
+        $this->weight = $item->weight;
+        $this->unit = $item->unit;
+
+        $this->description = $item->description;
+        $this->ecn_id = $item->c_notice_id;
+        $this->remarks = $item->remarks;
+        $this->status = $item->status;
+
+        $this->bom = json_decode($item->bom);
+
+
+        $this->created_by = User::find($item->user_id);
+        $this->created_at = $item->created_at;
+        $this->updated_by = User::find($item->updated_uid);
+        $this->updated_at = $item->updated_at;
+        $this->checked_by = User::find($item->checker_id);
+        $this->approved_by = User::find($item->approver_id);
+
+        $this->check_reviewed_at = $item->check_reviewed_at;
+        $this->app_reviewed_at = $item->app_reviewed_at;
+
+        $this->notes_id_array = [];
+
+        $this->notes = $item->pnotes;
+
+
+
+
+
+
+
+        foreach ($item->pnotes as $note) {
+            array_push($this->notes_id_array,$note->id);
+        }
+
+
+
+
+
+
+
+    }
 
 
 
 
 
     public function storeItem()
-    {
+    {        
+        
+
+
         $this->validate();
+
+        $this->part_number = $this->getProductNo();
+
+
         try {
             $this->item = Item::create([
-                'part_type' => 'assy',
+                'part_type' => self::PART_TYPE,
                 'description' => $this->description,
                 'part_number' => $this->getProductNo(),
                 'c_notice_id' => $this->ecn_id,
                 'weight' => $this->weight,
                 'unit' => $this->unit,
                 'remarks' => $this->remarks,
-                'user_id' => Auth::id()
+                'user_id' => Auth::id(),
+                'updated_uid' => Auth::id()
             ]);
+
             session()->flash('success','Assy Part has been created successfully!');
 
             // Attach Notes to Product
             $this->item->pnotes()->attach($this->notes_id_array);
 
-            $this->itemId = $this->item->id;
+            $this->uid = $this->item->id;
 
             // Flag Notes (Special Notes)
             foreach ($this->fnotes as $fnote) {
 
-                $props['urun_id'] = $this->itemId;
+                $props['urun_id'] = $this->uid;
                 $props['no'] = $fnote['no'];
                 $props['text_tr'] = $fnote['text_tr'];
 
                 Fnote::create($props);
-
-                //dd($fnote);
             }
 
             $this->dispatch('triggerAttachment',
-                modelId: $this->itemId
+                modelId: $this->uid
             );
 
-            $this->action = 'VIEW';
+            $this->dispatch('saveTree',idAssy: $this->item->id);
+
+
+            //$this->action = 'VIEW';
 
         } catch (\Exception $ex) {
             session()->flash('error','Something goes wrong!!'.$ex);
@@ -208,71 +287,6 @@ class LwAssy extends Component
 
 
 
-    public function getItemProps() {
-
-        if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
-
-            $item = Item::find($this->uid);
-
-            if ($item->status == 'wip') {
-                $this->isItemEditable = true;
-                $this->isItemDeleteable = true;
-            }
-
-            $this->createdBy = User::find($item->user_id);
-            $this->checkedBy = User::find($item->checker_id);
-            $this->approvedBy = User::find($item->approver_id);
-
-            $this->part_number = $item->part_number;
-            $this->version = $item->version;
-            $this->weight = $item->weight;
-            $this->unit = $item->unit;
-
-            $this->description = $item->description;
-            $this->ecn_id = $item->c_notice_id;
-            $this->remarks = $item->remarks;
-
-            $this->status = $item->status;
-
-            $this->created_at = $item->created_at;
-            $this->check_reviewed_at = $item->check_reviewed_at;
-            $this->app_reviewed_at = $item->app_reviewed_at;
-
-            $this->notes_id_array = [];
-
-
-            $this->notes = $item->notes;
-
-            foreach ($item->pnotes as $note) {
-                //array_push($this->notes,$note);
-                array_push($this->notes_id_array,$note->id);
-            }
-
-
-
-            $this->created_at = $item->created_at;
-            $this->updated_at = $item->updated_at;
-            $this->created_by = User::find($item->user_id)->email;
-            //$this->updated_by = User::find($item->updated_uid)->email;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        }
-    }
 
 
 
@@ -297,6 +311,42 @@ class LwAssy extends Component
         $counter->update(['counter_value' => $new_no]);         // Update Counter
         return $new_no;
     }
+
+    #[On('addTreeToDB')]
+
+    public function addTreeToDB($idAssy,$bomData) {
+
+
+        // Çalışıyor
+
+
+        if ($idAssy > 0) {
+
+
+
+            $props['bom'] = $bomData;
+
+            $i = Item::find($idAssy);
+
+            $sonuc = $i->update($props);
+
+            dump([$idAssy,$bomData,$sonuc,$props,$i]);
+
+
+            Log::info($i);
+            Log::info($props);
+
+
+        }
+
+
+        //dd($veri);
+    }
+
+
+
+
+
 
 
 

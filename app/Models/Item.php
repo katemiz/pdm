@@ -25,6 +25,7 @@ class Item extends Model
         'part_number_mt',
         'part_number_wb',
         'standard_number',
+        'bom',
         'makefrom_part_number',
         'version',
         'is_latest',

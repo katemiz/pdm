@@ -444,7 +444,7 @@
 
                         <td class="has-text-right">
 
-                            <a href="javascript:addNodeJS({{ $record->id}})">
+                            <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }})">
                                 <span class="icon"><x-carbon-checkmark /></span>
                             </a>
 

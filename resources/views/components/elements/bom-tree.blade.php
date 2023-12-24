@@ -132,58 +132,11 @@
 
     })
 
-    function addNodeJS(idPartSelected) {
-
-        // console.log(idPartSelected)
-
-        //         console.log($('#tree').tree('toJson'));
-
-        let qty
-        let node = $('#tree').tree('getNodeById',idPartSelected)
-
-        // console.log("idPartSelected",idPartSelected)
-        // console.log("Node check",node)
-
-
-        if (node === null) {
-            qty = 1
-
-            // console.log("Node check",node)
-
-            $('#tree').tree('appendNode', {
-                name: idPartSelected.toString(),
-                id: idPartSelected,
-                qty:qty
-            }
-        );
-
-
-        } else {
-            qty = node.qty +1
-
-
-
-            $('#tree').tree('updateNode',node, {
-                    name: idPartSelected.toString(),
-                    id: idPartSelected,
-                    qty:qty
-                }
-            );
 
 
 
 
 
-
-        }
-
-
-
-
-
-
-
-}
 
 
 

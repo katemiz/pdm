@@ -42,7 +42,7 @@
                         </p>
 
                         @role(['engineering'])
-                        @if ($isItemDeleteable)
+                        @if ($isItemEditable)
 
                         <p class="control ml-1">
                             <a class="button is-link is-light is-small" href='/products/form/{{ $itemId }}'>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
 
-                @if (in_array($status,['wip']))
+                @if (in_array($status,['WIP']))
                 <div class="column">
                     <div class="field has-addons is-pulled-right">
 
@@ -124,26 +124,41 @@
             </div>
         </div>
 
-        {{-- <div class="columns">
-            <div class="column block">
-                <label class="label">Material</label>
-                SILINECEK
-            </div>
-
-            <div class="column block has-text-right">
-                <label class="label">Part Weight [kg]</label>
-                {{ $weight }}
-            </div>
-        </div> --}}
 
 
         <div class="column">
 
-            <table class="table is-fullwidth">
+            <table class="table is-fullwidth has-background-light">
 
                 <caption>Bill of Materials</caption>
 
+                @if ($bom)
+
+                <thead>
+                    <tr>
+                        <th>Part Number</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach ($bom as $i)
+                        <tr>
+                            <td class="is-narrow">{{ $i->name }}</td>
+                            <td>{{ $i->id }}</td>
+                            <td class="is-narrow has-text-right">{{ $i->qty }}</td>
+                        </tr>
+                    
+                    @endforeach
+                </tbody>
+                @endif
+
+
+
             </table>
+
+
 
         </div>
 

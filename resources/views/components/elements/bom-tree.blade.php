@@ -13,13 +13,10 @@
 
     $(document).ready(function () {
 
-
         $(function() {
             $('#tree').tree({
                 data: @json($treeData),
                 selectable:true,
-
-
 
                 onCreateLi: function(node, $li) {
                     // Append a link to the jqtree-element div.
@@ -108,6 +105,11 @@
             } else {
                 $('#tree').tree('removeNode', node);
             }
+
+
+            Livewire.dispatch('saveTree', {idAssy: "500"})
+
+
 
         }
     })

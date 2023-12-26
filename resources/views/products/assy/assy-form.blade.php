@@ -1,7 +1,5 @@
 <section class="section container">
 
-
-<div>
     <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
     <script src="{{ asset('/js/jquery-3.7.1.min.js') }}"></script>
@@ -9,19 +7,17 @@
 
     <link rel="stylesheet" href="{{ asset('/css/jqtree.css')}}">
 
-
-
     <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">Assemblies</h1>
+        <h1 class="title has-text-weight-light is-size-1">Assembled Products</h1>
         <h2 class="subtitle has-text-weight-light">{{ $uid ? 'Update Assembly Properties' : 'Add New Assembly'}}</h2>
     </header>
 
     @if ($uid)
-        <div class="control">
-            <div class="tags has-addons">
-                <span class="tag is-dark is-large mb-6">{{ $part_number}}-{{ $version }}</span>
-            </div>
+    <div class="control">
+        <div class="tags has-addons">
+            <span class="tag is-dark is-large mb-6">{{ $part_number}}-{{ $version }}</span>
         </div>
+    </div>
     @endif
 
     @if (session()->has('error'))
@@ -36,19 +32,15 @@
         </div>
     @endif
 
-
     <div class="columns">
 
         <div class="column is-3">
-
 
             <nav class="breadcrumb" aria-label="breadcrumbs">
                 <ul>
                   <li>
                     <a href="#">
-                      <span class="icon is-small">
-                        <x-carbon-tree-view-alt />
-                      </span>
+                      <span class="icon is-small"><x-carbon-tree-view-alt /></span>
                       <span>Product Tree</span>
                     </a>
                   </li>
@@ -62,10 +54,7 @@
                 <span>Add Node</span>
             </button>
 
-            <livewire:lw-tree
-                :treeData="$treeData"/>
-
-
+            <livewire:lw-tree :treeData="$treeData"/>
 
         </div>
 
@@ -161,12 +150,10 @@
                             @foreach ($ncategories as $ncategory)
 
                                 <p class="has-text-info has-text-7 mt-3">{{ $ncategory->text_tr }} / {{ $ncategory->text_en }}</p>
-                                @foreach ($pnotes as $note)
-                                    @if ($note->note_category_id == $ncategory->id)
-                                    <label wire:key="{{ $note->id }}" class="checkbox is-block ">
-                                        <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"> {{ $note->text_tr }}
-                                    </label>
-                                    @endif
+                                @foreach ($ncategory->productNotes as $note)
+                                <label wire:key="{{ $note->id }}" class="checkbox is-block ">
+                                    <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"> {{ $note->text_tr }}
+                                </label>
                                 @endforeach
 
                             @endforeach
@@ -444,7 +431,7 @@
 
                         <td class="has-text-right">
 
-                            <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }})">
+                            <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ $record->description }}','{{ $record->version }}')">
                                 <span class="icon"><x-carbon-checkmark /></span>
                             </a>
 
@@ -475,7 +462,6 @@
 
 
 
-</div>
 
 
 

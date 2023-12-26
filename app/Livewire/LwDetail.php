@@ -25,10 +25,20 @@ use Spatie\Permission\Models\Permission;
 
 class LwDetail extends Component
 {
-    use WithPagination;
-
     const PART_TYPE = 'Detail';
 
+    public $page_view_title = 'Detail Parts';
+    public $page_view_subtitle = 'Detail Part Properties';
+
+    public $list_all_url = '/parts/list';
+    public $item_edit_url = '/details/form';
+    public $item_view_url = '/products-detail/view';
+
+    public $has_material = true;
+    public $has_bom = false;
+    public $has_notes = true;
+    public $has_flag_notes = true;
+    public $has_vendor = false;
 
     public $action = 'LIST'; // LIST,FORM,VIEW
 
@@ -58,7 +68,6 @@ class LwDetail extends Component
     public $family;
     public $form;
 
-    public $notes = [];
 
     public $materials = [];
     public $ncategories = [];
@@ -96,6 +105,9 @@ class LwDetail extends Component
 
     public $fno     = [];
     public $fnotes  = [];
+    public $notes = [];
+
+    public $all_revs = [];
 
     public $remarks;
 
@@ -105,6 +117,9 @@ class LwDetail extends Component
     {
         if (request('id')) {
             $this->uid = request('id');
+
+            $this->setUnsetProps();
+
             foreach (Fnote::where('urun_id',$this->uid)->get() as $r) {
                 $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
             }
@@ -122,13 +137,13 @@ class LwDetail extends Component
         $ecns = CNotice::where('status','wip')->get();
         $items = false;
 
-        if ( $this->action === 'VIEW') {
-            $this->setUnsetProps();
-        }
+        // if ( $this->action === 'VIEW') {
+        //     $this->setUnsetProps();
+        // }
 
-        if ( $this->action === 'FORM' && $this->uid) {
-            $this->setUnsetProps();
-        }
+        // if ( $this->action === 'FORM' && $this->uid) {
+        //     $this->setUnsetProps();
+        // }
 
         if ( $this->action === 'LIST') {
 
@@ -220,6 +235,11 @@ class LwDetail extends Component
                 array_push($this->notes_id_array,$note->id);
             }
 
+            // Revisions
+            foreach (Item::where('part_number',$this->part_number)->get() as $i) {
+                $this->all_revs[$i->version] = $i->id;
+            }
+
         } else {
             $this->topic = '';
             $this->description = '';
@@ -232,6 +252,7 @@ class LwDetail extends Component
     public function viewItem($idItem) {
         $this->uid = $idItem;
         $this->action = 'VIEW';
+        $this->setUnsetProps();
     }
 
 
@@ -251,7 +272,7 @@ class LwDetail extends Component
                 'remarks' => $this->remarks,
                 'user_id' => Auth::id()
             ]);
-            session()->flash('success','Product has been created successfully!');
+            session()->flash('success','Detail Part has been created successfully!');
 
             // Attach Notes to Product
             $this->item->pnotes()->attach($this->notes_id_array);
@@ -266,15 +287,14 @@ class LwDetail extends Component
                 $props['text_tr'] = $fnote['text_tr'];
 
                 Fnote::create($props);
-
-                //dd($fnote);
             }
 
-            $this->dispatch('triggerAttachment',
-                modelId: $this->uid
-            );
+            $this->dispatch('triggerAttachment', modelId: $this->uid);
 
             $this->action = 'VIEW';
+
+            $this->setUnsetProps();
+
 
         } catch (\Exception $ex) {
             session()->flash('error','Something goes wrong!!'.$ex);
@@ -285,9 +305,7 @@ class LwDetail extends Component
 
     public function updateItem()
     {
-
         $this->validate();
-
 
         try {
 
@@ -299,8 +317,6 @@ class LwDetail extends Component
                 'unit' => $this->unit,
                 'remarks' => $this->remarks
             ]);
-
-
 
             $aaa = Item::find($this->uid);
 
@@ -326,6 +342,7 @@ class LwDetail extends Component
 
             $this->action = 'VIEW';
 
+            $this->setUnsetProps();
 
 
         } catch (\Exception $ex) {

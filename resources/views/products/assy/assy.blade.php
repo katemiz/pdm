@@ -93,24 +93,26 @@
             console.log('saveTree is running')
             console.log($('#tree').tree('toJson'))
 
-            alert(e.detail.idAssy)
+            //alert(e.detail.idAssy)
 
-            Livewire.dispatch('addTreeToDB', { idAssy:e.detail.idAssy, bomData: $('#tree').tree('toJson')});
+            Livewire.dispatch('addTreeToDB', { bomData: $('#tree').tree('toJson')});
 
         })
 
 
-        function addNodeJS(idAssy,idPartSelected,partNumber) {
+        function addNodeJS(idAssy,idSelected,partNumber,description,version) {
 
             let qty
-            let node = $('#tree').tree('getNodeById',idPartSelected)
+            let node = $('#tree').tree('getNodeById',idSelected)
 
             if (node === null) {
                 qty = 1
 
                 $('#tree').tree('appendNode', {
                     name: partNumber.toString(),
-                    id: idPartSelected,
+                    id: idSelected,
+                    description:description,
+                    version:version,
                     qty:qty
                 });
 
@@ -120,7 +122,9 @@
 
                 $('#tree').tree('updateNode',node, {
                         name: partNumber.toString(),
-                        id: idPartSelected,
+                        id: idSelected,
+                        description:description,
+                        version:version,
                         qty:qty
                     }
                 );
@@ -129,7 +133,7 @@
             console.log('addNodeJS function',$('#tree').tree('toJson'))
             //Livewire.dispatch('addTreeToDB', $('#tree').tree('toJson'))
 
-            Livewire.dispatch('addTreeToDB', { idAssy:idAssy, bomData: $('#tree').tree('toJson')});
+            Livewire.dispatch('addTreeToDB', { bomData: $('#tree').tree('toJson')});
 
         }
 
@@ -143,7 +147,7 @@
             @break
 
         @case('VIEW')
-            @include('products.assy.assy-view')
+            @include('products.items-view')
             @break
 
         {{-- @case('LIST')

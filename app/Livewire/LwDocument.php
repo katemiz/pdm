@@ -335,7 +335,7 @@ class LwDocument extends Component
 
     public function triggerDelete($type, $uid) {
 
-        if ($type === 'document') {
+        if ($type === 'delete') {
             $this->uid = $uid;
         }
 

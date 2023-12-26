@@ -74,7 +74,7 @@ class LwItem extends Component
             $items[$key]['isItemEditable'] = false;
             $items[$key]['isItemDeleteable'] = false;
 
-            if ($item->status == 'wip') {
+            if ($item->status == 'WIP') {
                 $items[$key]['isItemEditable'] = true;
                 $items[$key]['isItemDeleteable'] = true;
             }

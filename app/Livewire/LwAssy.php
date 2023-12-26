@@ -15,10 +15,10 @@ use App\Livewire\LwTree;
 
 use App\Models\CNotice;
 use App\Models\Counter;
-use App\Models\NoteCategory;
-use App\Models\Item;
 use App\Models\Fnote;
-use App\Models\Pnote;
+use App\Models\Item;
+use App\Models\NoteCategory;
+//use App\Models\Pnote;
 use App\Models\User;
 
 
@@ -27,6 +27,22 @@ use App\Models\User;
 class LwAssy extends Component
 {
     const PART_TYPE = 'Assy';
+
+    public $page_view_title = 'Assembled Products';
+    public $page_view_subtitle = 'Assembled Products Properties';
+
+    public $list_all_url = '/parts/list';
+    public $item_edit_url = '/products-assy/form';
+    public $item_view_url = '/products-assy/view';
+
+    public $has_material = false;
+    public $has_bom = true;
+    public $has_notes = true;
+    public $has_flag_notes = true;
+    public $has_vendor = false;
+
+
+
 
 
     public $uid;
@@ -39,7 +55,7 @@ class LwAssy extends Component
     public $showNodeGui = false;
     public $constants;
 
-    public $bom;
+    //public $bom;
 
     #[Validate('required', message: 'Please enter description')]
     public $description;
@@ -62,9 +78,12 @@ class LwAssy extends Component
     public $ecns;
 
     public $fnotes  = [];
-    public $pnotes  = [];
+    public $notes  = [];
     public $ncategories = [];
     public $notes_id_array = [];
+
+    public $all_revs = [];
+
 
     public $created_by;
     public $updated_by;
@@ -105,7 +124,7 @@ class LwAssy extends Component
 
     public function setNotes() {
         $this->ncategories = NoteCategory::orderBy('text_tr')->get();
-        $this->pnotes = Pnote::orderBy('text_tr')->get();
+        //$this->pnotes = Pnote::orderBy('text_tr')->get();
     }
 
 
@@ -173,8 +192,6 @@ class LwAssy extends Component
             return true;
         }
 
-
-
         $item = Item::find($this->uid);
 
         if ($item->status == 'WIP') {
@@ -192,7 +209,7 @@ class LwAssy extends Component
         $this->remarks = $item->remarks;
         $this->status = $item->status;
 
-        $this->bom = json_decode($item->bom);
+        $this->treeData = json_decode($item->bom);
 
 
         $this->created_by = User::find($item->user_id);
@@ -206,25 +223,11 @@ class LwAssy extends Component
         $this->app_reviewed_at = $item->app_reviewed_at;
 
         $this->notes_id_array = [];
-
         $this->notes = $item->pnotes;
-
-
-
-
-
-
 
         foreach ($item->pnotes as $note) {
             array_push($this->notes_id_array,$note->id);
         }
-
-
-
-
-
-
-
     }
 
 
@@ -232,14 +235,9 @@ class LwAssy extends Component
 
 
     public function storeItem()
-    {        
-        
-
-
+    {
         $this->validate();
-
         $this->part_number = $this->getProductNo();
-
 
         try {
             $this->item = Item::create([
@@ -271,14 +269,10 @@ class LwAssy extends Component
                 Fnote::create($props);
             }
 
-            $this->dispatch('triggerAttachment',
-                modelId: $this->uid
-            );
-
+            $this->dispatch('triggerAttachment', modelId: $this->uid);
             $this->dispatch('saveTree',idAssy: $this->item->id);
 
-
-            //$this->action = 'VIEW';
+            $this->action = 'VIEW';
 
         } catch (\Exception $ex) {
             session()->flash('error','Something goes wrong!!'.$ex);
@@ -287,6 +281,49 @@ class LwAssy extends Component
 
 
 
+    public function updateItem()
+    {
+        $this->validate();
+
+        try {
+
+            Item::whereId($this->uid)->update([
+                'description' => $this->description,
+                'c_notice_id' => $this->ecn_id,
+                'weight' => $this->weight,
+                'unit' => $this->unit,
+                'remarks' => $this->remarks,
+                'updated_uid' => Auth::id()
+            ]);
+
+            $aaa = Item::find($this->uid);
+
+            // Update Notes to Product
+            $aaa->pnotes()->detach();
+            $aaa->pnotes()->attach(array_unique($this->notes_id_array));
+
+            // Flag Notes (Special Notes)
+            Fnote::where('urun_id',$this->uid)->delete();
+
+            foreach ($this->fnotes as $fnote) {
+                $props['urun_id'] = $this->uid;
+                $props['no'] = $fnote['no'];
+                $props['text_tr'] = $fnote['text_tr'];
+                Fnote::create($props);
+            }
+
+            session()->flash('message','Assy part has been updated successfully!');
+
+            $this->dispatch('triggerAttachment',
+                modelId: $this->uid
+            );
+
+            $this->action = 'VIEW';
+
+        } catch (\Exception $ex) {
+            session()->flash('success','Something goes wrong!!');
+        }
+    }
 
 
 
@@ -312,25 +349,36 @@ class LwAssy extends Component
         return $new_no;
     }
 
-    #[On('addTreeToDB')]
 
-    public function addTreeToDB($idAssy,$bomData) {
+    public function addSNote() {
+        $this->fnotes[] = [];
+    }
+
+
+    public function deleteSNote($key) {
+        unset($this->fnotes[$key]);
+    }
+
+
+
+    #[On('addTreeToDB')]
+    public function addTreeToDB($bomData) {
 
 
         // Çalışıyor
 
 
-        if ($idAssy > 0) {
+        if ($this->uid) {
 
 
 
             $props['bom'] = $bomData;
 
-            $i = Item::find($idAssy);
+            $i = Item::find($this->uid);
 
             $sonuc = $i->update($props);
 
-            dump([$idAssy,$bomData,$sonuc,$props,$i]);
+            //dump([$idAssy,$bomData,$sonuc,$props,$i]);
 
 
             Log::info($i);

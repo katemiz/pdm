@@ -254,12 +254,12 @@
 
 
         <livewire:ck-editor
-            wire:model="notes"
+            wire:model="remarks"
             label='Notes and Remarks'
             placeholder='notes ...'
-            :content="$notes"/>
+            :content="$remarks"/>
 
-        @error('notes')
+        @error('remarks')
         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
         @enderror
 

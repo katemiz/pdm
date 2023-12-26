@@ -21,6 +21,28 @@ class LwBuyable extends Component
 
     const PART_TYPE = 'Buyable';
 
+
+    public $page_view_title = 'Buyable Products';
+    public $page_view_subtitle = 'Buyable Product Properties';
+
+    public $list_all_url = '/parts/list';
+    public $item_edit_url = '/buyables/form';
+    public $item_view_url = '/buyables/view';
+
+    public $has_material = false;
+    public $has_bom = false;
+    public $has_notes = false;
+    public $has_flag_notes = false;
+    public $has_vendor = true;
+
+
+
+
+
+
+
+
+
     public $uid;
     public $action = 'LIST'; // LIST,FORM,VIEW
 
@@ -55,8 +77,11 @@ class LwBuyable extends Component
 
     public $material;
     public $finish;
-    public $notes;
+    public $remarks;
     public $status;
+
+    public $unit = 'mm';
+
 
     public $created_by;
     public $created_at;
@@ -123,7 +148,7 @@ class LwBuyable extends Component
                 ->orWhere('part_number_wb','LIKE',"%".$this->query."%")
                 ->orWhere('material','LIKE',"%".$this->query."%")
                 ->orWhere('finish','LIKE',"%".$this->query."%")
-                ->orWhere('notes','LIKE',"%".$this->query."%")
+                ->orWhere('remarks','LIKE',"%".$this->query."%")
                 ->orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
         } else {
@@ -165,8 +190,7 @@ class LwBuyable extends Component
 
         $props['updated_uid'] = Auth::id();
         $props['part_type'] = self::PART_TYPE;
-
-
+        $props['unit'] = $this->unit;
         $props['part_number_mt'] = $this->part_number_mt;
         $props['part_number_wb'] = $this->part_number_wb;
         $props['vendor'] = $this->vendor;
@@ -174,8 +198,8 @@ class LwBuyable extends Component
         $props['url'] = $this->url;
         $props['description'] = $this->description;
         $props['weight'] = $this->weight;
-        $props['material'] = $this->material;
-        $props['notes'] = $this->notes;
+        $props['material_text'] = $this->material;
+        $props['remarks'] = $this->remarks;
         $props['finish'] = $this->finish;
 
 
@@ -215,13 +239,14 @@ class LwBuyable extends Component
             $this->vendor = $buyable->vendor;
             $this->vendor_part_no = $buyable->vendor_part_no;
             $this->url = $buyable->url;
+            $this->unit = $buyable->unit;
             $this->description = $buyable->description;
             $this->version = $buyable->version;
             $this->is_latest = $buyable->is_latest;
             $this->weight = $buyable->weight;
-            $this->material = $buyable->material;
+            $this->material = $buyable->material_text;
             $this->finish = $buyable->finish;
-            $this->notes = $buyable->notes;
+            $this->remarks = $buyable->remarks;
             $this->status = $buyable->status;
             $this->created_by = User::find($buyable->user_id);
             $this->created_at = $buyable->created_at;
@@ -229,17 +254,10 @@ class LwBuyable extends Component
             $this->updated_at = $buyable->updated_at;
         }
 
-        // if ($this->manual_doc_number > 0) {
-        //     $user_manual = Document::where('is_latest',true)->where('document_no', $this->manual_doc_number)->first();
-
-        //     if($user_manual) {
-        //         $this->user_manual_attach_id = $user_manual->id;
-        //     }
-        // }
 
         // Revisions
-        foreach (Item::where('part_number',$this->part_number)->get() as $sellable) {
-            $this->all_revs[$sellable->version] = $sellable->id;
+        foreach (Item::where('part_number',$this->part_number)->get() as $i) {
+            $this->all_revs[$i->version] = $i->id;
         }
 
     }

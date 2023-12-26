@@ -105,7 +105,7 @@
             @break
 
         @case('VIEW')
-            @include('products.buyables.buyables-view')
+            @include('products.items-view')
             @break
 
         @case('LIST')

@@ -268,12 +268,12 @@
 
 
         <div class="field block">
-            <label class="label">Datasheets and Documents</label>
+            <label class="label">Datasheets/Documents</label>
 
             @if ($uid)
             @livewire('file-list', [
                 'canDelete' => true,
-                'model' => 'Buyable',
+                'model' => 'Product',
                 'modelId' => $uid,
                 'tag' => 'Datasheet',                          // Any tag other than model name
             ])
@@ -281,7 +281,7 @@
 
             <div class="control">
                 @livewire('file-upload', [
-                    'model' => 'Buyable',
+                    'model' => 'Product',
                     'modelId' => $uid ? $uid : false,
                     'isMultiple'=> true,                   // can multiple files be selected
                     'tag' => 'Datasheet',                          // Any tag other than model name
@@ -295,7 +295,7 @@
             @if ($uid)
                 @livewire('file-list', [
                     'canDelete' => true,
-                    'model' => 'Buyable',
+                    'model' => 'Product',
                     'modelId' => $uid,
                     'tag' => '3D',                          // Any tag other than model name
                 ])
@@ -304,7 +304,7 @@
             <div class="control">
 
                 @livewire('file-upload', [
-                    'model' => 'Buyable',
+                    'model' => 'Products',
                     'modelId' => $uid ? $uid : false,
                     'isMultiple'=> true,                   // can multiple files be selected
                     'tag' => '3D',                          // Any tag other than model name

@@ -19,4 +19,11 @@ class CNotice extends Model
     ];
 
 
+    public function getCrTopicAttribute()
+    {
+        $cr = CRequest::find($this->c_notice_id);
+        return $cr->topic;
+    }
+
+
 }

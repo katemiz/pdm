@@ -325,6 +325,16 @@ class LwUser extends Component
 
 
 
+    public function sendTestMail() {
+
+        $msgdata['blade'] = 'emails.user_created';  // Blade file to be used
+        $msgdata['subject'] = 'Test EMail';
+        $msgdata['action_url'] = url('/');
+        $msgdata['action_title'] = 'Go to App / Giriş';
+
+        Mail::to('katemiz@masttech.com')->send(new AppMail($msgdata));
+    }
+
 
 
 

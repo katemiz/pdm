@@ -122,7 +122,7 @@
 
                                     <label class="checkbox is-block">
                                         <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
-                                        @checked($uid && $ecn->id == $ecn_id)> ECN-{{ $ecn->id }}
+                                        @checked($uid && $ecn->id == $ecn_id)> ECN-{{ $ecn->id }} {{ $ecn->cr_topic }}
                                     </label>
 
                                 @endforeach
@@ -278,7 +278,7 @@
                     </div>
 
                     <div class="field block">
-                        <label class="label">STEP and DXF Files</label>
+                        <label class="label">STEP/DXF Files</label>
 
                         @if ($uid)
                         @livewire('file-list', [
@@ -302,14 +302,14 @@
 
 
                     <div class="field block">
-                        <label class="label">Drawing and BOM in PDF Format</label>
+                        <label class="label">Drawing/BOM Files</label>
 
                         @if ($uid)
                         @livewire('file-list', [
                             'canDelete' => true,
                             'model' => 'Product',
                             'modelId' => $uid,
-                            'tag' => 'DWG-PDF',                          // Any tag other than model name
+                            'tag' => 'DWG-BOM',                          // Any tag other than model name
                         ])
                         @endif
 
@@ -319,7 +319,7 @@
                                 'model' => 'Product',
                                 'modelId' => $uid ? $uid : false,
                                 'isMultiple'=> true,                   // can multiple files be selected
-                                'tag' => 'DWG-PDF',                          // Any tag other than model name
+                                'tag' => 'DWG-BOM',                          // Any tag other than model name
                                 'canEdit' => true])
                         </div>
                     </div>

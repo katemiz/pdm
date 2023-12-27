@@ -243,9 +243,9 @@
         <div class="column">
             <div class="columns">
 
+                @if ( !$has_vendor )
                 <div class="column">
 
-                    {{-- ATTACHMENTS --}}
                     <div class="block">
                     <label class="label">CAD Files</label>
                     @livewire('file-list', [
@@ -253,35 +253,37 @@
                         'modelId' => $uid,
                         'showMime' => false,
                         'showSize' => false,
-                        'tag' => 'CAD',                          // Any tag other than model name
+                        'tag' => 'CAD', // Any tag other than model name
                     ])
                     </div>
 
                 </div>
+                @endif
+
 
                 <div class="column">
 
                     <div class="block">
-                        <label class="label">STEP/DXF Files</label>
+                        <label class="label">{{ $has_vendor ? '3D Files':'STEP/DXF Files' }}</label>
                         @livewire('file-list', [
                             'model' => 'Product',
                             'modelId' => $uid,
                             'showMime' => false,
                             'showSize' => false,
-                            'tag' => 'STEP',                          // Any tag other than model name
+                            'tag' => $has_vendor ? '3D':'STEP' ,                          // Any tag other than model name
                         ])
                     </div>
                 </div>
 
                 <div class="column">
                     <div class="block">
-                        <label class="label">Drawing and BOM</label>
+                        <label class="label">{{ $has_vendor ? 'Datasheest/Documents' : 'Drawing/BOM Files'}}</label>
                         @livewire('file-list', [
                             'model' => 'Product',
                             'modelId' => $uid,
                             'showMime' => false,
                             'showSize' => false,
-                            'tag' => 'DWG-PDF',                          // Any tag other than model name
+                            'tag' => $has_vendor ? 'Datasheet':'DWG-BOM',                          // Any tag other than model name
                         ])
                     </div>
 

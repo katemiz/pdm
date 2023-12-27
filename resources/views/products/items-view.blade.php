@@ -213,10 +213,11 @@
 
                 <caption>Bill of Materials</caption>
 
-                @if ($treeData)s
+                @if ($treeData)
                 <thead>
                     <tr>
                         <th>Part Number</th>
+                        <th>Type</th>
                         <th>Description</th>
                         <th>Quantity</th>
                     </tr>
@@ -225,7 +226,27 @@
                 <tbody>
                     @foreach ($treeData as $i)
                         <tr>
-                            <td class="is-narrow">{{ $i->name }}-{{ $i->version }}</td>
+                            <td class="is-narrow">
+
+                                @switch($i->part_type)
+
+                                    @case('Detail')
+                                        <a href="/details/view/{{$i->id}}" target="_blank">
+                                        @break
+
+                                    @case('Assy')
+                                        <a href="/products-assy/view/{{$i->id}}" target="_blank">
+                                        @break
+
+                                    @case('Buyable')
+                                        <a href="/buyables/view/{{$i->id}}" target="_blank">
+                                        @break
+
+                                @endswitch
+                                {{ $i->name }}-{{ $i->version }}</a>
+
+                            </td>
+                            <td>{{ $i->part_type }}</td>
                             <td>{{ $i->description }}</td>
                             <td class="is-narrow has-text-right">{{ $i->qty }}</td>
                         </tr>

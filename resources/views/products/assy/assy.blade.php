@@ -1,106 +1,15 @@
 <section class="section container">
 
+    <script src="{{ asset('/js/confirm_modal.js') }}"></script>
+
     <script>
 
-        window.addEventListener('ConfirmModal',function(e) {
-
-            let sa_title, sa_text, confirmText, cancelText
-            let dispatchRoute, dispatchData
-
-            switch (e.detail.type) {
-
-                case 'delete':
-
-                    sa_title = 'Do you really want to delete this Sellable Product?'
-                    sa_text = 'Once deleted, there is no reverting back!'
-                    confirmText = 'Delete'
-                    cancelText ='Oops ...'
-
-                    dispatchRoute = 'onDeleteConfirmed'
-                    dispatchData = {type:e.detail.type}
-                    break;
-
-                case 'freeze':
-
-                    sa_title = 'Sellable Product will be frozen!'
-                    sa_text = 'Once frozen, no editing is possible.'
-                    confirmText = 'Freeze'
-                    cancelText ='Cancel'
-
-                    dispatchRoute = 'onFreezeConfirmed'
-                    dispatchData = {}
-
-                    break;
-
-                case 'revise':
-
-                    sa_title = 'Do you want revise this requirement?'
-                    sa_text = 'New revision will be editable.'
-                    confirmText = 'Revise'
-                    cancelText ='Cancel'
-
-                    dispatchRoute = 'onReviseConfirmed'
-                    dispatchData = {}
-                    break;
-
-                case 'attach':
-
-                    sa_title = 'Do you want delete attached file?'
-                    sa_text = 'Once deleted, there is no reverting back!'
-                    confirmText = 'Delete File'
-                    cancelText ='Cancel'
-
-                    dispatchRoute = 'deleteAttach'
-                    dispatchData = {}
-                    break;
-
-
-            }
-
-            Swal.fire({
-                title: sa_title,
-                text: sa_text,
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: confirmText,
-                cancelButtonText: cancelText,
-
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.dispatch(dispatchRoute, dispatchData)
-                } else {
-                    return false
-                }
-            })
-        });
-
-        window.addEventListener('attachDeleted',function(e) {
-
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'File/Attachment has been deleted',
-                showConfirmButton: false,
-                timer: 1500
-            })
-        })
-
-
         window.addEventListener('saveTree',function(e) {
-
-            console.log('saveTree is running')
-            console.log($('#tree').tree('toJson'))
-
-            //alert(e.detail.idAssy)
-
             Livewire.dispatch('addTreeToDB', { bomData: $('#tree').tree('toJson')});
-
         })
 
 
-        function addNodeJS(idAssy,idSelected,partNumber,description,version) {
+        function addNodeJS(idAssy,idSelected,partNumber,description,version,part_type) {
 
             let qty
             let node = $('#tree').tree('getNodeById',idSelected)
@@ -113,6 +22,7 @@
                     id: idSelected,
                     description:description,
                     version:version,
+                    part_type:part_type,
                     qty:qty
                 });
 
@@ -125,16 +35,13 @@
                         id: idSelected,
                         description:description,
                         version:version,
+                        part_type:part_type,
                         qty:qty
                     }
                 );
             }
 
-            console.log('addNodeJS function',$('#tree').tree('toJson'))
-            //Livewire.dispatch('addTreeToDB', $('#tree').tree('toJson'))
-
             Livewire.dispatch('addTreeToDB', { bomData: $('#tree').tree('toJson')});
-
         }
 
 

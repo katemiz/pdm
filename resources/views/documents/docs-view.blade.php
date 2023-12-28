@@ -24,20 +24,24 @@
                     </a>
                 </p>
 
+                @role(['EngineeringDept'])
                 <p class="level-item">
                     <a href="/documents/file/form/">
                         <span class="icon is-small"><x-carbon-add /></span>
                         <span>Add</span>
                     </a>
                 </p>
+                @endrole
+
 
             </div>
 
             <!-- Right side -->
             <div class="level-right">
 
-                @role(['admin','company_admin','engineer'])
-                @if ($status == 'Frozen')
+                @role(['EngineeringDept'])
+
+                @if ( in_array($status,['Frozen','Released']) )
 
                     @if ($is_latest)
                     <p class="level-item">
@@ -56,11 +60,20 @@
                         </a>
                     </p>
 
+                    @role(['Approver'])
                     <p class="level-item">
                         <a wire:click='freezeConfirm({{ $uid }})'>
                             <span class="icon"><x-carbon-stamp /></span>
                         </a>
                     </p>
+
+                    <p class="level-item">
+                        <a wire:click='releaseConfirm({{ $uid }})'>
+                            <span class="icon"><x-carbon-send /></span>
+                        </a>
+                    </p>
+                    @endrole
+
 
                     <p class="level-item">
                         <a wire:click="triggerDelete('delete',{{ $uid }})">

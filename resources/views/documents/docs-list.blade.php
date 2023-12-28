@@ -31,7 +31,7 @@
         <!-- Left side -->
         <div class="level-left">
 
-            {{-- @role(['admin','company_admin']) --}}
+            @role(['EngineeringDept'])
             <div class="level-item has-text-centered">
                 <a href="/documents/form" class="button is-dark">
                     <span class="icon is-small"><x-carbon-add /></span>
@@ -44,7 +44,7 @@
                 </a>
 
             </div>
-            {{-- @endrole --}}
+            @endrole
 
         </div>
 
@@ -139,9 +139,10 @@
 
                     @endif
 
-                    @role(['admin','EngineeringDept'])
+                    @role(['EngineeringDept'])
 
-                        @if ($record->status != 'Frozen')
+                        @if ( !in_array($record->status,['Frozen','Released']) )
+
 
                             @if ($record->is_html)
 
@@ -158,7 +159,6 @@
                             @endif
 
                         @endif
-
 
                     @endrole
 

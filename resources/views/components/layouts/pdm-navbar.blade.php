@@ -26,6 +26,7 @@
 
             @if(Auth::check())
 
+                @role(['admin'])
                 <div class="navbar-item has-dropdown is-hoverable">
 
                     <a class="navbar-link">
@@ -43,6 +44,8 @@
                         <a href="/admin-projects/list" class="navbar-item">Projects</a>
                     </div>
                 </div>
+                @endrole
+
 
                 <div class="navbar-item has-dropdown is-hoverable">
 

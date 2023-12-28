@@ -19,6 +19,8 @@ use App\Models\Company;
 use App\Models\Document;
 use App\Models\User;
 
+use Mail;
+use App\Mail\AppMail;
 
 
 class LwDocument extends Component
@@ -174,13 +176,13 @@ class LwDocument extends Component
 
     public function getDocumentsList()  {
 
-        $documents = Document::when($this->show_latest, function ($query) {
-                            $query->where('is_latest', true);
+        return  Document::when($this->show_latest, function ($query) {
+            $query->where('is_latest', true);
         })
+        ->where('title', 'LIKE', "%".$this->query."%")
+        ->orWhere('remarks','LIKE',"%".$this->query."%")
         ->orderBy($this->sortField,$this->sortDirection)
         ->paginate(env('RESULTS_PER_PAGE'));
-
-        return $documents;
     }
 
 
@@ -431,8 +433,15 @@ class LwDocument extends Component
         $this->dispatch('ConfirmModal', type:'freeze');
 
         session()->flash('message','Document has been frozen successfully.');
-
     }
+
+
+    public function releaseConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'doc_release');
+    }
+
+
 
     #[On('onFreezeConfirmed')]
     public function doFreeze() {
@@ -466,4 +475,66 @@ class LwDocument extends Component
         $this->dispatch('refreshFileListNewId', modelId:$this->uid);
         $this->action = 'VIEW';
     }
+
+
+    #[On('onReleaseConfirmed')]
+    public function doRelease() {
+
+        $doc = Document::find($this->uid);
+
+        $props['status'] = 'Released';
+        $props['approver_id'] = Auth::id();
+        $props['app_revied_at'] = time();
+
+        $doc->update($props);
+
+        $this->setProps();
+
+        $this->action = 'VIEW';
+
+        session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
+
+        // Send EMails
+
+        $this->sendTestMail();
+
+
+    }
+
+
+
+    public function sendTestMail() {
+
+        $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
+        $msgdata['subject'] = 'D'.$this->document_no.' R'.$this->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
+        $msgdata['url'] = url('/').'/documents/view/'.$this->uid;
+        $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
+
+        $msgdata['document_no'] = $this->document_no;
+        $msgdata['title'] = $this->title;
+        $msgdata['revision'] = $this->revision;
+        $msgdata['remarks'] = $this->remarks;
+
+        $allCompanyUsers = User::where('company_id',$this->company_id)->get();
+
+        $toArr = [];
+
+        foreach ($allCompanyUsers as $key => $u) {
+            array_push($toArr, $u->email);
+        }
+
+        Mail::to($toArr)->send(new AppMail($msgdata));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 }

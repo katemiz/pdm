@@ -3,7 +3,7 @@
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Simple Transactional Email</title>
+    <title>Belge Yayınlama Bildirimi - Document Release Notification</title>
     <style>
       /* -------------------------------------
           GLOBAL RESETS
@@ -333,7 +333,7 @@
     </style>
   </head>
   <body>
-    <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+    <span class="preheader">{{ $mailData['title'] }}</span>
     <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
       <tr>
         <td>&nbsp;</td>
@@ -349,13 +349,14 @@
                   <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                        <p>Dear / Sayın {{ $mailData['name'] }} {{ $mailData['lastname'] }},</p>
-                        <p>Your account for <strong>{{ config('appconstants.app.title') }}</strong> has been created. Your password is given below. Please change your password immediately</p>
+                        <p>PDM Kullanıcıları / PDM Users,</p>
 
-                        <p><strong>{{ config('appconstants.app.title') }}</strong> için geçerli hesabınız oluşturulmuştur. Aşağıda şifreniz bulunmaktadır. Şifrenizi hemen değiştirmenizi öneririz.</p>
+                        <p>Aşağıda ayrıntıları verilen belge PDM Uygulamasında yayınlanmıştır. Verilen bağlantıyı kullanarak belge ayrıntı ve eklerine erişebilirsiniz</p>
 
-                        <p><strong>Username / Kullanıcı Hesabı :</strong> {{ $mailData['email'] }}</p>
-                        <p><strong>Password / Şifre :</strong> {{ $mailData['password'] }}</p>
+                        <p>Document detailed below has been released in PDM System. Please use given link to access document details</p>
+
+                        <p><strong>D{{ $mailData['document_no'] }} R{{ $mailData['revision'] }}</strong></p>
+                        <p><strong>{{ $mailData['title'] }}</strong></p>
 
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                           <tbody>
@@ -364,7 +365,7 @@
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td> <a href="{{ $mailData['action_url'] }}" target="_blank">{{ $mailData['action_title'] }}</a> </td>
+                                      <td> <a href="{{ $mailData['url'] }}" target="_blank">{{ $mailData['url_title'] }}</a> </td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -372,7 +373,10 @@
                             </tr>
                           </tbody>
                         </table>
-                        <p>Best Regards / İyi Günler</p>
+                        <br>
+                        <br>
+                        <br>
+                        <p>Saygılarımızla / Best Regards</p>
                       </td>
                     </tr>
                   </table>

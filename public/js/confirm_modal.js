@@ -5,6 +5,21 @@ window.addEventListener('ConfirmModal',function(e) {
 
     switch (e.detail.type) {
 
+
+        case 'doc_release':
+
+            sa_title = 'Document Release ?'
+            sa_text = 'This document shall be released and PDM users shall be informed by email. Do you want to continue?'
+            confirmText = 'Release'
+            cancelText ='Cancel'
+
+            dispatchRoute = 'onReleaseConfirmed'
+            dispatchData = {type:e.detail.type}
+            break;
+
+
+
+
         case 'delete':
 
             sa_title = 'Do you really want to delete this item?'

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Item;
 
 use Illuminate\Http\Request;
+
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use PDF; // If you created the alias
 
 class MYPDF extends \TCPDF {
@@ -21,8 +23,8 @@ class MYPDF extends \TCPDF {
 
 
 
-        $this->SetFillColor(45, 245, 220); // Set a light yellow background
-        $this->Rect(0, 0, $this->getPageWidth(), $this->getPageHeight(), 'DF');
+        //$this->SetFillColor(45, 245, 220); // Set a light yellow background
+        //$this->Rect(0, 0, $this->getPageWidth(), $this->getPageHeight(), 'DF');
 
         //$this->SetFillColor(45, 245, 20); // Set a light yellow background
 
@@ -37,13 +39,19 @@ class MYPDF extends \TCPDF {
         // Set font
         $this->SetFont('helvetica', 'B', 20);
         // Title
-        $this->Cell(0, 15, 'BILL OF MATERIALS', 0, false, 'C', 0, '', 1, false, 'M', 'M');
+        //$this->Cell(0, 15, 'BILL OF MATERIALS', 0, false, 'C', 0, '', 1, false, 'M', 'M');
 
-        $this->ImageSVG($file='/images/icon_manual.svg', $x=12, $y=12, $w='20', $h='20', $link='http://rrrrrrr.tcpdf.org', $align='', $palign='', $border=1, $fitonpage=false);
+        $this->ImageSVG($file='/images/mtlogo.svg', $x=10, $y=10, $w='', $h='10', $link='http://rrrrrrr.tcpdf.org', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+        $this->ImageSVG($file='/images/pdm_logo.svg', $x=185, $y=10, $w='15', $h='', $link='http://rrrrrrr.tcpdf.org', $align='', $palign='', $border=0, $fitonpage=false);
+
+
+        // $this->ImageSVG($file='/images/icon_manual.svg', $x=12, $y=12, $w='20', $h='20', $link='http://rrrrrrr.tcpdf.org', $align='', $palign='', $border=1, $fitonpage=false);
 
         $this->SetXY(35,17);
 
-        $this->Cell(0, 0, 'BILL OF MATERIALS', 1, false, 'C', 1, '', 0, false, 'M', 'M');
+        // $this->Cell(0, 0, 'BILL OF MATERIALS', 1, false, 'C', 1, '', 0, false, 'M', 'M');
 
 
     }
@@ -51,11 +59,28 @@ class MYPDF extends \TCPDF {
     // Page footer
     public function Footer() {
         // Position at 15 mm from bottom
-        $this->SetY(-15);
+        //$this->SetY(-15);
+
+        $this->ImageSVG($file="/images/baykus_orange.svg", $x=8, $y=285, $w='6', $h='6', $link='https://kapkara.one', $align='', $palign='', $border=0, $fitonpage=false);
+
+        $this->SetXY(14,290);
+        $this->SetFont('helvetica', '', 6);
+
+        $this->Cell(30, 0, 'kapkara.one', 0, false, 'L', 0, '', 0, false, 'M', 'M');
+
+        $this->SetXY(170,290);
+        $this->Cell(30, 0, 'masttech.net', 0, false, 'R', 0, '', 0, false, 'M', 'M');
+        $this->SetXY(170,287);
+
+        $this->Cell(30, 0, 'PDM Product Data Management', 0, false, 'R', 0, '', 0, false, 'M', 'M');
+
+        $this->SetXY(100,285);
+
         // Set font
-        $this->SetFont('helvetica', 'I', 8);
+        $this->SetFont('dejavusans', '', 8);
         // Page number
-        $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        //$this->Cell(10, 10, $this->getAliasNumPage().'/'.$this->getAliasNbPages(), 1, false, 'R', 0, '', 0, false, 'T', 'M');
+
     }
 }
 
@@ -69,10 +94,27 @@ class PDFController extends Controller
 
         $item = Item::find(request('id'));
 
+        switch ($item->part_type) {
+            case 'Detail':
+                $url = url('/').'/details/view/'.$item->id;
+                break;
+
+            case 'Assy':
+                $url = url('/').'/products-assy/view/'.$item->id;
+                break;
+                    
+            case 'Buyable':
+                $url = url('/').'/buyables/view/'.$item->id;
+                break;
+            
+        }
+
+
+
 
 
         // Create a new TCPDF instance
-        $pdf = new MYPDF();
+        $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'utf-8', false);
 
         // Set document information
         $pdf->SetCreator('Your Name');
@@ -89,14 +131,12 @@ class PDFController extends Controller
 
 
 
-        $pdf->SetY(70);
+        $pdf->SetY(50);
+        $pdf->SetFont('dejavusans', '', 16);
 
 
-        $pdf->SetFillColor(45, 145, 120); // Set a light yellow background
-        $pdf->Cell(0, 0, 'BILL OF MATERIALS', 0, false, 'C', 1, '', 0, false, 'M', 'M');
-
-
-
+        //$pdf->SetFillColor(45, 145, 120); // Set a light yellow background
+        $pdf->Cell(0, 0, 'ÜRÜN VERİSİ / BILL OF MATERIALS', 0, false, 'C', 0, '', 0, false, 'M', 'M');
 
 
 
@@ -104,84 +144,53 @@ class PDFController extends Controller
 
 
 
-        // Set font
-        $pdf->SetFont('times', 'B', 12);
+        $pdf->SetXY(PDF_MARGIN_LEFT,60);
 
-        // Add content to the PDF
-        //$pdf->Cell(0, 10, 'Hello, this is a sample PDF generated using TCPDF in Laravel.', 0, 1, 'C');
-
-        //$pdf->ImageSVG($file='/images/hero.svg', $x=15, $y=90, $w='40', $h='50', $link='http://www.tcpdf.org', $align='', $palign='', $border=0, $fitonpage=false);
-
-        // $html = <<<HTML
-        // <div class="column">
-        //     <label class="label">Material</label>
-        //     Aluminum | Sheet/Plate | rtrytrytry | tyutyu
-        // </div>
-        // HTML;
-
-        // $pdf->writeHTML($html, true, false, true, false, '');
+        $qr = QrCode::generate($url);
 
 
-        $pdf->SetXY(12,80);
 
-        $pdf->ImageSVG($file='/images/baykus_orange.svg', $x=12, $y=80, $w='30', $h='30', $link='http://rrrrrrr.tcpdf.org', $align='', $palign='', $border=1, $fitonpage=false);
+        $pdf->ImageSVG($file="@$qr", $x=10, $y=60, $w='20', $h='20', $link='http://rrrrrrr.tcpdf.org', $align='', $palign='', $border=0, $fitonpage=false);
 
-        $pdf->SetXY(45,80);
+        $pdf->SetXY(32,60);
 
-        $pdf->SetFont('helvetica', 'B', 36);
-        $pdf->Cell(42, 16, $item->part_number, 1, $ln=0, 'L', 0, '', 0, false, 'T', 'T');
-
-        $pdf->Cell(20, 0, '-'.$item->version, 1, $ln=0, 'L', 0, '', 0, false, 'T', 'T');
-
-        $pdf->SetXY(45,98);
-        $pdf->SetFont('times', '', 28);
-        $pdf->Cell(0, 12, $item->description, 1, $ln=0, 'L', 0, '', 0, false, 'T', 'B');
+        $pdf->SetFont('dejavusans', 'B', 24);
+        $pdf->Cell(0, 10, $item->part_number.'-'.$item->version, 0, $ln=0, 'L', 0, '', 0, false, 'T', 'T');
 
 
-        $pdf->SetFont('times', 'B', 12);
+        $pdf->SetXY(32,70);
+        $pdf->SetFont('dejavusans', '', 12);
+        //$pdf->Cell(0, 8, $item->description, 0, $ln=0, 'L', 0, '', 0, false, 'T', 'B');
+
+        $pdf->MultiCell(0, 8, $item->description, 0, 'L', 0, 0, '', '', true);
 
 
-        $pdf->SetX(100);
+        $pdf->SetFont('dejavusans', '', 12);
+
+
 
         // set filling color
-//$pdf->SetTextColor(255,255,128);
+        //$pdf->SetTextColor(255,255,128);
 
 
         $pdf->Ln();
+        $pdf->SetY(90);
+
 
 
         //$pdf->SetX(20);
 
-        $pdf->Ln();
+        // $pdf->Ln();
 
-        $pdf->SetY(100);
-
-
-
-        $pdf->SetY(140);
+        // $pdf->SetY(100);
 
 
 
+        // $pdf->SetY(140);
 
-        $tbl = <<<EOD
-        <table border="1" cellpadding="0" cellspacing="0" align="center">
-         <tr nobr="true">
-          <th colspan="2">NON-BREAKING ROWS</th>
-         </tr>
-         <tr nobr="true">
-          <td>ROW 1<br />COLUMN 1</td>
-          <td>ROW 1<br />COLUMN 2</td>
-         </tr>
-         <tr nobr="true">
-          <td>ROW 2<br />COLUMN 1</td>
-          <td>ROW 2<br />COLUMN 2</td>
-         </tr>
-         <tr nobr="true">
-          <td>ROW 3<br />COLUMN 1</td>
-          <td>ROW 3<br />COLUMN 2</td>
-         </tr>
-        </table>
-        EOD;
+
+
+
 
 
 
@@ -191,8 +200,11 @@ class PDFController extends Controller
 
         if ($item->bom) {
 
+            $pdf->SetFont('dejavusans', '', 10);
+
+
             $bom = '
-            <table border="1" cellpadding="3" cellspacing="0" align="left" >
+            <table border="1" cellpadding="3" cellspacing="0" align="left" border-collapse="collapse" border=="1px solid gray">
 
             
 
@@ -201,8 +213,8 @@ class PDFController extends Controller
                 <tr>
                     <th style="width:15%">Part Number</th>
                     <th style="width:10%">Type</th>
-                    <th style="width:65%">Description</th>
-                    <th style="width:10%">Quantity</th>
+                    <th style="width:60%">Description</th>
+                    <th style="width:15%;text-align:right;">Miktar<br>Quantity</th>
                 </tr>
                 </thead>';
 
@@ -211,14 +223,17 @@ class PDFController extends Controller
                     <tr>
                         <td style="width:15%">'.$i->name.'-'.$i->version.'</td>
                         <td style="width:10%">'.$i->part_type.'</td>
-                        <td style="width:65%">'.$i->description.'</td>
-                        <td style="width:10%">'.$i->qty.'</td>
+                        <td style="width:60%">'.$i->description.'</td>
+                        <td style="width:15%;text-align:right;">'.$i->qty.'</td>
                     </tr>';
                 }
 
             $bom .= '
             </tbody>
             </table>';
+
+            $pdf->writeHTML($bom, true, false, false, false, '');
+
         };
 
 
@@ -236,10 +251,8 @@ class PDFController extends Controller
 
 
 
-        $pdf->writeHTML($tbl, true, false, false, false, '');
 
         
-        $pdf->writeHTML($bom, true, false, false, false, '');
 
 
         // Output the PDF to the browser or save it to a file

@@ -28,6 +28,11 @@
                     </a>
 
                     <x-add-button />
+
+                    <a href="/pdf/bom/{{$uid}}" class="button is-outlined mr-2">
+                        <span class="icon is-small"><x-carbon-document-pdf /></span>
+                    </a>
+
             </div>
 
             <!-- Right side -->

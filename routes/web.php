@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PDFController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -127,4 +128,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/material/{action}/{id?}', Material::class);
     Route::get('/process/{action}/{id?}', Process::class);
     Route::get('/notes/{action}/{id?}', ProductNote::class);
+
+
+    // PDF GENERATION
+    Route::get('/pdf/bom/{id}', [PDFController::class, 'generatePdf']);
+
+
 });

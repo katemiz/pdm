@@ -57,11 +57,6 @@
             @include('products.items-view')
             @break
 
-        {{-- @case('LIST')
-        @default
-            @include('products.assy.assy-list')
-            @break --}}
-
     @endswitch
 
 </section>

@@ -431,7 +431,7 @@
 
                         <td class="has-text-right">
 
-                            <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ $record->description }}','{{ $record->version }}','{{ $record->part_type }}')">
+                            <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
                                 <span class="icon"><x-carbon-checkmark /></span>
                             </a>
 

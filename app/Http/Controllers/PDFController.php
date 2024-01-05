@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Malzeme;
+
 
 use Illuminate\Http\Request;
 
@@ -102,11 +104,11 @@ class PDFController extends Controller
             case 'Assy':
                 $url = url('/').'/products-assy/view/'.$item->id;
                 break;
-                    
+
             case 'Buyable':
                 $url = url('/').'/buyables/view/'.$item->id;
                 break;
-            
+
         }
 
 
@@ -197,17 +199,36 @@ class PDFController extends Controller
 
 
 
+        if ($item->malzeme_id) {
+            $malzeme =  Malzeme::find($item->malzeme_id);
+
+            $material_definition = $malzeme->material_definition;
+            $family = config('appconstants.family')[$malzeme->family];
+            $form = config('appconstants.family')[$malzeme->form];
+
+
+            $malzeme = '
+            <div class="column">
+            <label class="label">Malzeme / Material</label>
+            '.$family.' - '.$form.' - '. $material_definition.'
+            </div>';
+        }
+
+
+
+
+
+
+
+
+
 
         if ($item->bom) {
 
             $pdf->SetFont('dejavusans', '', 10);
 
-
             $bom = '
             <table border="1" cellpadding="3" cellspacing="0" align="left" border-collapse="collapse" border=="1px solid gray">
-
-            
-
 
                 <thead>
                 <tr>
@@ -233,7 +254,6 @@ class PDFController extends Controller
             </table>';
 
             $pdf->writeHTML($bom, true, false, false, false, '');
-
         };
 
 
@@ -252,7 +272,7 @@ class PDFController extends Controller
 
 
 
-        
+
 
 
         // Output the PDF to the browser or save it to a file

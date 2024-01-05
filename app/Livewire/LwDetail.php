@@ -68,6 +68,8 @@ class LwDetail extends Component
     public $family;
     public $form;
 
+    public $is_latest;
+
 
     public $materials = [];
     public $ncategories = [];
@@ -398,6 +400,25 @@ class LwDetail extends Component
             $this->js("showModal('m10')");
             $this->js("console.log('m10false')");
         }
+    }
+
+
+
+
+
+
+
+    public function freezeConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'freeze');
+    }
+
+
+    #[On('onFreezeConfirmed')]
+    public function doFreeze() {
+        Item::find($this->uid)->update(['status' =>'Frozen']);
+        $this->action = 'VIEW';
+        $this->setUnsetProps();
     }
 
 

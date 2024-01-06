@@ -88,13 +88,7 @@
         })
 
 
-        // document.addEventListener('livewire:initialized', () => {
-        //     @this.on('done-file-upload', (event) => {
-        //         console.log('doneFileUpload')
 
-        //         alert(event.detail)
-        //     });
-        // });
 
     </script>
 

@@ -5,6 +5,8 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
+use Livewire\WithPagination;
+
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -26,6 +28,8 @@ use App\Models\User;
 
 class LwAssy extends Component
 {
+    use WithPagination;
+
     const PART_TYPE = 'Assy';
 
     public $page_view_title = 'Assembled Products';

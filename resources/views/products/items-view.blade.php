@@ -59,11 +59,19 @@
                         </a>
                     </p>
 
+                    @role(['Approver'])
                     <p class="level-item">
                         <a wire:click='freezeConfirm({{ $uid }})'>
                             <span class="icon"><x-carbon-stamp /></span>
                         </a>
                     </p>
+
+                    <p class="level-item">
+                        <a wire:click='releaseConfirm({{ $uid }})'>
+                            <span class="icon"><x-carbon-send /></span>
+                        </a>
+                    </p>
+                    @endrole
 
                     <p class="level-item">
                         <a wire:click="deleteConfirm({{ $uid }})">

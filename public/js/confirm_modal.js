@@ -6,6 +6,23 @@ window.addEventListener('ConfirmModal',function(e) {
     switch (e.detail.type) {
 
 
+
+        case 'assy_release':
+
+            sa_title = 'Assembly Release ?'
+            sa_text = 'This assembly and its children shall be released and PDM users shall be informed by email. Do you want to continue?'
+            confirmText = 'Release'
+            cancelText ='Cancel'
+
+            dispatchRoute = 'onReleaseConfirmed'
+            dispatchData = {type:e.detail.type}
+            break;
+
+
+
+
+
+
         case 'doc_release':
 
             sa_title = 'Document Release ?'

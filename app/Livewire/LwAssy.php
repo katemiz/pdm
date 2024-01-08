@@ -404,4 +404,93 @@ class LwAssy extends Component
 
 
 
+
+    public function releaseConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'assy_release');
+    }
+
+
+    #[On('onReleaseConfirmed')]
+    public function doRelease() {
+
+        $item = Item::find($this->uid);
+
+        $c = [];
+
+        foreach ( json_decode($item->bom) as $children) {
+
+
+            array_push($c,$children);
+        }
+
+        dd($c);
+
+
+
+        return true;
+
+
+        $props['status'] = 'Released';
+        $props['approver_id'] = Auth::id();
+        $props['app_revied_at'] = time();
+
+        $doc->update($props);
+
+        $this->setProps();
+
+        $this->action = 'VIEW';
+
+        session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
+
+        // Send EMails
+
+        $this->sendTestMail();
+
+
+    }
+
+
+
+
+
+    public function checkAssyIntegrity($id) {
+
+        $item = Item::find($id);
+
+
+        foreach ( json_decode($item->bom) as $children) {
+
+            switch ($i->part_type) {
+
+                case 'Detail':
+                    $this->checkDetailIntegrity($i);
+                    break;
+
+                case 'Buyable':
+                    $this->checkBuyableIntegrity($i);
+                    break;
+
+                case 'Assy':
+                    $this->checkAssyIntegrity($i);
+                    break;
+            }
+        }
+    }
+
+
+
+    public function checkDetailIntegrity($item) {
+
+
+        foreach ( json_decode($item->bom) as $children) {
+
+
+            array_push($c,$children);
+        }
+
+
+    }
+
+
 }

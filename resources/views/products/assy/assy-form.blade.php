@@ -417,27 +417,31 @@
                 <tbody>
 
                     @foreach ($nodes as $record)
-                    <tr wire:key="{{ $record->id }}">
 
-                        @foreach (array_keys($constants['list']['headers']) as $col_name)
-                            <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
-                                @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
-                                    {!! $record[$col_name] !!}
-                                @else
-                                    {{ $record[$col_name] }}
-                                @endif
+                        @if ($record->part_number != $part_number)
+                        <tr wire:key="{{ $record->id }}">
+
+                            @foreach (array_keys($constants['list']['headers']) as $col_name)
+                                <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
+                                    @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
+                                        {!! $record[$col_name] !!}
+                                    @else
+                                        {{ $record[$col_name] }}
+                                    @endif
+                                </td>
+                            @endforeach
+
+                            <td class="has-text-right">
+
+                                <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
+                                    <span class="icon"><x-carbon-checkmark /></span>
+                                </a>
+
                             </td>
-                        @endforeach
 
-                        <td class="has-text-right">
+                        </tr>
+                        @endif
 
-                            <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
-                                <span class="icon"><x-carbon-checkmark /></span>
-                            </a>
-
-                        </td>
-
-                    </tr>
                     @endforeach
 
                 </tbody>

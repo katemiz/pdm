@@ -136,6 +136,51 @@
         </div>
 
 
+
+
+
+
+        @if ($release_errors)
+
+            <article class="message is-danger">
+                <div class="message-header">
+                <p>Assy Release Not Performed : Missing Actions!</p>
+                </div>
+
+                <div class="message-body">
+
+                    <p class="my-4">Please complete following actions/points to release this dataset.</p>
+
+                    <table class="table is-fullwidth has-background-danger-light is-light">
+                        @foreach ($release_errors as $part => $perrors)
+                            <tr>
+                                <th>{{$part}}</th>
+                                <td>
+                                    <ol>
+                                    @foreach ($perrors as $perror)
+                                        <li>{{ $perror['error'] }}</li>
+                                    @endforeach
+                                    </ol>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </table>
+
+                </div>
+            </article>
+
+        @endif
+
+
+
+
+
+
+
+
+
+
+
         {{-- MATERIAL --}}
         @if ($has_material)
         <div class="column">

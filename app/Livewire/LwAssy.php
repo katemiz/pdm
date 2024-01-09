@@ -7,23 +7,19 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\WithPagination;
 
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 
 use App\Livewire\LwTree;
 
-
+use App\Models\Attachment;
 use App\Models\CNotice;
 use App\Models\Counter;
 use App\Models\Fnote;
 use App\Models\Item;
 use App\Models\NoteCategory;
-//use App\Models\Pnote;
 use App\Models\User;
-
-
 
 
 class LwAssy extends Component
@@ -45,10 +41,6 @@ class LwAssy extends Component
     public $has_flag_notes = true;
     public $has_vendor = false;
 
-
-
-
-
     public $uid;
 
     public $query = '';
@@ -58,8 +50,6 @@ class LwAssy extends Component
     public $action;
     public $showNodeGui = false;
     public $constants;
-
-    //public $bom;
 
     #[Validate('required', message: 'Please enter description')]
     public $description;
@@ -77,8 +67,6 @@ class LwAssy extends Component
     public $version;
     public $weight;
 
-
-
     public $ecns;
 
     public $fnotes  = [];
@@ -88,11 +76,12 @@ class LwAssy extends Component
 
     public $all_revs = [];
 
-
     public $created_by;
     public $updated_by;
     public $created_at;
     public $updated_at;
+
+    public $release_errors = false;
 
 
     public function mount()
@@ -128,12 +117,11 @@ class LwAssy extends Component
 
     public function setNotes() {
         $this->ncategories = NoteCategory::orderBy('text_tr')->get();
-        //$this->pnotes = Pnote::orderBy('text_tr')->get();
     }
 
 
     public function setFlagNotes() {
-        foreach (Fnote::where('urun_id',$this->uid)->orderBy('text_tr')->get() as $r) {
+        foreach (Fnote::where('item_id',$this->uid)->orderBy('text_tr')->get() as $r) {
             $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
         }
     }
@@ -305,10 +293,10 @@ class LwAssy extends Component
             $aaa->pnotes()->attach(array_unique($this->notes_id_array));
 
             // Flag Notes (Special Notes)
-            Fnote::where('urun_id',$this->uid)->delete();
+            Fnote::where('item_id',$this->uid)->delete();
 
             foreach ($this->fnotes as $fnote) {
-                $props['urun_id'] = $this->uid;
+                $props['item_id'] = $this->uid;
                 $props['no'] = $fnote['no'];
                 $props['text_tr'] = $fnote['text_tr'];
                 Fnote::create($props);
@@ -412,38 +400,42 @@ class LwAssy extends Component
     #[On('onReleaseConfirmed')]
     public function doRelease() {
 
-        $item = Item::find($this->uid);
 
-        $c = [];
-
-        foreach ( json_decode($item->bom) as $children) {
+        $this->release_errors = false;
 
 
-            array_push($c,$children);
+        $this->checkAssyIntegrity($this->uid);
+
+        if ( !$this->release_errors ) {
+
+
+
+
+
+
+
+
+
+
+
+            $props['status'] = 'Released';
+            $props['approver_id'] = Auth::id();
+            $props['app_revied_at'] = time();
+
+            $doc->update($props);
+
+            $this->setProps();
+
+            $this->action = 'VIEW';
+
+            session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
+
+            // Send EMails
+
+            $this->sendTestMail();
+
         }
 
-        dd($c);
-
-
-
-        return true;
-
-
-        $props['status'] = 'Released';
-        $props['approver_id'] = Auth::id();
-        $props['app_revied_at'] = time();
-
-        $doc->update($props);
-
-        $this->setProps();
-
-        $this->action = 'VIEW';
-
-        session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
-
-        // Send EMails
-
-        $this->sendTestMail();
 
 
     }
@@ -452,25 +444,24 @@ class LwAssy extends Component
 
 
 
-    public function checkAssyIntegrity($id) {
+    public function checkAssyIntegrity($idItem) {
 
-        $item = Item::find($id);
-
+        $item = Item::find($idItem);
 
         foreach ( json_decode($item->bom) as $children) {
 
-            switch ($i->part_type) {
+            switch ($children->part_type) {
 
                 case 'Detail':
-                    $this->checkDetailIntegrity($i);
+                    $this->checkDetailIntegrity($children->id);
                     break;
 
                 case 'Buyable':
-                    $this->checkBuyableIntegrity($i);
+                    $this->checkBuyableIntegrity($children->id);
                     break;
 
                 case 'Assy':
-                    $this->checkAssyIntegrity($i);
+                    $this->checkAssyIntegrity($children->id);
                     break;
             }
         }
@@ -478,17 +469,146 @@ class LwAssy extends Component
 
 
 
-    public function checkDetailIntegrity($item) {
+    public function checkDetailIntegrity($id) {
 
+        $d = Item::find($id);
 
-        foreach ( json_decode($item->bom) as $children) {
+        if ( $d->c_notice_id == NULL ) {
 
-
-            array_push($c,$children);
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'No ECN defined'
+            ];
         }
 
 
+        if ( $d->weight == NULL || $d->weight < 0 ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'Weight not defined'
+            ];
+        }
+
+
+        $attachments = Attachment::where('model_name','Product')
+            ->where('model_item_id',$id)->get();
+
+
+        $has_step = false;
+        $has_dxf = false;
+        $has_dwg = false;
+
+        foreach ($attachments as $dosya) {
+
+            $ext = substr(strrchr($dosya->original_file_name, '.'), 1);
+
+            if ($dosya->tag == 'STEP' && in_array($ext, ['STEP','stp','step'])) {
+                $has_step = true;
+            }
+
+            if ($dosya->tag == 'STEP' && in_array($ext, ['DXF','dxf'])) {
+                $has_dxf = true;
+            }
+
+            if ($dosya->tag == 'DWG-BOM' && in_array($ext, ['pdf','PDF'])) {
+                $has_dwg = true;
+            }
+        }
+
+
+
+        if ( !$has_step ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'STEP file not attached'
+            ];
+        }
+
+        if ( !$has_dxf ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'DXF file not attached'
+            ];
+        }
+
+        if ( !$has_dwg ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'Drawing file (pdf) not attached'
+            ];
+        }
+
+
+
     }
+
+
+
+    public function checkBuyableIntegrity($id) {
+
+        $b = Item::find($id);
+
+        if ( $b->c_notice_id == NULL ) {
+
+            $this->release_errors[$b->part_number][] = [
+                'id' => $b->id,
+                'part_number' => $b->part_number,
+                'error' => 'No ECN defined'
+            ];
+        }
+
+
+        if ( $b->weight == NULL || $b->weight < 0 ) {
+
+            $this->release_errors[$b->part_number][] = [
+                'id' => $b->id,
+                'part_number' => $b->part_number,
+                'error' => 'Weight not defined'
+            ];
+        }
+
+
+        if ( $b->vendor == NULL ) {
+
+            $this->release_errors[$b->part_number][] = [
+                'id' => $b->id,
+                'part_number' => $b->part_number,
+                'error' => 'Vendor name not defined'
+            ];
+        }
+
+
+        if ( $b->vendor_part_no == NULL ) {
+
+            $this->release_errors[$b->part_number][] = [
+                'id' => $b->id,
+                'part_number' => $b->part_number,
+                'error' => 'Vendor part number not defined'
+            ];
+        }
+
+        if ( $b->url == NULL ) {
+
+            $this->release_errors[$b->part_number][] = [
+                'id' => $b->id,
+                'part_number' => $b->part_number,
+                'error' => 'Buyable part URL not defined'
+            ];
+        }
+
+
+
+    }
+
 
 
 }

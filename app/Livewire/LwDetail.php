@@ -329,6 +329,8 @@ class LwDetail extends Component
             // Flag Notes (Special Notes)
             Fnote::where('item_id',$this->uid)->delete();
 
+            //dd($this->uid);
+
             foreach ($this->fnotes as $fnote) {
                 $props['item_id'] = $this->uid;
                 $props['no'] = $fnote['no'];

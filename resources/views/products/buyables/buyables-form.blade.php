@@ -32,7 +32,7 @@
 
 
 
-
+{{--
         <div class="columns">
 
             <div class="column is-half">
@@ -82,7 +82,7 @@
 
             </div>
 
-        </div>
+        </div> --}}
 
 
 

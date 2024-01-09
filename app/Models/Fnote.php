@@ -9,13 +9,14 @@ class Fnote extends Model
 {
     use HasFactory;
 
-    protected $table = 'snotes';
+    protected $table = 'fnotes';
 
     protected $fillable = [
         'user_id',
-        'urun_id',
+        'item_id',
         'no',
         'text_tr',
+        'text_en',
     ];
 }
 

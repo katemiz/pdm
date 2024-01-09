@@ -19,10 +19,10 @@ class MYPDF extends \TCPDF {
 
         $this->SetY(10);
 
-        $this->SetFillColor(216, 226, 220); 
+        $this->SetFillColor(216, 226, 220);
         $this->Rect(0, 0, $this->getPageWidth(), PDF_MARGIN_TOP, 'F');
 
-        $this->SetFillColor(45, 145, 220); 
+        $this->SetFillColor(45, 145, 220);
 
         $this->ImageSVG($file='/images/mtlogo.svg', $x=10, $y=10, $w='', $h='10', $link=url('/'), $align='', $palign='', $border=0, $fitonpage=false);
         $this->ImageSVG($file='/images/pdm_logo2.svg', $x=186, $y=6, $w='16', $h='', $link=url('/'), $align='', $palign='', $border=0, $fitonpage=false);
@@ -58,7 +58,7 @@ class PDFController extends Controller
 
         $fnotes = false;
 
-        foreach (Fnote::where('urun_id',$item->id)->get() as $r) {
+        foreach (Fnote::where('item_id',$item->id)->get() as $r) {
             $fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
         }
 
@@ -113,7 +113,7 @@ class PDFController extends Controller
         $pdf->SetTextColor(35, 100, 170);
 
         $pdf->SetXY(175,60);
-        $pdf->SetFillColor(230, 230, 230); 
+        $pdf->SetFillColor(230, 230, 230);
         $pdf->SetTextColor(0,0,0);
 
         $pdf->Cell(25, 5, 'ECN-'.$item->c_notice_id, 0, $ln=0, 'C', 1, '', 0, false, 'T', 'C');
@@ -225,7 +225,7 @@ class PDFController extends Controller
                         <th style="width:15%;text-align:right;">Miktar<br>Quantity</th>
                     </tr>
                     </thead>';
-                    
+
                     foreach ($page_rows as $i) {
                         $table .= '
                         <tr>

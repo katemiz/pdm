@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-use App\Models\Yaptirga;
+use App\Models\Pnote;
 
 
 class Urun extends Model
@@ -45,7 +45,7 @@ class Urun extends Model
 
     public function notes()
     {
-        return $this->belongsToMany(Yaptirga::class)->withTimestamps();
+        return $this->belongsToMany(Pnote::class)->withTimestamps();
     }
 
     public function snotes()

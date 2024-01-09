@@ -1,28 +1,5 @@
 <section class="section container">
 
-    <script>
-        function toggleDropdown() {
-
-            let dd = document.getElementById('dmenu')
-
-            if (dd.classList.contains('is-active')) {
-                dd.classList.remove('is-active')
-            } else {
-                dd.classList.add('is-active')
-            }
-
-            console.log(event.target)
-
-            // !elem.contains(event.target);
-
-        }
-
-        // window.onclick = function(e){
-        //     document.getElementById('dmenu').classList.remove('is-active')
-
-        // }
-    </script>
-
     <div class="columns">
 
         <div class="column is-8">
@@ -49,10 +26,7 @@
 
         <!-- Left side -->
         <div class="level-left">
-
             <x-add-button class="has-background-link-light"/>
-
-
         </div>
 
         <!-- Right side -->
@@ -193,7 +167,7 @@
     {{ $items->withQueryString()->links('components.pagination.bulma') }}
 
     @else
-        <div class="notification is-warning is-light">No Sellable Products found in database</div>
+        <div class="notification is-warning is-light">No parts found in database</div>
     @endif
 </section>
 

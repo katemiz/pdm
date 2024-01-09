@@ -92,7 +92,7 @@ class LwDetail extends Component
     public $status;
     public $unit = 'mm';
 
-    #[Validate('required|numeric', message: 'Weight should be numeric')]
+    //#[Validate('required|numeric', message: 'Weight should be numeric')]
     public $weight;
 
     public $created_by;
@@ -122,7 +122,7 @@ class LwDetail extends Component
 
             $this->setUnsetProps();
 
-            foreach (Fnote::where('urun_id',$this->uid)->get() as $r) {
+            foreach (Fnote::where('item_id',$this->uid)->get() as $r) {
                 $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
             }
         }
@@ -327,10 +327,10 @@ class LwDetail extends Component
             $aaa->pnotes()->attach(array_unique($this->notes_id_array));
 
             // Flag Notes (Special Notes)
-            Fnote::where('urun_id',$this->uid)->delete();
+            Fnote::where('item_id',$this->uid)->delete();
 
             foreach ($this->fnotes as $fnote) {
-                $props['urun_id'] = $this->uid;
+                $props['item_id'] = $this->uid;
                 $props['no'] = $fnote['no'];
                 $props['text_tr'] = $fnote['text_tr'];
                 Fnote::create($props);

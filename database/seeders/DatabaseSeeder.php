@@ -9,9 +9,10 @@ use Spatie\Permission\Models\Permission;
 
 use App\Models\Counter;
 use App\Models\Company;
+use App\Models\Malzeme;
 use App\Models\NoteCategory;
 use App\Models\User;
-use App\Models\Yaptirga;
+use App\Models\Pnote;
 
 class DatabaseSeeder extends Seeder
 {
@@ -53,7 +54,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        \App\Models\CRequest::factory()->count(50)->create();
+        \App\Models\CRequest::factory()->count(10)->create();
 
         Role::create(['name' => 'EngineeringDept']);
         Role::create(['name' => 'OperationsDept']);
@@ -109,7 +110,7 @@ class DatabaseSeeder extends Seeder
 
         // NOTES
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Demir ve Çelik > Çinko kaplama ASTM B633-13, SC 4, Type II (Renkli)",
@@ -118,7 +119,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 1,
             'text_tr' => "Verilmeyen Ölçü ve Ayrıntılar için 3B - CAD [3 Boyutlu Bilgisayar ] Modeli kullanılacaktır.",
@@ -127,7 +128,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 1,
             'text_tr' => "Verilmediği müddetçe, talaşlı imalat için kullanılacak parmak freze boyutları 16 mm çap ve dip burun yarıçapı 4 mm olacaktır.",
@@ -136,7 +137,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 1,
             'text_tr' => "Tüm sivri köşeleri yuvarlatın ve çapakları temizleyiniz",
@@ -145,7 +146,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Alüminyum Alaşımları > Kimyasal (Kromat) Dönüşüm Kaplaması, MIL-DTL-5541F, TIP I SINIF 1A (SARI)",
@@ -154,7 +155,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Alüminyum Alaşımları > Kimyasal (Kromat) Dönüşüm Kaplaması, MIL-DTL-5541F, TIP I SINIF 1A (Renksiz)",
@@ -163,7 +164,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Alüminyum Alaşımları > Eloksal Kaplama, MIL-A-8625F, Tip II, Sınıf 1, 20 μm (Renksiz) [Doğal Renk : Mat Hafif Gri]",
@@ -172,7 +173,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Alüminyum Alaşımları > Eloksal Kaplama, MIL-A-8625F, Tip II, Sınıf 2, 20 μm (Renkli)",
@@ -181,7 +182,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Renk, Eloksal  > Eloksal Kaplama Rengi RAL 9005 Siyah olacaktır.",
@@ -190,7 +191,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Paslanmaz Çelik > Pasivasyon, ASTM A967-05",
@@ -199,7 +200,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Metaller > Çinko-Nikel kaplama ASTM B841-99 Tip A, Kalınlık Sınıfı 10 (Renksiz)",
@@ -208,7 +209,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Metaller > Çinko-Nikel kaplama ASTM B841-99 Tip B, Kalınlık Sınıfı 10  (Sarı)",
@@ -217,7 +218,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Metaller > Çinko-Nikel kaplama ASTM B841-99 Tip C, Kalınlık Sınıfı 10  (Bronz Rengi)",
@@ -226,7 +227,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Metaller > Çinko-Nikel kaplama ASTM B841-99 Tip D, Kalınlık Sınıfı 10 (Siyah)",
@@ -235,7 +236,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Renk, Çinko Kaplama> Siyah, RAL 9005",
@@ -244,7 +245,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Demir ve Çelik > Çinko kaplama ASTM B633-13, SC 3, Type II (Renkli)",
@@ -253,7 +254,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Renk, Çinko Kaplama> Beyaz, RAL 9016 ",
@@ -262,7 +263,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Metaller > Katı Film Yağlayıcı M-46010-1, MIL-PRF-46010H [Doğal Renk]",
@@ -271,13 +272,35 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        Yaptirga::create([
+        Pnote::create([
             'user_id' => 1,
             'note_category_id' => 2,
             'text_tr' => "Metaller > Katı Film Yağlayıcı M-46010-2, MIL-PRF-46010H [Siyah]",
             'text_en' => "Metals > Solid Film Lubricate M-46010-2 per MIL-PRF-46010H [Black]",
             'status' => "A"
         ]);
+
+
+
+
+        Malzeme::create([
+            'user_id' => 1,
+            'form' => '300',
+            'family' => '200',
+            'description' => 'St 37-2 / 1.0037',
+            'specification' => 'DIN 17100 / EN 10025',
+            'status' => 'A'
+        ]);
+
+        Malzeme::create([
+            'user_id' => 1,
+            'form' => '300',
+            'family' => '200',
+            'description' => 'St 44-2 / 1.0044',
+            'specification' => 'DIN 17100 / EN 1002',
+            'status' => 'A'
+        ]);
+
     }
 }
 

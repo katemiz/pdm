@@ -263,13 +263,11 @@ class LwAssy extends Component
 
             $this->uid = $this->item->id;
 
-            // Flag Notes (Special Notes)
+            // Flag Notes
             foreach ($this->fnotes as $fnote) {
-
-                $props['urun_id'] = $this->uid;
+                $props['item_id'] = $this->uid;
                 $props['no'] = $fnote['no'];
                 $props['text_tr'] = $fnote['text_tr'];
-
                 Fnote::create($props);
             }
 

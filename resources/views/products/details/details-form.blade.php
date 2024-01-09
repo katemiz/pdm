@@ -359,6 +359,12 @@
             @endif
         </div>
 
+
+
+        @foreach ($errors->all() as $error)
+        {{ $error }}<br/>
+    @endforeach
+
     </form>
 
 </div>

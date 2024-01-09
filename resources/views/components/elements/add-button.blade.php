@@ -1,26 +1,5 @@
 <div>
 
-    <script>
-        function toggleDropdown() {
-
-            let dd = document.getElementById('dmenu')
-
-            if (dd.classList.contains('is-active')) {
-                dd.classList.remove('is-active')
-            } else {
-                dd.classList.add('is-active')
-            }
-
-            //console.log(event.target)
-
-
-        }
-
-
-    </script>
-
-
-
     @role(['admin','EngineeringDepartment'])
 
         <div class="dropdown" id="dmenu">
@@ -69,3 +48,19 @@
           </div>
     @endrole
 </div>
+
+
+<script>
+        function toggleDropdown() {
+
+            let dd = document.getElementById('dmenu')
+
+            if (dd.classList.contains('is-active')) {
+                dd.classList.remove('is-active')
+            } else {
+                dd.classList.add('is-active')
+            }
+
+            //console.log(event.target)
+        }
+</script>

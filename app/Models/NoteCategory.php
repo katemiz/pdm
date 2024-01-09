@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-use App\Models\Yaptirga;
+use App\Models\Pnote;
 
 
 class NoteCategory extends Model
@@ -25,7 +25,7 @@ class NoteCategory extends Model
 
     public function productNotes()
     {
-        return $this->hasMany(Yaptirga::class);
+        return $this->hasMany(Pnote::class);
     }
 
 }

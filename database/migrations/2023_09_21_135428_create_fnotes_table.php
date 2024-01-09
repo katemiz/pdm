@@ -14,9 +14,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('snotes', function (Blueprint $table) {
+        Schema::create('fnotes', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Urun::class);
+            $table->foreignIdFor(Item::class);
             $table->text('no');
             $table->text('text_tr');
             $table->text('text_en')->nullable();
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('snotes');
+        Schema::dropIfExists('fnotes');
     }
 };

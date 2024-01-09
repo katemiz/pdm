@@ -1,5 +1,3 @@
-
-
 <header class="mb-6">
     <h1 class="title has-text-weight-light is-size-1">{{ $page_view_title }}</h1>
     <h2 class="subtitle has-text-weight-light">{{ $page_view_subtitle }}</h2>
@@ -27,12 +25,11 @@
                         <span>List All</span>
                     </a>
 
-                    <x-add-button />
+                    <x-add-button/>
 
-                    <a href="/pdf/bom/{{$uid}}" class="button is-outlined mr-2">
+                    <a href="/pdf/bom/{{$uid}}" class="button is-outlined mx-2 has-text-danger">
                         <span class="icon is-small"><x-carbon-document-pdf /></span>
                     </a>
-
             </div>
 
             <!-- Right side -->

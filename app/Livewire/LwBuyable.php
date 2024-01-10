@@ -8,6 +8,7 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 
 use App\Models\Counter;
+use App\Models\CNotice;
 use App\Models\Document;
 use App\Models\Item;
 use App\Models\User;
@@ -35,14 +36,6 @@ class LwBuyable extends Component
     public $has_flag_notes = false;
     public $has_vendor = true;
 
-
-
-
-
-
-
-
-
     public $uid;
     public $action = 'LIST'; // LIST,FORM,VIEW
 
@@ -64,6 +57,9 @@ class LwBuyable extends Component
     public $description;
     public $version;
     public $is_latest;
+
+    #[Validate('required|numeric', message: 'Please select ECN')]
+    public $ecn_id;
 
     public $all_revs = [];
 
@@ -89,6 +85,9 @@ class LwBuyable extends Component
     public $updated_at;
 
 
+    public $release_errors = false;
+    public $parts_list = false;
+
 
     public function mount()
     {
@@ -108,7 +107,8 @@ class LwBuyable extends Component
 
     public function render() {
         return view('products.buyables.buyables',[
-            'buyables' => $this->getBuyables()
+            'buyables' => $this->getBuyables(),
+            'ecns' => CNotice::where('status','wip')->get()
         ]);
     }
 
@@ -193,6 +193,7 @@ class LwBuyable extends Component
         $props['unit'] = $this->unit;
         $props['part_number_mt'] = $this->part_number_mt;
         $props['part_number_wb'] = $this->part_number_wb;
+        $props['c_notice_id'] = $this->ecn_id;
         $props['vendor'] = $this->vendor;
         $props['vendor_part_no'] = $this->vendor_part_no;
         $props['url'] = $this->url;
@@ -235,6 +236,7 @@ class LwBuyable extends Component
             $this->part_number = $buyable->part_number;
             $this->part_number_mt = $buyable->part_number_mt;
             $this->part_number_wb = $buyable->part_number_wb;
+            $this->ecn_id = $buyable->c_notice_id;
             $this->product_type = $buyable->product_type;
             $this->vendor = $buyable->vendor;
             $this->vendor_part_no = $buyable->vendor_part_no;

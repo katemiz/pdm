@@ -44,10 +44,10 @@ class LwDetail extends Component
 
     public $uid = false;
 
-    public $isAdd = false;
-    public $isEdit = false;
-    public $isList = true;
-    public $isView = false;
+    // public $isAdd = false;
+    // public $isEdit = false;
+    // public $isList = true;
+    // public $isView = false;
 
     public $canUserAdd = true;
     public $canUserEdit = true;
@@ -113,7 +113,8 @@ class LwDetail extends Component
 
     public $remarks;
 
-
+    public $release_errors = false;
+    public $parts_list = false;
 
     public function mount()
     {

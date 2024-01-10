@@ -88,7 +88,32 @@
 
 
 
+        <div class="field">
+            <label class="label">Available ECNs</label>
 
+            <div class="control">
+
+                @if ( $ecns->count() > 0)
+
+                    @foreach ($ecns as $ecn)
+
+                        <label class="checkbox is-block">
+                            <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
+                            @checked($uid && $ecn->id == $ecn_id)> ECN-{{ $ecn->id }} {{ $ecn->cr_topic }}
+                        </label>
+
+                    @endforeach
+
+                @else
+                    <p>No usable ECNs found in database</p>
+                @endif
+
+            </div>
+
+            @error('ecn_id')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+            @enderror
+        </div>
 
 
 
@@ -110,6 +135,9 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
+
+
+
 
 
 

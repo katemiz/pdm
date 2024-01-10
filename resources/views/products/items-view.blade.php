@@ -113,14 +113,12 @@
 
             <div class="column has-text-right is-4">
                 <table class="table is-fullwidth">
-                    @if(!$has_vendor)
                     <tr>
                         <tr>
                             <th class="has-text-right">ECN</th>
                             <td class="has-text-right"><a class="tag is-link" href="/ecn/view/{{ $ecn_id }}">{{ $ecn_id }}</a></td>
                         </tr>
                     </tr>
-                    @endif
                     <tr>
                         <th class="has-text-right">Unit</th>
                         <td class="has-text-right">{{ $unit }}</td>

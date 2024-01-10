@@ -21,6 +21,9 @@ use App\Models\Item;
 use App\Models\NoteCategory;
 use App\Models\User;
 
+use Mail;
+use App\Mail\AppMail;
+
 
 class LwAssy extends Component
 {
@@ -82,6 +85,7 @@ class LwAssy extends Component
     public $updated_at;
 
     public $release_errors = false;
+    public $parts_list = false;
 
 
     public function mount()
@@ -409,22 +413,16 @@ class LwAssy extends Component
         if ( !$this->release_errors ) {
 
 
+            $this->releaseAssy($this->uid);
+
+
+            dd($this->parts_list);
 
 
 
 
 
 
-
-
-
-            $props['status'] = 'Released';
-            $props['approver_id'] = Auth::id();
-            $props['app_revied_at'] = time();
-
-            $doc->update($props);
-
-            $this->setProps();
 
             $this->action = 'VIEW';
 
@@ -466,7 +464,6 @@ class LwAssy extends Component
             }
         }
     }
-
 
 
     public function checkDetailIntegrity($id) {
@@ -552,7 +549,6 @@ class LwAssy extends Component
     }
 
 
-
     public function checkBuyableIntegrity($id) {
 
         $b = Item::find($id);
@@ -607,6 +603,111 @@ class LwAssy extends Component
 
 
 
+    }
+
+
+
+
+
+
+
+
+
+
+
+    public function releaseAssy($id) {
+
+        $rel = Item::find($id);
+
+        $props['status'] = 'Released';
+        $props['approver_id'] = Auth::id();
+        $props['app_reviewed_at'] = time();
+
+        $this->parts_list[] = [$rel->id,$rel->part_number,$rel->description];
+
+        foreach ( json_decode($rel->bom) as $children) {
+
+            switch ($children->part_type) {
+
+                case 'Detail':
+                    $this->releaseDetail($children->id);
+                    break;
+
+                case 'Buyable':
+                    $this->releaseBuyable($children->id);
+                    break;
+
+                case 'Assy':
+                    $this->releaseAssy($children->id);
+                    break;
+            }
+        }
+
+
+
+    }
+
+
+
+    public function releaseDetail($id) {
+
+        $rel = Item::find($id);
+
+        $this->parts_list[] = [$rel->id,$rel->part_number,$rel->description];
+
+
+        $props['status'] = 'Released';
+        $props['approver_id'] = Auth::id();
+        $props['app_reviewed_at'] = time();
+
+        //$rel->update($props);
+
+    }
+
+    public function releaseBuyable($id) {
+
+        $rel = Item::find($id);
+
+        $this->parts_list[] = [$rel->id,$rel->part_number,$rel->description];
+
+
+        $props['status'] = 'Released';
+        $props['approver_id'] = Auth::id();
+        $props['app_reviewed_at'] = time();
+
+        //$rel->update($props);
+
+    }
+
+
+
+
+
+
+
+
+
+    public function sendReleaseMail() {
+
+        $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
+        $msgdata['subject'] = 'D'.$this->document_no.' R'.$this->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
+        $msgdata['url'] = url('/').'/documents/view/'.$this->uid;
+        $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
+
+        $msgdata['document_no'] = $this->document_no;
+        $msgdata['title'] = $this->title;
+        $msgdata['revision'] = $this->revision;
+        $msgdata['remarks'] = $this->remarks;
+
+        $allCompanyUsers = User::where('company_id',$this->company_id)->get();
+
+        $toArr = [];
+
+        foreach ($allCompanyUsers as $key => $u) {
+            array_push($toArr, $u->email);
+        }
+
+        Mail::to($toArr)->send(new AppMail($msgdata));
     }
 
 

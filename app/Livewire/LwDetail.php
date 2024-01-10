@@ -220,6 +220,9 @@ class LwDetail extends Component
 
             $this->status = $item->status;
 
+            $this->is_latest = $item->is_latest;
+
+
             $this->created_by = User::find($item->user_id);
             $this->created_at = $item->created_at;
             $this->updated_by = User::find($item->updated_uid);

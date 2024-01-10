@@ -16,6 +16,7 @@ use App\Livewire\LwTree;
 use App\Models\Attachment;
 use App\Models\CNotice;
 use App\Models\Counter;
+use App\Models\Company;
 use App\Models\Fnote;
 use App\Models\Item;
 use App\Models\NoteCategory;
@@ -23,6 +24,8 @@ use App\Models\User;
 
 use Mail;
 use App\Mail\AppMail;
+
+use Carbon\Carbon;
 
 
 class LwAssy extends Component
@@ -64,6 +67,8 @@ class LwAssy extends Component
     public $part_number;
     public $remarks;
 
+    public $is_latest;
+
     public $status;
 
     public $unit = 'mm';
@@ -84,6 +89,8 @@ class LwAssy extends Component
     public $created_at;
     public $updated_at;
 
+    public $company_id;
+
     public $release_errors = false;
     public $parts_list = false;
 
@@ -101,6 +108,8 @@ class LwAssy extends Component
         $this->setECNs();
 
         $this->constants = config('assy_nodes');
+
+        $this->setCompanyProps();
     }
 
 
@@ -132,7 +141,11 @@ class LwAssy extends Component
 
 
 
-
+    public function setCompanyProps()
+    {
+        $this->company_id =  Auth::user()->company_id;
+        $this->company =  Company::find($this->company_id);
+    }
 
 
 
@@ -204,6 +217,8 @@ class LwAssy extends Component
         $this->ecn_id = $item->c_notice_id;
         $this->remarks = $item->remarks;
         $this->status = $item->status;
+        $this->is_latest = $item->is_latest;
+
 
         $this->treeData = json_decode($item->bom);
 
@@ -412,25 +427,20 @@ class LwAssy extends Component
 
         if ( !$this->release_errors ) {
 
+            $this->parts_list = [];
 
             $this->releaseAssy($this->uid);
 
-
-            dd($this->parts_list);
-
-
-
-
-
-
+            $this->setProps();
 
             $this->action = 'VIEW';
 
-            session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
+            session()->flash('message','Product Dataset has been released and email has been sent to PDM users successfully.');
 
             // Send EMails
 
-            $this->sendTestMail();
+            $this->sendReleaseMail();
+
 
         }
 
@@ -625,6 +635,12 @@ class LwAssy extends Component
 
         $this->parts_list[] = [$rel->id,$rel->part_number,$rel->description];
 
+        $props['status'] = 'Released';
+        $props['approver_id'] = Auth::id();
+        $props['app_reviewed_at'] = Carbon::now();
+
+        $rel->update($props);
+
         foreach ( json_decode($rel->bom) as $children) {
 
             switch ($children->part_type) {
@@ -658,9 +674,9 @@ class LwAssy extends Component
 
         $props['status'] = 'Released';
         $props['approver_id'] = Auth::id();
-        $props['app_reviewed_at'] = time();
+        $props['app_reviewed_at'] = Carbon::now();
 
-        //$rel->update($props);
+        $rel->update($props);
 
     }
 
@@ -673,9 +689,9 @@ class LwAssy extends Component
 
         $props['status'] = 'Released';
         $props['approver_id'] = Auth::id();
-        $props['app_reviewed_at'] = time();
+        $props['app_reviewed_at'] = Carbon::now();
 
-        //$rel->update($props);
+        $rel->update($props);
 
     }
 
@@ -689,15 +705,18 @@ class LwAssy extends Component
 
     public function sendReleaseMail() {
 
-        $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
-        $msgdata['subject'] = 'D'.$this->document_no.' R'.$this->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
-        $msgdata['url'] = url('/').'/documents/view/'.$this->uid;
-        $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
+        $msgdata['blade'] = 'emails.dataset_released';  // Blade file to be used
+        $msgdata['subject'] = 'Teknik Veri Yayınlanma Bildirimi / Dataset Release Notification';
+        $msgdata['url'] = url('/').'/products-assy/view/'.$this->uid;
+        $msgdata['url_title'] = 'Ürün Verisi Bağlantısı / Dataset Link';
 
-        $msgdata['document_no'] = $this->document_no;
-        $msgdata['title'] = $this->title;
-        $msgdata['revision'] = $this->revision;
+        $msgdata['part_number'] = $this->part_number;
+        $msgdata['description'] = $this->description;
+        $msgdata['version'] = $this->version;
         $msgdata['remarks'] = $this->remarks;
+
+        $msgdata['parts_list'] = $this->parts_list;
+
 
         $allCompanyUsers = User::where('company_id',$this->company_id)->get();
 

@@ -37,7 +37,7 @@
 
                 @role(['admin','EngineeringDept'])
 
-                @if ($status == 'Frozen')
+                @if ( in_array($status,['Frozen','Released']) )
 
                     @if ($is_latest)
                     <p class="level-item">
@@ -48,7 +48,10 @@
                     </p>
                     @endif
 
-                @else
+                @endif
+
+
+                @if ($status != 'Released')
 
                     <p class="level-item">
                         <a href='{{ $item_edit_url }}/{{ $uid }}'>

@@ -146,19 +146,19 @@ class LwDocument extends Component
 
 
 
-    public function checkUserRoles() {
+    // public function checkUserRoles() {
 
-        $this->logged_user = Auth::user();
-        $this->company_id = $this->logged_user->company_id;
+    //     $this->logged_user = Auth::user();
+    //     $this->company_id = $this->logged_user->company_id;
 
-        if ($this->logged_user->hasRole('admin')) {
-            $this->is_user_admin = true;
-        }
+    //     if ($this->logged_user->hasRole('admin')) {
+    //         $this->is_user_admin = true;
+    //     }
 
-        if ($this->logged_user->hasRole('company_admin')) {
-            $this->is_user_company_admin = true;
-        }
-    }
+    //     if ($this->logged_user->hasRole('company_admin')) {
+    //         $this->is_user_company_admin = true;
+    //     }
+    // }
 
 
     public function checkSessionVariables() {

@@ -8,7 +8,7 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 
 use App\Models\NoteCategory;
-use App\Models\Yaptirga;
+use App\Models\Pnote;
 use App\Models\User;
 
 use Illuminate\Support\Facades\Auth;
@@ -86,13 +86,13 @@ class ProductNote extends Component
 
             if (strlen($this->search) > 0) {
 
-                $items = Yaptirga::where('text_tr', 'LIKE', "%".$this->search."%")
+                $items = Pnote::where('text_tr', 'LIKE', "%".$this->search."%")
                 ->orWhere('text_en', 'LIKE', "%".$this->search."%")
                 ->orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
 
             } else {
-                $items = Yaptirga::orderBy($this->sortField,$this->sortDirection)->paginate(env('RESULTS_PER_PAGE'));
+                $items = Pnote::orderBy($this->sortField,$this->sortDirection)->paginate(env('RESULTS_PER_PAGE'));
             }
         }
 
@@ -121,7 +121,7 @@ class ProductNote extends Component
     public function setUnsetProps($opt = 'set') {
 
         if ($opt === 'set') {
-            $this->item = Yaptirga::find($this->itemId);
+            $this->item = Pnote::find($this->itemId);
 
             $this->item->canEdit = true;
 
@@ -168,7 +168,7 @@ class ProductNote extends Component
     {
         $this->validate();
         try {
-            $this->item = Yaptirga::create([
+            $this->item = Pnote::create([
                 'user_id' => Auth::id(),
                 'text_tr' => $this->text_tr,
                 'text_en' => $this->text_en,
@@ -200,7 +200,7 @@ class ProductNote extends Component
 
         try {
 
-            $this->item = Yaptirga::whereId($this->itemId)->update([
+            $this->item = Pnote::whereId($this->itemId)->update([
                 'user_id' => Auth::id(),
                 'note_category_id' => $this->category_id,
                 'text_tr' => $this->text_tr,

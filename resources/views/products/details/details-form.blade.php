@@ -93,6 +93,10 @@
         </div>
 
 
+        @if ($itemtype == 'Detail')
+
+
+
         <div class="field ">
 
             <label class="label">Material</label>
@@ -166,6 +170,8 @@
 
             </div>
         </div>
+
+        @endif
 
 
         <div class="field">

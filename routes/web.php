@@ -107,7 +107,12 @@ Route::middleware(['auth'])->group(function () {
     // PRODUCTS
     Route::get('/products/{action}/{id?}', LwProduct::class);
     Route::get('/parts/{action}/{id?}', LwItem::class);         // List All Items
-    Route::get('/details/{action}/{id?}', LwDetail::class);     // Detil Parts
+
+    //Route::get('/details/{action}/{id?}', LwDetail::class);     // Detail Parts
+
+    Route::get('/details/{itemtype}/{action}/{id?}', LwDetail::class);     // Detail Parts
+
+
     Route::get('/products-assy/{action}/{id?}', LwAssy::class); // Assy Parts
     Route::get('/buyables/{action}/{id?}', LwBuyable::class);   // Buyable Parts
 
@@ -115,9 +120,6 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    // Route::get('/parts-menu', function () {
-    //     return view('products.parts-menu');
-    // });
 
     // DOCUMENTS
     Route::get('/documents/{action}/{id?}', LwDocument::class);

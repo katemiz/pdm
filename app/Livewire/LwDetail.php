@@ -25,7 +25,7 @@ use Spatie\Permission\Models\Permission;
 
 class LwDetail extends Component
 {
-    const PART_TYPE = 'Detail';
+    public $itemtype = 'Detail';
 
     public $page_view_title = 'Detail Parts';
     public $page_view_subtitle = 'Detail Part Properties';
@@ -43,11 +43,6 @@ class LwDetail extends Component
     public $action = 'LIST'; // LIST,FORM,VIEW
 
     public $uid = false;
-
-    // public $isAdd = false;
-    // public $isEdit = false;
-    // public $isList = true;
-    // public $isView = false;
 
     public $canUserAdd = true;
     public $canUserEdit = true;
@@ -118,6 +113,15 @@ class LwDetail extends Component
 
     public function mount()
     {
+
+        if (!request('itemtype')) {
+
+            dd('no itemtype defined');
+        }
+
+        $this->itemtype = request('itemtype');
+
+
         if (request('id')) {
             $this->uid = request('id');
 
@@ -267,7 +271,7 @@ class LwDetail extends Component
         $this->validate();
         try {
             $this->item = Item::create([
-                'part_type' =>self::PART_TYPE,
+                'part_type' => $this->itemtype,
                 'updated_uid' => Auth::id(),
                 'malzeme_id' => $this->mat_id,
                 'description' => $this->description,

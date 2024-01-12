@@ -110,7 +110,7 @@ Route::middleware(['auth'])->group(function () {
 
     //Route::get('/details/{action}/{id?}', LwDetail::class);     // Detail Parts
 
-    Route::get('/details/{itemtype}/{action}/{id?}', LwDetail::class);     // Detail Parts
+    Route::get('/details/{itemtype}/{action}/{id?}', LwDetail::class);     // Detail-MakeFrom-Standard Parts
 
 
     Route::get('/products-assy/{action}/{id?}', LwAssy::class); // Assy Parts

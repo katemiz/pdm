@@ -42,17 +42,19 @@ class LwDetail extends Component
 
     public $action = 'LIST'; // LIST,FORM,VIEW
 
+    public $query = '';
+    public $sortField = 'created_at';
+    public $sortDirection = 'DESC';
+
     public $uid = false;
 
     public $canUserAdd = true;
     public $canUserEdit = true;
     public $canUserDelete = true;
 
-    public $search = '';
-    public $sortField = 'created_at';
-    public $sortDirection;
 
     public $part_number;
+    public $makefrom_part_number;
 
     public $constants;
 
@@ -108,6 +110,8 @@ class LwDetail extends Component
 
     public $remarks;
 
+    public $togglePartSelect = false;
+
     public $release_errors = false;
     public $parts_list = false;
 
@@ -120,7 +124,6 @@ class LwDetail extends Component
         }
 
         $this->itemtype = request('itemtype');
-
 
         if (request('id')) {
             $this->uid = request('id');
@@ -174,7 +177,8 @@ class LwDetail extends Component
 
         return view('products.details.details',[
             'items' => $items,
-            'ecns' => $ecns
+            'ecns' => $ecns,
+            'nodes' => $this->getNodes()
         ]);
     }
 
@@ -186,6 +190,29 @@ class LwDetail extends Component
             ->where('form', $this->mat_form)
             ->orderBy($this->sortField,'asc')->get();
         }
+    }
+
+
+
+    public function getNodes() {
+
+        if ($this->itemtype == 'MakeFrom') {
+            if ( strlen($this->query) > 2 ) {
+
+                return Item::where('part_number', 'LIKE', "%".$this->query."%")
+                    ->orWhere('description', 'LIKE', "%".$this->query."%")
+                    ->orderBy($this->sortField,$this->sortDirection)
+                    ->paginate(env('RESULTS_PER_PAGE'));
+
+            } else {
+
+                return Item::orderBy($this->sortField,$this->sortDirection)
+                    ->paginate(env('RESULTS_PER_PAGE'));
+            }
+        } else {
+            return false;
+        }
+
     }
 
 
@@ -276,6 +303,7 @@ class LwDetail extends Component
                 'malzeme_id' => $this->mat_id,
                 'description' => $this->description,
                 'part_number' => $this->getProductNo(),
+                'makefrom_part_number' => $this->makefrom_part_number,
                 'c_notice_id' => $this->ecn_id,
                 'weight' => $this->weight,
                 'unit' => $this->unit,
@@ -325,6 +353,7 @@ class LwDetail extends Component
                 'c_notice_id' => $this->ecn_id,
                 'weight' => $this->weight,
                 'unit' => $this->unit,
+                'makefrom_part_number' => $this->makefrom_part_number,
                 'remarks' => $this->remarks
             ]);
 

@@ -18,7 +18,7 @@
                     <span>Assembled Product</span>
                 </a>
 
-                <a href="/details/detail/form" class="dropdown-item">
+                <a href="/details/Detail/form" class="dropdown-item">
                     <span class="icon"><x-carbon-qr-code /></span>
                     <span>Detail (Make) Part</span>
                 </a>
@@ -28,12 +28,12 @@
                     <span>Buyable Part</span>
                 </a>
 
-                <a href="/details/make-from/form" class="dropdown-item">
+                <a href="/details/MakeFrom/form" class="dropdown-item">
                     <span class="icon"><x-carbon-change-catalog /></span>
                     <span>Make-From Part</span>
                 </a>
 
-                <a href="/parts-menu" class="dropdown-item">
+                <a href="/details/Standard/form" class="dropdown-item">
                     <span class="icon"><x-carbon-catalog /></span>
                     <span>Standard Parts</span>
                 </a>

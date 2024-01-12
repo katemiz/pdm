@@ -2,8 +2,25 @@
     <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
     <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">Detail Parts</h1>
-        <h2 class="subtitle has-text-weight-light">{{ $uid ? 'Update Detail Part' : 'New Detail Part' }}</h2>
+        @switch($itemtype)
+
+            @case('Detail')
+                <h1 class="title has-text-weight-light is-size-1">Detail Parts</h1>
+                <h2 class="subtitle has-text-weight-light">{{ $uid ? 'Update Detail Part' : 'New Detail Part' }}</h2>
+                @break
+
+            @case('MakeFrom')
+                <h1 class="title has-text-weight-light is-size-1">Make From Parts</h1>
+                <h2 class="subtitle has-text-weight-light">{{ $uid ? 'Update Make From Part' : 'New Make From Part' }}</h2>
+
+                @break
+
+            @case('Standard')
+                <h1 class="title has-text-weight-light is-size-1">Standard Parts</h1>
+                <h2 class="subtitle has-text-weight-light">{{ $uid ? 'Update Standard Part' : 'New Standard Part' }}</h2>
+                @break
+
+        @endswitch
     </header>
 
     @if ($uid)
@@ -19,6 +36,8 @@
             {{ session('error') }}
         </div>
     @endif
+
+
 
     @if (session()->has('message'))
         <div class="notification is-info is-light">
@@ -95,8 +114,6 @@
 
         @if ($itemtype == 'Detail')
 
-
-
         <div class="field ">
 
             <label class="label">Material</label>
@@ -170,6 +187,146 @@
 
             </div>
         </div>
+
+        @endif
+
+
+
+        @if ($itemtype == 'MakeFrom')
+
+            <label class="label">Make From Part Number</label>
+
+            <div class="columns">
+                <div class="column is-8">
+                    {{ $makefrom_part_number ? $makefrom_part_number : 'None yet, click to select' }}
+                    {{-- <p>Make From Part : Reference source part that will be used to make this part. Click to select.</p> --}}
+                </div>
+                <div class="column has-text-right">
+                    <button wire:click="$toggle('togglePartSelect')" class="button is-light is-small">
+                        <span class="icon is-small">
+
+                            @if ($togglePartSelect)
+                            <x-carbon-view-off />
+                            @else
+                            <x-carbon-view />
+
+                            @endif
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="column {{ $togglePartSelect ? '':'is-hidden'}}">
+
+
+                <nav class="level my-6">
+
+                    <!-- Left side -->
+                    {{-- <div class="level-left">
+                        <div class="level-item has-text-centered">
+                            <button wire:click="$toggle('showNodeGui')" class="button is-light is-small">
+                                <span class="icon is-small"><x-carbon-chevron-left /></span>
+                            </button>
+                        </div>
+                    </div> --}}
+
+                    <div class="level-right">
+
+                        <div class="field has-addons">
+                            <div class="control">
+                            <input class="input is-small" type="text" wire:model.live="query" placeholder="Search ...">
+                            </div>
+                            <div class="control">
+                            <a class="button is-link is-light is-small">
+                                @if ( strlen($query) > 0)
+                                    <span class="icon is-small is-left" wire:click="resetFilter">
+                                        <x-carbon-close />
+                                    </span>
+                                @else
+                                    <span class="icon is-small"><x-carbon-search /></span>
+                                @endif
+                            </a>
+                            </div>
+                        </div>
+
+                    </div>
+                </nav>
+
+                @if ($nodes->count() > 0)
+                    <table class="table is-fullwidth">
+
+                        <caption>{{ $nodes->total() }} {{ $nodes->total() > 1 ? ' Records' :' Record' }}</caption>
+
+                        <thead>
+                            <tr>
+                                @foreach ($constants['list']['headers'] as $col_name => $headerParams)
+                                    <th class="has-text-{{ $headerParams['align'] }}">
+                                        {{ $headerParams['title'] }}
+
+                                        @if ($headerParams['sortable'])
+
+                                            <a class="{{ $headerParams['direction'] == 'asc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('{{$col_name}}')">
+                                                <span class="icon has-text-link">
+                                                    <x-carbon-chevron-sort-up />
+                                                </span>
+                                            </a>
+
+                                            <a class="{{ $headerParams['direction'] == 'desc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('{{$col_name}}')">
+                                                <span class="icon has-text-link">
+                                                    <x-carbon-chevron-sort-down />
+                                                </span>
+                                            </a>
+
+                                        @endif
+                                    </th>
+                                @endforeach
+
+                                <th class="has-text-right"><span class="icon"><x-carbon-user-activity /></span></th>
+
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach ($nodes as $record)
+
+                                @if ($record->part_number != $part_number)
+                                <tr wire:key="{{ $record->id }}">
+
+                                    @foreach (array_keys($constants['list']['headers']) as $col_name)
+                                        <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
+                                            @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
+                                                {!! $record[$col_name] !!}
+                                            @else
+                                                {{ $record[$col_name] }}
+                                            @endif
+                                        </td>
+                                    @endforeach
+
+                                    <td class="has-text-right">
+
+                                        <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
+                                            <span class="icon"><x-carbon-checkmark /></span>
+                                        </a>
+
+                                    </td>
+
+                                </tr>
+                                @endif
+
+                            @endforeach
+
+                        </tbody>
+                    </table>
+
+                    {{ $nodes->withQueryString()->links('components.pagination.bulma') }}
+
+                @else
+                    <div class="notification is-warning is-light">No nodes found in database</div>
+                @endif
+
+            </div>
 
         @endif
 
@@ -374,3 +531,12 @@
     </form>
 
 </div>
+
+
+
+
+
+
+
+
+

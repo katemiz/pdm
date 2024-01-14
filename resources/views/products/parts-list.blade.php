@@ -118,7 +118,8 @@
                             @break
 
                         @case('Detail')
-                            <a href="/details/view/{{ $record->id}}">
+                        @case('MakeFrom')
+                            <a href="/details/{{ $record->part_type }}/view/{{ $record->id}}">
                                 <span class="icon"><x-carbon-view/></span>
                             </a>
                             @break
@@ -132,6 +133,7 @@
                     @role(['admin','EngineeringDepartment'])
 
                         @switch($record->part_type)
+
                             @case('Buyable')
                                 <a href="/buyables/form/{{ $record->id}}">
                                     <span class="icon"><x-carbon-edit /></span>
@@ -145,12 +147,12 @@
                                 @break
 
                             @case('Detail')
-                                <a href="/details/form/{{ $record->id}}">
+                            @case('MakeFrom')
+                                <a href="/details/{{ $record->part_type }}/form/{{ $record->id}}">
                                     <span class="icon"><x-carbon-edit /></span>
                                 </a>
                                 @break
 
-                            @default
                         @endswitch
 
                     @endrole

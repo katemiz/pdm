@@ -8,15 +8,12 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 
-
 use App\Models\CNotice;
 use App\Models\Counter;
 use App\Models\Fnote;
 use App\Models\Malzeme;
 use App\Models\Item;
-// use App\Models\NoteCategory;
 use App\Models\User;
-
 
 class LwItem extends Component
 {
@@ -88,7 +85,9 @@ class LwItem extends Component
 
 
 
-
+    public function resetFilter() {
+        $this->query = '';
+    }
 
 
 

@@ -25,13 +25,13 @@ use Spatie\Permission\Models\Permission;
 
 class LwDetail extends Component
 {
-    public $itemtype = 'Detail';
+    public $part_type = 'Detail';
 
     public $page_view_title = 'Detail Parts';
     public $page_view_subtitle = 'Detail Part Properties';
 
     public $list_all_url = '/parts/list';
-    public $item_edit_url = '/details/form';
+    public $item_edit_url;
     public $item_view_url = '/products-detail/view';
 
     public $has_material = true;
@@ -89,7 +89,6 @@ class LwDetail extends Component
     public $status;
     public $unit = 'mm';
 
-    //#[Validate('required|numeric', message: 'Weight should be numeric')]
     public $weight;
 
     public $created_by;
@@ -117,13 +116,12 @@ class LwDetail extends Component
 
     public function mount()
     {
-
-        if (!request('itemtype')) {
-
-            dd('no itemtype defined');
+        if (!request('part_type')) {
+            dd('no part_type defined');
         }
 
-        $this->itemtype = request('itemtype');
+        $this->part_type = request('part_type');
+        $this->item_edit_url = '/details/'.$this->part_type.'/form';
 
         if (request('id')) {
             $this->uid = request('id');
@@ -146,14 +144,6 @@ class LwDetail extends Component
     {
         $ecns = CNotice::where('status','wip')->get();
         $items = false;
-
-        // if ( $this->action === 'VIEW') {
-        //     $this->setUnsetProps();
-        // }
-
-        // if ( $this->action === 'FORM' && $this->uid) {
-        //     $this->setUnsetProps();
-        // }
 
         if ( $this->action === 'LIST') {
 
@@ -196,7 +186,7 @@ class LwDetail extends Component
 
     public function getNodes() {
 
-        if ($this->itemtype == 'MakeFrom') {
+        if ($this->part_type == 'MakeFrom') {
             if ( strlen($this->query) > 2 ) {
 
                 return Item::where('part_number', 'LIKE', "%".$this->query."%")
@@ -212,7 +202,6 @@ class LwDetail extends Component
         } else {
             return false;
         }
-
     }
 
 
@@ -222,9 +211,13 @@ class LwDetail extends Component
 
             $item = Item::find($this->uid);
 
-            $this->mat_id = $item->malzeme_id;
+            //dd([$item,$item->makefrom_part_number]);
 
-            if ($item->status == 'wip') {
+
+            $this->mat_id = $item->malzeme_id;
+            $this->part_type = $item->part_type;
+
+            if ($item->status == 'WIP') {
                 $this->isItemEditable = true;
                 $this->isItemDeleteable = true;
             }
@@ -234,14 +227,20 @@ class LwDetail extends Component
             $this->weight = $item->weight;
             $this->unit = $item->unit;
 
+
+
             $malzeme =  Malzeme::find($item->malzeme_id);
 
-            $this->material_definition = $malzeme->material_definition;
-            $this->family = $malzeme->family;
-            $this->form = $malzeme->form;
+            if ($this->part_type == 'MakeFrom') {
+                $this->material_definition = 'See Source Part Material';
+            } else {
+                $this->material_definition = $malzeme->material_definition;
+                $this->family = $malzeme->family;
+                $this->form = $malzeme->form;
 
-            $this->mat_family = $malzeme->family;
-            $this->mat_form = $malzeme->form;
+                $this->mat_family = $malzeme->family;
+                $this->mat_form = $malzeme->form;
+            }
 
             $this->getMaterialList();
 
@@ -252,6 +251,9 @@ class LwDetail extends Component
             $this->status = $item->status;
 
             $this->is_latest = $item->is_latest;
+
+            $this->makefrom_part_number = $item->makefrom_part_number;
+
 
 
             $this->created_by = User::find($item->user_id);
@@ -295,10 +297,16 @@ class LwDetail extends Component
 
     public function storeItem()
     {
+
+        if ($this->part_type == 'MakeFrom') {
+            $this->mat_id = 0 ;
+        }
+
+
         $this->validate();
         try {
             $this->item = Item::create([
-                'part_type' => $this->itemtype,
+                'part_type' => $this->part_type,
                 'updated_uid' => Auth::id(),
                 'malzeme_id' => $this->mat_id,
                 'description' => $this->description,
@@ -343,6 +351,10 @@ class LwDetail extends Component
 
     public function updateItem()
     {
+        if ($this->part_type == 'MakeFrom') {
+            $this->mat_id = 0 ;
+        }
+
         $this->validate();
 
         try {
@@ -416,6 +428,20 @@ class LwDetail extends Component
     public function integrityCheck() {
         return true;
     }
+
+
+
+
+    public function addSourcePart($sourcePartNumber) {
+
+        $this->makefrom_part_number = $sourcePartNumber;
+
+        //dd($this->make_from_part_number);
+
+    }
+
+
+
 
 
     public function addSNote() {

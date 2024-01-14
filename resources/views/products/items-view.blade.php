@@ -1,7 +1,30 @@
 <header class="mb-6">
-    <h1 class="title has-text-weight-light is-size-1">{{ $page_view_title }}</h1>
-    <h2 class="subtitle has-text-weight-light">{{ $page_view_subtitle }}</h2>
+    @switch($part_type)
+
+        @case('Detail')
+            <h1 class="title has-text-weight-light is-size-1">Detail Parts</h1>
+            <h2 class="subtitle has-text-weight-light">Detail Part Properties</h2>
+            @break
+
+        @case('MakeFrom')
+            <h1 class="title has-text-weight-light is-size-1">Make From Parts</h1>
+            <h2 class="subtitle has-text-weight-light">Make From Part Properties</h2>
+
+            @break
+
+        @case('Standard')
+            <h1 class="title has-text-weight-light is-size-1">Standard Parts</h1>
+            <h2 class="subtitle has-text-weight-light">Standard Part Properties</h2>
+            @break
+
+    @endswitch
 </header>
+
+
+
+
+
+
 
 @if (session()->has('message'))
     <div class="notification">
@@ -36,7 +59,6 @@
             <div class="level-right">
 
                 @role(['admin','EngineeringDept'])
-
                 @if ( in_array($status,['Frozen','Released']) )
 
                     @if ($is_latest)
@@ -49,7 +71,6 @@
                     @endif
 
                 @endif
-
 
                 @if ($status != 'Released')
 
@@ -79,7 +100,6 @@
                         </a>
                     </p>
                 @endif
-
                 @endrole
 
             </div>
@@ -176,7 +196,13 @@
 
 
 
-
+        {{-- MATERIAL --}}
+        @if ($part_type == 'MakeFrom')
+        <div class="column">
+            <label class="label">Source Part Number</label>
+            {{ $makefrom_part_number }}
+        </div>
+        @endif
 
 
 
@@ -339,7 +365,6 @@
 
 
                 <div class="column">
-
                     <div class="block">
                         <label class="label">{{ $has_vendor ? '3D Files':'STEP/DXF Files' }}</label>
                         @livewire('file-list', [
@@ -363,7 +388,6 @@
                             'tag' => $has_vendor ? 'Datasheet':'DWG-BOM',                          // Any tag other than model name
                         ])
                     </div>
-
                 </div>
 
             </div>

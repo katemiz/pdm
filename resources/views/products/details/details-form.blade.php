@@ -2,7 +2,7 @@
     <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
     <header class="mb-6">
-        @switch($itemtype)
+        @switch($part_type)
 
             @case('Detail')
                 <h1 class="title has-text-weight-light is-size-1">Detail Parts</h1>
@@ -112,7 +112,7 @@
         </div>
 
 
-        @if ($itemtype == 'Detail')
+        @if ($part_type == 'Detail')
 
         <div class="field ">
 
@@ -192,14 +192,13 @@
 
 
 
-        @if ($itemtype == 'MakeFrom')
+        @if ($part_type == 'MakeFrom')
 
             <label class="label">Make From Part Number</label>
 
             <div class="columns">
                 <div class="column is-8">
                     {{ $makefrom_part_number ? $makefrom_part_number : 'None yet, click to select' }}
-                    {{-- <p>Make From Part : Reference source part that will be used to make this part. Click to select.</p> --}}
                 </div>
                 <div class="column has-text-right">
                     <button wire:click="$toggle('togglePartSelect')" class="button is-light is-small">
@@ -217,41 +216,28 @@
             </div>
 
 
-            <div class="column {{ $togglePartSelect ? '':'is-hidden'}}">
+            <div class="column card has-background-white-ter mb-5 {{ $togglePartSelect ? '':'is-hidden'}}">
 
+                <div class="level-right">
 
-                <nav class="level my-6">
-
-                    <!-- Left side -->
-                    {{-- <div class="level-left">
-                        <div class="level-item has-text-centered">
-                            <button wire:click="$toggle('showNodeGui')" class="button is-light is-small">
-                                <span class="icon is-small"><x-carbon-chevron-left /></span>
-                            </button>
+                    <div class="field has-addons">
+                        <div class="control">
+                        <input class="input is-small" type="text" wire:model.live="query" placeholder="Search ...">
                         </div>
-                    </div> --}}
-
-                    <div class="level-right">
-
-                        <div class="field has-addons">
-                            <div class="control">
-                            <input class="input is-small" type="text" wire:model.live="query" placeholder="Search ...">
-                            </div>
-                            <div class="control">
-                            <a class="button is-link is-light is-small">
-                                @if ( strlen($query) > 0)
-                                    <span class="icon is-small is-left" wire:click="resetFilter">
-                                        <x-carbon-close />
-                                    </span>
-                                @else
-                                    <span class="icon is-small"><x-carbon-search /></span>
-                                @endif
-                            </a>
-                            </div>
+                        <div class="control">
+                        <a class="button is-link is-light is-small">
+                            @if ( strlen($query) > 0)
+                                <span class="icon is-small is-left" wire:click="resetFilter">
+                                    <x-carbon-close />
+                                </span>
+                            @else
+                                <span class="icon is-small"><x-carbon-search /></span>
+                            @endif
+                        </a>
                         </div>
-
                     </div>
-                </nav>
+
+                </div>
 
                 @if ($nodes->count() > 0)
                     <table class="table is-fullwidth">
@@ -306,7 +292,7 @@
 
                                     <td class="has-text-right">
 
-                                        <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
+                                        <a wire:click="addSourcePart({{ $record->part_number }})">
                                             <span class="icon"><x-carbon-checkmark /></span>
                                         </a>
 

@@ -32,7 +32,7 @@ class LwAssy extends Component
 {
     use WithPagination;
 
-    const PART_TYPE = 'Assy';
+    public $part_type = 'Assy';
 
     public $page_view_title = 'Assembled Products';
     public $page_view_subtitle = 'Assembled Products Properties';
@@ -61,7 +61,7 @@ class LwAssy extends Component
     public $description;
 
     #[Validate('required|numeric', message: 'Please select ECN')]
-    public $ecn_id;
+    public $c_notice_id;
 
     public $treeData;
     public $part_number;
@@ -214,7 +214,7 @@ class LwAssy extends Component
         $this->unit = $item->unit;
 
         $this->description = $item->description;
-        $this->ecn_id = $item->c_notice_id;
+        $this->c_notice_id = $item->c_notice_id;
         $this->remarks = $item->remarks;
         $this->status = $item->status;
         $this->is_latest = $item->is_latest;
@@ -252,10 +252,10 @@ class LwAssy extends Component
 
         try {
             $this->item = Item::create([
-                'part_type' => self::PART_TYPE,
+                'part_type' => $this->part_type,
                 'description' => $this->description,
                 'part_number' => $this->getProductNo(),
-                'c_notice_id' => $this->ecn_id,
+                'c_notice_id' => $this->c_notice_id,
                 'weight' => $this->weight,
                 'unit' => $this->unit,
                 'remarks' => $this->remarks,
@@ -298,7 +298,7 @@ class LwAssy extends Component
 
             Item::whereId($this->uid)->update([
                 'description' => $this->description,
-                'c_notice_id' => $this->ecn_id,
+                'c_notice_id' => $this->c_notice_id,
                 'weight' => $this->weight,
                 'unit' => $this->unit,
                 'remarks' => $this->remarks,
@@ -373,31 +373,16 @@ class LwAssy extends Component
     #[On('addTreeToDB')]
     public function addTreeToDB($bomData) {
 
-
-        // Çalışıyor
-
-
         if ($this->uid) {
-
-
 
             $props['bom'] = $bomData;
 
             $i = Item::find($this->uid);
-
             $sonuc = $i->update($props);
 
-            //dump([$idAssy,$bomData,$sonuc,$props,$i]);
-
-
-            Log::info($i);
-            Log::info($props);
-
-
+            // Log::info($i);
+            // Log::info($props);
         }
-
-
-        //dd($veri);
     }
 
 

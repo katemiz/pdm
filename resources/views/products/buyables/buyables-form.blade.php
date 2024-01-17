@@ -98,8 +98,8 @@
                     @foreach ($ecns as $ecn)
 
                         <label class="checkbox is-block">
-                            <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
-                            @checked($uid && $ecn->id == $ecn_id)> ECN-{{ $ecn->id }} {{ $ecn->cr_topic }}
+                            <input type="radio" wire:model="c_notice_id" value="{{$ecn->id}}"
+                            @checked($uid && $ecn->id == $c_notice_id)> ECN-{{ $ecn->id }} {{ $ecn->cr_topic }}
                         </label>
 
                     @endforeach
@@ -110,7 +110,7 @@
 
             </div>
 
-            @error('ecn_id')
+            @error('c_notice_id')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>

@@ -13,6 +13,7 @@ use App\Models\Counter;
 use App\Models\Fnote;
 use App\Models\Malzeme;
 use App\Models\Item;
+use App\Models\Sfamily;
 use App\Models\NoteCategory;
 use App\Models\User;
 
@@ -52,9 +53,11 @@ class LwDetail extends Component
     public $canUserEdit = true;
     public $canUserDelete = true;
 
-
     public $part_number;
     public $makefrom_part_number;
+
+    public $make_from_source_item;
+    public $makefrom_source_item;
 
     public $constants;
 
@@ -67,6 +70,11 @@ class LwDetail extends Component
 
     public $is_latest;
 
+    public $sfamilies;
+    public $standard_family;
+    public $standard_number;
+    public $standard_family_id;
+    public $std_params;
 
     public $materials = [];
     public $ncategories = [];
@@ -74,13 +82,13 @@ class LwDetail extends Component
 
     // Item Props
     #[Validate('required|numeric', message: 'Please select material')]
-    public $mat_id;
+    public $malzeme_id;
 
     #[Validate('required', message: 'Please write part name/title')]
     public $description;
 
     #[Validate('required|numeric', message: 'Please select ECN')]
-    public $ecn_id;
+    public $c_notice_id;
 
     public $isItemEditable = false;
     public $isItemDeleteable = false;
@@ -114,6 +122,7 @@ class LwDetail extends Component
     public $release_errors = false;
     public $parts_list = false;
 
+
     public function mount()
     {
         if (!request('part_type')) {
@@ -126,7 +135,7 @@ class LwDetail extends Component
         if (request('id')) {
             $this->uid = request('id');
 
-            $this->setUnsetProps();
+            $this->getProps();
 
             foreach (Fnote::where('item_id',$this->uid)->get() as $r) {
                 $this->fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
@@ -144,6 +153,10 @@ class LwDetail extends Component
     {
         $ecns = CNotice::where('status','wip')->get();
         $items = false;
+
+        if ( $this->part_type == 'Standard') {
+            $this->getStandardFamilies();
+        }
 
         if ( $this->action === 'LIST') {
 
@@ -173,6 +186,14 @@ class LwDetail extends Component
     }
 
 
+
+
+    public function getStandardFamilies()  {
+        $this->sfamilies = Sfamily::orderBy('standard_number','ASC')->get();
+    }
+
+
+
     public function getMaterialList() {
 
         if ($this->mat_family && $this->mat_form) {
@@ -190,6 +211,7 @@ class LwDetail extends Component
             if ( strlen($this->query) > 2 ) {
 
                 return Item::where('part_number', 'LIKE', "%".$this->query."%")
+                    ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
                     ->orWhere('description', 'LIKE', "%".$this->query."%")
                     ->orderBy($this->sortField,$this->sortDirection)
                     ->paginate(env('RESULTS_PER_PAGE'));
@@ -205,130 +227,192 @@ class LwDetail extends Component
     }
 
 
-    public function setUnsetProps($opt = 'set') {
-
-        if ($opt === 'set') {
-
-            $item = Item::find($this->uid);
-
-            //dd([$item,$item->makefrom_part_number]);
-
-
-            $this->mat_id = $item->malzeme_id;
-            $this->part_type = $item->part_type;
-
-            if ($item->status == 'WIP') {
-                $this->isItemEditable = true;
-                $this->isItemDeleteable = true;
-            }
-
-            $this->part_number = $item->part_number;
-            $this->version = $item->version;
-            $this->weight = $item->weight;
-            $this->unit = $item->unit;
+    public function getProps() {
 
 
 
-            $malzeme =  Malzeme::find($item->malzeme_id);
+        $item = Item::find($this->uid);
+
+
+        $this->malzeme_id = $item->malzeme_id;
+        $this->part_type = $item->part_type;
+
+        if ($item->status == 'WIP') {
+            $this->isItemEditable = true;
+            $this->isItemDeleteable = true;
+        }
+
+        $this->part_number = $item->part_number;
+        $this->version = $item->version;
+        $this->weight = $item->weight;
+        $this->unit = $item->unit;
+
+        $malzeme =  Malzeme::find($item->malzeme_id);
+
+        //dd('eeeeeeee');
+
+        if ( in_array($this->part_type,['MakeFrom','Standard']) ) {
 
             if ($this->part_type == 'MakeFrom') {
                 $this->material_definition = 'See Source Part Material';
-            } else {
-                $this->material_definition = $malzeme->material_definition;
-                $this->family = $malzeme->family;
-                $this->form = $malzeme->form;
-
-                $this->mat_family = $malzeme->family;
-                $this->mat_form = $malzeme->form;
             }
 
-            $this->getMaterialList();
-
-            $this->description = $item->description;
-            $this->ecn_id = $item->c_notice_id;
-            $this->remarks = $item->remarks;
-
-            $this->status = $item->status;
-
-            $this->is_latest = $item->is_latest;
-
-            $this->makefrom_part_number = $item->makefrom_part_number;
-
-
-
-            $this->created_by = User::find($item->user_id);
-            $this->created_at = $item->created_at;
-            $this->updated_by = User::find($item->updated_uid);
-            $this->updated_at = $item->updated_at;
-            $this->checked_by = User::find($item->checker_id);
-            $this->approved_by = User::find($item->approver_id);
-
-            $this->check_reviewed_at = $item->check_reviewed_at;
-            $this->app_reviewed_at = $item->app_reviewed_at;
-
-            $this->notes_id_array = [];
-
-            $this->notes = $item->pnotes;
-
-            foreach ($item->pnotes as $note) {
-                array_push($this->notes_id_array,$note->id);
+            if ($this->part_type == 'Standard') {
+                $this->material_definition = 'See Standard Documentation';
             }
 
-            // Revisions
-            foreach (Item::where('part_number',$this->part_number)->get() as $i) {
-                $this->all_revs[$i->version] = $i->id;
-            }
 
+            //dd('ssssss');
         } else {
-            $this->topic = '';
-            $this->description = '';
-            $this->is_for_ecn = false;
-            $this->rejectReason = false;
-            $this->status = false;
+
+            //dd(['here3',$item,$this->mat_family,$malzeme->material_definition]);
+
+            $this->material_definition = $malzeme->material_definition;
+
+            $this->family = $malzeme->family;
+            $this->form = $malzeme->form;
+
+            $this->mat_family = $malzeme->family;
+            $this->mat_form = $malzeme->form;
+
+
         }
+
+
+
+        $this->getMaterialList();
+
+        $this->standard_family_id = $item->standard_family_id;
+        $this->standard_number = $item->standard_number;
+        $this->description = $item->description;
+        $this->c_notice_id = $item->c_notice_id;
+        $this->remarks = $item->remarks;
+
+        $this->status = $item->status;
+
+        $this->is_latest = $item->is_latest;
+
+        $this->makefrom_part_number = $item->makefrom_part_number;
+
+
+        if ($this->part_type == 'MakeFrom') {
+            $this->makefrom_source_item = Item::where('part_number',$this->makefrom_part_number)->where('is_latest',true)->sole();
+        }
+
+        $this->std_params = $item->std_params;
+
+        $this->created_by = User::find($item->user_id);
+        $this->created_at = $item->created_at;
+        $this->updated_by = User::find($item->updated_uid);
+        $this->updated_at = $item->updated_at;
+        $this->checked_by = User::find($item->checker_id);
+        $this->approved_by = User::find($item->approver_id);
+
+        $this->check_reviewed_at = $item->check_reviewed_at;
+        $this->app_reviewed_at = $item->app_reviewed_at;
+
+        $this->notes_id_array = [];
+
+        $this->notes = $item->pnotes;
+
+        foreach ($item->pnotes as $note) {
+            array_push($this->notes_id_array,$note->id);
+        }
+
+        $this->standard_family = Sfamily::find($this->standard_family_id);
+
+        // Revisions
+        foreach (Item::where('part_number',$this->part_number)->get() as $i) {
+            $this->all_revs[$i->version] = $i->id;
+        }
+
+
     }
+
 
     public function viewItem($idItem) {
         $this->uid = $idItem;
         $this->action = 'VIEW';
-        $this->setUnsetProps();
+        $this->getProps();
     }
 
 
     public function storeItem()
     {
-
         if ($this->part_type == 'MakeFrom') {
-            $this->mat_id = 0 ;
+            $this->malzeme_id = 0 ;
         }
 
 
-        $this->validate();
+        //$this->validate();
+
+        $this->standard_family = Sfamily::find($this->standard_family_id);
+
+
+
+        switch ($this->part_type) {
+
+            case 'Detail':
+            case 'MakeFrom':
+
+                $props = $this->validate([
+                    'c_notice_id' => 'required',
+                    'description' => 'required|min:6',
+                    'malzeme_id' => 'required'
+                ]);
+
+                $props['part_type']  = $this->part_type;
+                $props['user_id']  = Auth::id();
+                $props['updated_uid']  = Auth::id();
+                $props['weight']  = $this->weight;
+                $props['remarks']  = $this->remarks;
+
+                $props['part_number']  = $this->getProductNo();
+                $props['makefrom_part_number']  = $this->makefrom_part_number;
+                $props['c_notice_id']  = $this->c_notice_id;
+                $props['unit']  = $this->unit;
+
+                break;
+
+            case 'Standard':
+
+                $props = $this->validate([
+                    'standard_family_id' => 'required',
+                    'std_params' => 'required'
+                ]);
+
+                $props['part_type']  = $this->part_type;
+                $props['user_id']  = Auth::id();
+                $props['updated_uid']  = Auth::id();
+                $props['weight']  = $this->weight;
+                $props['remarks']  = $this->remarks;
+
+                $props['standard_family_id']  = $this->standard_family_id;
+                $props['standard_number']  = $this->standard_family->standard_number;
+                $props['part_number']  = 0;
+                $props['description'] = $this->standard_family->description;
+
+                break;
+        }
+
+
+        //dd($props);
+
+
         try {
-            $this->item = Item::create([
-                'part_type' => $this->part_type,
-                'updated_uid' => Auth::id(),
-                'malzeme_id' => $this->mat_id,
-                'description' => $this->description,
-                'part_number' => $this->getProductNo(),
-                'makefrom_part_number' => $this->makefrom_part_number,
-                'c_notice_id' => $this->ecn_id,
-                'weight' => $this->weight,
-                'unit' => $this->unit,
-                'remarks' => $this->remarks,
-                'user_id' => Auth::id()
-            ]);
-            session()->flash('success','Detail Part has been created successfully!');
+
+            $this->item = Item::create($props);
+            $this->uid = $this->item->id;
+
+            session()->flash('success',$this->part_type.' Part has been created successfully!');
 
             // Attach Notes to Product
             $this->item->pnotes()->attach($this->notes_id_array);
 
-            $this->uid = $this->item->id;
-
             // Flag Notes (Special Notes)
             foreach ($this->fnotes as $fnote) {
 
-                $props['urun_id'] = $this->uid;
+                $props['item_id'] = $this->uid;
                 $props['no'] = $fnote['no'];
                 $props['text_tr'] = $fnote['text_tr'];
 
@@ -336,11 +420,9 @@ class LwDetail extends Component
             }
 
             $this->dispatch('triggerAttachment', modelId: $this->uid);
-
             $this->action = 'VIEW';
 
-            $this->setUnsetProps();
-
+            $this->getProps();
 
         } catch (\Exception $ex) {
             session()->flash('error','Something goes wrong!!'.$ex);
@@ -352,22 +434,56 @@ class LwDetail extends Component
     public function updateItem()
     {
         if ($this->part_type == 'MakeFrom') {
-            $this->mat_id = 0 ;
+            $this->malzeme_id = 0 ;
         }
 
-        $this->validate();
+        $this->standard_family = Sfamily::find($this->standard_family_id);
+
+
+        switch ($this->part_type) {
+
+            case 'Detail':
+            case 'MakeFrom':
+
+                $props = $this->validate([
+                    'c_notice_id' => 'required',
+                    'description' => 'required|min:6',
+                    'malzeme_id' => 'required'
+                ]);
+
+                $props['updated_uid']  = Auth::id();
+                $props['makefrom_part_number']  = $this->makefrom_part_number;
+                $props['weight']  = $this->weight;
+                $props['unit']  = $this->unit;
+                $props['remarks']  = $this->remarks;
+
+                break;
+
+            case 'Standard':
+
+                $props = $this->validate([
+                    'standard_family_id' => 'required',
+                    'std_params' => 'required'
+                ]);
+
+                $props['standard_family_id']  = $this->standard_family_id;
+                $props['part_type']  = $this->part_type;
+                $props['updated_uid']  = Auth::id();
+                $props['standard_number']  = $this->standard_family->standard_number;
+                $props['weight']  = $this->weight;
+                $props['remarks']  = $this->remarks;
+                $props['user_id']  = Auth::id();
+
+                $props['description'] = $this->standard_family->description;
+
+                break;
+        }
+
+        //dd($props);
 
         try {
 
-            Item::whereId($this->uid)->update([
-                'malzeme_id' => $this->mat_id,
-                'description' => $this->description,
-                'c_notice_id' => $this->ecn_id,
-                'weight' => $this->weight,
-                'unit' => $this->unit,
-                'makefrom_part_number' => $this->makefrom_part_number,
-                'remarks' => $this->remarks
-            ]);
+            Item::whereId($this->uid)->update($props);
 
             $aaa = Item::find($this->uid);
 
@@ -377,8 +493,6 @@ class LwDetail extends Component
 
             // Flag Notes (Special Notes)
             Fnote::where('item_id',$this->uid)->delete();
-
-            //dd($this->uid);
 
             foreach ($this->fnotes as $fnote) {
                 $props['item_id'] = $this->uid;
@@ -395,7 +509,7 @@ class LwDetail extends Component
 
             $this->action = 'VIEW';
 
-            $this->setUnsetProps();
+            $this->getProps();
 
 
         } catch (\Exception $ex) {
@@ -483,7 +597,7 @@ class LwDetail extends Component
     public function doFreeze() {
         Item::find($this->uid)->update(['status' =>'Frozen']);
         $this->action = 'VIEW';
-        $this->setUnsetProps();
+        $this->getProps();
     }
 
 

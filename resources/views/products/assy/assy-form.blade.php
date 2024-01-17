@@ -121,8 +121,8 @@
                                 @foreach ($ecns as $ecn)
 
                                     <label class="checkbox is-block">
-                                        <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
-                                        @checked($uid && $ecn->id == $ecn_id)> ECN-{{ $ecn->id }} {{ $ecn->cr_topic }}
+                                        <input type="radio" wire:model="c_notice_id" value="{{$ecn->id}}"
+                                        @checked($uid && $ecn->id == $c_notice_id)> ECN-{{ $ecn->id }} {{ $ecn->cr_topic }}
                                     </label>
 
                                 @endforeach
@@ -133,7 +133,7 @@
 
                         </div>
 
-                        @error('ecn_id')
+                        @error('c_notice_id')
                         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                         @enderror
                     </div>
@@ -433,9 +433,15 @@
 
                             <td class="has-text-right">
 
-                                <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
-                                    <span class="icon"><x-carbon-checkmark /></span>
-                                </a>
+                                @if ($record->part_type)
+                                    <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},'{{ addslashes($record->standard_number. " ". $record->std_params) }}','{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
+                                        <span class="icon"><x-carbon-checkmark /></span>
+                                    </a>
+                                @else
+                                    <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
+                                        <span class="icon"><x-carbon-checkmark /></span>
+                                    </a>
+                                @endif
 
                             </td>
 

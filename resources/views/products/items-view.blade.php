@@ -9,8 +9,14 @@
         @case('MakeFrom')
             <h1 class="title has-text-weight-light is-size-1">Make From Parts</h1>
             <h2 class="subtitle has-text-weight-light">Make From Part Properties</h2>
-
             @break
+
+
+        @case('Buyable')
+            <h1 class="title has-text-weight-light is-size-1">Buyable Parts</h1>
+            <h2 class="subtitle has-text-weight-light">Buyable Part Properties</h2>
+            @break
+
 
         @case('Standard')
             <h1 class="title has-text-weight-light is-size-1">Standard Parts</h1>
@@ -50,16 +56,19 @@
 
                     <x-add-button/>
 
+                    @if ($part_type != 'Standard')
                     <a href="/pdf/bom/{{$uid}}" class="button is-outlined mx-2 has-text-danger">
                         <span class="icon is-small"><x-carbon-document-pdf /></span>
                     </a>
+                    @endif
+
             </div>
 
             <!-- Right side -->
             <div class="level-right">
 
                 @role(['admin','EngineeringDept'])
-                @if ( in_array($status,['Frozen','Released']) )
+                @if ( in_array($status,['Frozen','Released'])  && $part_type != 'Standard' )
 
                     @if ($is_latest)
                     <p class="level-item">
@@ -80,6 +89,9 @@
                         </a>
                     </p>
 
+
+
+
                     @role(['Approver'])
                     <p class="level-item">
                         <a wire:click='freezeConfirm({{ $uid }})'>
@@ -87,18 +99,26 @@
                         </a>
                     </p>
 
+                    @if ($part_type != 'Standard')
+
                     <p class="level-item">
                         <a wire:click='releaseConfirm({{ $uid }})'>
                             <span class="icon"><x-carbon-send /></span>
                         </a>
                     </p>
+                    @endif
+
                     @endrole
+
+                    @if ($part_type != 'Standard')
 
                     <p class="level-item">
                         <a wire:click="deleteConfirm({{ $uid }})">
                             <span class="icon has-text-danger"><x-carbon-trash-can /></span>
                         </a>
                     </p>
+
+                    @endif
                 @endif
                 @endrole
 
@@ -119,8 +139,14 @@
             </div>
 
             <div class="column is-7">
-                <p class="title has-text-weight-light is-size-2">{{$part_number}}<span class="has-text-grey-lighter">-{{$version}}</span></p>
-                <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
+
+                @if ($part_type == 'Standard')
+                    <p class="title has-text-weight-light is-size-2">{{$standard_number}} {{$std_params}}</p>
+                    <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
+                @else
+                    <p class="title has-text-weight-light is-size-2">{{$part_number}}<span class="has-text-grey-lighter">-{{$version}}</span></p>
+                    <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
+                @endif
 
                 @if (count($all_revs) > 1)
                 <div class="tags has-addons">
@@ -134,12 +160,18 @@
                 @endif
             </div>
 
+
+
+
             <div class="column has-text-right is-4">
+
+                @if ($part_type != 'Standard')
+
                 <table class="table is-fullwidth">
                     <tr>
                         <tr>
                             <th class="has-text-right">ECN</th>
-                            <td class="has-text-right"><a class="tag is-link" href="/ecn/view/{{ $ecn_id }}">{{ $ecn_id }}</a></td>
+                            <td class="has-text-right"><a class="tag is-link" href="/ecn/view/{{ $c_notice_id }}">{{ $c_notice_id }}</a></td>
                         </tr>
                     </tr>
                     <tr>
@@ -151,7 +183,11 @@
                         <td class="has-text-right">{{ $weight ? $weight :'-' }}</td>
                     </tr>
                 </table>
+                @endif
+
             </div>
+
+
 
         </div>
         </div>
@@ -200,7 +236,27 @@
         @if ($part_type == 'MakeFrom')
         <div class="column">
             <label class="label">Source Part Number</label>
-            {{ $makefrom_part_number }}
+
+            @switch($makefrom_source_item->part_type)
+                @case('Buyable')
+                    <a href="/buyables/view/{{ $makefrom_source_item->id}}" target="_blank">{{ $makefrom_source_item->part_number}} {{ $makefrom_source_item->description}}</a>
+                    @break
+
+                @case('Assy')
+                    <a href="/products-assy/view/{{ $makefrom_source_item->id}}" target="_blank">{{ $makefrom_source_item->part_number}} {{ $makefrom_source_item->description}}</a>
+                    @break
+
+                @case('Detail')
+                @case('MakeFrom')
+                @case('Standard')
+
+                    <a href="/details/{{ $makefrom_source_item->part_type }}/view/{{ $makefrom_source_item->id}}" target="_blank">{{ $makefrom_source_item->part_number}} {{ $makefrom_source_item->description}}</a>
+                    @break
+
+                @default
+
+            @endswitch
+
         </div>
         @endif
 
@@ -217,7 +273,7 @@
         @endif
 
         {{-- STANDARD PART NOTES --}}
-        @if ($has_notes)
+        @if ($has_notes && $part_type != 'Standard')
         <div class="column content">
             <label class="label">General Part Notes</label>
             <ol>
@@ -230,7 +286,7 @@
 
 
         {{-- FLAG NOTES --}}
-        @if ($has_flag_notes)
+        @if ($has_flag_notes  && $part_type != 'Standard')
         <div class="column content">
             <label class="label">Special Part Notes</label>
             @foreach ($fnotes as $flag)
@@ -343,6 +399,10 @@
 
 
         {{-- FILES --}}
+
+
+        @if ($part_type != 'Standard')
+
         <div class="column">
             <div class="columns">
 
@@ -392,6 +452,26 @@
 
             </div>
         </div>
+
+        @endif
+
+
+        @if ( $part_type == 'Standard' )
+        <div class="column">
+
+            <div class="block">
+            <label class="label">Standard</label>
+            @livewire('file-list', [
+                'model' => 'Standard',
+                'modelId' => $standard_family_id,
+                'showMime' => false,
+                'showSize' => false,
+                'tag' => 'STD', // Any tag other than model name
+            ])
+            </div>
+
+        </div>
+        @endif
 
 
 

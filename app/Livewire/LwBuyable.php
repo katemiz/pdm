@@ -20,7 +20,7 @@ class LwBuyable extends Component
 {
     use WithPagination;
 
-    const PART_TYPE = 'Buyable';
+    public $part_type = 'Buyable';
 
 
     public $page_view_title = 'Buyable Products';
@@ -59,7 +59,7 @@ class LwBuyable extends Component
     public $is_latest;
 
     #[Validate('required|numeric', message: 'Please select ECN')]
-    public $ecn_id;
+    public $c_notice_id;
 
     public $all_revs = [];
 
@@ -189,11 +189,11 @@ class LwBuyable extends Component
         $this->validate();
 
         $props['updated_uid'] = Auth::id();
-        $props['part_type'] = self::PART_TYPE;
+        $props['part_type'] = $this->part_type;
         $props['unit'] = $this->unit;
         $props['part_number_mt'] = $this->part_number_mt;
         $props['part_number_wb'] = $this->part_number_wb;
-        $props['c_notice_id'] = $this->ecn_id;
+        $props['c_notice_id'] = $this->c_notice_id;
         $props['vendor'] = $this->vendor;
         $props['vendor_part_no'] = $this->vendor_part_no;
         $props['url'] = $this->url;
@@ -236,7 +236,7 @@ class LwBuyable extends Component
             $this->part_number = $buyable->part_number;
             $this->part_number_mt = $buyable->part_number_mt;
             $this->part_number_wb = $buyable->part_number_wb;
-            $this->ecn_id = $buyable->c_notice_id;
+            $this->c_notice_id = $buyable->c_notice_id;
             $this->product_type = $buyable->product_type;
             $this->vendor = $buyable->vendor;
             $this->vendor_part_no = $buyable->vendor_part_no;

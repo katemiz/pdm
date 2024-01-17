@@ -157,6 +157,13 @@
                             <span class="ml-2">Product Notes</span>
                         </a>
 
+                        <a href="/std-family/list" class="navbar-item">
+                            <span class="icon has-text-info">
+                                <x-carbon-catalog />
+                            </span>
+                            <span class="ml-2">Standard Families</span>
+                        </a>
+
                     </div>
                 </div>
 

@@ -24,7 +24,9 @@ class Item extends Model
         'description',
         'part_number_mt',
         'part_number_wb',
+        'standard_family_id',
         'standard_number',
+        'std_params',
         'bom',
         'makefrom_part_number',
         'version',
@@ -45,34 +47,28 @@ class Item extends Model
         'app_reviewed_at',
     ];
 
+
     public function getFullPartNumberAttribute()
     {
+        if ($this->part_type == 'Standard') {
+
+            $sf = Sfamily::find($this->standard_family_id);
+            return $sf->standard_number.' '.$this->std_params;
+        }
+
         return $this->part_number.'-'.$this->version;
     }
+
 
     public function pnotes()
     {
         return $this->belongsToMany(Pnote::class)->withTimestamps();
     }
 
+
     public function flagnotes()
     {
         return $this->hasMany(Fnote::class);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

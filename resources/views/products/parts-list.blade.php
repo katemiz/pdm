@@ -92,6 +92,19 @@
             @foreach ($items as $record)
             <tr wire:key="{{ $record->id }}">
 
+
+
+
+                <td>{{ $record->full_part_number }}</td>
+                <td>{{ $record->part_type }}</td>
+                <td>{{ $record->c_notice_id }}</td>
+                <td>{{ $record->description }}</td>
+                <td>{{ $record->created_at }}</td>
+
+
+
+
+{{--
                 @foreach (array_keys($constants['list']['headers']) as $col_name)
                     <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
                         @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
@@ -100,7 +113,7 @@
                             {{ $record[$col_name] }}
                         @endif
                     </td>
-                @endforeach
+                @endforeach --}}
 
                 <td class="has-text-right">
 
@@ -119,6 +132,8 @@
 
                         @case('Detail')
                         @case('MakeFrom')
+                        @case('Standard')
+
                             <a href="/details/{{ $record->part_type }}/view/{{ $record->id}}">
                                 <span class="icon"><x-carbon-view/></span>
                             </a>
@@ -148,6 +163,8 @@
 
                             @case('Detail')
                             @case('MakeFrom')
+                            @case('Standard')
+
                                 <a href="/details/{{ $record->part_type }}/form/{{ $record->id}}">
                                     <span class="icon"><x-carbon-edit /></span>
                                 </a>

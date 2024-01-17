@@ -48,6 +48,9 @@
     <form method="POST" enctype="multipart/form-data">
     @csrf
 
+
+        @if ($part_type != 'Standard')
+
         <div class="field">
             <label class="label">Part Unit</label>
 
@@ -65,6 +68,55 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
+
+        @endif
+
+        @if ($part_type == 'Standard')
+
+
+            <div class="field">
+
+                <label class="label has-text-weight-normal" for="topic">Select Standard Family</label>
+                <div class="control">
+                    <div class="select">
+                        <select wire:model='standard_family_id'>
+                        <option>Select Family</option>
+
+                        @foreach ( $sfamilies as $sfamily)
+                            <option value="{{ $sfamily->id }}" @selected( $standard_family_id == $sfamily->id )>{{$sfamily->standard_number}} {{$sfamily->description}}</option>
+                        @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                @error('standard_family_id')
+                <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+
+
+            <div class="field">
+
+                <label class="label" for="topic">Standard (Part) Parameters</label>
+                <div class="control">
+
+                    <input
+                        class="input"
+                        id="description"
+                        wire:model="std_params"
+                        type="text"
+                        value="{{ $uid ? $std_params : ''}}"
+                        placeholder=" eg M10X50" required>
+                </div>
+
+                @error('std_params')
+                <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+        @endif
+
+
+        @if ($part_type != 'Standard')
 
         <div class="field">
 
@@ -85,7 +137,6 @@
             @enderror
         </div>
 
-
         <div class="field">
             <label class="label">Available ECNs</label>
 
@@ -95,8 +146,8 @@
 
                     @foreach ($ecns as $ecn)
                         <label class="checkbox is-block">
-                            <input type="radio" wire:model="ecn_id" value="{{$ecn->id}}"
-                            @checked($uid && $ecn->id == $ecn_id)> ECN-{{ $ecn->id }} {{ $ecn->cr_topic }}
+                            <input type="radio" wire:model="c_notice_id" value="{{$ecn->id}}"
+                            @checked($uid && $ecn->id == $c_notice_id)> ECN-{{ $ecn->id }} {{ $ecn->cr_topic }}
                         </label>
                     @endforeach
 
@@ -106,11 +157,12 @@
 
             </div>
 
-            @error('ecn_id')
+            @error('c_notice_id')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
 
+        @endif
 
         @if ($part_type == 'Detail')
 
@@ -167,7 +219,7 @@
 
                         <div class="control">
                             <div class="select">
-                                <select wire:model='mat_id'>
+                                <select wire:model='malzeme_id'>
                                 <option>Select Material</option>
 
                                 @foreach ($materials as $material)
@@ -180,7 +232,7 @@
                         <p>No materials</p>
                     @endif
 
-                    @error('mat_id')
+                    @error('malzeme_id')
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
@@ -273,14 +325,21 @@
                             </tr>
                         </thead>
 
+
                         <tbody>
 
                             @foreach ($nodes as $record)
 
-                                @if ($record->part_number != $part_number)
+                                @if ( isset($part_number) && $record->part_number != $part_number)
                                 <tr wire:key="{{ $record->id }}">
 
-                                    @foreach (array_keys($constants['list']['headers']) as $col_name)
+                                    <td>{{ $record->full_part_number }}</td>
+                                    <td>{{ $record->part_type }}</td>
+                                    <td>{{ $record->c_notice_id }}</td>
+                                    <td>{{ $record->description }}</td>
+                                    <td>{{ $record->created_at }}</td>
+
+                                    {{-- @foreach (array_keys($constants['list']['headers']) as $col_name)
                                         <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
                                             @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
                                                 {!! $record[$col_name] !!}
@@ -288,7 +347,7 @@
                                                 {{ $record[$col_name] }}
                                             @endif
                                         </td>
-                                    @endforeach
+                                    @endforeach --}}
 
                                     <td class="has-text-right">
 
@@ -317,85 +376,89 @@
         @endif
 
 
-        <div class="field">
-            <label class="label">Notes, Select All Applicable</label>
+        @if ($part_type != 'Standard')
 
-            <div class="control">
+            <div class="field">
+                <label class="label">Notes, Select All Applicable</label>
 
-                @foreach ($ncategories as $ncategory)
+                <div class="control">
 
-                    <p class="has-text-info has-text-7 mt-3">{{ $ncategory->text_tr }} / {{ $ncategory->text_en }}</p>
-                    @foreach ($ncategory->productNotes as $note)
-                    <label wire:key="{{ $note->id }}" class="checkbox is-block ">
-                        <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"> {{ $note->text_tr }}
-                    </label>
+                    @foreach ($ncategories as $ncategory)
+
+                        <p class="has-text-info has-text-7 mt-3">{{ $ncategory->text_tr }} / {{ $ncategory->text_en }}</p>
+                        @foreach ($ncategory->productNotes as $note)
+                        <label wire:key="{{ $note->id }}" class="checkbox is-block ">
+                            <input type="checkbox" wire:model="notes_id_array" value="{{ $note->id }}"> {{ $note->text_tr }}
+                        </label>
+                        @endforeach
+
                     @endforeach
 
-                @endforeach
-
-            </div>
-
-            @error('notes_id_array')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
-        </div>
-
-
-        <div class="field ">
-            <label class="label">Special Part Notes [Flag Notes]</label>
-
-            <div class="columns">
-
-                <div class="column is-1">
-                    <a wire:click='addSNote' class="button is-small is-link"><span class="icon"><x-carbon-add /></span></a>
                 </div>
 
-                <div class="column">
+                @error('notes_id_array')
+                <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                @enderror
+            </div>
 
-                    @foreach ($fnotes as $index => $fnote)
-                    <div class="field-body">
 
-                      <div class="field is-narrow">
-                        @if ($index == 0)
-                        <label class="label has-text-weight-normal">No</label>
-                        @endif
+            <div class="field ">
+                <label class="label">Special Part Notes [Flag Notes]</label>
 
-                        <p class="control">
-                          <input class="input" type="text" placeholder="No" wire:model="fnotes.{{ $index }}.no">
-                        </p>
-                      </div>
+                <div class="columns">
 
-                      <div class="field">
-                        @if ($index == 0)
-                            <label class="label has-text-weight-normal">Flag Note</label>
-                        @endif
+                    <div class="column is-1">
+                        <a wire:click='addSNote' class="button is-small is-link"><span class="icon"><x-carbon-add /></span></a>
+                    </div>
 
-                        <div class="columns">
+                    <div class="column">
 
-                            <div class="column">
-                                <p class="control">
-                                    <input class="input" type="text" placeholder="Specific part note" wire:model="fnotes.{{ $index }}.text_tr">
-                                </p>
-                            </div>
+                        @foreach ($fnotes as $index => $fnote)
+                        <div class="field-body">
 
-                            <div class="column is-1">
-                                <p class="control">
-                                    <a wire:click='deleteSNote("{{ $index }}")'><span class="icon is-small has-text-danger"><x-carbon-trash-can /></span></a>
-                                </p>
+                        <div class="field is-narrow">
+                            @if ($index == 0)
+                            <label class="label has-text-weight-normal">No</label>
+                            @endif
+
+                            <p class="control">
+                            <input class="input" type="text" placeholder="No" wire:model="fnotes.{{ $index }}.no">
+                            </p>
+                        </div>
+
+                        <div class="field">
+                            @if ($index == 0)
+                                <label class="label has-text-weight-normal">Flag Note</label>
+                            @endif
+
+                            <div class="columns">
+
+                                <div class="column">
+                                    <p class="control">
+                                        <input class="input" type="text" placeholder="Specific part note" wire:model="fnotes.{{ $index }}.text_tr">
+                                    </p>
+                                </div>
+
+                                <div class="column is-1">
+                                    <p class="control">
+                                        <a wire:click='deleteSNote("{{ $index }}")'><span class="icon is-small has-text-danger"><x-carbon-trash-can /></span></a>
+                                    </p>
+                                </div>
+
                             </div>
 
                         </div>
 
-                      </div>
+                        </div>
+                        @endforeach
 
                     </div>
-                    @endforeach
 
                 </div>
 
             </div>
 
-        </div>
+        @endif
 
 
         <div class="field">
@@ -428,84 +491,115 @@
         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
         @enderror
 
+        @if ($part_type != 'Standard')
 
-        <div class="field block">
-            <label class="label">CAD Files</label>
+            <div class="field block">
+                <label class="label">CAD Files</label>
 
-            @if ($uid)
-            @livewire('file-list', [
-                'canDelete' => true,
-                'model' => 'Product',
-                'modelId' => $uid,
-                'tag' => 'CAD',                          // Any tag other than model name
-            ])
-            @endif
-
-            <div class="control">
-
-                @livewire('file-upload', [
+                @if ($uid)
+                @livewire('file-list', [
+                    'canDelete' => true,
                     'model' => 'Product',
-                    'modelId' => $uid ? $uid : false,
-                    'isMultiple'=> true,                   // can multiple files be selected
+                    'modelId' => $uid,
                     'tag' => 'CAD',                          // Any tag other than model name
-                    'canEdit' => $canUserEdit])
+                ])
+                @endif
+
+                <div class="control">
+
+                    @livewire('file-upload', [
+                        'model' => 'Product',
+                        'modelId' => $uid ? $uid : false,
+                        'isMultiple'=> true,                   // can multiple files be selected
+                        'tag' => 'CAD',                          // Any tag other than model name
+                        'canEdit' => $canUserEdit])
+                </div>
             </div>
-        </div>
 
-        <div class="field block">
-            <label class="label">STEP/DXF Files</label>
+            <div class="field block">
+                <label class="label">STEP/DXF Files</label>
 
-            @if ($uid)
-            @livewire('file-list', [
-                'canDelete' => true,
-                'model' => 'Product',
-                'modelId' => $uid,
-                'tag' => 'STEP',                          // Any tag other than model name
-            ])
-            @endif
-
-            <div class="control">
-
-                @livewire('file-upload', [
+                @if ($uid)
+                @livewire('file-list', [
+                    'canDelete' => true,
                     'model' => 'Product',
-                    'modelId' => $uid ? $uid : false,
-                    'isMultiple'=> true,                   // can multiple files be selected
+                    'modelId' => $uid,
                     'tag' => 'STEP',                          // Any tag other than model name
-                    'canEdit' => $canUserEdit])
+                ])
+                @endif
+
+                <div class="control">
+
+                    @livewire('file-upload', [
+                        'model' => 'Product',
+                        'modelId' => $uid ? $uid : false,
+                        'isMultiple'=> true,                   // can multiple files be selected
+                        'tag' => 'STEP',                          // Any tag other than model name
+                        'canEdit' => $canUserEdit])
+                </div>
             </div>
-        </div>
 
 
-        <div class="field block">
-            <label class="label">Drawing/BOM Files</label>
+            <div class="field block">
+                <label class="label">Drawing/BOM Files</label>
 
-            @if ($uid)
-            @livewire('file-list', [
-                'canDelete' => true,
-                'model' => 'Product',
-                'modelId' => $uid,
-                'tag' => 'DWG-BOM',                          // Any tag other than model name
-            ])
-            @endif
-
-            <div class="control">
-
-                @livewire('file-upload', [
+                @if ($uid)
+                @livewire('file-list', [
+                    'canDelete' => true,
                     'model' => 'Product',
-                    'modelId' => $uid ? $uid : false,
-                    'isMultiple'=> true,                   // can multiple files be selected
+                    'modelId' => $uid,
                     'tag' => 'DWG-BOM',                          // Any tag other than model name
-                    'canEdit' => $canUserEdit])
+                ])
+                @endif
+
+                <div class="control">
+
+                    @livewire('file-upload', [
+                        'model' => 'Product',
+                        'modelId' => $uid ? $uid : false,
+                        'isMultiple'=> true,                   // can multiple files be selected
+                        'tag' => 'DWG-BOM',                          // Any tag other than model name
+                        'canEdit' => $canUserEdit])
+                </div>
             </div>
-        </div>
+
+        @endif
 
 
         <div class="buttons is-right">
-            @if ($uid)
-                <button wire:click.prevent="updateItem()" class="button is-dark">Update Detail Part</button>
-            @else
-                <button wire:click.prevent="storeItem()" class="button is-dark">New Detail Part</button>
-            @endif
+
+            @switch($part_type)
+
+                @case('Detail')
+
+                    @if ($uid)
+                        <button wire:click.prevent="updateItem()" class="button is-dark">Update Detail Part</button>
+                    @else
+                        <button wire:click.prevent="storeItem()" class="button is-dark">New Detail Part</button>
+                    @endif
+
+
+                    @break
+
+                @case('MakeFrom')
+                    @if ($uid)
+                        <button wire:click.prevent="updateItem()" class="button is-dark">Update Make From Part</button>
+                    @else
+                        <button wire:click.prevent="storeItem()" class="button is-dark">New Make From Part</button>
+                    @endif
+
+                    @break
+
+                @case('Standard')
+                    @if ($uid)
+                        <button wire:click.prevent="updateItem()" class="button is-dark">Update Standard Part</button>
+                    @else
+                        <button wire:click.prevent="storeItem()" class="button is-dark">New Standard Part</button>
+                    @endif
+                    @break
+
+            @endswitch
+
         </div>
 
 

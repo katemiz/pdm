@@ -27,6 +27,7 @@ use App\Livewire\LwBuyable;
 use App\Livewire\LwDetail;
 use App\Livewire\LwHtmlDocument;
 use App\Livewire\LwSellable;
+use App\Livewire\LwStandardFamily;
 use App\Livewire\LwProduct;
 use App\Livewire\ProductNote;
 use App\Livewire\Engineering;
@@ -124,6 +125,10 @@ Route::middleware(['auth'])->group(function () {
     // DOCUMENTS
     Route::get('/documents/{action}/{id?}', LwDocument::class);
     Route::get('/documents-html/{action}/{id?}', LwHtmlDocument::class);
+
+
+    // STANDARD FAMILIES
+    Route::get('/std-family/{action}/{id?}', LwStandardFamily::class);
 
 
     // MATERIAL, PROCESS and NOTES

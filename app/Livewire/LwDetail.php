@@ -54,10 +54,8 @@ class LwDetail extends Component
     public $canUserDelete = true;
 
     public $part_number;
-    public $makefrom_part_number;
-
-    public $make_from_source_item;
-    public $makefrom_source_item;
+    public $makefrom_part_id;
+    public $makefrom_part_item;
 
     public $constants;
 
@@ -133,8 +131,8 @@ class LwDetail extends Component
         $this->item_edit_url = '/details/'.$this->part_type.'/form';
 
         if (request('id')) {
-            $this->uid = request('id');
 
+            $this->uid = request('id');
             $this->getProps();
 
             foreach (Fnote::where('item_id',$this->uid)->get() as $r) {
@@ -143,6 +141,7 @@ class LwDetail extends Component
         }
 
         $this->action = strtoupper(request('action'));
+
         $this->constants = config('product');
         $this->ncategories = NoteCategory::orderBy('text_tr')->get();
     }
@@ -157,6 +156,7 @@ class LwDetail extends Component
         if ( $this->part_type == 'Standard') {
             $this->getStandardFamilies();
         }
+
 
         if ( $this->action === 'LIST') {
 
@@ -234,6 +234,7 @@ class LwDetail extends Component
         $item = Item::find($this->uid);
 
 
+
         $this->malzeme_id = $item->malzeme_id;
         $this->part_type = $item->part_type;
 
@@ -248,6 +249,8 @@ class LwDetail extends Component
         $this->unit = $item->unit;
 
         $malzeme =  Malzeme::find($item->malzeme_id);
+
+
 
         //dd('eeeeeeee');
 
@@ -292,12 +295,14 @@ class LwDetail extends Component
 
         $this->is_latest = $item->is_latest;
 
-        $this->makefrom_part_number = $item->makefrom_part_number;
+        $this->makefrom_part_id = $item->makefrom_part_id;
 
 
         if ($this->part_type == 'MakeFrom') {
-            $this->makefrom_source_item = Item::where('part_number',$this->makefrom_part_number)->where('is_latest',true)->sole();
+            $this->makefrom_part_item = Item::find($this->makefrom_part_id);
         }
+
+
 
         $this->std_params = $item->std_params;
 
@@ -368,7 +373,7 @@ class LwDetail extends Component
                 $props['remarks']  = $this->remarks;
 
                 $props['part_number']  = $this->getProductNo();
-                $props['makefrom_part_number']  = $this->makefrom_part_number;
+                $props['makefrom_part_id']  = $this->makefrom_part_id;
                 $props['c_notice_id']  = $this->c_notice_id;
                 $props['unit']  = $this->unit;
 
@@ -452,7 +457,7 @@ class LwDetail extends Component
                 ]);
 
                 $props['updated_uid']  = Auth::id();
-                $props['makefrom_part_number']  = $this->makefrom_part_number;
+                $props['makefrom_part_id']  = $this->makefrom_part_id;
                 $props['weight']  = $this->weight;
                 $props['unit']  = $this->unit;
                 $props['remarks']  = $this->remarks;
@@ -546,12 +551,10 @@ class LwDetail extends Component
 
 
 
-    public function addSourcePart($sourcePartNumber) {
+    public function addSourcePart($makefrom_part_id,$full_part_number) {
 
-        $this->makefrom_part_number = $sourcePartNumber;
-
-        //dd($this->make_from_part_number);
-
+        $this->makefrom_part_id = $makefrom_part_id;
+        $this->makefrom_part_item = Item::find($makefrom_part_id);
     }
 
 

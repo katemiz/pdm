@@ -29,6 +29,13 @@ return [
                 "direction" => "asc"
             ],
 
+            "part_type"=> [
+                "title" => "Part Type",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
             "description"=> [
                 "title" => "Product Description",
                 "sortable" => true,

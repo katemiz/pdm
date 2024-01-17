@@ -421,7 +421,14 @@
                         @if ($record->part_number != $part_number)
                         <tr wire:key="{{ $record->id }}">
 
-                            @foreach (array_keys($constants['list']['headers']) as $col_name)
+
+                            <td>{{ $record->full_part_number }}</td>
+                            <td>{{ $record->c_notice_id }}</td>
+                            <td>{{ $record->part_type }}</td>
+                            <td>{{ $record->description }}</td>
+                            <td>{{ $record->created_at }}</td>
+
+                            {{-- @foreach (array_keys($constants['list']['headers']) as $col_name)
                                 <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
                                     @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
                                         {!! $record[$col_name] !!}
@@ -429,16 +436,16 @@
                                         {{ $record[$col_name] }}
                                     @endif
                                 </td>
-                            @endforeach
+                            @endforeach --}}
 
                             <td class="has-text-right">
 
-                                @if ($record->part_type)
+                                @if ($record->part_type == 'Standard')
                                     <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},'{{ addslashes($record->standard_number. " ". $record->std_params) }}','{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
                                         <span class="icon"><x-carbon-checkmark /></span>
                                     </a>
                                 @else
-                                    <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},{{ $record->part_number }},'{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
+                                    <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},'{{ $record->full_part_number }}','{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
                                         <span class="icon"><x-carbon-checkmark /></span>
                                     </a>
                                 @endif

@@ -11,8 +11,27 @@
 
         function addNodeJS(idAssy,idSelected,partNumber,description,version,part_type) {
 
-            let qty
+            let qty,full_part_number
             let node = $('#tree').tree('getNodeById',idSelected)
+
+
+            if (part_type == 'Standard') {
+
+
+                console.log('Standard',partNumber)
+                full_part_number = partNumber
+
+            } else {
+
+
+                console.log('Standard Değil',description)
+
+                full_part_number = description
+
+
+            }
+
+
 
             if (node === null) {
                 qty = 1
@@ -20,7 +39,7 @@
                 $('#tree').tree('appendNode', {
                     name: partNumber.toString(),
                     id: idSelected,
-                    description:description,
+                    description:full_part_number,
                     version:version,
                     part_type:part_type,
                     qty:qty
@@ -33,7 +52,7 @@
                 $('#tree').tree('updateNode',node, {
                         name: partNumber.toString(),
                         id: idSelected,
-                        description:description,
+                        description:full_part_number,
                         version:version,
                         part_type:part_type,
                         qty:qty

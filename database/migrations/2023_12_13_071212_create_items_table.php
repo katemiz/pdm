@@ -32,7 +32,7 @@ return new class extends Migration
             $table->text('standard_number')->nullable();
             $table->text('std_params')->nullable();
             $table->json('bom')->nullable();
-            $table->integer('makefrom_part_number')->nullable();
+            $table->integer('makefrom_part_id')->nullable();
             $table->integer('version')->default(0);
             $table->boolean('is_latest')->default(true);
             $table->text('vendor')->nullable();

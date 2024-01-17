@@ -171,6 +171,7 @@ class LwAssy extends Component
         if ( strlen($this->query) > 2 ) {
 
             return Item::where('part_number', 'LIKE', "%".$this->query."%")
+                ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
                 ->orWhere('description', 'LIKE', "%".$this->query."%")
                 ->orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));

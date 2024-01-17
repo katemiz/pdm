@@ -250,7 +250,7 @@
 
             <div class="columns">
                 <div class="column is-8">
-                    {{ $makefrom_part_number ? $makefrom_part_number : 'None yet, click to select' }}
+                    {{ $makefrom_part_item ? $makefrom_part_item->full_part_number : 'None yet, click to select' }}
                 </div>
                 <div class="column has-text-right">
                     <button wire:click="$toggle('togglePartSelect')" class="button is-light is-small">
@@ -350,11 +350,7 @@
                                     @endforeach --}}
 
                                     <td class="has-text-right">
-
-                                        <a wire:click="addSourcePart({{ $record->part_number }})">
-                                            <span class="icon"><x-carbon-checkmark /></span>
-                                        </a>
-
+                                        <a wire:click="addSourcePart( {{ $record->id }}, '{{ $record->full_part_number }}' )"><span class="icon"><x-carbon-checkmark /></span></a>
                                     </td>
 
                                 </tr>

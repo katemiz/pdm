@@ -237,20 +237,20 @@
         <div class="column">
             <label class="label">Source Part Number</label>
 
-            @switch($makefrom_source_item->part_type)
+            @switch($makefrom_part_item->part_type)
                 @case('Buyable')
-                    <a href="/buyables/view/{{ $makefrom_source_item->id}}" target="_blank">{{ $makefrom_source_item->part_number}} {{ $makefrom_source_item->description}}</a>
+                    <a href="/buyables/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
                     @break
 
                 @case('Assy')
-                    <a href="/products-assy/view/{{ $makefrom_source_item->id}}" target="_blank">{{ $makefrom_source_item->part_number}} {{ $makefrom_source_item->description}}</a>
+                    <a href="/products-assy/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
                     @break
 
                 @case('Detail')
                 @case('MakeFrom')
                 @case('Standard')
 
-                    <a href="/details/{{ $makefrom_source_item->part_type }}/view/{{ $makefrom_source_item->id}}" target="_blank">{{ $makefrom_source_item->part_number}} {{ $makefrom_source_item->description}}</a>
+                    <a href="/details/{{ $makefrom_part_item->part_type }}/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
                     @break
 
                 @default

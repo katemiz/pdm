@@ -246,29 +246,21 @@
 
         @if ($part_type == 'MakeFrom')
 
-            <label class="label">Make From Part Number</label>
+            <div class="field">
 
-            <div class="columns">
-                <div class="column is-8">
-                    {{ $makefrom_part_item ? $makefrom_part_item->full_part_number : 'None yet, click to select' }}
+                <label class="label">Make From Part Number</label>
+                <div class="control">
+
+                {{ $makefrom_part_item ? $makefrom_part_item->full_part_number : 'None yet, select from the following list' }}
                 </div>
-                <div class="column has-text-right">
-                    <button wire:click="$toggle('togglePartSelect')" class="button is-light is-small">
-                        <span class="icon is-small">
 
-                            @if ($togglePartSelect)
-                            <x-carbon-view-off />
-                            @else
-                            <x-carbon-view />
-
-                            @endif
-                        </span>
-                    </button>
-                </div>
             </div>
 
 
-            <div class="column card has-background-white-ter mb-5 {{ $togglePartSelect ? '':'is-hidden'}}">
+
+
+
+            <div class="column card has-background-white-ter mb-5">
 
                 <div class="level-right">
 
@@ -330,7 +322,7 @@
 
                             @foreach ($nodes as $record)
 
-                                @if ( isset($part_number) && $record->part_number != $part_number)
+                                @if ( !isset($part_number) || $record->part_number != $part_number)
                                 <tr wire:key="{{ $record->id }}">
 
                                     <td>{{ $record->full_part_number }}</td>

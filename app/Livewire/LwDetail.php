@@ -208,7 +208,10 @@ class LwDetail extends Component
     public function getNodes() {
 
         if ($this->part_type == 'MakeFrom') {
+
             if ( strlen($this->query) > 2 ) {
+
+                //dd('dddd');
 
                 return Item::where('part_number', 'LIKE', "%".$this->query."%")
                     ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
@@ -218,9 +221,13 @@ class LwDetail extends Component
 
             } else {
 
+                //dd('dddd2');
+
+
                 return Item::orderBy($this->sortField,$this->sortDirection)
                     ->paginate(env('RESULTS_PER_PAGE'));
             }
+
         } else {
             return false;
         }
@@ -298,8 +305,8 @@ class LwDetail extends Component
         $this->makefrom_part_id = $item->makefrom_part_id;
 
 
-        if ($this->part_type == 'MakeFrom') {
-            $this->makefrom_part_item = Item::find($this->makefrom_part_id);
+        if ($this->part_type == 'MakeFrom' && $item->makefrom_part_id) {
+            $this->makefrom_part_item = Item::find($item->makefrom_part_id);
         }
 
 
@@ -334,6 +341,10 @@ class LwDetail extends Component
 
     }
 
+
+    public function resetFilter() {
+        $this->query = '';
+    }
 
     public function viewItem($idItem) {
         $this->uid = $idItem;

@@ -4,14 +4,12 @@
 
 <div class="column has-background-light">
 
-    <div class="card mb-6">
-        <div class="card-content">
-            <div class="column">
-                <p class="title has-text-weight-light is-size-3">{{$company->name}}</p>
-                <p class="subtitle has-text-weight-light is-size-6">{{ $company->fullname }}</p>
-            </div>
-        </div>
+
+    <div class="column">
+        <p class="title has-text-weight-light is-size-3">{{$company->name}}</p>
+        <p class="subtitle has-text-weight-light is-size-6">{{ $company->fullname }}</p>
     </div>
+
 
     <nav class="level my-6">
         <div class="level-item has-text-centered">
@@ -34,8 +32,8 @@
     </div>
 
     <div class="column has-text-centered">
-        <p>{{ $created_by }} {{ $updated_by }}</p>
-        <p>{{ $created_at }} {{ $updated_at }}</p>
+        <p class="my-3">{{ $created_by }}<br>{{ $created_at }}</p>
+        <p class="my-3">{{ $updated_by }}<br>{{ $updated_at }}</p>
     </div>
 
     @if (strlen(trim($remarks)) > 0)

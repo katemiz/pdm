@@ -37,7 +37,7 @@
                 @foreach ($product_types as $k => $eptype)
 
                     <label class="checkbox is-block">
-                        <input type="radio" wire:model="product_type" value="{{ $k }}"> {{ $eptype }}
+                        <input type="radio" wire:model.live="product_type" value="{{ $k }}"> {{ $eptype }}
                     </label>
 
                 @endforeach
@@ -134,7 +134,7 @@
 
         <livewire:ck-editor
             wire:model="description"
-            label='Sellable product Description'
+            label='Sellable Product Description'
             placeholder='General description of Sellable product'
             :content="$description"/>
 
@@ -147,7 +147,7 @@
 
 
 
-
+        @if ($product_type == 'MST')
 
         <div class="columns">
 
@@ -215,8 +215,6 @@
             </div>
 
         </div>
-
-
 
 
         <div class="columns">
@@ -349,13 +347,16 @@
 
         </div>
 
+        @endif
+
+
 
         <div class="columns">
 
             <div class="column is-4">
                 <div class="field">
 
-                    <label class="label">Mast Weight (kg)</label>
+                    <label class="label">Weight (kg)</label>
                     <div class="control">
                         <input
                             class="input"
@@ -371,6 +372,10 @@
                     @enderror
                 </div>
             </div>
+
+
+            @if ($product_type == 'MST')
+
 
             <div class="column is-4">
                 <div class="field">
@@ -412,8 +417,12 @@
                 </div>
             </div>
 
+            @endif
+
         </div>
 
+
+        @if ($product_type == 'MST')
 
         <div class="columns">
 
@@ -460,41 +469,73 @@
 
         </div>
 
+        @endif
 
-        <div class="field">
-            <label class="label">Product Manual Number</label>
-            <div class="control">
-                <input
-                    class="input"
-                    id="manual_doc_number"
-                    wire:model.live="manual_doc_number"
-                    type="text"
-                    value="{{ $uid ? $manual_doc_number : ''}}"
-                    placeholder="Ender product manual document number" required>
+
+
+
+
+        <div class="columns">
+
+
+            <div class="column is-narrow">
+
+                <label class="label">Product Manual Number</label>
+
+                @if ($manual_doc_number)
+                    <p><a href="/documents/view/{{$manual_doc_id}}" target="_blank">{{ $manual_doc_number.' '.$manual_doc_title }}</a></p>
+                @else
+                    <p>No Manual Selected</p>
+                @endif
+
             </div>
 
-            @switch($manual_doc_number_exists)
-                @case('initial')
-                    @break
-                @case('no')
-                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">No documents found with this number</div>
-                    @break
+            {{-- <div class="column">
 
-                @default
-                    <div class="notification is-success is-light is-size-7 p-1 mt-1">{{ $manual_doc_number_exists }}</div>
-                    @break
+                <button wire:click="$toggle('toggleManualSelect')" class="button is-light ml-6">
 
-            @endswitch
+                    <span class="icon is-small">
+                        @if ($toggleManualSelect)
+                            <x-carbon-view-off />
+                        @else
+                            <x-carbon-view />
+                        @endif
+                    </span>
 
-            @error('manual_doc_number')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
+                </button>
+
+            </div> --}}
+
+
         </div>
+
+
+
+
+
+
+
+
+
+
+        {{-- @if ($toggleManualSelect) --}}
+        @include('products.endproducts.manual-selection')
+
+        {{-- @endif --}}
+
+
+
+
+
+
+
 
         <div class="field ">
             <label class="label">Interfaces</label>
 
             <div class="field-body">
+
+                @if ($product_type == 'MST')
 
                 <div class="field">
 
@@ -514,8 +555,9 @@
                         <input type="checkbox" wire:model="drainage" wire:click="$toggle('drainage')"> Drainage Interface<br>
                     </div>
 
-
                 </div>
+
+                @endif
 
                 <div class="field">
 

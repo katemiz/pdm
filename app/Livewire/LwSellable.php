@@ -26,6 +26,9 @@ class LwSellable extends Component
     public $sortField = 'created_at';
     public $sortDirection = 'DESC';
 
+    public $sortDirManualNo ="asc";
+    public $sortDirManualTitle ="asc";
+
     public $show_latest = true; /// Show only latest versions
 
     public $constants;
@@ -33,6 +36,8 @@ class LwSellable extends Component
 
     // Constants
     public $product_types = [
+        "ACC" => 'Accessories',
+        "RCP" => 'Remote Control Positioner',
         "MTPC" => "Compressor",
         "MST" => "Mast",
     ];
@@ -110,7 +115,7 @@ class LwSellable extends Component
     #[Validate('nullable|numeric', message: 'Number of sections should be numeric')]
     public $number_of_sections;
 
-    #[Validate('nullable|required', message: 'Please indicate whether product has locking capability')]
+    #[Validate('nullable|numeric', message: 'Please indicate whether product has locking capability')]
     public $has_locking;
 
     public $lock_types = [
@@ -123,9 +128,11 @@ class LwSellable extends Component
     public $max_pressure_in_bar = 2.0;
 
     #[Validate('nullable|numeric', message: 'Product manual document number should be numeric')]
+    public $manual_doc_id;
     public $manual_doc_number;
-    public $manual_doc_number_exists = 'initial';   // does such a document exist?
-    public $user_manual_attach_id;
+    public $manual_doc_title;
+
+    public $toggleManualSelect = false; // Show/Hide Manual Select Form
 
     public $payload_interface = true;
     public $roof_interface = false;
@@ -180,7 +187,8 @@ class LwSellable extends Component
 
     public function render() {
         return view('products.endproducts.ep',[
-            'endproducts' => $this->getEndProducts()
+            'endproducts' => $this->getEndProducts(),
+            'manuals' => $this->getManuals()
         ]);
     }
 
@@ -188,19 +196,19 @@ class LwSellable extends Component
     public function updated($property)
     {
         // $property: The name of the current property that was updated
-        if ($property === 'manual_doc_number') {
+        // if ($property === 'manual_doc_number') {
 
-            $this->manual_doc_number_exists = 'no';
+            // $this->manual_doc_number_exists = 'no';
 
-            $manual = Document::where(
-                ['document_no' => $this->manual_doc_number],
-                ['is_latest' => true]
-            )->first();
+            // $manual = Document::where(
+            //     ['document_no' => $this->manual_doc_number],
+            //     ['is_latest' => true]
+            // )->first();
 
-            if ($manual) {
-                $this->manual_doc_number_exists = 'D'.$this->manual_doc_number.' R'.$manual->revision.' '.$manual->title;
-            }
-        }
+            // if ($manual) {
+            //     $this->manual_doc_number_exists = 'D'.$this->manual_doc_number.' R'.$manual->revision.' '.$manual->title;
+            // }
+        // }
     }
 
 
@@ -236,6 +244,37 @@ class LwSellable extends Component
             ->paginate(env('RESULTS_PER_PAGE'));
         }
     }
+
+
+
+
+
+    public function getManuals() {
+
+        if ( $this->action != 'FORM'  && !$this->uid) {
+            return collect([]);
+        }
+
+        if ( strlen($this->query) > 2 ) {
+
+            return  Document::where('is_latest', true)
+                ->where('doc_type', 'MN')
+                ->orWhere('title', 'LIKE', "%".$this->query."%")
+                ->orWhere('remarks','LIKE',"%".$this->query."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+
+        } else {
+
+            return  Document::where('is_latest', true)
+                ->where('doc_type', 'MN')
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+        }
+    }
+
+
+
 
 
     public function viewItem($uid) {
@@ -399,7 +438,9 @@ class LwSellable extends Component
             $user_manual = Document::where('is_latest',true)->where('document_no', $this->manual_doc_number)->first();
 
             if($user_manual) {
-                $this->user_manual_attach_id = $user_manual->id;
+                $this->manual_doc_id = $user_manual->id;
+                $this->manual_doc_title = $user_manual->title;
+
             }
         }
 
@@ -446,6 +487,9 @@ class LwSellable extends Component
     }
 
 
+
+
+
     #[On('onDeleteConfirmed')]
     public function doDelete() {
 
@@ -472,7 +516,14 @@ class LwSellable extends Component
 
 
 
+    public function addManual($idRecord) {
 
+        $man = Document::find($idRecord);
+
+        $this->manual_doc_id = $man->id;
+        $this->manual_doc_number = $man->document_no;
+        $this->manual_doc_title = $man->title;
+    }
 
 
 

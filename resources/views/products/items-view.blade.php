@@ -237,6 +237,9 @@
         <div class="column">
             <label class="label">Source Part Number</label>
 
+            @if ($makefrom_part_item)
+
+
             @switch($makefrom_part_item->part_type)
                 @case('Buyable')
                     <a href="/buyables/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
@@ -256,6 +259,13 @@
                 @default
 
             @endswitch
+
+            @else
+
+            Not defined yet
+
+            @endif
+
 
         </div>
         @endif

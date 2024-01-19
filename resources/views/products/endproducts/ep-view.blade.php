@@ -107,6 +107,9 @@
                             <th>End Product Type</th>
                             <td>{{ !empty($product_type) ? $product_types[$product_type] : ''}}</td>
                         </tr>
+
+                        @if ($product_type == 'MST')
+
                         <tr>
                             <th>Drive Type</th>
                             <td>{{ !empty($drive_type) ? $drive_types[$drive_type] : ''}}</td>
@@ -115,6 +118,7 @@
                             <th>Mast Family</th>
                             <td>{{$mast_family_mt}} / {{$mast_family_wb}}</td>
                         </tr>
+                        @endif
                     </table>
                 </div>
 
@@ -126,6 +130,8 @@
 
             <table class="table is-fullwidth">
                 <thead>
+
+                    @if ($product_type == 'MST')
 
                     <tr>
                         <th>Maximum Payload Capacity</th>
@@ -149,14 +155,6 @@
                         <td class="has-text-grey-light is-narrow">mm</td>
                         <td class="has-text-right is-narrow">{{ round($nested_height_mm/25.4,1) }}</td>
                         <td class="has-text-grey-light is-narrow">in</td>
-                    </tr>
-
-                    <tr>
-                        <th>Weight</th>
-                        <td class="has-text-right">{{ $product_weight_kg }}</td>
-                        <td class="has-text-grey-light is-narrow">kg</td>
-                        <td class="has-text-right">{{ round($product_weight_kg*2.20462,0) }}</td>
-                        <td class="has-text-grey-light">lb</td>
                     </tr>
 
                     <tr>
@@ -192,7 +190,6 @@
                     </tr>
                     @endif
 
-
                     <tr>
                         <th>Number of Sections</th>
                         <td class="has-text-right" colspan="4">{{ $number_of_sections }}</td>
@@ -201,18 +198,22 @@
                     <tr>
                         <th>Lock Type</th>
                         <td class="has-text-right" colspan="4">{{ $has_locking ? $lock_types[$has_locking] :'' }}</td>
-
                     </tr>
-
-
 
                     <tr>
                         <th>Design Drag Coefficient (C<sub>d</sub>)</th>
                         <td class="has-text-right" colspan="4">{{ $design_drag_coefficient }}</td>
-
                     </tr>
 
+                    @endif
 
+                    <tr>
+                        <th>Weight</th>
+                        <td class="has-text-right">{{ $product_weight_kg }}</td>
+                        <td class="has-text-grey-light is-narrow">kg</td>
+                        <td class="has-text-right">{{ round($product_weight_kg*2.20462,0) }}</td>
+                        <td class="has-text-grey-light">lb</td>
+                    </tr>
 
 
                     <tr>
@@ -256,31 +257,45 @@
             </div>
 
 
-            <div class="column">
+            <div class="column pt-4">
 
-                @livewire('file-list', [
-                    'getById' => $user_manual_attach_id,
+                @if ($manual_doc_number)
+
+                    <div class="card">
+
+                        <div class="card-content has-background-white-ter">
+                        <div class="media ">
+                            <div class="media-left">
+                            <figure class="image is-48x48">
+                                <img src="{{ asset('/images/icon_manual.svg') }}" alt="Type of Files">
+                            </figure>
+                            </div>
+                            <div class="media-content">
+                            <p class="subtitle is-6">User Manual</p>
+                            </div>
+                        </div>
+
+                        <div class="content">
+                            <a href="/documents/view/{{$manual_doc_id}}" target="_blank">{{ $manual_doc_number.' '.$manual_doc_title }}</a>
+                        </div>
+                        </div>
+                    </div>
+
+                @endif
+
+                {{-- @livewire('file-list', [
+                    'getById' => $manual_doc_id,
                     'with_icons' => true,
                     'icon_type' => 'Manual',
                     'files_header' => 'User Manual',
                     'model' => 'Document',
                     'modelId' => $uid,
                     'tag' => 'document',
-                ])
+                ]) --}}
 
             </div>
 
         </div>
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -296,6 +311,9 @@
         {{-- INTERFACES --}}
         <div class="column">
             <div class="columns ">
+
+
+                @if ($product_type == 'MST')
 
                 <div class="column content is-half">
                     <strong>Mechanical Interfaces</strong>
@@ -343,8 +361,9 @@
 
                     </ul>
 
-
                 </div>
+
+                @endif
 
                 <div class="column content">
 
@@ -371,28 +390,12 @@
                         <li>Has 220 AC Interface</li>
                         @endif
 
-
                     </ul>
-
 
                 </div>
 
             </div>
         </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         <div class="columns is-size-7 has-text-grey mt-6">
@@ -402,12 +405,9 @@
                 <p>{{ $created_at }}</p>
             </div>
 
-
             <div class="column has-text-centered">
                 <p class="subtitle has-text-weight-light is-size-6"><strong>Status</strong><br>{{$status}}</p>
             </div>
-
-
 
             <div class="column has-text-right">
                 <p>{{ $updated_by->email }}</p>

@@ -115,8 +115,7 @@ class LwStandardFamily extends Component
 
     public function storeUpdateItem () {
 
-        $props['updated_uid'] = Auth::id();
-        $props['remarks'] = $this->remarks;
+
 
         if ( $this->uid ) {
             // update
@@ -124,6 +123,9 @@ class LwStandardFamily extends Component
                 'standard_number' => 'required',
                 'description' => 'required|min:6',
             ]);
+
+            $props['updated_uid'] = Auth::id();
+            $props['remarks'] = $this->remarks;
 
             Sfamily::find($this->uid)->update($props);
             session()->flash('message','Standard family has been updated successfully.');
@@ -134,6 +136,9 @@ class LwStandardFamily extends Component
                 'standard_number' => 'required|unique:standard_families',
                 'description' => 'required|min:6',
             ]);
+
+            $props['updated_uid'] = Auth::id();
+            $props['remarks'] = $this->remarks;
 
             $props['user_id'] = Auth::id();
             $this->uid = Sfamily::create($props)->id;

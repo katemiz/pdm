@@ -394,6 +394,41 @@ class LwAssy extends Component
 
 
 
+    public function deleteConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'delete');
+    }
+
+
+    #[On('onDeleteConfirmed')]
+    public function doDelete() {
+
+        $current_item = Item::find($this->uid);
+
+        if ($current_item->version > 0) {
+
+            $previous_item = Item::where("part_number",$current_item->part_number)
+            ->where("version",$current_item->version-1)->first();
+
+            $previous_item->update(['is_latest' => true]);
+        }
+
+        $current_item->delete();
+
+        session()->flash('info','Item has been deleted successfully!');
+
+        redirect('/parts/list');
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     public function releaseConfirm($uid) {

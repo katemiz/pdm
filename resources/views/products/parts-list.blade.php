@@ -6,7 +6,7 @@
 
             <header class="mb-6">
                 <h1 class="title has-text-weight-light is-size-1">List of Components</h1>
-                <h2 class="subtitle has-text-weight-light">List of all components ['Detail','Assy','Buyable','Standard']</h2>
+                <h2 class="subtitle has-text-weight-light">List of all components ['Detail','Assy','Buyable','MakeFrom','Standard']</h2>
             </header>
 
         </div>
@@ -18,8 +18,17 @@
     </div>
 
 
-    @if(session('message'))
-        <div class="notification is-info is-light">{{ session('message') }}</div>
+
+    @if (session()->has('message'))
+    <div class="notification">
+        {{ session('message') }}
+    </div>
+    @endif
+
+
+
+    @if(session('info'))
+        <div class="notification is-info is-light">{{ session('info') }}</div>
     @endif
 
     <nav class="level my-6">

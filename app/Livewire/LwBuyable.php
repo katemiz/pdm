@@ -314,8 +314,18 @@ class LwBuyable extends Component
         }
 
         $current_item->delete();
-        $this->action = 'LIST';
+
+        session()->flash('info','Item has been deleted successfully!');
+
+        redirect('/parts/list');
+
     }
+
+
+
+
+
+
 
 
 

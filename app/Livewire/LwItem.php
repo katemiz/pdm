@@ -51,7 +51,6 @@ class LwItem extends Component
     }
 
 
-
     public function setECNs() {
         $this->ecns =  CNotice::where('status','wip')->get();
     }
@@ -88,20 +87,5 @@ class LwItem extends Component
     public function resetFilter() {
         $this->query = '';
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

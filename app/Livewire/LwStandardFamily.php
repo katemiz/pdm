@@ -115,8 +115,6 @@ class LwStandardFamily extends Component
 
     public function storeUpdateItem () {
 
-
-
         if ( $this->uid ) {
             // update
             $props = $this->validate([

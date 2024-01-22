@@ -27,11 +27,6 @@
 </header>
 
 
-
-
-
-
-
 @if (session()->has('message'))
     <div class="notification">
         {{ session('message') }}
@@ -88,9 +83,6 @@
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
                     </p>
-
-
-
 
                     @role(['Approver'])
                     <p class="level-item">
@@ -239,26 +231,25 @@
 
             @if ($makefrom_part_item)
 
+                @switch($makefrom_part_item->part_type)
+                    @case('Buyable')
+                        <a href="/buyables/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
+                        @break
 
-            @switch($makefrom_part_item->part_type)
-                @case('Buyable')
-                    <a href="/buyables/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
-                    @break
+                    @case('Assy')
+                        <a href="/products-assy/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
+                        @break
 
-                @case('Assy')
-                    <a href="/products-assy/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
-                    @break
+                    @case('Detail')
+                    @case('MakeFrom')
+                    @case('Standard')
 
-                @case('Detail')
-                @case('MakeFrom')
-                @case('Standard')
+                        <a href="/details/{{ $makefrom_part_item->part_type }}/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
+                        @break
 
-                    <a href="/details/{{ $makefrom_part_item->part_type }}/view/{{ $makefrom_part_item->id}}" target="_blank">{{ $makefrom_part_item->full_part_number}} {{ $makefrom_part_item->description}}</a>
-                    @break
+                    @default
 
-                @default
-
-            @endswitch
+                @endswitch
 
             @else
 
@@ -409,60 +400,56 @@
 
 
         {{-- FILES --}}
-
-
         @if ($part_type != 'Standard')
+            <div class="column">
+                <div class="columns">
 
-        <div class="column">
-            <div class="columns">
+                    @if ( !$has_vendor )
+                    <div class="column">
 
-                @if ( !$has_vendor )
-                <div class="column">
-
-                    <div class="block">
-                    <label class="label">CAD Files</label>
-                    @livewire('file-list', [
-                        'model' => 'Product',
-                        'modelId' => $uid,
-                        'showMime' => false,
-                        'showSize' => false,
-                        'tag' => 'CAD', // Any tag other than model name
-                    ])
-                    </div>
-
-                </div>
-                @endif
-
-
-                <div class="column">
-                    <div class="block">
-                        <label class="label">{{ $has_vendor ? '3D Files':'STEP/DXF Files' }}</label>
+                        <div class="block">
+                        <label class="label">CAD Files</label>
                         @livewire('file-list', [
                             'model' => 'Product',
                             'modelId' => $uid,
                             'showMime' => false,
                             'showSize' => false,
-                            'tag' => $has_vendor ? '3D':'STEP' ,                          // Any tag other than model name
+                            'tag' => 'CAD', // Any tag other than model name
                         ])
-                    </div>
-                </div>
+                        </div>
 
-                <div class="column">
-                    <div class="block">
-                        <label class="label">{{ $has_vendor ? 'Datasheest/Documents' : 'Drawing/BOM Files'}}</label>
-                        @livewire('file-list', [
-                            'model' => 'Product',
-                            'modelId' => $uid,
-                            'showMime' => false,
-                            'showSize' => false,
-                            'tag' => $has_vendor ? 'Datasheet':'DWG-BOM',                          // Any tag other than model name
-                        ])
                     </div>
-                </div>
+                    @endif
 
+
+                    <div class="column">
+                        <div class="block">
+                            <label class="label">{{ $has_vendor ? '3D Files':'STEP/DXF Files' }}</label>
+                            @livewire('file-list', [
+                                'model' => 'Product',
+                                'modelId' => $uid,
+                                'showMime' => false,
+                                'showSize' => false,
+                                'tag' => $has_vendor ? '3D':'STEP' ,                          // Any tag other than model name
+                            ])
+                        </div>
+                    </div>
+
+                    <div class="column">
+                        <div class="block">
+                            <label class="label">{{ $has_vendor ? 'Datasheest/Documents' : 'Drawing/BOM Files'}}</label>
+                            @livewire('file-list', [
+                                'model' => 'Product',
+                                'modelId' => $uid,
+                                'showMime' => false,
+                                'showSize' => false,
+                                'tag' => $has_vendor ? 'Datasheet':'DWG-BOM',                          // Any tag other than model name
+                            ])
+                        </div>
+                    </div>
+
+                </div>
             </div>
-        </div>
-
         @endif
 
 

@@ -121,14 +121,6 @@ class Ecn extends Component
         if ($opt === 'set') {
             $this->item = CNotice::find($this->itemId);
 
-            $this->item->canEdit = false;
-            $this->item->canDelete = false;
-
-            if ($this->item->status == 'wip') {
-                $this->item->canEdit = true;
-                $this->item->canDelete = true;
-            }
-
             $this->createdBy = User::find($this->item->user_id);
             $this->engBy = User::find($this->item->eng_app_id);
 
@@ -146,9 +138,6 @@ class Ecn extends Component
             if ($cr->is_for_ecn) {
                 $this->isForNewProduct = true;
             }
-
-
-
 
         } else {
             $this->topic = '';

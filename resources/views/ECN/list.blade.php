@@ -106,21 +106,19 @@
 
                 <td class="has-text-right">
 
-                    <a wire:click="viewItem({{ $record->id}})">
-                        <span class="icon"><x-carbon-view/></span>
-                    </a>
+                    <a wire:click="viewItem({{ $record->id}})"><span class="icon"><x-carbon-view/></span></a>
 
-                    @if ($canEdit && $record->canEdit)
-                        <a href="/cr/form/{{ $record->id}}">
-                            <span class="icon"><x-carbon-edit /></span>
-                        </a>
-                    @endif
+                    @role(['EngineeringDept'])
+                    @if ($record->status == 'wip' )
 
-                    @if ($canDelete && $record->canDelete)
+                        <a href="/cr/form/{{ $record->id}}"><span class="icon"><x-carbon-edit /></span></a>
+
                         <a wire:click.prevent="startCRDelete({{$record->id}})">
                             <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
                         </a>
+
                     @endif
+                    @endrole
 
                 </td>
 

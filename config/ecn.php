@@ -41,6 +41,13 @@ return [
                 "direction" => "asc"
             ],
 
+            "status"=> [
+                "title" => "Status",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
             "created_at"=> [
                 "title" => "Created On",
                 "sortable" => true,

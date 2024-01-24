@@ -34,9 +34,7 @@ class LwItem extends Component
 
     public function mount()
     {
-
         $this->setECNs();
-        //$this->action = strtoupper(request('action'));
         $this->constants = config('product');
     }
 
@@ -57,7 +55,6 @@ class LwItem extends Component
 
 
     public function getParts() {
-
 
         $this->sortDirection = $this->constants['list']['headers'][$this->sortField]['direction'];
 
@@ -98,5 +95,7 @@ class LwItem extends Component
 
         $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
     }
+
+
 
 }

@@ -108,17 +108,15 @@
                         <span class="icon"><x-carbon-view/></span>
                     </a>
 
-                    @if ($canEdit && $record->canEdit)
-                        <a href="/cr/form/{{ $record->id}}">
-                            <span class="icon"><x-carbon-edit /></span>
-                        </a>
-                    @endif
+                    @role(['EngineeringDept'])
+                    @if ($record->status == 'wip' )
+                        <a href="/cr/form/{{ $record->id}}"><span class="icon"><x-carbon-edit /></span></a>
 
-                    @if ($canDelete && $record->canDelete)
                         <a wire:click.prevent="startCRDelete({{$record->id}})">
                             <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
                         </a>
                     @endif
+                    @endrole
 
                 </td>
 

@@ -37,23 +37,22 @@
                             </a>
                         </p>
 
-                        @if ($canEdit && $item->canEdit)
+                        @role(['EngineeringDept'])
+                        @if ($status == 'wip' )
                         <p class="control ml-1">
                             <a class="button is-link is-light is-small" href='/cr/form/{{ $item->id }}'>
                                 <span class="icon is-small"><x-carbon-edit /></span>
                                 <span>Edit</span>
                             </a>
                         </p>
-                        @endif
 
-                        @if ($canDelete && $item->canDelete)
                         <p class="control ml-1">
                             <button class="button is-danger is-light is-small" wire:click.prevent="startCRDelete({{$item->id}})">
                                 <span class="icon is-small"><x-carbon-trash-can /></span>
-                                <span>Delete</span>
                             </button>
                         </p>
                         @endif
+                        @endrole
 
                     </div>
                 </div>

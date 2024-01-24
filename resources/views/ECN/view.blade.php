@@ -143,6 +143,12 @@
                         <p>{{ $engBy->name }} {{ $engBy->lastname }}</p>
                         <p>{{ $created_at }}</p>
                         @break
+
+                    @case('complete')
+                        <a onclick="showModal('m10')">Tamamlandı - Completed</a>
+                        {{-- <p>{{ $engBy->name }} {{ $engBy->lastname }}</p> --}}
+                        <p>{{ $updated_at }}</p>
+                        @break
                     @endswitch
 
                 </td>

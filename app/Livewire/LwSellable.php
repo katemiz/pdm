@@ -115,7 +115,7 @@ class LwSellable extends Component
     #[Validate('nullable|numeric', message: 'Number of sections should be numeric')]
     public $number_of_sections;
 
-    #[Validate('nullable|numeric', message: 'Please indicate whether product has locking capability')]
+    #[Validate('nullable|string', message: 'Please indicate whether product has locking capability')]
     public $has_locking;
 
     public $lock_types = [

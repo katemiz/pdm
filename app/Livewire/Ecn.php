@@ -50,6 +50,8 @@ class Ecn extends Component
     public $createdBy;
     public $status;
     public $created_at;
+    public $updated_at;
+
 
     public $isForNewProduct = false; // Is this ECN for NEW or for CHANGE
 
@@ -135,6 +137,8 @@ class Ecn extends Component
             $this->status = $this->item->status;
 
             $this->created_at = $this->item->created_at;
+            $this->updated_at = $this->item->updated_at;
+
 
 
             $cr = CRequest::find($this->item->c_notice_id);
@@ -183,6 +187,22 @@ class Ecn extends Component
         } catch (\Exception $ex) {
             session()->flash('success','Something goes wrong!!');
         }
+    }
+
+
+    public function closeECN($idECN) {
+
+        $this->itemId = $idECN;
+
+        CNotice::whereId($this->itemId)->update([
+            'status' => 'complete',
+        ]);
+
+
+        $this->action = 'VIEW';
+
+        session()->flash('message','ECN has been completed and closed successfully!');
+
     }
 
 

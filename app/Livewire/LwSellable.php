@@ -303,7 +303,7 @@ class LwSellable extends Component
 
         $this->validate();
 
-        $props['part_number'] = $this->getEProductNo();
+        $props['updated_uid'] = Auth::id();
         $props['part_number_mt'] = $this->part_number_mt;
         $props['part_number_wb'] = $this->part_number_wb;
         $props['product_type'] = $this->product_type;
@@ -353,14 +353,14 @@ class LwSellable extends Component
 
         if ( $this->uid ) {
             // update
-            $props['updated_uid'] = Auth::id();
             EProduct::find($this->uid)->update($props);
             session()->flash('message','Sellable product has been updated successfully.');
 
         } else {
             // create
             $props['user_id'] = Auth::id();
-            $props['updated_uid'] = Auth::id();
+            $props['part_number'] = $this->getEProductNo();
+
             $this->uid = EProduct::create($props)->id;
             session()->flash('message','Sellable product has been created successfully.');
         }

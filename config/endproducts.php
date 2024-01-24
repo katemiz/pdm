@@ -13,7 +13,7 @@ return [
 
         "headers" => [
 
-            "part_no"=> [
+            "part_number"=> [
                 "title" => "PN",
                 "sortable" => true,
                 "align" => "left",

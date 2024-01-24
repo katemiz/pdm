@@ -20,15 +20,22 @@ return [
 
         "headers" => [
 
-            "id"=> [
+            "ecn_no"=> [
                 "title" => "ECN No",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
             ],
 
-            "c_notice_id"=> [
+            "cr_no"=> [
                 "title" => "CR No",
+                "sortable" => true,
+                "align" => "left",
+                "direction" => "asc"
+            ],
+
+            "cr_topic"=> [
+                "title" => "CR Title",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"

@@ -9,7 +9,6 @@ class CNotice extends Model
 {
     use HasFactory;
 
-
     protected $table = 'ecns';
 
     protected $fillable = [
@@ -24,6 +23,19 @@ class CNotice extends Model
         $cr = CRequest::find($this->c_notice_id);
         return $cr->topic;
     }
+
+
+    public function getEcnNoAttribute()
+    {
+        return 'ECN '.$this->id;
+    }
+
+
+    public function getCrNoAttribute()
+    {
+        return 'CR '.$this->c_notice_id;
+    }
+
 
 
 }

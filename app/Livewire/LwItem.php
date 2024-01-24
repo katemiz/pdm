@@ -77,15 +77,26 @@ class LwItem extends Component
         }
 
         return $items;
-
-
-
     }
 
 
 
     public function resetFilter() {
         $this->query = '';
+    }
+
+
+    public function changeSortDirection ($key) {
+
+        $this->sortField = $key;
+
+        if ($this->constants['list']['headers'][$key]['direction'] == 'asc') {
+            $this->constants['list']['headers'][$key]['direction'] = 'desc';
+        } else {
+            $this->constants['list']['headers'][$key]['direction'] = 'asc';
+        }
+
+        $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
     }
 
 }

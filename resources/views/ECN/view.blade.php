@@ -30,13 +30,6 @@
                             </a>
                         </p>
 
-                        {{-- <p class="control ml-5">
-                            <a wire:click="addNew()" class="button is-info is-light is-small">
-                            <span class="icon is-small"><x-carbon-add /></span>
-                            <span>Add New</span>
-                            </a>
-                        </p> --}}
-
                         @role(['EngineeringDept'])
                         @if ($status == 'wip' )
                             <p class="control ml-1">
@@ -49,7 +42,6 @@
                             <p class="control ml-1">
                                 <button class="button is-danger is-light is-small" wire:click.prevent="startCRDelete({{$item->id}})">
                                     <span class="icon is-small"><x-carbon-trash-can /></span>
-                                    <span>Delete</span>
                                 </button>
                             </p>
                         @endif
@@ -68,13 +60,6 @@
                                 <span>Finalize / Tamamla</span>
                             </a>
                         </p>
-
-                        {{-- <p class="control ml-5">
-                            <a onclick="showModal('m20')" class="button is-danger is-light is-small">
-                                <span class="icon is-small"><x-carbon-thumbs-down /></span>
-                                <span>Reject / Red</span>
-                            </a>
-                        </p> --}}
 
                     </div>
                 </div>
@@ -98,7 +83,7 @@
 
         <label class="label">Yapılacakların Tanımı - Actions List</label>
 
-        <div class="notification">
+        <div class="notification content">
             {!! $item->pre_description !!}
         </div>
 
@@ -111,7 +96,7 @@
         ], 'ECN')
 
 
-        @livewire('file-upload', [
+        {{-- @livewire('file-upload', [
             'hasForm' => false,                      // true when possible to add/remove file otherwise false
             'model' => 'CR',
             'modelId' => $item->id,
@@ -119,7 +104,7 @@
             'tag' => 'CR',                          // Any tag other than model name
             'canEdit' => $canEdit], 'CR')
 
-        <hr>
+        <hr> --}}
 
         <table class="table is-fullwidth">
             <tr>
@@ -133,7 +118,7 @@
 
                     @switch($status)
                     @case('wip')
-                        <p class="has-text-info">İncelemede - Work In Progress</p>
+                        <p class="has-text-info">Çalışılıyor - Work In Progress</p>
                         @break
                     @case('accepted')
                         <p class="has-text-info">Kabul Edildi - Accepted</span>

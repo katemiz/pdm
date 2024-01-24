@@ -103,7 +103,7 @@
 
 
         @if ( strlen($item->description) > 0)
-        <div class="notification">
+        <div class="notification content">
             {!! $item->description !!}
         </div>
         @endif

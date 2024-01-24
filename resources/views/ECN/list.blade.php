@@ -111,7 +111,7 @@
                     @role(['EngineeringDept'])
                     @if ($record->status == 'wip' )
 
-                        <a href="/cr/form/{{ $record->id}}"><span class="icon"><x-carbon-edit /></span></a>
+                        <a href="/ecn/form/{{ $record->id}}"><span class="icon"><x-carbon-edit /></span></a>
 
                         <a wire:click.prevent="startCRDelete({{$record->id}})">
                             <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>

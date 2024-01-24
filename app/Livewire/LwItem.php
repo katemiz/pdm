@@ -23,7 +23,7 @@ class LwItem extends Component
     public $action = 'LIST';
 
     public $query = '';
-    public $sortField = 'part_number';
+    public $sortField = 'created_at';
     public $sortDirection = 'DESC';
 
     public $show_latest = true; /// Show only latest versions
@@ -58,10 +58,18 @@ class LwItem extends Component
 
         $this->sortDirection = $this->constants['list']['headers'][$this->sortField]['direction'];
 
-        $items = Item::where('part_number', 'LIKE', "%".$this->query."%")
-                    ->orWhere('description', 'LIKE', "%".$this->query."%")
-                    ->orderBy($this->sortField,$this->sortDirection)
-                    ->paginate(env('RESULTS_PER_PAGE'));
+        if ( strlen($this->query) > 2 ) {
+
+            $items = Item::where('part_number', 'LIKE', "%".$this->query."%")
+            ->orWhere('description', 'LIKE', "%".$this->query."%")
+            ->orderBy($this->sortField,$this->sortDirection)
+            ->paginate(env('RESULTS_PER_PAGE'));
+
+        } else {
+
+            $items = Item::orderBy($this->sortField,$this->sortDirection)
+            ->paginate(env('RESULTS_PER_PAGE'));
+        }
 
         foreach ($items as $key => $item) {
             $items[$key]['isItemEditable'] = false;

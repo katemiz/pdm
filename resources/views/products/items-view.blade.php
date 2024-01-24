@@ -370,15 +370,15 @@
                                 @switch($i->part_type)
 
                                     @case('Detail')
-                                        <a href="/details/view/{{$i->id}}" target="_blank">
+                                        <a href="/details/Detail/view/{{$i->id}}" target="_blank">
                                         @break
 
                                     @case('Assy')
-                                        <a href="/products-assy/view/{{$i->id}}" target="_blank">
+                                        <a href="/products-assy/Assy/view/{{$i->id}}" target="_blank">
                                         @break
 
                                     @case('Buyable')
-                                        <a href="/buyables/view/{{$i->id}}" target="_blank">
+                                        <a href="/buyables/Buyable/view/{{$i->id}}" target="_blank">
                                         @break
 
                                 @endswitch

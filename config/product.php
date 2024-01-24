@@ -51,7 +51,7 @@ return [
                 "sortable" => true,
                 "align" => "left",
                 "column_name" => "created_at",
-                "direction" => "asc"
+                "direction" => "desc"
             ]
         ]
     ]

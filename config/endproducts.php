@@ -45,7 +45,7 @@ return [
                 "title" => "Created On",
                 "sortable" => true,
                 "align" => "left",
-                "direction" => "asc"
+                "direction" => "desc"
             ]
 
         ],

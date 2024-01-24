@@ -181,6 +181,7 @@ class LwDocument extends Component
         })
         ->where('title', 'LIKE', "%".$this->query."%")
         ->orWhere('remarks','LIKE',"%".$this->query."%")
+        ->orWhere('document_no','LIKE',"%".$this->query."%")
         ->orderBy($this->sortField,$this->sortDirection)
         ->paginate(env('RESULTS_PER_PAGE'));
     }

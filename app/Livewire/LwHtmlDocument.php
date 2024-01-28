@@ -23,16 +23,20 @@ class LwHtmlDocument extends Component
     public $uid;
     public $pid;
 
+    public $doctree;
 
-    public $action = 'cover-form'; // cover-form, cover-view, page-form, page-form
+    public $action = 'cover-form'; // cover-form, cover-view, page-form, page-form, page-view
     public $all_revs = [];
 
+    public $parent_node_id = false;
 
     public $constants;
 
     public $document_no;
 
-    public $doctree;
+    public $toc;
+
+    public $page;
 
     public $company;
     public $companies = [];
@@ -71,7 +75,6 @@ class LwHtmlDocument extends Component
     public $updated_at;
 
     public $title;
-    public $toc = [];    /// Table of Contents
 
 
     public $ptitle;
@@ -90,6 +93,8 @@ class LwHtmlDocument extends Component
     {
         if (request('id')) {
             $this->uid = request('id');
+
+            $this->getDoctree();
 
             // if (request('pid')) {
             //     $this->pid = request('pid');
@@ -115,9 +120,21 @@ class LwHtmlDocument extends Component
 
     public function render()
     {
-
-
         return view('documents.html-docs');
+    }
+
+
+
+    public function getDoctree() {
+
+        if ($this->uid) {
+            $this->doctree = json_decode(Document::find($this->uid)->toc);
+
+            session(['toc' => $this->doctree]);
+
+        } else {
+            $this->doctree = false;
+        }
     }
 
 
@@ -164,14 +181,9 @@ class LwHtmlDocument extends Component
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
         $this->dispatch('triggerAttachment',modelId: $this->uid);
 
-
         $this->action = 'cover-view';
-
         $this->setDocProps();
-
-
     }
-
 
 
     public function viewCover() {
@@ -184,11 +196,13 @@ class LwHtmlDocument extends Component
     }
 
 
-    public function addPage()
+    public function addPage($parent_node_id)
     {
         $this->action = 'page-form';
+        $this->parent_node_id = $parent_node_id;
         $this->pid = false;
     }
+
 
     public function editPage($pid)
     {
@@ -198,19 +212,7 @@ class LwHtmlDocument extends Component
     }
 
 
-
-    // public function addNode()
-    // {
-    //     $this->storeUpdatePage ();
-
-
-    //     $this->dispatch('addNodeToTree',id: $this->pid,name:$this->ptitle);
-
-    // }
-
-
-
-    public function storeUpdatePage () {
+    public function storeUpdatePage ($parent_node_id,$pid) {
 
         $this->validate();
 
@@ -219,28 +221,44 @@ class LwHtmlDocument extends Component
         $props['title'] = $this->ptitle;
         $props['content'] = $this->pcontent;
 
-        if ( $this->pid ) {
+        $is_update = false;
+
+        if ( $pid > 0 ) {
             // update
-            Page::find($this->pid)->update($props);
-            session()->flash('message','Page has been updated successfully.');
+            Page::find($pid)->update($props);
+            session()->flash('info','Page has been updated successfully.');
+            $this->page = Page::find($pid);
+
+            $is_update = true;
 
         } else {
             // create
             $props['user_id'] = Auth::id();
-            $this->pid = Page::create($props)->id;
-            session()->flash('message','Page has been created successfully.');
-
-            $node = ['id'=> $this->pid,'name' => $this->ptitle];
-
-            $this->dispatch('addNode',$node)->to(LwToc::class);
-
+            $this->page = Page::create($props);
+            session()->flash('info','Page has been created successfully.');
         }
 
-        $this->action = 'page-view';
+        $node = ['id'=> $this->page->id,'name' => $this->ptitle];
 
+        $this->dispatch('updateTreeOnBrowser',parent_node_id:$parent_node_id,node:$node,is_update:$is_update);
+        $this->action = 'page-view';
         $this->setPageProps();
     }
 
+
+    #[On('updateTocInDB')]
+    public function updateTocInDB($toc) {
+        Document::find($this->uid)->update(['toc' => json_encode($toc)]);
+    }
+
+
+
+
+    #[On('viewPage')]
+    public function viewPage($pid) {
+        $this->page = Page::find($pid);
+        $this->action = 'page-view';
+    }
 
 
 
@@ -259,7 +277,7 @@ class LwHtmlDocument extends Component
         $this->language = $d->language;
         $this->company_id = $d->company_id;
         $this->title = $d->title;
-        $this->doctree = json_decode($d->toc);
+        $this->toc = json_decode($d->toc);
         $this->remarks = $d->remarks;
         $this->status = $d->status;
         $this->created_at = $d->created_at;

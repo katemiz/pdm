@@ -1,12 +1,3 @@
-<script>
-
-function addNode() {
-    alert('fgfgdfg')
-}
-
-</script>
-
-
 <h2 class="subtitle has-text-weight-light has-text-info">{{ $pid ? 'Edit Page' : 'Add New Page' }}</h2>
 
 <form method="POST" enctype="multipart/form-data">
@@ -21,7 +12,6 @@ function addNode() {
         @error('title')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
         @enderror
-
     </div>
 
 
@@ -36,18 +26,9 @@ function addNode() {
     @enderror
 
     <div class="buttons is-right">
-        <button wire:click.prevent="storeUpdatePage()" class="button is-dark">
+        <button wire:click.prevent="storeUpdatePage({{ $parent_node_id ? $parent_node_id : 0 }},{{ $pid ? $pid : 0 }})" class="button is-dark">
             {{ $pid ? 'Update Page' : 'Add Page'}}
         </button>
-
-        {{-- <button wire:click.prevent="addNode()" class="button is-dark">
-            {{ $pid ? 'Update Page' : 'Add Page'}}
-        </button> --}}
-
-
-        {{-- <button wire:click="addNode" class="button is-dark">
-            {{ $pid ? 'Update Page' : 'Add Page'}}
-        </button> --}}
     </div>
 
 

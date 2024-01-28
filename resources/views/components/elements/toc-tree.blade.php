@@ -1,7 +1,7 @@
 <div>
-    <div id="tree" class="notification mt-4" ></div>
-
-    {{ $doctree }}
+    <div id="toc" class="notification mt-4" ></div>
+{{--
+    {{ $doctree }} --}}
 </div>
 
 
@@ -12,10 +12,22 @@
 
 <script>
 
-    let doctree
+    // let doctree
+
+
 
 
     function initializeTree(doctree) {
+
+        //console.log("initilizing", JSON.parse(doctree))
+
+        console.log("initilizing", typeof doctree)
+
+        // doctree = [
+        //     {id:44,name:"jhfjfr"},
+        //     {id:56,name:"yyy"}
+        // ]
+
 
         $('#toc').tree({
             data: doctree,
@@ -24,37 +36,66 @@
                 // Append a link to the jqtree-element div.
                 // The link has an url '#node-[id]' and a data property 'node-id'.
                 $li.find('.jqtree-element').append(
-                    '<span class="mx-1" data-node-id="'+ node.qty +'">['+ node.qty +']</span><a href="#node-'+ node.id +'" class="edit mx-1 has-text-danger" data-node-id="'+ node.id +'"> x</a>'
+                    '<a href="#node-'+ node.id +'" class="edit mx-1 has-text-danger" data-node-id="'+ node.id +'"> +</a>'
                 );
             }
         });
 
-        console.log('Jqtree Initialized',$('#toc').tree('toJson'))
+        console.log('Jqtree Initialized',$('#toc').tree())
     }
 
 
 
+    window.addEventListener('childTriggered',function(e) {
+
+        console.log("childTriggered")
+
+        doctree = [
+            {id:44,name:"jhfjfr"},
+            {id:56,name:"yyy"}
+        ]
+
+        $('#toc').tree('refresh');
+
+
+        //initializeTree(doctree)
+    })
 
 
 
 
 
 
+    // $(document).ready(function () {
 
-    $(document).ready(function () {
 
-        doctree = @json($doctree)
+    //     console.log(typeof doctree)
 
-        console.log('AAAAAAAAAA',doctree)
+    //     $('#toc').tree({
+    //         data: doctree,
+    //         selectable:true,
+    //         onCreateLi: function(node, $li) {
+    //             // Append a link to the jqtree-element div.
+    //             // The link has an url '#node-[id]' and a data property 'node-id'.
+    //             $li.find('.jqtree-element').append(
+    //                 '<a href="#node-'+ node.id +'" class="edit mx-1 has-text-danger" data-node-id="'+ node.id +'"> +</a>'
+    //             );
+    //         }
+    //     });
 
-        if (doctree) {
-            initializeTree(doctree)
-            console.log('BBBBB',doctree)
 
-        }
-        
 
-    });
+    //     // if (doctree.length > 0) {
+    //     //     initializeTree(doctree)
+    //     //     console.log('BBBBB',doctree.length)
+
+    //     // } else {
+
+    //     //     console.log('document ready doctree boş. jqtree not initialized')
+    //     // }
+
+
+    // });
 
 
 
@@ -147,7 +188,7 @@
 
 
 
-        
+
     })
 
 
@@ -165,43 +206,42 @@
             name: e.detail.name
         }
 
+        console.log('Eklenecek node',node)
 
 
-        if ( $('#toc').tree('getTree') ) {
-
-            alert('VAR')
-
-        } else {
-
-            doctree = [ node ]
-
-            initializeTree(doctree)
 
 
-            alert('YOK')
-        }
+        // if ( $('#toc').tree('getTree') ) {
+
+        //     alert('VAR')
+
+        // } else {
+
+        //     doctree = [ node ]
+
+        //     console.log('RRRRRRRRRRR', doctree)
+
+
+        //     initializeTree(doctree)
+
+
+        //     console.log('YOK idi eklenmiş olmalı')
+        // }
 
         if (e.detail.parentId) {
 
             console.log('yes parent')
-
-
             let parentNode = $('#toc').tree('getNodeById',e.detail.parentId)
 
-            $('#toc').tree('appendNode', {
-                    name: e.detail.name,
-                    id: e.detail.id,
-                },
-                parentNode
-            )
+            $('#toc').tree('appendNode', node, parentNode)
         } else {
 
-            console.log('no parent')
+            console.log('no parent',$('#toc').tree())
 
-            $('#toc').tree('appendNode', {
-                name: e.detail.name,
-                id: e.detail.id,
-            })
+            $('#toc').tree('appendNode', node)
+
+            $('#toc').tree('refresh');
+
         }
 
     })
@@ -211,7 +251,7 @@
 
 
 
-    
+
     function addNodeJS(idPartSelected) {
 
         // console.log(idPartSelected)

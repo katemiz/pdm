@@ -23,7 +23,7 @@ class LwToc extends Component
     public function render()
     {
         return view('components.elements.toc-tree', [
-            'doctree' => $this->getDoctree(),
+            //'doctree' => $this->getDoctree(),
         ]);
     }
 
@@ -37,6 +37,16 @@ class LwToc extends Component
             return false;
         }
     }
+
+
+    #[On('addTreeTriggered')]
+    public function yepYeni()
+    {
+        $this->dispatch('childTriggered');
+
+    }
+
+
 
 
     #[On('addNode')]

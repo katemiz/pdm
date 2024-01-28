@@ -1,24 +1,30 @@
+@if (session()->has('info'))
+<div class="notification is-info is-light">
+    {{ session('info') }}
+</div>
+@endif
+
 <div class="columns">
 
     <div class="column">
-        <a href='#'>
+        <a href='javascript:viewPreviuosNext({{ $page->id }},"previous")'>
             <span class="icon "><x-carbon-chevron-left /></span>
         </a>
     </div>
 
     @role(['admin','company_admin','engineer'])
     <div class="column has-text-centered">
-        <a wire:click='editPage({{ $pid }})'>
+        <a wire:click='editPage({{ $page->id }})'>
             <span class="icon "><x-carbon-edit /></span>
         </a>
-        <a  wire:click="triggerDelete('document',{{ $uid }})">
+        <a  wire:click="triggerDelete('page',{{ $page->id }})">
             <span class="icon has-text-danger"><x-carbon-trash-can /></span>
-        </a>   
+        </a>
     </div>
     @endrole
 
     <div class="column has-text-right">
-        <a href='#'>
+        <a href='javascript:viewPreviuosNext({{ $page->id }},"next")'>
             <span class="icon "><x-carbon-chevron-right /></span>
         </a>
     </div>
@@ -30,15 +36,15 @@
 
 
 
-<h2 class="subtitle has-text-weight-light">{{ $ptitle }}</h2>
+<h2 class="subtitle has-text-weight-light">{{ $page->title }}</h2>
 
-        
+
 <div class="content">
-    {!! $pcontent !!}
+    {!! $page->content !!}
 </div>
 
 <div class="columns is-size-7 has-text-grey mt-6">
-        
+
     <div class="column">
         <p>{{ $pcreated_by }}</p>
         <p>{{ $pcreated_at }}</p>

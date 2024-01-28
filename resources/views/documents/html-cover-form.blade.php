@@ -1,5 +1,6 @@
 
 
+
     <header class="mb-6">
         <h2 class="subtitle has-text-weight-light has-text-info">{{ $uid ? 'Edit Doc Properties' : 'Doc Details' }}</h2>
     </header>

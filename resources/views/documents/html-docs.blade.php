@@ -7,32 +7,11 @@
 
     <link rel="stylesheet" href="{{ asset('/css/jqtree.css')}}">
 
+    <script>
+        let doctree = JSON.parse(@json(session('toc')))
+    </script>
 
-    {{-- <script>
-
-
-    window.addEventListener('addNodeToTree',function(e) {
-
-        let newNode = {
-            name: e.detail.id,
-            id: e.detail.name
-        }
-
-        if (e.detail.topNodeId) {
-
-            $('#toc').tree('appendNode', newNode)
-
-
-        } else {
-            $('#toc').tree('appendNode', newNode)
-        }
-
-    })
-
-
-
-    </script> --}}
-
+    <script src="{{ asset('/js/jqtree_actions.js') }}"></script>
 
     <div class="columns">
 
@@ -44,46 +23,42 @@
         </div>
 
         <div class="column is-narrow">
+
                 <a href="/documents/file/list">
                     <span class="icon is-small"><x-carbon-document-multiple-02 /></span>
                     <span>List All</span>
                 </a>
 
-
-
                 @role(['admin','company_admin','engineer'])
+                    <div class="buttons mt-3">
 
-                <div class="buttons mt-3">
+                    @if ($status == 'Frozen')
 
-                @if ($status == 'Frozen')
+                        @if ($is_latest)
+                        <p class="level-item">
+                            <a wire:click='reviseConfirm({{ $uid }})'>
+                                <span class="icon"><x-carbon-version /></span>
+                                <span>Revise</span>
+                            </a>
+                        </p>
+                        @endif
 
-                    @if ($is_latest)
-                    <p class="level-item">
-                        <a wire:click='reviseConfirm({{ $uid }})'>
-                            <span class="icon"><x-carbon-version /></span>
-                            <span>Revise</span>
-                        </a>
-                    </p>
+                    @else
+
+                            <a wire:click='editCover({{ $uid }})'>
+                                <span class="icon"><x-carbon-edit /></span>
+                            </a>
+
+                            <a wire:click='freezeConfirm({{ $uid }})'>
+                                <span class="icon"><x-carbon-stamp /></span>
+                            </a>
+
+                            <a wire:click="triggerDelete('document',{{ $uid }})">
+                                <span class="icon has-text-danger"><x-carbon-trash-can /></span>
+                            </a>
                     @endif
 
-                @else
-
-                        <a wire:click='editCover({{ $uid }})'>
-                            <span class="icon"><x-carbon-edit /></span>
-                        </a>
-
-                        <a wire:click='freezeConfirm({{ $uid }})'>
-                            <span class="icon"><x-carbon-stamp /></span>
-                        </a>
-
-                        <a wire:click="triggerDelete('document',{{ $uid }})">
-                            <span class="icon has-text-danger"><x-carbon-trash-can /></span>
-                        </a>
-                @endif
-
-                </div>
-
-
+                    </div>
                 @endrole
 
         </div>
@@ -91,26 +66,28 @@
 
 
 
-
-
     <div class="columns">
 
         <div class="column is-3">
-
 
             @if ($uid)
 
                 <h2 class="subtitle has-text-weight-light">Table of Contents</h2>
 
-
-                <button wire:click="addPage()" class="button is-dark is-small is-fullwidth mb-2">
+                <button wire:click="addPage(0)" class="button is-dark is-small is-fullwidth mb-2">
                     <span class="icon is-small"><x-carbon-add /></span>
                     <span>Add Page</span>
                 </button>
 
                 <a wire:click='viewCover()'>Cover Page</a>
 
-                <livewire:lw-toc uid="{{ $uid }}"/>
+
+                {{-- <livewire:lw-toc uid="{{ $uid }}"/> --}}
+
+
+                <div wire:ignore>
+                    <div id="toc" class="notification mt-4" ></div>
+                </div>
 
             @else
 
@@ -145,6 +122,24 @@
 
             @endswitch
         </div>
+
+
+
+        {{-- <div class="column">
+
+                @include('documents.html-cover-form')
+
+                @include('documents.html-cover-view')
+
+                @include('documents.html-page-form')
+
+                @include('documents.html-page-view')
+
+
+        </div> --}}
+
+
+
 
 
     </div>

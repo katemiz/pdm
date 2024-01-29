@@ -61,6 +61,7 @@ class LwItem extends Component
         if ( strlen($this->query) > 2 ) {
 
             $items = Item::where('part_number', 'LIKE', "%".$this->query."%")
+            ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
             ->orWhere('description', 'LIKE', "%".$this->query."%")
             ->orderBy($this->sortField,$this->sortDirection)
             ->paginate(env('RESULTS_PER_PAGE'));

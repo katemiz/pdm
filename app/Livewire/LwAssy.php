@@ -140,13 +140,11 @@ class LwAssy extends Component
     }
 
 
-
     public function setCompanyProps()
     {
         $this->company_id =  Auth::user()->company_id;
         $this->company =  Company::find($this->company_id);
     }
-
 
 
     public function changeSortDirection ($key) {
@@ -161,9 +159,6 @@ class LwAssy extends Component
 
         $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
     }
-
-
-
 
 
     public function getNodes() {
@@ -181,7 +176,6 @@ class LwAssy extends Component
             return Item::orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
         }
-
     }
 
 
@@ -190,7 +184,6 @@ class LwAssy extends Component
     public function addNode($idNode) {
 
         $p = Item::find($idNode);
-
         $this->dispatch('refreshTree',id: $p->id,name: $p->description);
     }
 
@@ -220,9 +213,9 @@ class LwAssy extends Component
         $this->status = $item->status;
         $this->is_latest = $item->is_latest;
 
-
         $this->treeData = json_decode($item->bom);
 
+        // dd($this->treeData);
 
         $this->created_by = User::find($item->user_id);
         $this->created_at = $item->created_at;

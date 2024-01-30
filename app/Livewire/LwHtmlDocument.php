@@ -41,6 +41,9 @@ class LwHtmlDocument extends Component
     public $company;
     public $companies = [];
 
+    public $pnode_id;
+    public $nnode_id;
+
     #[Validate('required', message: 'Please select company')]
     public $company_id;
 
@@ -255,9 +258,12 @@ class LwHtmlDocument extends Component
 
 
     #[On('viewPage')]
-    public function viewPage($pid) {
+    public function viewPage($pid,$pnode_id,$nnode_id) {
         $this->page = Page::find($pid);
         $this->action = 'page-view';
+
+        $this->pnode_id = $pnode_id;
+        $this->nnode_id = $nnode_id;
     }
 
 

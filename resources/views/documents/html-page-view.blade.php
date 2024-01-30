@@ -7,9 +7,14 @@
 <div class="columns">
 
     <div class="column">
-        <a href='javascript:viewPreviuosNext({{ $page->id }},"previous")'>
+
+        @if ($pnode_id > 0)
+
+        <a href='javascript:viewPreviuosNext({{ $pnode_id }})'>
             <span class="icon "><x-carbon-chevron-left /></span>
         </a>
+        @endif
+
     </div>
 
     @role(['admin','company_admin','engineer'])
@@ -24,12 +29,17 @@
     @endrole
 
     <div class="column has-text-right">
-        <a href='javascript:viewPreviuosNext({{ $page->id }},"next")'>
+        @if ($nnode_id > 0)
+        <a href='javascript:viewPreviuosNext({{ $nnode_id }})'>
             <span class="icon "><x-carbon-chevron-right /></span>
         </a>
+        @endif
     </div>
 
 </div>
+
+
+
 
 
 
@@ -58,3 +68,8 @@
     </div>
 
 </div>
+
+
+{{-- <script>
+    RefreshPreviousNext({{ $page->id }})
+</script> --}}

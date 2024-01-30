@@ -26,8 +26,20 @@ $(document).ready(function () {
 
             if (event.node) {
                 // node was selected
-                var node = event.node;
-                Livewire.dispatch('viewPage', { pid: node.id });
+                let node = event.node;
+
+                let pnode_id = 0;
+                let nnode_id = 0;
+
+                if (node.getPreviousNode()) {
+                    pnode_id = node.getPreviousNode().id
+                }
+
+                if (node.getNextNode()) {
+                    nnode_id = node.getNextNode().id
+                }
+
+                Livewire.dispatch('viewPage', { pid: node.id,pnode_id:pnode_id,nnode_id:nnode_id });
 
             } else {
                 // event.node is null
@@ -145,46 +157,27 @@ window.addEventListener('updateTreeOnBrowser',function(e) {
 
 
 
-function viewPreviuosNext(current_page_id,previous_or_next) {
+function viewPreviuosNext(current_page_id) {
 
+    let node = $('#toc').tree('getNodeById',current_page_id)
 
-    let currentNode = $('#toc').tree('getNodeById',current_page_id)
+    let pnode_id = 0;
+    let nnode_id = 0;
 
-    if (previous_or_next == 'previous') {
-
-
-        if (currentNode.getPreviousNode()) {
-            // console.log("pNode",pNode)
-
-            Livewire.dispatch('viewPage', { pid: currentNode.getPreviousNode().id });
-        }
-
-
-
+    if (node.getPreviousNode()) {
+        pnode_id = node.getPreviousNode().id
     }
 
-    if (previous_or_next == 'next') {
-
-
-        if (currentNode.getPreviousNode()) {
-
-            // console.log("nNode",nNode)
-
-
-            Livewire.dispatch('viewPage', { pid: currentNode.getPreviousNode().id });
-        }
-
-
-
-
+    if (node.getNextNode()) {
+        nnode_id = node.getNextNode().id
     }
 
+    Livewire.dispatch('viewPage', { pid: node.id,pnode_id:pnode_id,nnode_id:nnode_id });
 
 
 
 
 }
-
 
 
 

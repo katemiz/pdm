@@ -332,7 +332,7 @@
             <div class="control">
 
                 @livewire('file-upload', [
-                    'model' => 'Products',
+                    'model' => 'Product',
                     'modelId' => $uid ? $uid : false,
                     'isMultiple'=> true,                   // can multiple files be selected
                     'tag' => '3D',                          // Any tag other than model name

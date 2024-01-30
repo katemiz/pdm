@@ -38,7 +38,7 @@ return new class extends Migration
             $table->text('vendor')->nullable();
             $table->text('vendor_part_no')->nullable();
             $table->text('url')->nullable();
-            $table->float('weight')->nullable();
+            $table->float('weight',8,3)->nullable();
             $table->text('material_text')->nullable();
             $table->text('finish_text')->nullable();
             $table->text('remarks')->nullable();

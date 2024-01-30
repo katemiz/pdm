@@ -316,7 +316,7 @@
 
                     <tr>
                         <th>Weight</th>
-                        <td class="has-text-right">{{ round($weight,1) }} kg</td>
+                        <td class="has-text-right">{{ round($weight,3) }} kg</td>
                     </tr>
 
                     <tr>

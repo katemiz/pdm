@@ -378,7 +378,7 @@
                                         @break
 
                                     @case('Buyable')
-                                        <a href="/details/Buyable/view/{{$i->id}}" target="_blank">
+                                        <a href="/buyables/view/{{$i->id}}" target="_blank">
                                         @break
 
                                     @case('MakeFrom')

@@ -236,11 +236,7 @@ class LwDetail extends Component
 
     public function getProps() {
 
-
-
         $item = Item::find($this->uid);
-
-
 
         $this->malzeme_id = $item->malzeme_id;
         $this->part_type = $item->part_type;
@@ -257,10 +253,6 @@ class LwDetail extends Component
 
         $malzeme =  Malzeme::find($item->malzeme_id);
 
-
-
-        //dd('eeeeeeee');
-
         if ( in_array($this->part_type,['MakeFrom','Standard']) ) {
 
             if ($this->part_type == 'MakeFrom') {
@@ -271,11 +263,7 @@ class LwDetail extends Component
                 $this->material_definition = 'See Standard Documentation';
             }
 
-
-            //dd('ssssss');
-        } else {
-
-            //dd(['here3',$item,$this->mat_family,$malzeme->material_definition]);
+        } elseif ($malzeme) {
 
             $this->material_definition = $malzeme->material_definition;
 
@@ -284,11 +272,7 @@ class LwDetail extends Component
 
             $this->mat_family = $malzeme->family;
             $this->mat_form = $malzeme->form;
-
-
         }
-
-
 
         $this->getMaterialList();
 
@@ -308,8 +292,6 @@ class LwDetail extends Component
         if ($this->part_type == 'MakeFrom' && $item->makefrom_part_id) {
             $this->makefrom_part_item = Item::find($item->makefrom_part_id);
         }
-
-
 
         $this->std_params = $item->std_params;
 

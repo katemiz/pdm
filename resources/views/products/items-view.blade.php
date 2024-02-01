@@ -1,3 +1,38 @@
+<script>
+
+
+
+
+    function reviseConfirm() {
+
+
+
+        Swal.fire({
+            title: sa_title,
+            text: sa_text,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: confirmText,
+            cancelButtonText: cancelText,
+
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch(dispatchRoute, dispatchData)
+            } else {
+                return false
+            }
+        })
+    }
+
+
+
+</script>
+
+
+
+
 <header class="mb-6">
     @switch($part_type)
 
@@ -76,7 +111,7 @@
 
                 @endif
 
-                @if ($status != 'Released')
+                @if ( !in_array($status,['Released','Frozen']) )
 
                     <p class="level-item">
                         <a href='{{ $item_edit_url }}/{{ $uid }}'>
@@ -92,24 +127,20 @@
                     </p>
 
                     @if ($part_type != 'Standard')
-
                     <p class="level-item">
                         <a wire:click='releaseConfirm({{ $uid }})'>
                             <span class="icon"><x-carbon-send /></span>
                         </a>
                     </p>
                     @endif
-
                     @endrole
 
                     @if ($part_type != 'Standard')
-
                     <p class="level-item">
                         <a wire:click="deleteConfirm({{ $uid }})">
                             <span class="icon has-text-danger"><x-carbon-trash-can /></span>
                         </a>
                     </p>
-
                     @endif
                 @endif
                 @endrole
@@ -143,9 +174,8 @@
                 @if (count($all_revs) > 1)
                 <div class="tags has-addons">
                     @foreach ($all_revs as $key => $revId)
-                        @if ($key != $revision)
-                            <a href="/{{$item_view_url}}/{{$revId}}"
-                                class="tag {{ array_key_last($all_revs) == $key ? 'is-success':'' }} is-light mr-1">R{{$key}}</a>
+                        @if ($key != $version)
+                            <a href="{{$item_view_url}}/{{$revId}}" class="tag {{ array_key_last($all_revs) == $key ? 'is-success':'' }} is-light mr-1">R{{$key}}</a>
                         @endif
                     @endforeach
                 </div>

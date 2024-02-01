@@ -233,6 +233,12 @@ class LwAssy extends Component
         foreach ($item->pnotes as $note) {
             array_push($this->notes_id_array,$note->id);
         }
+
+
+        // Revisions
+        foreach (Item::where('part_number',$this->part_number)->get() as $i) {
+            $this->all_revs[$i->version] = $i->id;
+        }
     }
 
 
@@ -416,8 +422,54 @@ class LwAssy extends Component
 
 
 
+    public function freezeConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'freeze');
+    }
 
 
+    #[On('onFreezeConfirmed')]
+    public function doFreeze() {
+        Item::find($this->uid)->update(['status' =>'Frozen']);
+        $this->action = 'VIEW';
+        $this->setProps();
+    }
+
+
+
+
+
+
+    public function reviseConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'revise');
+    }
+
+
+    #[On('onReviseConfirmed')]
+    public function doRevise() {
+
+        $original_part = Item::find($this->uid);
+        $revised_part = $original_part->replicate();
+
+        $revised_part->status = 'WIP';
+        $revised_part->version = $original_part->version+1;
+
+        $revised_part->save();
+
+        // Do not Copy files!
+        // Delibrate decision
+
+        $original_part->update(['is_latest' => false]);
+
+        $this->uid = $revised_part->id;
+        $this->action = 'VIEW';
+
+        $this->setProps();
+
+        // This refreshes new item attachments
+        $this->dispatch('triggerAttachment',modelId: $this->uid);
+    }
 
 
 

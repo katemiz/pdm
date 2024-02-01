@@ -29,6 +29,7 @@ class LwItem extends Component
     public $show_latest = true; /// Show only latest versions
 
 
+
     public $ecns;
     public $constants;
 
@@ -61,6 +62,9 @@ class LwItem extends Component
         if ( strlen($this->query) > 2 ) {
 
             $items = Item::where('part_number', 'LIKE', "%".$this->query."%")
+            ->when($this->show_latest, function ($query) {
+                $query->where('is_latest', true);
+            })
             ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
             ->orWhere('description', 'LIKE', "%".$this->query."%")
             ->orderBy($this->sortField,$this->sortDirection)
@@ -69,6 +73,9 @@ class LwItem extends Component
         } else {
 
             $items = Item::orderBy($this->sortField,$this->sortDirection)
+            ->when($this->show_latest, function ($query) {
+                $query->where('is_latest', true);
+            })
             ->paginate(env('RESULTS_PER_PAGE'));
         }
 

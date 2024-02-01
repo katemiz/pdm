@@ -241,6 +241,30 @@ class LwDetail extends Component
         $this->malzeme_id = $item->malzeme_id;
         $this->part_type = $item->part_type;
 
+        switch ($item->part_type) {
+
+            case 'MakeFrom':
+                $item_view_url = '/details/MakeFrom/view';
+                break;
+
+            case 'Buyable':
+                $item_view_url = '/details/Buyable/view';
+                break;
+
+            case 'Standard':
+                $item_view_url = '/details/Standard/view';
+                break;
+
+            case 'Detail':
+                $item_view_url = '/details/Detail/view';
+                break;
+
+            case 'Assy':
+                $item_view_url = '/products-assy/view';
+                break;
+
+        }
+
         if ($item->status == 'WIP') {
             $this->isItemEditable = true;
             $this->isItemDeleteable = true;
@@ -577,6 +601,37 @@ class LwDetail extends Component
         }
     }
 
+
+    public function reviseConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'revise');
+    }
+
+
+    #[On('onReviseConfirmed')]
+    public function doRevise() {
+
+        $original_part = Item::find($this->uid);
+        $revised_part = $original_part->replicate();
+
+        $revised_part->status = 'WIP';
+        $revised_part->version = $original_part->version+1;
+
+        $revised_part->save();
+
+        // Do not Copy files!
+        // Delibrate decision
+
+        $original_part->update(['is_latest' => false]);
+
+        $this->uid = $revised_part->id;
+        $this->action = 'VIEW';
+
+        $this->getProps();
+
+        // This refreshes new item attachments
+        $this->dispatch('triggerAttachment',modelId: $this->uid);
+    }
 
 
 

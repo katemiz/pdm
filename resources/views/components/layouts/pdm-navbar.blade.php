@@ -167,6 +167,13 @@
                     </div>
                 </div>
 
+                <a href="/moms/list" class="navbar-item">
+                    <span class="icon has-text-warning">
+                        <x-carbon-report-data />
+                    </span>
+                    <span class="ml-2">MOM</span>
+                </a>
+
             @endif
 
         </div>

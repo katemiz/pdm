@@ -20,7 +20,7 @@ use Illuminate\Http\RedirectResponse;
 class Logware extends Component
 {
 
-    /* Actions: 
+    /* Actions:
         login : Ususal login action,
         register : New user add,
         forgot: Password Renewal
@@ -42,13 +42,10 @@ class Logware extends Component
 
     public function render()
     {
-
-
         if (request('action')) {
             $this->action = request('action');
         }
 
-        //dd($this->action);
         return view('admin.log-wire');
     }
 
@@ -72,12 +69,20 @@ class Logware extends Component
             'password' => ['required', 'string', 'max:255'],
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-            return redirect('/');
+
+        if ( User::where('email',$this->email)->sole()->status == 'inactive') {
+
+            $this->addError('account', 'This account is not active');
+
+        } else {
+
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+                return redirect('/');
+            }
+
+            $this->addError('email', 'The provided credentials do not match our records.');
         }
-    
-        $this->addError('email', 'The provided credentials do not match our records.');
     }
 
 
@@ -124,7 +129,7 @@ class Logware extends Component
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
-    
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

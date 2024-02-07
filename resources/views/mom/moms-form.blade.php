@@ -3,8 +3,8 @@
     <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
     @assets
-    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js" defer></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <script src="{{ asset('/js/air-datepicker.js') }}" defer></script>
+    <link rel="stylesheet" type="text/css" href="{{ asset('/js/air-datepicker.css') }}">
     @endassets
 
     <header class="mb-6">
@@ -19,74 +19,6 @@
 
     <form method="POST" enctype="multipart/form-data">
         @csrf
-
-
-
-        <div class="field has-addons">
-            <div class="control">
-              <input class="input" type="text" placeholder="Find a repository" >
-            </div>
-            <div class="control">
-              <a class="button is-info" data-deneme>
-                Search
-              </a>
-            </div>
-          </div>
-
-
-        {{-- <div class="field">
-            <label class="label">Select Company</label>
-            <div class="control">
-                @foreach ($companies as $company)
-                <label class="radio">
-                    <input type="radio" value="{{$company->id}}" wire:model="company_id">
-                    {{$company->name}}
-                    </label>
-                @endforeach
-            </div>
-
-            @error('company_id')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
-        </div> --}}
-
-
-
-
-        {{-- <div class="field">
-            <label class="label">Select Document Type</label>
-            <div class="control">
-                @foreach ($doc_types as $abbr => $type_name)
-                <label class="radio">
-                    <input type="radio" value="{{$abbr}}" wire:model="doc_type">
-                    {{$type_name}}
-                    </label>
-                @endforeach
-            </div>
-
-            @error('doc_type')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
-        </div> --}}
-
-
-
-        {{-- <div class="field">
-            <label class="label">Document Language</label>
-            <div class="control">
-                @foreach ($languages as $key => $language)
-                <label class="radio">
-                    <input type="radio" value="{{$key}}" wire:model="language">
-                    {{$language}}
-                    </label>
-                @endforeach
-            </div>
-
-            @error('language')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-            @enderror
-        </div> --}}
-
 
         <div class="field">
 
@@ -104,10 +36,10 @@
 
                 </div>
 
-                <div class="field">
+                <div class="field is-narrow">
                     <label class="label">Toplantının Tarihi / Meeting Date</label>
                     <div class="control">
-                        <input class="input" type="label" wire:model='mom_start_date' placeholder="Tarih ..." readonly data-meetstart>
+                        <input class="input" type="label" wire:model='mom_start_date' id="mom_start_date" placeholder="Tarih ..." readonly data-meetstart>
                     </div>
 
                     @error('mom_start_date')
@@ -116,27 +48,9 @@
 
                 </div>
 
-                <div class="field">
-                    <label class="label">Toplantının Bitiş Tarihi / Meeting End Date</label>
-                    <div class="control">
-                        <input class="input" type="label" wire:model='mom_end_date' placeholder="Tarih ..." readonly data-meetend>
-                    </div>
-
-                    @error('mom_end_date')
-                        <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                    @enderror
-
-                </div>
-
             </div>
 
         </div>
-
-
-
-
-
-
 
 
         <div class="field">
@@ -148,13 +62,12 @@
             @error('subject')
                 <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
-
         </div>
 
 
         <livewire:ck-editor
             wire:model="minutes"
-            cktype="STANDARD"
+            cktype="FULL"
             label='Toptantı Tutanağı / Meeting Minutes'
             placeholder='Tutanak / Minutes ....'
             :content="$minutes"/>
@@ -184,36 +97,11 @@
             </div>
         </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         <div class="buttons is-right">
             <button wire:click.prevent="storeUpdateItem()" class="button is-dark">
                 {{ $uid ? 'Update MOM' : 'Add MOM' }}
             </button>
         </div>
-
-
-
 
     </form>
 
@@ -233,11 +121,23 @@
 
 @script
 <script>
-    new Pikaday({ field: $wire.$el.querySelector('[data-meetstart]') });
-    new Pikaday({ field: $wire.$el.querySelector('[data-meetend]') });
 
-    new Pikaday({ field: $wire.$el.querySelector('[data-deneme]') });
-
+    new AirDatepicker('#mom_start_date', {
+        range: true,
+        multipleDatesSeparator: ' - ',
+        locale: {
+            days: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
+            daysShort: ['Pzr', 'Pts', 'Sl', 'Çar', 'Per', 'Cum', 'Cts'],
+            daysMin: ['Pa', 'Pt', 'Sl', 'Ça', 'Pe', 'Cu', 'Ct'],
+            months: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+            monthsShort: ['Oca', 'Şbt', 'Mrt', 'Nsn', 'Mys', 'Hzr', 'Tmz', 'Ağt', 'Eyl', 'Ekm', 'Ksm', 'Arl'],
+            today: 'Bugün',
+            clear: 'Temizle',
+            dateFormat: 'dd.MMM.yyyy',
+            timeFormat: 'hh:mm aa',
+            firstDay: 1
+        }
+    })
 
 </script>
 @endscript

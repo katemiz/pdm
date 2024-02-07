@@ -69,19 +69,22 @@ class Logware extends Component
             'password' => ['required', 'string', 'max:255'],
         ]);
 
+        $is_user_active = true;
 
         if ( User::where('email',$this->email)->sole()->status == 'inactive') {
+            $credentials['password'] = 'thisisnotactiveanymore';
+            $is_user_active = false;
+        }
 
-            $this->addError('account', 'This account is not active');
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect('/');
+        }
 
-        } else {
-
-            if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
-                return redirect('/');
-            }
-
+        if ($is_user_active) {
             $this->addError('email', 'The provided credentials do not match our records.');
+        } else {
+            $this->addError('email', 'This account is not active');
         }
     }
 

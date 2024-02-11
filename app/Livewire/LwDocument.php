@@ -332,7 +332,6 @@ class LwDocument extends Component
 
             $this->toc = $c->toc;
         }
-
     }
 
 

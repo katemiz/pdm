@@ -13,7 +13,7 @@
     </header>
 
     @if ($uid)
-    <p class="title has-text-weight-light is-size-2">{{'MOM-'.$id }}</p>
+    <p class="title has-text-weight-light is-size-2">{{'MOM-'.$uid }}</p>
     @endif
 
 
@@ -39,13 +39,12 @@
                 <div class="field is-narrow">
                     <label class="label">Toplantının Tarihi / Meeting Date</label>
                     <div class="control">
-                        <input class="input" type="label" wire:model='mom_start_date' id="mom_start_date" placeholder="Tarih ..." readonly data-meetstart>
+                        <input class="input" type="label" id="mom_date" placeholder="Tarih ..." readonly>
                     </div>
 
-                    @error('mom_start_date')
+                    @error('mom_date')
                         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
-
                 </div>
 
             </div>
@@ -75,6 +74,19 @@
         @error('minutes')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
         @enderror
+
+
+        <livewire:ck-editor
+            wire:model="remarks"
+            cktype="STD"
+            label='Notlar / Remarks'
+            placeholder='....'
+            :content="$remarks"/>
+
+        @error('remarks')
+            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+        @enderror
+
 
 
         <div class="field block">
@@ -122,7 +134,7 @@
 @script
 <script>
 
-    new AirDatepicker('#mom_start_date', {
+    new AirDatepicker('#mom_date', {
         range: true,
         multipleDatesSeparator: ' - ',
         locale: {
@@ -133,9 +145,14 @@
             monthsShort: ['Oca', 'Şbt', 'Mrt', 'Nsn', 'Mys', 'Hzr', 'Tmz', 'Ağt', 'Eyl', 'Ekm', 'Ksm', 'Arl'],
             today: 'Bugün',
             clear: 'Temizle',
-            dateFormat: 'dd.MMM.yyyy',
+            dateFormat: 'dd.MM.yyyy',
             timeFormat: 'hh:mm aa',
             firstDay: 1
+        },
+        onSelect: (dp) => {
+
+            console.log(dp.formattedDate)
+            Livewire.dispatch('onCalendarClicked',  { mom_date: dp.formattedDate })
         }
     })
 

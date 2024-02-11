@@ -20,7 +20,10 @@ return new class extends Migration
             $table->integer('updated_uid');
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(Company::class);
-            $table->foreignIdFor(Project::class);
+            $table->foreignIdFor(Project::class)->nullable();
+            $table->integer('mom_no');
+            $table->integer('revision')->default(1);
+            $table->boolean('is_latest')->default(true);
             $table->date('mom_start_date');
             $table->date('mom_end_date')->nullable();
             $table->text('place')->nullable();

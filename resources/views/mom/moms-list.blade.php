@@ -65,83 +65,82 @@
 
     <table class="table is-fullwidth">
 
-        <caption>{{ $documents->total() }} {{ $documents->total() > 1 ? ' Records' :' Record' }}</caption>
+        <caption>{{ $moms->total() }} {{ $moms->total() > 1 ? ' Records' :' Record' }}</caption>
 
         <thead>
             <tr>
-                @foreach ($constants['list']['headers'] as $col_name => $headerParams)
-                    <th class="has-text-{{ $headerParams['align'] }}">
-                        {{ $headerParams['title'] }}
+                <th class="has-text-left">
+                    MOM No
 
-                        @if ($headerParams['sortable'])
+                    <a class="{{ $mom_no_direction == 'asc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('mom_no')">
+                        <span class="icon has-text-link"><x-carbon-chevron-sort-up /></span>
+                    </a>
 
-                            <a class="{{ $headerParams['direction'] == 'asc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('{{$col_name}}')">
-                                <span class="icon has-text-link">
-                                    <x-carbon-chevron-sort-up />
-                                </span>
-                            </a>
+                    <a class="{{ $mom_no_direction == 'desc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('mom_no')">
+                        <span class="icon has-text-link"><x-carbon-chevron-sort-down /></span>
+                    </a>
+                </th>
 
-                            <a class="{{ $headerParams['direction'] == 'desc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('{{$col_name}}')">
-                                <span class="icon has-text-link">
-                                    <x-carbon-chevron-sort-down />
-                                </span>
-                            </a>
+                <th class="has-text-left">
+                    Subject
 
-                        @endif
-                    </th>
-                @endforeach
+                    <a class="{{ $subject_direction == 'asc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('subject')">
+                        <span class="icon has-text-link"><x-carbon-chevron-sort-up /></span>
+                    </a>
 
-                @if ( isset($constants['list']['actions']) )
-                    <th class="has-text-right"><span class="icon"><x-carbon-user-activity /></span></th>
-                @endif
+                    <a class="{{ $subject_direction == 'desc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('subject')">
+                        <span class="icon has-text-link"><x-carbon-chevron-sort-down /></span>
+                    </a>
+                </th>
+
+                <th class="has-text-left">
+                    Date Prepared
+
+                    <a class="{{ $updated_at_direction == 'asc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('updated_at')">
+                        <span class="icon has-text-link"><x-carbon-chevron-sort-up /></span>
+                    </a>
+
+                    <a class="{{ $updated_at_direction == 'desc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('updated_at')">
+                        <span class="icon has-text-link"><x-carbon-chevron-sort-down /></span>
+                    </a>
+                </th>
+
+                <th class="has-text-right"><span class="icon"><x-carbon-user-activity /></span></th>
 
             </tr>
         </thead>
 
         <tbody>
 
-            @foreach ($documents as $record)
+            @foreach ($moms as $record)
             <tr wire:key="{{ $record->id }}">
 
-                @foreach (array_keys($constants['list']['headers']) as $col_name)
-                    <td>
-                        @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
-                            {!! $record[$col_name] !!}
-                        @else
-                            {{ $record[$col_name] }}
-                        @endif
-                    </td>
-                @endforeach
+
+
+                <td>MOM-{{ $record->mom_no }}</td>
+                <td>{{ $record->subject }}</td>
+                <td>{{ $record->updated_at }}</td>
+
+
+
+
+
+
+
 
                 <td class="has-text-right">
 
-                    @if ($record->is_html)
+                    <a wire:click="viewItem({{ $record->id }})">
+                        <span class="icon"><x-carbon-view/></span>
+                    </a>
 
-                        <a href="/documents-html/cover-view/{{ $record->id}}">
-                            <span class="icon"><x-carbon-view/></span>
-                        </a>
-                    @else
-
-                        <a wire:click="viewItem({{ $record->id}},{{$record->is_html}})">
-                            <span class="icon"><x-carbon-view/></span>
-                        </a>
-
-                    @endif
 
                     @role(['EngineeringDept'])
 
                         @if ( !in_array($record->status,['Frozen','Released']) )
-
-                            @if ($record->is_html)
-                                <a href="/documents-html/cover-form/{{ $record->id }}">
-                                    <span class="icon"><x-carbon-edit /></span>
-                                </a>
-                            @else
-                                <a href="/documents/form/{{ $record->id }}">
-                                    <span class="icon"><x-carbon-edit /></span>
-                                </a>
-                            @endif
-
+                            <a href="/moms/form/{{ $record->id }}">
+                                <span class="icon"><x-carbon-edit /></span>
+                            </a>
                         @endif
 
                     @endrole

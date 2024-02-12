@@ -429,7 +429,7 @@ class LwDetail extends Component
         try {
 
             $item = Item::create($props);
-            $this->uid = $this->item->id;
+            $this->uid = $item->id;
 
             session()->flash('success',$this->part_type.' Part has been created successfully!');
 

@@ -5,7 +5,7 @@ use function Livewire\Volt\{state};
 state('notesArray');
 
 
-$addNote = fn () => array_push('fn')$this->count++;
+//$addNote = fn () => array_push('fn')$this->count++;
 
 
 ?>

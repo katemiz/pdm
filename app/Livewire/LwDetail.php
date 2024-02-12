@@ -33,7 +33,7 @@ class LwDetail extends Component
 
     public $list_all_url = '/parts/list';
     public $item_edit_url;
-    public $item_view_url = '/products-detail/view';
+    public $item_view_url = '/details/Detail/view';
 
     public $has_material = true;
     public $has_bom = false;
@@ -119,6 +119,11 @@ class LwDetail extends Component
 
     public $release_errors = false;
     public $parts_list = false;
+
+    public $approved_by;
+
+    public $check_reviewed_at;
+    public $app_reviewed_at;
 
 
     public function mount()
@@ -423,13 +428,13 @@ class LwDetail extends Component
 
         try {
 
-            $this->item = Item::create($props);
+            $item = Item::create($props);
             $this->uid = $this->item->id;
 
             session()->flash('success',$this->part_type.' Part has been created successfully!');
 
             // Attach Notes to Product
-            $this->item->pnotes()->attach($this->notes_id_array);
+            $item->pnotes()->attach($this->notes_id_array);
 
             // Flag Notes (Special Notes)
             foreach ($this->fnotes as $fnote) {

@@ -107,7 +107,9 @@ class Logware extends Component
         ]);
 
 
-        event(new Registered($user));
+        //event(new Registered($user));
+
+        // Bu nasıl çalışıyor? Kişi kayıt olduktan sonra bir event başlatılıyor galiba : email göndermek için
 
         Auth::login($user);
 

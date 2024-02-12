@@ -74,6 +74,11 @@ class PDFController extends Controller
             case 'Buyable':
                 $url = url('/').'/buyables/view/'.$item->id;
                 break;
+
+            case 'MakeFrom':
+                $url = url('/').'/MakeFrom/view/'.$item->id;
+                break;
+
         }
 
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'utf-8', false);
@@ -136,6 +141,24 @@ class PDFController extends Controller
 
             $pdf->writeHTML($malzeme_text, true, false, false, false, '');
         }
+
+
+
+        if ($item->part_type == 'MakeFrom' && $item->makefrom_part_id > 0) {
+            $source_part =  Item::find($item->makefrom_part_id);
+
+            $malzeme_text = '
+            <h3 style="font-weight:bold;font-size:12px">Kullanılan Parça / Source Part</h3>
+            <span style="font-weight:normal;font-size:10px;">Bu parça aşağıda adı ve numarası verilen kaynak parça kullanılarak imal edilecektir</span>
+            <h3 style="font-weight:normal;font-size:10px;color:blue">'.$source_part->part_number.'-'.$source_part->version.' '. $source_part->description.'</h3>';
+
+            $pdf->writeHTML($malzeme_text, true, false, false, false, '');
+        }
+
+
+
+
+
 
         if ( $item->pnotes->count() > 0) {
 

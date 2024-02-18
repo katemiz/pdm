@@ -109,7 +109,11 @@
 
                 <div class="column is-7">
                     <p class="title has-text-weight-light is-size-2">M{{$mom_no}} R{{$revision}}</p>
-                    <p class="subtitle has-text-weight-light is-size-6">{{ $subject }}</p>
+                    <p class="subtitle has-text-weight-light is-size-6">
+                        {{ $subject }} -
+                        [{{ $mom_start_date ? date('d M Y',strtotime($mom_start_date)) : ''}}  {{ $mom_end_date ? ' - '.date('d M Y',strtotime($mom_end_date)) : ''}}]
+                    </p>
+
 
                     @if (count($all_revs) > 1)
                     <div class="tags has-addons">
@@ -143,7 +147,7 @@
                 'canDelete' => false,
                 'model' => 'MOM',
                 'modelId' => $uid,
-                'tag' => 'annex',                          // Any tag other than model name
+                'tag' => 'attachment',                          // Any tag other than model name
             ])
         </div>
 

@@ -13,7 +13,7 @@
     </header>
 
     @if ($uid)
-    <p class="title has-text-weight-light is-size-2">{{'MOM-'.$uid }}</p>
+    <p class="title has-text-weight-light is-size-2">{{'MOM-'.$mom_no }}</p>
     @endif
 
 
@@ -39,12 +39,8 @@
                 <div class="field is-narrow">
                     <label class="label">Toplantının Tarihi / Meeting Date</label>
                     <div class="control">
-                        <input class="input" type="label" id="mom_date" placeholder="Tarih ..." readonly>
+                        <input class="input" type="label" id="meeting_dates" placeholder="Tarih ..." readonly>
                     </div>
-
-                    @error('mom_date')
-                        <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                    @enderror
                 </div>
 
             </div>
@@ -127,16 +123,16 @@
     </div>
     @endif --}}
 
-
 </section>
 
 
 @script
 <script>
 
-    new AirDatepicker('#mom_date', {
+    new AirDatepicker('#meeting_dates', {
         range: true,
         multipleDatesSeparator: ' - ',
+        multipleDates: true,
         locale: {
             days: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
             daysShort: ['Pzr', 'Pts', 'Sl', 'Çar', 'Per', 'Cum', 'Cts'],
@@ -145,15 +141,16 @@
             monthsShort: ['Oca', 'Şbt', 'Mrt', 'Nsn', 'Mys', 'Hzr', 'Tmz', 'Ağt', 'Eyl', 'Ekm', 'Ksm', 'Arl'],
             today: 'Bugün',
             clear: 'Temizle',
-            dateFormat: 'dd.MM.yyyy',
+            dateFormat: 'dd-MM-yyyy',
             timeFormat: 'hh:mm aa',
             firstDay: 1
         },
         onSelect: (dp) => {
-
             console.log(dp.formattedDate)
-            Livewire.dispatch('onCalendarClicked',  { mom_date: dp.formattedDate })
-        }
+            Livewire.dispatch('onCalendarClicked',  { meeting_dates: dp.formattedDate })
+        },
+
+        selectedDates: @json($mom_date)
     })
 
 </script>

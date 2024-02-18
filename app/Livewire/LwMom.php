@@ -41,7 +41,7 @@ class LwMom extends Component
     public $sortField = 'created_at';
     public $sortDirection = 'DESC';
 
-    public $mom_date;
+    public $mom_date = [];
     public $mom_start_date;
     public $mom_end_date;
     public $mom_no;
@@ -77,34 +77,16 @@ class LwMom extends Component
     {
         if (request('action')) {
             $this->action = strtoupper(request('action'));
-
-            if ( in_array($this->action,['LIST','FORM','VIEW']) ) {
-                $this->is_html = false;
-            }
-
-            if ( in_array($this->action,['CFORM','CVIEW','PFORM','PVIEW']) ) {
-                $this->is_html = true;
-            }
         }
 
         if (request('id')) {
-
-            if ( in_array($this->action,['LIST','FORM','VIEW','CFORM','CVIEW']) ) {
-                $this->uid = request('id');
-            }
-
-            if ( in_array($this->action,['PFORM','PVIEW']) ) {
-                $this->pid = request('id');
-            }
+            $this->uid = request('id');
+            $this->setProps();
         }
-
-        $this->constants = config('documents');
 
         $this->setCompanyProps();
 
         $this->mom_start_date = Carbon::now()->format('Y-m-d');
-
-
     }
 
 
@@ -112,7 +94,6 @@ class LwMom extends Component
 
     public function render()
     {
-        $this->setProps();
 
         return view('mom.moms',[
             'moms' => $this->getMoms()
@@ -178,6 +159,8 @@ class LwMom extends Component
         $this->dispatch('triggerAttachment',modelId: $this->uid);
 
         $this->action = 'VIEW';
+        $this->setProps();
+
     }
 
 
@@ -201,6 +184,17 @@ class LwMom extends Component
             $this->created_by = User::find($c->user_id)->email;
             $this->updated_by = User::find($c->updated_uid)->email;
 
+            $this->mom_start_date = $c->mom_start_date;
+            $this->mom_end_date = $c->mom_end_date;
+
+            if ($c->mom_start_date) {
+                $this->mom_date[] = $c->mom_start_date;
+            }
+
+            if ($c->mom_end_date) {
+                $this->mom_date[] = $c->mom_end_date;
+            }
+
             // Revisions
             foreach (Mom::where('mom_no',$this->mom_no)->get() as $mom) {
                 $this->all_revs[$mom->revision] = $mom->id;
@@ -212,6 +206,9 @@ class LwMom extends Component
     public function viewItem($uid) {
         $this->action = 'VIEW';
         $this->uid = $uid;
+
+        $this->setProps();
+
     }
 
 
@@ -225,18 +222,18 @@ class LwMom extends Component
 
 
     #[On('onCalendarClicked')]
-    public function getDates($mom_date) {
+    public function getDates($meeting_dates) {
 
         $this->mom_start_date = null;
         $this->mom_end_date = null;
 
-        if ($mom_date) {
+        if ($meeting_dates) {
 
-            $start  = explode('.',$mom_date['0']);
+            $start  = explode('-',$meeting_dates['0']);
             $this->mom_start_date = $start['2'].'-'.$start['1'].'-'.$start['0'];
 
-            if (count($mom_date) > 1) {
-                $end    = explode('.',$mom_date['1']);
+            if (count($meeting_dates) > 1) {
+                $end    = explode('-',$meeting_dates['1']);
                 $this->mom_end_date = $end['2'].'-'.$end['1'].'-'.$end['0'];
             }
 

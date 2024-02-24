@@ -139,7 +139,9 @@ Route::middleware(['auth'])->group(function () {
 
 
     // PDF GENERATION
-    Route::get('/pdf/bom/{id}', [PDFController::class, 'generatePdf']);
+    Route::get('/pdf/bom/{id}', [PDFController::class, 'getType']);
+    Route::get('/pdf/cascadedbom/{id}', [PDFController::class, 'generateCascadedPdf']);
+
 
 
 });

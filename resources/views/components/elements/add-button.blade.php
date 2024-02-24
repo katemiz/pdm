@@ -14,32 +14,32 @@
               <div class="dropdown-content">
 
                 <a href="/products-assy/form" class="dropdown-item">
-                    <span class="icon"><x-carbon-asset /></span>
+                    <span class="icon has-text-info"><x-carbon-asset /></span>
                     <span>Assembled Product</span>
                 </a>
 
                 <a href="/details/Detail/form" class="dropdown-item">
-                    <span class="icon"><x-carbon-qr-code /></span>
+                    <span class="icon has-text-info"><x-carbon-qr-code /></span>
                     <span>Detail (Make) Part</span>
                 </a>
 
                 <a href="/buyables/form" class="dropdown-item">
-                    <span class="icon"><x-carbon-shopping-cart-arrow-down /></span>
+                    <span class="icon has-text-info"><x-carbon-shopping-cart-arrow-down /></span>
                     <span>Buyable Part</span>
                 </a>
 
                 <a href="/details/MakeFrom/form" class="dropdown-item">
-                    <span class="icon"><x-carbon-change-catalog /></span>
+                    <span class="icon has-text-info"><x-carbon-change-catalog /></span>
                     <span>Make-From Part</span>
                 </a>
 
                 <a href="/details/Standard/form" class="dropdown-item">
-                    <span class="icon"><x-carbon-catalog /></span>
+                    <span class="icon has-text-info"><x-carbon-chip /></span>
                     <span>Standard Parts</span>
                 </a>
 
                 <a href="/parts-menu" class="dropdown-item">
-                    <span class="icon"><x-carbon-chemistry /></span>
+                    <span class="icon has-text-info"><x-carbon-chemistry /></span>
                     <span>Chemical Items</span>
                 </a>
 

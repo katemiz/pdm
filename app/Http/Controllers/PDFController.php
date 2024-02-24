@@ -6,12 +6,12 @@ use App\Models\Item;
 use App\Models\Malzeme;
 use App\Models\Fnote;
 
-
-
 use Illuminate\Http\Request;
 
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use PDF; // If you created the alias
+
+use ZipArchive;
 
 class MYPDF extends \TCPDF {
 
@@ -52,9 +52,25 @@ class MYPDF extends \TCPDF {
 class PDFController extends Controller
 {
 
-    public function generatePdf()
+    public $pdf_fname;
+    public $tree_items;
+
+
+
+    public function getType()
     {
-        $item = Item::find(request('id'));
+        // if ( request('cascaded') ) {
+        //     $this->generateCascadedPdf(request('id'));
+        // } else {
+            $this->generatePdf(request('id'),true);
+        // }
+    }
+
+
+
+    public function generatePdf($itemId, $file_return)
+    {
+        $item = Item::find($itemId);
 
         $fnotes = false;
 
@@ -142,8 +158,6 @@ class PDFController extends Controller
             $pdf->writeHTML($malzeme_text, true, false, false, false, '');
         }
 
-
-
         if ($item->part_type == 'MakeFrom' && $item->makefrom_part_id > 0) {
             $source_part =  Item::find($item->makefrom_part_id);
 
@@ -154,11 +168,6 @@ class PDFController extends Controller
 
             $pdf->writeHTML($malzeme_text, true, false, false, false, '');
         }
-
-
-
-
-
 
         if ( $item->pnotes->count() > 0) {
 
@@ -274,8 +283,72 @@ class PDFController extends Controller
 
         $fname = 'BOM_'.$item->part_number.'R'.$item->version;
 
-        $pdf->Output($fname, 'I'); // 'I' means inline, you can change it to 'D' to force download
+        $this->pdf_fname = '/tmp/'.$fname.'.pdf';
+
+        if ($file_return) {
+            $pdf->Output($fname, 'I'); // 'I' means inline, you can change it to 'D' to force download
+        } else {
+
+            //dd($this->pdf_fname);
+            $pdf->Output($this->pdf_fname,'F');
+        }
+
+
     }
+
+
+
+
+
+
+
+    public function generateCascadedPdf($assyId)
+    {
+        $assy = Item::find($assyId);
+
+        $this->getItemTree($assyId);
+
+        $zip = new ZipArchive;
+        $zipFileName = 'BOM_'.$assy->part_number.'R'.$assy->version.'.zip';
+
+        if( $zip->open(public_path($zipFileName),ZipArchive::CREATE) === true ) {
+
+            $this->generatePdf($assyId,false);
+            $zip->addFile($this->pdf_fname,basename($this->pdf_fname));
+
+            foreach( $this->tree_items as $itemId) {
+                $this->generatePdf($itemId,false);
+                $zip->addFile($this->pdf_fname,basename($this->pdf_fname));
+            }
+
+            $zip->close();
+
+            return response()->download(public_path($zipFileName))->deleteFileAfterSend(true);
+        }
+    }
+
+
+
+
+    public function getItemTree($id) {
+
+        $assy = Item::find($id);
+
+        if ($assy->bom) {
+
+            foreach( json_decode($assy->bom) as $item) {
+
+                if($item->part_type != 'Standard') {
+                    $this->tree_items[] = $item->id;
+                }
+
+                if ($item->part_type == 'Assy') {
+                    $this->getItemTree($item->id);
+                }
+            }
+        }
+    }
+
 
 
 }

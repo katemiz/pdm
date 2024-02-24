@@ -92,6 +92,13 @@
                     </a>
                     @endif
 
+                    @if ($part_type == 'Assy')
+                    <a href="/pdf/cascadedbom/{{$uid}}" class="button is-outlined mx-2 ">
+                        <span class="icon is-small"><x-carbon-volume-file-storage /></span>
+                    </a>
+                    @endif
+
+
             </div>
 
             <!-- Right side -->
@@ -157,7 +164,36 @@
 
             <div class="column">
                 <figure class="image is-64x64">
-                    {!! QrCode::size(64)->generate(url('/').$item_view_url.'/'.$uid) !!}
+
+                    @switch($part_type)
+                        @case('Assy')
+                            <x-carbon-asset />
+                            @break
+
+                        @case('Detail')
+                            <x-carbon-qr-code />
+                            @break
+
+                        @case('Buyable')
+                            <x-carbon-shopping-cart-arrow-down />
+                            @break
+
+                        @case('MakeFrom')
+                            <x-carbon-change-catalog />
+                            @break
+
+                        @case('Standard')
+                            <x-carbon-change-catalog />
+                            @break
+
+
+                        @case('Chemical')
+                            <x-carbon-chemistry />
+                            @break
+
+
+                    @endswitch
+
                 </figure>
             </div>
 
@@ -533,7 +569,15 @@
                 </div>
 
                 <div class="column has-text-centered">
-                    <p class="subtitle has-text-weight-light is-size-6"><strong>Status</strong><br>{{$status}}</p>
+
+                    Status
+                    <div class="card-image has-text-centered">
+                        <figure class="image is-64x64 is-inline-block">
+                            {!! QrCode::size(64)->generate(url('/').$item_view_url.'/'.$uid) !!}
+                        </figure>
+                    </div>
+
+                    {{$status}}
                 </div>
 
                 <div class="column has-text-right">

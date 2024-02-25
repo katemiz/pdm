@@ -11,6 +11,38 @@
                 {{-- <figure class="image my-4">
                     <img src="images/masttech_pdm.svg" alt="Company PDM">
                 </figure> --}}
+
+
+                <article class="message">
+                <div class="message-body">
+                    <strong>Data-Driven Success</strong><br><br>
+                        PDM empowers businesses by organizing, tracking, and optimizing product-related data. Success lies in harnessing this data effectively.
+                </div>
+                </article>
+
+                <article class="message">
+                <div class="message-body">
+                    <strong>Data Make Sense</strong><br><br>
+                    PDM bridges the gap between raw information and actionable insights, leading to successful product development.
+                </div>
+                </article>
+
+                <article class="message">
+                    <div class="message-body">
+                        <strong>Order in Your Data World</strong><br><br>
+                        PDM brings structure and clarity, ensuring seamless collaboration across teams.
+                    </div>
+                </article>
+
+
+
+
+
+
+
+
+
+
             </div>
 
             <div class="column">

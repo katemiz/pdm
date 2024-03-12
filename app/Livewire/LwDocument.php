@@ -167,7 +167,9 @@ class LwDocument extends Component
 
 
     public function getDocumentsList()  {
-        return Document::where('is_latest', $this->show_latest)
+        return Document::when($this->show_latest, function ($query) {
+            $query->where('is_latest', true);
+        })
         ->whereAny([
             'title',
             'remarks',
@@ -466,14 +468,14 @@ class LwDocument extends Component
 
         // Send EMails
 
-        $this->sendTestMail();
+        $this->sendMail();
 
 
     }
 
 
 
-    public function sendTestMail() {
+    public function sendMail() {
 
         $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
         $msgdata['subject'] = 'D'.$this->document_no.' R'.$this->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';

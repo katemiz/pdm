@@ -163,6 +163,7 @@
         <div class="columns">
 
             <div class="column">
+
                 <figure class="image is-64x64">
 
                     @switch($part_type)

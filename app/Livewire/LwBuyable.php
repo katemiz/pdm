@@ -95,6 +95,7 @@ class LwBuyable extends Component
 
     public function mount()
     {
+
         if (request('action')) {
             $this->action = strtoupper(request('action'));
         }
@@ -110,6 +111,7 @@ class LwBuyable extends Component
 
 
     public function render() {
+
         return view('products.buyables.buyables',[
             'buyables' => $this->getBuyables(),
             'ecns' => CNotice::where('status','wip')->get()
@@ -190,6 +192,8 @@ class LwBuyable extends Component
 
     public function storeUpdateItem () {
 
+        $this->part_type = 'Buyable';
+
         $this->validate();
 
         $props['updated_uid'] = Auth::id();
@@ -206,7 +210,6 @@ class LwBuyable extends Component
         $props['material_text'] = $this->material;
         $props['remarks'] = $this->remarks;
         $props['finish'] = $this->finish;
-
 
         if ( $this->uid ) {
             // update
@@ -233,15 +236,20 @@ class LwBuyable extends Component
 
     public function getProps () {
 
+
+
         if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
 
             $buyable = Item::find($this->uid);
+
+            //dd($buyable);
+
 
             $this->part_number = $buyable->part_number;
             $this->part_number_mt = $buyable->part_number_mt;
             $this->part_number_wb = $buyable->part_number_wb;
             $this->c_notice_id = $buyable->c_notice_id;
-            $this->part_type = $buyable->product_type;
+            $this->part_type = $buyable->part_type;
             $this->vendor = $buyable->vendor;
             $this->vendor_part_no = $buyable->vendor_part_no;
             $this->url = $buyable->url;
@@ -259,6 +267,9 @@ class LwBuyable extends Component
             $this->updated_by = User::find($buyable->updated_uid);
             $this->updated_at = $buyable->updated_at;
         }
+
+        //dd($this->part_type);
+
 
 
         // $users = DB::table('users')

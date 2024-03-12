@@ -33,6 +33,7 @@ class LwItem extends Component
     public $ecns;
     public $constants;
 
+
     public function mount()
     {
         $this->setECNs();

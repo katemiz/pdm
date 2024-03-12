@@ -88,6 +88,10 @@ class LwBuyable extends Component
     public $release_errors = false;
     public $parts_list = false;
 
+    public $whereUsed = [];
+    public $manual_doc_number_exists;
+
+
 
     public function mount()
     {
@@ -237,7 +241,7 @@ class LwBuyable extends Component
             $this->part_number_mt = $buyable->part_number_mt;
             $this->part_number_wb = $buyable->part_number_wb;
             $this->c_notice_id = $buyable->c_notice_id;
-            $this->product_type = $buyable->product_type;
+            $this->part_type = $buyable->product_type;
             $this->vendor = $buyable->vendor;
             $this->vendor_part_no = $buyable->vendor_part_no;
             $this->url = $buyable->url;
@@ -255,6 +259,17 @@ class LwBuyable extends Component
             $this->updated_by = User::find($buyable->updated_uid);
             $this->updated_at = $buyable->updated_at;
         }
+
+
+        // $users = DB::table('users')
+        //      ->select(DB::raw('count(*) as user_count, status'))
+        //      ->where('status', '<>', 1)
+        //      ->groupBy('status')
+        //      ->get();
+
+        // select id,description from items where JSON_CONTAINS(bom,'{"id":284}');
+
+        // $this->whereUsed = Item::where(JSON_SEARCH('bom',['id'=>$this->uid]))->toArray();
 
 
         // Revisions

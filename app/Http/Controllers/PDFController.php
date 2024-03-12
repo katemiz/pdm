@@ -9,7 +9,7 @@ use App\Models\Fnote;
 use Illuminate\Http\Request;
 
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
-use PDF; // If you created the alias
+//use PDF; // If you created the alias
 
 use ZipArchive;
 

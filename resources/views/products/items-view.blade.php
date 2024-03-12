@@ -559,6 +559,20 @@
         @endif
 
 
+
+        <div class="column">
+            <label class="label">Where Used</label>
+            <div class="notification">
+                {!! $remarks !!}
+            </div>
+        </div>
+
+
+
+
+
+
+
         {{-- DATE, USER INFO --}}
         <div class="column">
             <div class="columns is-size-7 has-text-grey mt-6">

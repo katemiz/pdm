@@ -144,44 +144,35 @@ class LwDocument extends Component
         $this->company =  Company::find($this->company_id);
     }
 
-
-
-    // public function checkUserRoles() {
-
-    //     $this->logged_user = Auth::user();
-    //     $this->company_id = $this->logged_user->company_id;
-
-    //     if ($this->logged_user->hasRole('admin')) {
-    //         $this->is_user_admin = true;
-    //     }
-
-    //     if ($this->logged_user->hasRole('company_admin')) {
-    //         $this->is_user_company_admin = true;
-    //     }
-    // }
-
-
     public function checkSessionVariables() {
 
-        if (session('current_project_id')) {
-            $this->project_id = session('current_project_id');
-            $this->company_id = Project::find($this->project_id)->company_id;
-        }
+        return true;
 
-        if (session('current_eproduct_id')) {
-            $this->endproduct_id = session('current_eproduct_id');
-        }
+        // if (session('current_project_id')) {
+        //     $this->project_id = session('current_project_id');
+        //     $this->company_id = Project::find($this->project_id)->company_id;
+        // }
+
+        // if (session('current_eproduct_id')) {
+        //     $this->endproduct_id = session('current_eproduct_id');
+        // }
     }
 
 
-    public function getDocumentsList()  {
 
-        return  Document::when($this->show_latest, function ($query) {
-            $query->where('is_latest', true);
-        })
-        ->where('title', 'LIKE', "%".$this->query."%")
-        ->orWhere('remarks','LIKE',"%".$this->query."%")
-        ->orWhere('document_no','LIKE',"%".$this->query."%")
+
+
+
+
+
+
+    public function getDocumentsList()  {
+        return Document::where('is_latest', $this->show_latest)
+        ->whereAny([
+            'title',
+            'remarks',
+            'document_no',
+        ], 'LIKE', "%".$this->query."%")
         ->orderBy($this->sortField,$this->sortDirection)
         ->paginate(env('RESULTS_PER_PAGE'));
     }
@@ -213,27 +204,6 @@ class LwDocument extends Component
         }
     }
 
-
-    public function getProjectsList()  {
-
-        if ($this->is_user_admin && $this->company_id) {
-            if (session('current_project_id')) {
-                $this->project_id = session('current_project_id');
-                $this->projects = Project::find($this->project_id)->get();
-
-            } else {
-                $this->projects = Project::where('company_id',$this->company_id)->get();
-            }
-        } else {
-            $this->projects = Project::where('company_id',$this->logged_user->company_id)->get();
-        }
-
-        if (count($this->projects) == 1) {
-            $this->project_id = $this->projects['0']->id;
-        }
-
-        $this->getEndProductsList();
-    }
 
 
 
@@ -279,7 +249,7 @@ class LwDocument extends Component
     #[On('addContent')]
     public function addContentPage() {
 
-        $this->paction = 'PFORM';
+        //$this->paction = 'PFORM';
 
         dd($this->uid);
     }
@@ -306,9 +276,9 @@ class LwDocument extends Component
             $this->created_by = User::find($c->user_id)->email;
             $this->updated_by = User::find($c->updated_uid)->email;
 
-            if ($c->is_html) {
-                $this->fileOrHtml = 'HTML';
-            }
+            // if ($c->is_html) {
+            //     $this->fileOrHtml = 'HTML';
+            // }
 
             // Revisions
             foreach (Document::where('document_no',$this->document_no)->get() as $doc) {
@@ -318,15 +288,15 @@ class LwDocument extends Component
 
         if ($this->pid && in_array($this->action,['PVIEW','PFORM']) ) {
 
-            $p = Page::find($this->pid);
+            // $p = Page::find($this->pid);
 
-            $this->uid = $p->document_id;
-            $this->ptitle = $p->title;
-            $this->pcontent = $p->content;
-            $this->pcreated_at = $p->created_at;
-            $this->pupdated_at = $p->updated_at;
-            $this->pcreated_by = User::find($p->user_id);
-            $this->pupdated_by = User::find($p->updated_uid);
+            // $this->uid = $p->document_id;
+            // $this->ptitle = $p->title;
+            // $this->pcontent = $p->content;
+            // $this->pcreated_at = $p->created_at;
+            // $this->pupdated_at = $p->updated_at;
+            // $this->pcreated_by = User::find($p->user_id);
+            // $this->pupdated_by = User::find($p->updated_uid);
 
             $c = Document::find($this->uid);
 
@@ -341,9 +311,9 @@ class LwDocument extends Component
             $this->uid = $uid;
         }
 
-        if ($type === 'verification') {
-            $this->vid = $uid;
-        }
+        // if ($type === 'verification') {
+        //     $this->vid = $uid;
+        // }
 
         $this->dispatch('ConfirmModal', type:$type);
     }

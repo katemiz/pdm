@@ -33,6 +33,9 @@ class LwMom extends Component
 
     public $show_my_moms;
 
+    public $companies;
+    public $company;
+
     public $limit_by_company = true;
     public $limit_by_project = false;
     public $limit_by_user = false;

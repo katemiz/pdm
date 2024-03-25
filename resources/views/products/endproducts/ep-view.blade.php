@@ -129,7 +129,7 @@
         <div class="column">
 
             <table class="table is-fullwidth">
-                <thead>
+                <tbody>
 
                     @if ($product_type == 'MST')
 
@@ -226,11 +226,21 @@
                         <td colspan="4" class="has-text-right">{!! $finish !!}</td>
                     </tr>
 
-                </thead>
+                    @if (strlen($description) > 0)
+                    <tr>
+                        <th>Description and Other Parameters</th>
+                        <td colspan="4" class="has-text-right">{!! $description !!}</td>
+                    </tr>
+                    @endif
+
+
+                </tbody>
 
             </table>
 
         </div>
+
+
 
         <div class="columns">
 

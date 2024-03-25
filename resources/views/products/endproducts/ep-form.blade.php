@@ -134,6 +134,7 @@
 
         <livewire:ck-editor
             wire:model="description"
+            cktype="STANDARD"
             label='Sellable Product Description'
             placeholder='General description of Sellable product'
             :content="$description"/>

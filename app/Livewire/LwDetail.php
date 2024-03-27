@@ -125,6 +125,8 @@ class LwDetail extends Component
     public $check_reviewed_at;
     public $app_reviewed_at;
 
+    public $parents = [];
+
 
     public function mount()
     {
@@ -349,7 +351,16 @@ class LwDetail extends Component
             $this->all_revs[$i->version] = $i->id;
         }
 
+        // Get Parents
+        $parents = Item::whereJsonContains('bom',['id' => (int) $this->uid])->get()->toArray();
+        //$parents = Item::whereJsonContains('bom->id',$this->uid)->get()->toArray();
 
+
+        //dd($parents);
+
+        if ($parents) {
+            $this->parents[] = $parents;
+        }
     }
 
 
@@ -537,6 +548,7 @@ class LwDetail extends Component
             $this->action = 'VIEW';
 
             $this->getProps();
+
 
 
         } catch (\Exception $ex) {

@@ -8,8 +8,7 @@ use Livewire\Attributes\Validate;
 use Livewire\WithPagination;
 
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log;
+
 
 use App\Livewire\LwTree;
 
@@ -63,6 +62,8 @@ class LwAssy extends Component
     #[Validate('required|numeric', message: 'Please select ECN')]
     public $c_notice_id;
 
+    public $item;
+
     public $treeData;
     public $part_number;
     public $remarks;
@@ -93,6 +94,9 @@ class LwAssy extends Component
 
     public $release_errors = false;
     public $parts_list = false;
+
+    public $parents = [];
+
 
 
     public function mount()
@@ -143,7 +147,7 @@ class LwAssy extends Component
     public function setCompanyProps()
     {
         $this->company_id =  Auth::user()->company_id;
-        $this->company =  Company::find($this->company_id);
+        //$this->company =  Company::find($this->company_id);
     }
 
 
@@ -197,10 +201,10 @@ class LwAssy extends Component
 
         $item = Item::find($this->uid);
 
-        if ($item->status == 'WIP') {
-            $this->isItemEditable = true;
-            $this->isItemDeleteable = true;
-        }
+        // if ($item->status == 'WIP') {
+        //     $this->isItemEditable = true;
+        //     $this->isItemDeleteable = true;
+        // }
 
         $this->part_number = $item->part_number;
         $this->version = $item->version;
@@ -221,11 +225,11 @@ class LwAssy extends Component
         $this->created_at = $item->created_at;
         $this->updated_by = User::find($item->updated_uid);
         $this->updated_at = $item->updated_at;
-        $this->checked_by = User::find($item->checker_id);
-        $this->approved_by = User::find($item->approver_id);
+        // $this->checked_by = User::find($item->checker_id);
+        // $this->approved_by = User::find($item->approver_id);
 
-        $this->check_reviewed_at = $item->check_reviewed_at;
-        $this->app_reviewed_at = $item->app_reviewed_at;
+        // $this->check_reviewed_at = $item->check_reviewed_at;
+        // $this->app_reviewed_at = $item->app_reviewed_at;
 
         $this->notes_id_array = [];
         $this->notes = $item->pnotes;
@@ -238,6 +242,18 @@ class LwAssy extends Component
         // Revisions
         foreach (Item::where('part_number',$this->part_number)->get() as $i) {
             $this->all_revs[$i->version] = $i->id;
+        }
+
+
+        // Get Parents
+        $parents = Item::whereJsonContains('bom',[['id' => $this->uid]])->get()->toArray();
+
+        // dd(gettype($parents));
+
+        // dd($parents);
+
+        if ($parents) {
+            $this->parents[] = $parents;
         }
     }
 

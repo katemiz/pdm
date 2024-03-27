@@ -562,9 +562,32 @@
 
 
         <div class="column">
-            <label class="label">Where Used</label>
+            <label class="label">Where Used / Parent Assemblies</label>
+
+            {{-- {{ print_r($parents) }} --}}
+
             <div class="notification">
-                {!! $remarks !!}
+
+                @if (count($parents) > 0)
+
+                {{ count($parents) }}
+
+                {{ print_r($parents) }}
+
+                    @foreach ($parents as $key => $parent)
+
+                    {{-- {{ $parent->id }} {{ $parent->description }} --}}
+                    {{ $parent }}
+
+
+                    @endforeach
+
+                @else
+
+                No parent assembly exists.
+
+                @endif
+
             </div>
         </div>
 

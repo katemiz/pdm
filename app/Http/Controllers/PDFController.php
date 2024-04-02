@@ -54,6 +54,7 @@ class PDFController extends Controller
 
     public $pdf_fname;
     public $tree_items;
+    public $parents = [];
 
 
 
@@ -96,6 +97,15 @@ class PDFController extends Controller
                 break;
 
         }
+
+        // Get Parents
+        $parents = Item::whereJsonContains('bom',['id' => (int) $itemId])->get();
+        if ($parents) {
+            $this->parents = $parents;
+        }
+
+
+
 
         $pdf = new MYPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'utf-8', false);
 
@@ -279,6 +289,24 @@ class PDFController extends Controller
 
                 $pdf->writeHTML($table, true, false, false, false, '');
             };
+        }
+
+
+        // Next Higher Assembly
+        if ( $this->parents->count() > 0) {
+
+            $nexthigher = '
+            <br>
+            <h3 style="font-weight:bold;font-size:12px;">Üst Montaj Bileşenleri / Where Used</h3>
+            <ul>';
+            foreach ($this->parents as $parent) {
+                $nexthigher .= '<li style="font-weight:normal;font-size:10px">'. $parent->part_number.'-'. $parent->version.' ' .$parent->description .'</li>';
+            }
+
+            $nexthigher .= '
+            </ul>';
+
+            $pdf->writeHTML($nexthigher, true, false, false, false, '');
         }
 
         $fname = 'BOM_'.$item->part_number.'R'.$item->version;

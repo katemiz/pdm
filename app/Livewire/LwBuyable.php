@@ -91,6 +91,8 @@ class LwBuyable extends Component
     public $whereUsed = [];
     public $manual_doc_number_exists;
 
+    public $parents = [];
+
 
 
     public function mount()
@@ -236,14 +238,9 @@ class LwBuyable extends Component
 
     public function getProps () {
 
-
-
         if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
 
             $buyable = Item::find($this->uid);
-
-            //dd($buyable);
-
 
             $this->part_number = $buyable->part_number;
             $this->part_number_mt = $buyable->part_number_mt;
@@ -268,24 +265,15 @@ class LwBuyable extends Component
             $this->updated_at = $buyable->updated_at;
         }
 
-        //dd($this->part_type);
-
-
-
-        // $users = DB::table('users')
-        //      ->select(DB::raw('count(*) as user_count, status'))
-        //      ->where('status', '<>', 1)
-        //      ->groupBy('status')
-        //      ->get();
-
-        // select id,description from items where JSON_CONTAINS(bom,'{"id":284}');
-
-        // $this->whereUsed = Item::where(JSON_SEARCH('bom',['id'=>$this->uid]))->toArray();
-
-
         // Revisions
         foreach (Item::where('part_number',$this->part_number)->get() as $i) {
             $this->all_revs[$i->version] = $i->id;
+        }
+
+        // Get Parents
+        $parents = Item::whereJsonContains('bom',['id' => (int) $this->uid])->get();
+        if ($parents) {
+            $this->parents = $parents;
         }
 
     }

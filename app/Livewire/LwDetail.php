@@ -352,14 +352,9 @@ class LwDetail extends Component
         }
 
         // Get Parents
-        $parents = Item::whereJsonContains('bom',['id' => (int) $this->uid])->get()->toArray();
-        //$parents = Item::whereJsonContains('bom->id',$this->uid)->get()->toArray();
-
-
-        //dd($parents);
-
+        $parents = Item::whereJsonContains('bom',['id' => (int) $this->uid])->get();
         if ($parents) {
-            $this->parents[] = $parents;
+            $this->parents = $parents;
         }
     }
 

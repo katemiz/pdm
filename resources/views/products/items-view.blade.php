@@ -559,36 +559,56 @@
         </div>
         @endif
 
-
-
         <div class="column">
             <label class="label">Where Used / Parent Assemblies</label>
 
-            {{-- {{ print_r($parents) }} --}}
-
-            <div class="notification">
+            {{-- <div class="notification"> --}}
 
                 @if (count($parents) > 0)
+                    <table class="table is-fullwidth">
+                    <tbody>
+                        @foreach ($parents as $key => $parent)
+                        <tr>
+                            <th class="is-narrow">
+                                
+                                @switch($parent->part_type)
 
-                {{ count($parents) }}
+                                    @case('Detail')
+                                        <a href="/details/Detail/view/{{$parent->id}}" target="_blank">
+                                        @break
 
-                {{ print_r($parents) }}
+                                    @case('Assy')
+                                        <a href="/products-assy/view/{{$parent->id}}" target="_blank">
+                                        @break
 
-                    @foreach ($parents as $key => $parent)
+                                    @case('Buyable')
+                                        <a href="/buyables/view/{{$parent->id}}" target="_blank">
+                                        @break
 
-                    {{-- {{ $parent->id }} {{ $parent->description }} --}}
-                    {{ $parent }}
+                                    @case('MakeFrom')
+                                        <a href="/details/MakeFrom/view/{{$parent->id}}" target="_blank">
+                                        @break
 
+                                    @case('Standard')
+                                        <a href="/details/Standard/view/{{$parent->id}}" target="_blank">
+                                        @break
 
-                    @endforeach
-
+                                @endswitch
+                                {{ $parent->part_number }}-{{ $parent->version }}
+                                </a>
+                            </th>
+                            <td>{{ $parent->description }}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                    </table>
                 @else
 
                 No parent assembly exists.
 
                 @endif
 
-            </div>
+            {{-- </div> --}}
         </div>
 
 

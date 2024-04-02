@@ -64,7 +64,7 @@ class LwAssy extends Component
 
     public $item;
 
-    public $treeData;
+    public $treeData = [];
     public $part_number;
     public $remarks;
 
@@ -217,9 +217,16 @@ class LwAssy extends Component
         $this->status = $item->status;
         $this->is_latest = $item->is_latest;
 
-        $this->treeData = json_decode($item->bom);
+        $children = json_decode($item->bom);
 
-        // dd($this->treeData);
+        foreach ($children as $i) {
+            $child = Item::find($i->id);
+            $i->part_type = $child->part_type;
+            $i->description = $child->description;
+
+            array_push($this->treeData, $i);
+        }
+
 
         $this->created_by = User::find($item->user_id);
         $this->created_at = $item->created_at;

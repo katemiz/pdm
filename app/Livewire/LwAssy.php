@@ -244,16 +244,10 @@ class LwAssy extends Component
             $this->all_revs[$i->version] = $i->id;
         }
 
-
         // Get Parents
-        $parents = Item::whereJsonContains('bom',[['id' => $this->uid]])->get()->toArray();
-
-        // dd(gettype($parents));
-
-        // dd($parents);
-
+        $parents = Item::whereJsonContains('bom',['id' => (int) $this->uid])->get();
         if ($parents) {
-            $this->parents[] = $parents;
+            $this->parents = $parents;
         }
     }
 

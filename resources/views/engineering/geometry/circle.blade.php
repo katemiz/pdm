@@ -31,8 +31,8 @@
             </figure>
 
             <footer class="card-footer">
-                <a wire:click="$toggle('is_hollow')" class="card-footer-item">Solid Section</a>
-                <a wire:click="$toggle('is_hollow')" class="card-footer-item">Hollow Section</a>
+                <a wire:click="$toggle('is_hollow')" class="card-footer-item">{{ $is_hollow ? 'Solid Section' : 'Hollow Section'}}</a>
+                {{-- <a wire:click="$toggle('is_hollow')" class="card-footer-item">Hollow Section</a> --}}
             </footer>
         </div>
         <div class="column">
@@ -42,7 +42,7 @@
                     <div class="field">
                         <label class="label">Outside Diameter, OD</label>
                         <div class="control">
-                        <input class="input" type="number" placeholder="Outside diameter" wire:model.live="odia">
+                        <input class="input" type="number" placeholder="Outside diameter" wire:model.live="odia" min="0">
                         </div>
                     </div>
 
@@ -50,37 +50,36 @@
                     <div class="field">
                         <label class="label">Inside Diameter, ID</label>
                         <div class="control">
-                        <input class="input" type="number" placeholder="Inside diameter" wire:model.live="idia">
+                        <input class="input" type="number" placeholder="Inside diameter" wire:model.live="idia" min="0">
                         </div>
                     </div>
                     @endif
                 </div>
             </div>
 
+            <table class="table mt-6 is-fullwidth has-background-grey-lighter">
+                <caption class="has-text-info mb-4">Results</caption>
+
+                <tr>
+                    <th>Thickness</th>
+                    <td class="has-text-right {{ $area == 'undefined' ? 'has-text-danger' :''}}">{{ $area == 'undefined' ? 'undefined':($odia-$idia)/2 }}</td>
+                    <td>mm</td>
+                </tr>
 
 
+                <tr>
+                    <th>Area</th>
+                    <td class="has-text-right {{ $area == 'undefined' ? 'has-text-danger' :''}}">{{ $area }}</td>
+                    <td>mm<sup>2</sup></td>
+                </tr>
 
+                <tr>
+                    <th>Inertia</th>
+                    <td class="has-text-right {{ $inertia_xx == 'undefined' ? 'has-text-danger' :''}}">{{ $inertia_xx }}</td>
+                    <td>mm<sup>4</sup></td>
+                </tr>
 
-                    <table class="table mt-6 is-fullwidth has-background-grey-lighter">
-                        <caption class="has-text-info mb-4">Results</caption>
-
-
-                        <tr>
-                            <th>Area</th>
-                            <td class="has-text-right">{{ $area }}</td>
-                            <td>mm<sup>2</sup></td>
-                        </tr>
-        
-                        <tr>
-                            <th>Inertia</th>
-                            <td class="has-text-right">{{ $inertia_xx }}</td>
-                            <td>mm<sup>4</sup></td>
-                        </tr>
-        
-                    </table>
-
-
-
+            </table>
 
         </div>
 

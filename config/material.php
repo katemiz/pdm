@@ -140,6 +140,6 @@ return [
 
         "100" => "Sheet/Plate",
         "200" => "Rod",
-        "300" => "Tube",
+        "300" => "Tube/Profile",
     ]
 ];

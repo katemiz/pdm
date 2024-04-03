@@ -13,12 +13,6 @@
         <h2 class="subtitle has-text-weight-light">Area and Area Inertia Calculations for Rectangular Sections</h2>
     </header>
 
-
-
-
-
-
-
     <div class="columns">
 
         <div class="column is-4">
@@ -31,10 +25,11 @@
             </figure>
 
             <footer class="card-footer">
-                <a wire:click="$toggle('is_hollow')" class="card-footer-item">Solid Section</a>
-                <a wire:click="$toggle('is_hollow')" class="card-footer-item">Hollow Section</a>
+                <a wire:click="$toggle('is_hollow')" class="card-footer-item">{{ $is_hollow ? 'Solid Section' : 'Hollow Section'}}</a>
+                {{-- <a wire:click="$toggle('is_hollow')" class="card-footer-item">Hollow Section</a> --}}
             </footer>
         </div>
+        
         <div class="column">
 
             <div class="field ">
@@ -56,7 +51,7 @@
                     <div class="field">
                         <label class="label">{{ $is_hollow ? 'Outer' : '' }} Radius, R<sub>out</sub></label>
                         <div class="control">
-                        <input class="input" type="number" placeholder="Outside diameter" wire:model.live="rout">
+                        <input class="input" type="number" placeholder="Outside diameter" wire:model.live="rout" min="0">
                         </div>
                     </div>
                 </div>
@@ -71,21 +66,17 @@
                         <div class="field">
                             <label class="label">Thickness, thk</label>
                             <div class="control">
-                            <input class="input" type="number" placeholder="Thickness" wire:model.live="thickness">
+                            <input class="input" type="number" placeholder="Thickness" wire:model.live="thickness" min="0">
                             </div>
                         </div>
 
                     @endif
 
-
-
-
-
                     @if ($is_hollow)
                         <div class="field">
                             <label class="label">Inner Radius, R<sub>inn</sub></label>
                             <div class="control">
-                            <input class="input" type="number" placeholder="Height of Section" wire:model.live="rinn">
+                            <input class="input" type="number" placeholder="Height of Section" wire:model.live="rinn" min="0">
                             </div>
                         </div>
                     @endif
@@ -114,20 +105,8 @@
 
             </table>
 
-
-
         </div>
 
     </div>
-
-
-
-
-
-
-
-
-
-
 
 </section>

@@ -3,30 +3,15 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Rule;
 
-// use Illuminate\Support\Facades\Auth;
-// use Illuminate\Support\Facades\Storage;
-
-// use App\Models\Company;
-// use App\Models\Endproduct;
-// use App\Models\Moc;
-// use App\Models\Phase;
-// use App\Models\Project;
-// use App\Models\User;
-
-
-
 class Engineering extends Component
 {
-    use WithPagination;
 
     public $action;
     public $is_hollow = true;
-
 
     public $odia = 100;
     public $idia = 90;
@@ -37,16 +22,9 @@ class Engineering extends Component
     public $rout = 10;
     public $rinn = 4;
 
-
-
     public $area;
     public $inertia_xx;
     public $inertia_yy;
-
-
-
-
-
 
 
     public function mount()
@@ -59,7 +37,6 @@ class Engineering extends Component
 
     public function render()
     {
-
         switch ($this->action) {
             case 'geometry-circle':
                 $this->geometryCircular();
@@ -78,59 +55,53 @@ class Engineering extends Component
     }
 
 
-
-
-
     public function selectAction($option)
     {
         $this->action = $option;
-
-
     }
 
 
     public function geometryCircular()
     {
-
-
-
         if ($this->is_hollow) {
 
-            if ($this->odia == 0 || $this->odia === null || $this->odia <= $this->idia ) {
+            if ($this->odia < 0) {
+                $this->odia = 0;
+            }
+
+            if ($this->idia < 0) {
+                $this->idia = 0;
+            }
+
+            if ($this->odia == 0 || $this->odia === null || $this->odia <= $this->idia) {
                 $this->area     = 'undefined';
                 $this->inertia_xx  = 'undefined';
-
                 return true;
             }
 
-
             $this->area     = round(pi()*(pow($this->odia/2,2) - pow($this->idia/2,2)),2);
             $this->inertia_xx  = round(pi()*(pow($this->odia,4) - pow($this->idia,4)) / 64,2);
+
         } else {
 
             if ($this->odia == 0 ) {
                 $this->area     = 'undefined';
                 $this->inertia_xx  = 'undefined';
-
                 return true;
             }
 
             $this->area     = round(pi()*pow($this->odia/2,2),2);
-
             $this->inertia_xx  = round(pi()*pow($this->odia,4) / 64,2);
-
         }
-
-
 
         // $this->js("console.log('$this->area')");
         // $this->js("console.log('$this->inertia')");
-
     }
 
 
-    public function geometryRectangleOld()
+    public function geometryRectangle()
     {
+
         if ($this->width == 0 || $this->height == 0 ) {
             $this->area     = 'undefined';
             $this->inertia_xx  = 'undefined';
@@ -138,18 +109,33 @@ class Engineering extends Component
             return true;
         }
 
-        if ($this->is_hollow) {
+        if ($this->thickness == 0) {
+            $this->rinn = 0;
+        }
+
+
+        if ($this->rout > $this->width/2 || $this->rout > $this->height/2) {
+            $this->rout = $this->width >= $this->height ? $this->height/2 : $this->width/2;
+        }
+
+        $area_outer = $this->width*$this->height + (pi() -4)*pow($this->rout,2);
+
+        $outer_inertia_xx = $this->IRectangleWRadius($this->width,$this->height,$this->rout);
+        $outer_inertia_yy = $this->IRectangleWRadius($this->height,$this->width,$this->rout);
+
+        if ($this->is_hollow && $this->thickness > 0) {
 
             // AREA
-            $this->area = round($this->areaRectangleWithRadius($this->width,$this->height,$this->rout) - $this->areaRectangleWithRadius($this->width-2*$this->thickness,$this->height-2*$this->thickness,$this->rinn),2);
+            $w = $this->width -2*$this->thickness;
+            $h = $this->height-2*$this->thickness;
 
-            $outer_inertia_xx = $this->inertiaRectangleWithRadius($this->width,$this->height,$this->rout);
+            $area_inner = $w*$h + (pi() -4)*pow($this->rinn,2);
 
-            // dd($outer_inertia_xx);
-            $inner_inertia_xx = $this->inertiaRectangleWithRadius($this->width-2*$this->thickness,$this->height-2*$this->thickness,$this->rinn);
+            $this->area =  round($area_outer- $area_inner,2);
 
-            $outer_inertia_yy = $this->inertiaRectangleWithRadius($this->height,$this->width,$this->rout);
-            $inner_inertia_yy = $this->inertiaRectangleWithRadius($this->height-2*$this->thickness,$this->width-2*$this->thickness,$this->rinn);
+            // INERTIA
+            $inner_inertia_xx = $this->IRectangleWRadius($w,$h,$this->rinn);
+            $inner_inertia_yy = $this->IRectangleWRadius($h,$w,$this->rinn);
 
             $this->inertia_xx = round($outer_inertia_xx - $inner_inertia_xx,2);
             $this->inertia_yy = round($outer_inertia_yy - $inner_inertia_yy,2);
@@ -161,28 +147,19 @@ class Engineering extends Component
         } else {
 
             // AREA
-            $this->area = round($this->areaRectangleWithRadius($this->width,$this->height,$this->rout),2);
+            $this->area = round($area_outer,2);
 
-            $this->inertia_xx = $this->inertiaRectangleWithRadius($this->width,$this->height,$this->rout);
-            $this->inertia_yy = $this->inertiaRectangleWithRadius($this->height,$this->width,$this->rout);
+            $this->inertia_xx = round($outer_inertia_xx,2);
+            $this->inertia_yy = round($outer_inertia_yy,2);
 
             $this->js("console.log('Ixx$this->inertia_xx')");
             $this->js("console.log('Iyy$this->inertia_yy')");
-
-
         }
-
-
-
-
-
     }
 
 
     function areaRectangleWithRadius ($w,$h,$r) {
-
         return $w*$h-4*pow($r,2)+pi()*pow($r,2);
-
     }
 
 
@@ -192,15 +169,12 @@ class Engineering extends Component
 
         $inertia = pi()*pow($r,4)/16;
 
-
-
         $area = pi()*pow($r,2)/4;
 
         $inertia_xx = $inertia+$area*pow($d,2);
 
         // dd($inertia_xx);
         $this->js("console.log('kose$inertia_xx')");
-
 
         return $inertia_xx;
     }
@@ -224,9 +198,6 @@ class Engineering extends Component
 
         $this->js("console.log('ab$ab')");
 
-
-
-
         $this->js("console.log('k$inertia_k')");
         $inertia = $inertia_a+$inertia_b+$inertia_k;
 
@@ -234,16 +205,8 @@ class Engineering extends Component
 
         $this->js("console.log('SON$inertia')");
 
-
         return $inertia;
     }
-
-
-
-
-
-
-
 
 
     function IRectangular($a,$b) {
@@ -251,15 +214,18 @@ class Engineering extends Component
         return ($a*pow($b,3)) / 12;
     }
 
+
     function ICircular($r) {
         // pi*r^4/4
         return (pi()*pow($r,4)) / 4;
     }
 
+
     function ICircularQuarter($r) {
         // pi*r^4/16
         return $this->ICircular($r)/4;
     }
+
 
     function IAxis($i,$A,$d) {
         // Ixx = Inertia + Area * d^2
@@ -289,72 +255,4 @@ class Engineering extends Component
 
         return $inertia_rect_1 + $inertia_rect_2 +  $circle_wrt_axis;
     }
-
-
-
-
-
-
-
-    public function geometryRectangle()
-    {
-        if ($this->width == 0 || $this->height == 0 ) {
-            $this->area     = 'undefined';
-            $this->inertia_xx  = 'undefined';
-            $this->inertia_yy  = 'undefined';
-            return true;
-        }
-
-        $area_outer = $this->width*$this->height + (pi() -4)*pow($this->rout,2);
-
-        $outer_inertia_xx = $this->IRectangleWRadius($this->width,$this->height,$this->rout);
-        $outer_inertia_yy = $this->IRectangleWRadius($this->height,$this->width,$this->rout);
-
-
-
-        if ($this->is_hollow) {
-
-            // AREA
-            $w = $this->width -2*$this->thickness;
-            $h = $this->height-2*$this->thickness;
-
-            $area_inner = $w*$h + (pi() -4)*pow($this->rinn,2);
-
-            $this->area =  round($area_outer- $area_inner,2);
-
-            // INERTIA
-            $inner_inertia_xx = $this->IRectangleWRadius($w,$h,$this->rinn);
-            $inner_inertia_yy = $this->IRectangleWRadius($h,$w,$this->rinn);
-
-            $this->inertia_xx = round($outer_inertia_xx - $inner_inertia_xx,2);
-            $this->inertia_yy = round($outer_inertia_yy - $inner_inertia_yy,2);
-
-            $this->js("console.log('DIS$outer_inertia_xx')");
-            $this->js("console.log('IC$inner_inertia_xx')");
-
-
-        } else {
-
-            // AREA
-            $this->area = round($area_outer);
-
-            $this->inertia_xx = round($outer_inertia_xx,2);
-            $this->inertia_yy = round($outer_inertia_yy,2);
-
-            $this->js("console.log('Ixx$this->inertia_xx')");
-            $this->js("console.log('Iyy$this->inertia_yy')");
-
-
-        }
-
-
-
-
-
-    }
-
-
-
-
-
 }

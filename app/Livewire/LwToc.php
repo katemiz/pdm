@@ -23,7 +23,7 @@ class LwToc extends Component
     public function render()
     {
         return view('components.elements.toc-tree', [
-            //'doctree' => $this->getDoctree(),
+            'doctree' => $this->getDoctree(),
         ]);
     }
 

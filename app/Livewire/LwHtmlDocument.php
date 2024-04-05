@@ -23,7 +23,7 @@ class LwHtmlDocument extends Component
     public $uid;
     public $pid;
 
-    public $doctree;
+    //public $doctree;
 
     public $action = 'cover-form'; // cover-form, cover-view, page-form, page-form, page-view
     public $all_revs = [];
@@ -89,15 +89,12 @@ class LwHtmlDocument extends Component
     public $pupdated_at;
 
 
-
-
-
     public function mount()
     {
         if (request('id')) {
             $this->uid = request('id');
 
-            $this->getDoctree();
+            //$this->getDoctree();
 
             // if (request('pid')) {
             //     $this->pid = request('pid');

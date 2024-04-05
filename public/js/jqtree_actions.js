@@ -2,7 +2,7 @@
 $(document).ready(function () {
 
 
-    console.log(typeof doctree)
+    //console.log(typeof doctree)
 
     $('#toc').tree({
         data: doctree,

@@ -10,6 +10,32 @@
 
 
 
+
+
+
+
+
+@script
+
+<script>
+
+
+
+
+let doctree = JSON.parse("{{$doctree}}")
+console.log('KKKKKKKKKKKK')
+
+
+initializeTree('doctree =', doctree)
+
+</script>
+
+@endscript
+
+
+
+
+
 <script>
 
     // let doctree
@@ -19,7 +45,7 @@
 
     function initializeTree(doctree) {
 
-        //console.log("initilizing", JSON.parse(doctree))
+        console.log("initilizing", JSON.parse(doctree))
 
         console.log("initilizing", typeof doctree)
 
@@ -182,13 +208,7 @@
 
 
     window.addEventListener('refreshTree',function(e) {
-
         data = e.detail.data
-
-
-
-
-
     })
 
 
@@ -207,9 +227,6 @@
         }
 
         console.log('Eklenecek node',node)
-
-
-
 
         // if ( $('#toc').tree('getTree') ) {
 
@@ -239,9 +256,7 @@
             console.log('no parent',$('#toc').tree())
 
             $('#toc').tree('appendNode', node)
-
             $('#toc').tree('refresh');
-
         }
 
     })

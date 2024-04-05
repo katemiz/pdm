@@ -3,15 +3,18 @@
     <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
     <script src="{{ asset('/js/jquery-3.7.1.min.js') }}"></script>
-    <script src="{{ asset('/js/tree.jquery.js') }}"></script>
+    {{-- <script src="{{ asset('/js/tree.jquery.js') }}"></script> --}}
 
     <link rel="stylesheet" href="{{ asset('/css/jqtree.css')}}">
 
-    <script>
+    {{-- <script>
         let doctree = JSON.parse(@json(session('toc')))
-    </script>
+    </script> --}}
 
-    <script src="{{ asset('/js/jqtree_actions.js') }}"></script>
+    {{-- <script src="{{ asset('/js/jqtree_actions.js') }}"></script> --}}
+
+
+    {{-- {{ print_r($doctree) }} --}}
 
     <div class="columns">
 
@@ -30,35 +33,35 @@
                 </a>
 
                 @role(['admin','company_admin','engineer'])
-                    <div class="buttons mt-3">
+                <div class="buttons mt-3">
 
-                    @if ($status == 'Frozen')
+                @if ($status == 'Frozen')
 
-                        @if ($is_latest)
-                        <p class="level-item">
-                            <a wire:click='reviseConfirm({{ $uid }})'>
-                                <span class="icon"><x-carbon-version /></span>
-                                <span>Revise</span>
-                            </a>
-                        </p>
-                        @endif
-
-                    @else
-
-                            <a wire:click='editCover({{ $uid }})'>
-                                <span class="icon"><x-carbon-edit /></span>
-                            </a>
-
-                            <a wire:click='freezeConfirm({{ $uid }})'>
-                                <span class="icon"><x-carbon-stamp /></span>
-                            </a>
-
-                            <a wire:click="triggerDelete('document',{{ $uid }})">
-                                <span class="icon has-text-danger"><x-carbon-trash-can /></span>
-                            </a>
+                    @if ($is_latest)
+                    <p class="level-item">
+                        <a wire:click='reviseConfirm({{ $uid }})'>
+                            <span class="icon"><x-carbon-version /></span>
+                            <span>Revise</span>
+                        </a>
+                    </p>
                     @endif
 
-                    </div>
+                @else
+
+                    <a wire:click='editCover({{ $uid }})'>
+                        <span class="icon"><x-carbon-edit /></span>
+                    </a>
+
+                    <a wire:click='freezeConfirm({{ $uid }})'>
+                        <span class="icon"><x-carbon-stamp /></span>
+                    </a>
+
+                    <a wire:click="triggerDelete('document',{{ $uid }})">
+                        <span class="icon has-text-danger"><x-carbon-trash-can /></span>
+                    </a>
+                @endif
+
+                </div>
                 @endrole
 
         </div>
@@ -82,7 +85,7 @@
                 <a wire:click='viewCover()'>Cover Page</a>
 
 
-                {{-- <livewire:lw-toc uid="{{ $uid }}"/> --}}
+                <livewire:lw-toc uid="{{ $uid }}"/>
 
 
                 <div wire:ignore>
@@ -99,7 +102,7 @@
 
         </div>
 
-        <div class="column">
+        {{-- <div class="column">
 
             @switch($action)
                 @case("cover-form")
@@ -121,7 +124,7 @@
                 @default
 
             @endswitch
-        </div>
+        </div> --}}
 
 
 

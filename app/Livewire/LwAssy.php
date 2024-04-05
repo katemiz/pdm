@@ -491,7 +491,9 @@ class LwAssy extends Component
 
 
 
-
+    public function resetFilter() {
+        $this->query = '';
+    }
 
     public function releaseConfirm($uid) {
         $this->uid = $uid;

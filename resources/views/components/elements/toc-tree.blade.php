@@ -20,6 +20,7 @@
 <script>
 
 
+let doctree = '{{$doctree}}'
 
 
 let doctree = JSON.parse("{{$doctree}}")

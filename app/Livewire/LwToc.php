@@ -32,7 +32,7 @@ class LwToc extends Component
     public function getDoctree() {
 
         if ($this->uid) {
-            return Document::find($this->uid)->toc;
+            return json_encode(Document::find($this->uid)->toc);
         } else {
             return false;
         }

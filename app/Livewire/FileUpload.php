@@ -53,6 +53,8 @@ class FileUpload extends Component
             $this->modelId = $modelId;
         }
 
+        dd($this->dosyalar);
+
         foreach ($this->dosyalar as $dosya) {
 
             $props['user_id'] = Auth::id();

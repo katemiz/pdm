@@ -5,8 +5,6 @@
 
     function reviseConfirm() {
 
-
-
         Swal.fire({
             title: sa_title,
             text: sa_text,
@@ -69,7 +67,20 @@
 @endif
 
 
+
+
 <div class="card">
+
+
+
+    <div class="card-image has-background-warning">
+        <model-viewer alt="jsdfkjdsfdjfj" src="/images/assy1.glb" shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
+    </div>
+
+
+
+
+
 
     <div class="card-content">
 
@@ -97,7 +108,6 @@
                         <span class="icon is-small"><x-carbon-volume-file-storage /></span>
                     </a>
                     @endif
-
 
             </div>
 
@@ -191,7 +201,6 @@
                         @case('Chemical')
                             <x-carbon-chemistry />
                             @break
-
 
                     @endswitch
 

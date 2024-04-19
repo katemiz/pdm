@@ -28,7 +28,7 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('part_number_mt')->nullable();
             $table->text('part_number_wb')->nullable();
-            $table->int('standard_family_id')->nullable();
+            $table->integer('standard_family_id')->nullable();
             $table->text('standard_number')->nullable();
             $table->text('std_params')->nullable();
             $table->json('bom')->nullable();

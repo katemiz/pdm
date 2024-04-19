@@ -551,6 +551,31 @@
                 </div>
             </div>
 
+
+
+            <div class="field block">
+                <label class="label">XR Extended Reality Files</label>
+
+                @if ($uid)
+                @livewire('file-list', [
+                    'canDelete' => true,
+                    'model' => 'Product',
+                    'modelId' => $uid,
+                    'tag' => 'XR',                          // Any tag other than model name
+                ])
+                @endif
+
+                <div class="control">
+
+                    @livewire('file-upload', [
+                        'model' => 'Product',
+                        'modelId' => $uid ? $uid : false,
+                        'isMultiple'=> true,                   // can multiple files be selected
+                        'tag' => 'XR',                          // Any tag other than model name
+                        'canEdit' => $canUserEdit])
+                </div>
+            </div>
+
         @endif
 
 

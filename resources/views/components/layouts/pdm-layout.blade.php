@@ -15,6 +15,11 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('/images/favicon.ico') }}">
 
         <script src="{{ asset('/js/js.js') }}"></script>
+        <script type="module" src="{{ asset('/js/model-viewer.min.js') }}"></script>
+        
+        <style>
+            model-viewer {width: 100%;height: 600px;}
+        </style>
 
     </head>
     <body>

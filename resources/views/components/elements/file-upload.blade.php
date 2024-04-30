@@ -9,6 +9,9 @@
     ])
     --}}
 
+
+
+
     <div class="content">
 
         <div class="columns">
@@ -18,7 +21,7 @@
                     <input
                         class="file-input"
                         type="file"
-                        wire:model="dosyalar"
+                        {{-- wire:model="dosyalar" --}}
                         id="fupload"
                         {{ $isMultiple ? 'multiple' : '' }} />
                     <span class="file-cta">
@@ -63,5 +66,18 @@
         @error('dosyalar') <span class="error">{{ $message }}</span> @enderror
 
     </div>
+
+
+    <script>
+
+        document.getElementById("fupload").onchange = ()=>{
+          let files = document.getElementById("fupload").files;
+            console.log(files)
+        }
+        
+        
+        
+        
+            </script>
 
 </div>

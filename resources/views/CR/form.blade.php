@@ -73,7 +73,7 @@
         <div class="field">
             <label class="label">Dosyalar / Files</label>
 
-            @livewire('show-contact', ['contact' => $contact])
+            {{-- @livewire('show-contact', ['contact' => $contact]) --}}
 
 
             @if ($item)

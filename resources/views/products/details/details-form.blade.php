@@ -557,12 +557,12 @@
                 <label class="label">XR Extended Reality Files</label>
 
                 @if ($uid)
-                @livewire('file-list', [
-                    'canDelete' => true,
-                    'model' => 'Product',
-                    'modelId' => $uid,
-                    'tag' => 'XR',                          // Any tag other than model name
-                ])
+                    @livewire('file-list', [
+                        'canDelete' => true,
+                        'model' => 'Product',
+                        'modelId' => $uid,
+                        'tag' => 'XR',                          // Any tag other than model name
+                    ])
                 @endif
 
                 <div class="control">
@@ -571,8 +571,9 @@
                         'model' => 'Product',
                         'modelId' => $uid ? $uid : false,
                         'isMultiple'=> true,                   // can multiple files be selected
-                        'tag' => 'XR',                          // Any tag other than model name
-                        'canEdit' => $canUserEdit])
+                        'tag' => 'XR'                          // Any tag other than model name
+                    ])
+
                 </div>
             </div>
 

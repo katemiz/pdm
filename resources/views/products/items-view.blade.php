@@ -72,10 +72,10 @@
 <div class="card">
 
 
-
+{{-- 
     <div class="card-image has-background-warning">
         <model-viewer alt="jsdfkjdsfdjfj" src="/images/assy1.glb" shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
-    </div>
+    </div> --}}
 
 
 

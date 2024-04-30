@@ -217,14 +217,19 @@ class LwAssy extends Component
         $this->status = $item->status;
         $this->is_latest = $item->is_latest;
 
-        $children = json_decode($item->bom);
 
-        foreach ($children as $i) {
-            $child = Item::find($i->id);
-            $i->part_type = $child->part_type;
-            $i->description = $child->description;
+        if ($item->bom) {
 
-            array_push($this->treeData, $i);
+            $children = json_decode($item->bom);
+
+
+            foreach ($children as $i) {
+                $child = Item::find($i->id);
+                $i->part_type = $child->part_type;
+                $i->description = $child->description;
+
+                array_push($this->treeData, $i);
+            }
         }
 
 

@@ -21,7 +21,7 @@
                     <input
                         class="file-input"
                         type="file"
-                        {{-- wire:model="dosyalar" --}}
+                        wire:model="dosyalar"
                         id="fupload"
                         {{ $isMultiple ? 'multiple' : '' }} />
                     <span class="file-cta">

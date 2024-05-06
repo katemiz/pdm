@@ -4,9 +4,7 @@
 </header>
 
 @if (session()->has('message'))
-    <div class="notification">
-        {{ session('message') }}
-    </div>
+    <div class="notification">{{ session('message') }}</div>
 @endif
 
 <div class="card">
@@ -33,7 +31,6 @@
                 </p>
                 @endrole
 
-
             </div>
 
             <!-- Right side -->
@@ -56,7 +53,7 @@
 
                     <p class="level-item">
                         <a href='/documents/form/{{ $uid }}'>
-                            <span class="icon"><x-carbon-edit /></span>
+                            <span class="icon"><x-carbon-edit id="233"/></span>
                         </a>
                     </p>
 
@@ -69,11 +66,10 @@
 
                     <p class="level-item">
                         <a wire:click='releaseConfirm({{ $uid }})'>
-                            <span class="icon"><x-carbon-send /></span>
+                            <span class="icon"><x-carbon-send/></span>
                         </a>
                     </p>
                     @endrole
-
 
                     <p class="level-item">
                         <a wire:click="triggerDelete('delete',{{ $uid }})">
@@ -115,7 +111,6 @@
                 <div class="column has-text-right is-4">
                     <span class="tag is-black">{{$doc_types[$doc_type]}}</span>
                     <span class="tag is-warning">{{$language}}</span>
-
                 </div>
 
             </div>
@@ -130,7 +125,6 @@
                 'tag' => 'document',                          // Any tag other than model name
             ])
         </div>
-
 
         @if (strlen(trim($remarks)) > 0)
         <div class="column has-text-grey content">
@@ -158,7 +152,5 @@
         </div>
 
     </div>
-
-
 
 </div>

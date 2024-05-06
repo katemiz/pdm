@@ -456,7 +456,7 @@ class LwDocument extends Component
 
         $props['status'] = 'Released';
         $props['approver_id'] = Auth::id();
-        $props['app_revied_at'] = time();
+        $props['app_revised_at'] = time();
 
         $doc->update($props);
 
@@ -464,15 +464,9 @@ class LwDocument extends Component
 
         $this->action = 'VIEW';
 
-        session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
-
         // Send EMails
-
         $this->sendMail();
-
-
     }
-
 
 
     public function sendMail() {
@@ -495,7 +489,12 @@ class LwDocument extends Component
             array_push($toArr, $u->email);
         }
 
-        Mail::to($toArr)->send(new AppMail($msgdata));
+        if (count($toArr) > 0) {
+            session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
+            Mail::to($toArr)->send(new AppMail($msgdata));
+        } else {
+            session()->flash('message','Document has been <b>released</b> but NO email been sent since no users found!');
+        }
     }
 
 

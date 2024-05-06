@@ -9,6 +9,8 @@
         <title>{{ $title ?? 'Page Title' }}</title>
 
         {{-- INCLUDES --}}
+        <link rel="stylesheet" href="{{ asset('/css/app.css') }}">
+
         <link rel="stylesheet" href="{{ asset('/css/bulma.min.css')}}">
         <link rel="stylesheet" href="{{ asset('/SweetAlert/sweetalert2_min.css') }}">
         <script src="{{ asset('/SweetAlert/sweetalert2.min.js') }}"></script>
@@ -17,10 +19,6 @@
         <script src="{{ asset('/js/js.js') }}"></script>
         <script type="module" src="{{ asset('/js/model-viewer.min.js') }}"></script>
         
-        <style>
-            model-viewer {width: 100%;height: 600px;}
-        </style>
-
     </head>
     <body>
         @include('components.layouts.pdm-navbar')

@@ -46,6 +46,13 @@ class Engineering extends Component
                 $this->geometryRectangle();
                 break;
 
+
+            case 'geometry-lshape':
+                $this->geometryLshape();
+                break;
+    
+
+
             default:
                 # code...
                 break;
@@ -156,6 +163,65 @@ class Engineering extends Component
             $this->js("console.log('Iyy$this->inertia_yy')");
         }
     }
+
+
+    public function geometryLshape()
+    {
+        if ($this->width == 0 || $this->height == 0 ) {
+            $this->area     = 'undefined';
+            $this->inertia_xx  = 'undefined';
+            $this->inertia_yy  = 'undefined';
+            return true;
+        }
+
+        if ($this->thickness == 0) {
+            $this->rinn = 0;
+        }
+
+        if ($this->rout > $this->width/2 || $this->rout > $this->height/2) {
+            $this->rout = $this->width >= $this->height ? $this->height/2 : $this->width/2;
+        }
+
+        $area_outer = $this->width*$this->height + (pi() -4)*pow($this->rout,2);
+
+        $outer_inertia_xx = $this->IRectangleWRadius($this->width,$this->height,$this->rout);
+        $outer_inertia_yy = $this->IRectangleWRadius($this->height,$this->width,$this->rout);
+
+        if ($this->is_hollow && $this->thickness > 0) {
+
+            // AREA
+            $w = $this->width -2*$this->thickness;
+            $h = $this->height-2*$this->thickness;
+
+            $area_inner = $w*$h + (pi() -4)*pow($this->rinn,2);
+
+            $this->area =  round($area_outer- $area_inner,2);
+
+            // INERTIA
+            $inner_inertia_xx = $this->IRectangleWRadius($w,$h,$this->rinn);
+            $inner_inertia_yy = $this->IRectangleWRadius($h,$w,$this->rinn);
+
+            $this->inertia_xx = round($outer_inertia_xx - $inner_inertia_xx,2);
+            $this->inertia_yy = round($outer_inertia_yy - $inner_inertia_yy,2);
+
+            $this->js("console.log('DIS$outer_inertia_xx')");
+            $this->js("console.log('IC$inner_inertia_xx')");
+
+
+        } else {
+
+            // AREA
+            $this->area = round($area_outer,2);
+
+            $this->inertia_xx = round($outer_inertia_xx,2);
+            $this->inertia_yy = round($outer_inertia_yy,2);
+
+            $this->js("console.log('Ixx$this->inertia_xx')");
+            $this->js("console.log('Iyy$this->inertia_yy')");
+        }
+    }
+
+
 
 
     function areaRectangleWithRadius ($w,$h,$r) {

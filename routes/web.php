@@ -32,6 +32,8 @@ use App\Livewire\LwMom;
 use App\Livewire\LwProduct;
 use App\Livewire\ProductNote;
 use App\Livewire\Engineering;
+use App\Livewire\Geometry;
+
 
 use App\Livewire\LwCompany;
 
@@ -50,7 +52,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/engineering/{action}', Engineering::class);
 
 require __DIR__.'/auth.php';
 
@@ -141,6 +142,12 @@ Route::middleware(['auth'])->group(function () {
     // PDF GENERATION
     Route::get('/pdf/bom/{id}', [PDFController::class, 'getType']);
     Route::get('/pdf/cascadedbom/{id}', [PDFController::class, 'generateCascadedPdf']);
+
+
+    // ENGINEERING
+    Route::get('/engineering/{action}', Engineering::class);
+    Route::get('/engineering/geometry/{shape}', Geometry::class);
+
 
 
 

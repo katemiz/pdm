@@ -38,6 +38,24 @@
       </a>
     </div>
 
+
+    <div class="column">
+      <a href="/engineering/geometry/lshape" class="has-text-centered is-block">L-Shaped Sections</a>
+
+      <a href="/engineering/geometry/lshape">
+
+      <figure class="image">
+        <img src="{{ asset('/images/Rectangle.svg') }}">
+      </figure>
+      </a>
+    </div>
+
+
+
+
+
+
+
   </div>
 
 

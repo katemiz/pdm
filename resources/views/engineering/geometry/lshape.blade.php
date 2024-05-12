@@ -18,12 +18,15 @@
 
     @livewire('canvas-lshape', [
         'lshape_width' => "$lshape_width",
-        'lshape_height' => "$lshape_height", 
+        'lshape_height' => "$lshape_height",
         "lshape_thk1"=>"$lshape_thk1",
         "lshape_thk2"=>"$lshape_thk2",
-        "lshape_radius" => "$lshape_radius"], key(1234))
+        "lshape_radius" => "$lshape_radius",
+        "area" => "$area",
+        "cx" => "cx",
+        "cy" => "cy"], key(1234))
 
-    
+
     <div class="column">
 
 
@@ -65,7 +68,7 @@
                         <input class="input" type="number" placeholder="Thickness" wire:model.live="lshape_thk2" min="0">
                         </div>
                     </div>
-                   
+
                     {{-- <div class="field">
                         <label class="label">Radius, R</label>
                         <div class="control">
@@ -80,19 +83,20 @@
         <table class="table is-fullwidth">
             <tbody><tr>
                 <th>Area</th>
-                <td class="has-text-right">1703.89</td>
+                <td class="has-text-right">{{ number_format($area, 2, '.', ' ') }}</td>
                 <td>mm<sup>2</sup></td>
             </tr>
 
             <tr>
                 <th>Inertia<sub>xx</sub></th>
-                <td class="has-text-right">{{ number_format(12132434.23435, 2, '.', ' ') }}</td>
+                <td class="has-text-right">{{ number_format($ixx, 2, '.', ' ') }}</td>
                 <td>mm<sup>4</sup></td>
+
             </tr>
 
             <tr>
                 <th>Inertia<sub>yy</sub></th>
-                <td class="has-text-right">940890.43</td>
+                <td class="has-text-right">{{ number_format($iyy, 2, '.', ' ') }}</td>
                 <td>mm<sup>4</sup></td>
             </tr>
 

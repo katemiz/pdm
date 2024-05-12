@@ -1,5 +1,7 @@
-<div class="column is-half has-background-warning" id="canvas_div">
-    
+<div class="column is-half has-background-light" id="canvas_div">
+
+    <script src="{{ asset('/js/canvas.js') }}"></script>
+
     <script>
 
         let canvasDiv = document.getElementById("canvas_div");
@@ -8,7 +10,7 @@
         padding = parseInt(padding.replace('px',''))
 
         let canvas = document.createElement('canvas')
-        canvas.classList.add('has-background-grey')
+        // canvas.classList.add('has-background-grey')
         canvas.id = 'myCanvas'
 
         canvasDiv.append(canvas)
@@ -18,11 +20,9 @@
 
         canvas.width = canvasDiv.offsetWidth -2*padding
         canvas.height = canvas.width
-    
+
         let cwidth = canvas.width
         let cheight = canvas.height
-
-
 
         function DrawShape(dims) {
 
@@ -32,7 +32,14 @@
             var width = parseFloat(dims.width);
             var r = parseFloat(dims.radius);
 
+            var cx = parseFloat(dims.cx)
+            var cy = parseFloat(dims.cy)
+            var area = parseFloat(dims.area)
+
             let max_dim;
+            let usage_ratio = 0.6
+
+            let cox,coy
 
             if (height >= width) {
                 max_dim = height
@@ -40,95 +47,81 @@
                 max_dim =width
             }
 
-            console.log("w H",width,height)
-            
-            let area_vertical = height*t1
-            let area_horizontal = (width-t1)*t2
-            
-            let total_area = area_vertical+area_horizontal
-            
-            let cx = (area_vertical*t1*0.5+area_horizontal*(width-t1)*0.5)/total_area
-            let cy = (area_vertical*(height-t2)*0.5+area_horizontal*t2*0.5)/total_area
-            
-            let vx1 = cwidth/2-cx
-            let vy1 = cheight/2+cy-height
-            
-            let vx2 = vx1+t1
-            let vy2 = vy1+height-t2
+            // Find Scale
+            let scale = (usage_ratio*cwidth)/max_dim
 
-            let startPoint = {
-                x:(cwidth-width)/2,
-                y:(cheight-height)/2
-            }
+            // Draw Coordinate Axes (x,y)
+            cox = 0.5*(cwidth-width*scale)
+            coy = 0.5*(cheight-scale*height)+scale*height
 
-            console.log("width ",cwidth)
-            console.log(startPoint)
-            
-            // Find Scale and Start Point
-            let scale = (0.8*cwidth)/max_dim
+            ctx.strokeStyle = "black"
+            ctx.lineWidth = 0.2;
 
-            console.log("scale and max_dim",scale,max_dim)
-
-            ctx.translate((cwidth-scale*width)/2, (cheight-scale*height)/2);
-
-
-            ctx.scale(scale, scale);
             ctx.beginPath();
 
-            console.log("x y",(cwidth-scale*width)/2, (cheight-scale*height)/2)
+                ctx.moveTo(0, coy);
+                ctx.lineTo(cwidth, coy);
 
+                ctx.moveTo(cox, 0);
+                ctx.lineTo(cox, cheight);
 
-            // Set a start-point
-            ctx.moveTo(0, 0);
-
-            ctx.lineTo(t1, 0);
-            ctx.lineTo(t1, height-t2);
-            ctx.lineTo(width, height-t2);
-            ctx.lineTo(width, height);
-            ctx.lineTo(0, height);
-            ctx.lineTo(0, 0);
-
-            // Stroke it (Do the Drawing)
-            ctx.strokeStyle = "red";
-            ctx.fillStyle = "green"
-            ctx.lineWidth = 2;
-            ctx.fill();
             ctx.stroke();
 
-            console.log('Drawing Shape',Date.now())
+            // Find Article at Center of Gravity, Draw Circle and Write Coordinates
+            DrawArticle(ctx,cox+cx*scale,coy-cy*scale, true)
+
+            DrawArrow(ctx,cwidth-20,coy,0,"X")
+            DrawArrow(ctx,cox,20,270,"Y")
+
+            ctx.fillStyle = "black";
+            ctx.fillText("("+Math.round(cx*1000,3)/1000+","+Math.round(cy*1000,3)/1000+")",cox+scale*cx+5,coy-scale*cy-5);
 
 
+            // Set Scale and Translation
+            ctx.translate((cwidth-scale*width)/2, (cheight-scale*height)/2);
+            ctx.scale(scale, scale);
+
+            // Draw L-Shape
+            ctx.beginPath();
+
+                ctx.moveTo(0, 0);
+                ctx.lineTo(t1, 0);
+                ctx.lineTo(t1, height-t2);
+                ctx.lineTo(width, height-t2);
+                ctx.lineTo(width, height);
+                ctx.lineTo(0, height);
+                ctx.lineTo(0, 0);
+
+                ctx.strokeStyle = "black"
+                ctx.lineWidth = .1;
+
+                // Stroke it (Do the Drawing)
+                // ctx.strokeStyle = "red";
+                ctx.fillStyle = "grey"
+                // ctx.lineWidth = 2;
+                ctx.fill();
+            ctx.stroke();
         }
+
+
+
+
 
         function ClearCanvas() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            console.log('Canvas Cleared',Date.now())
-
-            console.log('Canvas Cleared2',canvas.width,canvas.height)
-
+            canvas.width = canvas.width;
+            canvas.height = canvas.height;
         }
 
-        
+
 
         window.addEventListener('repaint',function(e) {
-
-            // "width" => $this->lshape_width,
-            //     "height" => $this->lshape_height,
-            //     "thk1" => $this->lshape_thk1,
-            //     "thk2" => $this->lshape_thk2,
-            //     "radius" => $this->lshape_radius
-
-            console.log(e.detail.width)
-            console.log(e.detail)
-
-            console.log('Repainting',Date.now())
             ClearCanvas()
             DrawShape(e.detail)
         })
 
 
 
-    
+
     </script>
 
 

@@ -149,8 +149,8 @@ class LwStandardFamily extends Component
         $this->action = 'VIEW';
     }
 
-
-
-
+    public function resetFilter() {
+        $this->query = '';
+    }
 
 }

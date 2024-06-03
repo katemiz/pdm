@@ -101,17 +101,14 @@
         <tbody>
 
             @foreach ($endproducts as $record)
+
             <tr wire:key="{{ $record->id }}">
 
-                @foreach (array_keys($constants['list']['headers']) as $col_name)
-                    <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
-                        @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
-                            {!! $record[$col_name] !!}
-                        @else
-                            {{ $record[$col_name] }}
-                        @endif
-                    </td>
-                @endforeach
+                <td>{{ $record['part_number']}}-{{ $record['version']}}</td>
+                <td>{{ key_exists($record['mast_family_mt'],$mast_families) ? $mast_families[$record['mast_family_mt']]: $product_types[$record['product_type']] }}</td>
+                <td>{{ $record['nomenclature']}}</td>
+                <td class="has-text-right">{{ $record['max_payload_kg']}}</td>
+                <td>{{ $record['created_at']}}</td>
 
                 <td class="has-text-right">
 
@@ -119,17 +116,11 @@
                         <span class="icon"><x-carbon-view/></span>
                     </a>
 
-
                     @if (in_array($record->status,['WIP']))
                     @role(['admin','company_admin','requirement_engineer'])
                         <a href="/endproducts/form/{{ $record->id }}">
-                        {{-- <a wire:click="editItem({{ $record->id }})"> --}}
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
-
-                        {{-- <a wire:click.prevent="triggerDelete({{$record->id}})">
-                            <span class="icon has-text-danger-dark"><x-carbon-trash-can /></span>
-                        </a> --}}
                     @endrole
                     @endif
 

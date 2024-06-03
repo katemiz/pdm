@@ -85,22 +85,18 @@
 
                     <p class="subtitle has-text-weight-light is-size-6"><strong>MT</strong> {{ $part_number_mt }} <strong>WB</strong> {{ $part_number_wb }}</p>
 
-
-                    {{-- @if (count($all_revs) > 1)
-                    <nav class="breadcrumb has-bullet-separator" aria-label="breadcrumbs">
-                        <ul>
+                    @if (count($all_revs) > 1)
+                    <div class="tags has-addons">
                         @foreach ($all_revs as $key => $revId)
-                            @if ($key != $revision)
-                            <li><a href="/requirements/view/{{$revId}}">R{{$key}}</a></li>
+                            @if ($key != $version)
+                                <a href="/endproducts/view/{{$revId}}" class="tag {{ array_key_last($all_revs) == $key ? 'is-success':'' }} is-light mr-1">R{{$key}}</a>
                             @endif
                         @endforeach
-                        </ul>
-                    </nav>
-                    @endif --}}
+                    </div>
+                    @endif
                 </div>
 
                 <div class="column has-text-right is-4">
-
 
                     <table class="table is-fullwidth">
                         <tr>

@@ -148,7 +148,4 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/engineering/{action}', Engineering::class);
     Route::get('/engineering/geometry/{shape}', Geometry::class);
 
-
-
-
 });

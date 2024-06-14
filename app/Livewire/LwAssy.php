@@ -217,11 +217,11 @@ class LwAssy extends Component
         $this->status = $item->status;
         $this->is_latest = $item->is_latest;
 
+        $this->treeData =[];  
 
         if ($item->bom) {
 
             $children = json_decode($item->bom);
-
 
             foreach ($children as $i) {
                 $child = Item::find($i->id);
@@ -285,7 +285,7 @@ class LwAssy extends Component
                 'updated_uid' => Auth::id()
             ]);
 
-            session()->flash('success','Assy Part has been created successfully!');
+            session()->flash('success','Assy has been created successfully!');
 
             // Attach Notes to Product
             $this->item->pnotes()->attach($this->notes_id_array);

@@ -63,17 +63,38 @@
         {{-- ASSEMBLY PROPERTIES --}}
 
         @if (!$showNodeGui)
+
         <div class="column">
 
-            <header class="mb-2">
-                <h2 class="subtitle has-text-weight-light has-text-info">Assembly Properties</h2>
-            </header>
+            <div class="columns">
+
+                <div class="column is-8">
+                    <header class="mb-2">
+                        <h2 class="subtitle has-text-weight-light has-text-info">Assembly Properties</h2>
+                    </header>
+                </div>
+                <div class="column">
+                    <div class="buttons is-right">
+
+                        @if ($uid)
+                            <a wire:click.prevent="updateItem()">
+                        @else
+                            <a wire:click.prevent="storeItem()" >
+                        @endif
+
+                            <span class="icon"><x-carbon-save /></span>
+                            </a>
+
+                    </div>
+                </div>
+            </div>
+
 
             <form method="POST" enctype="multipart/form-data">
                 @csrf
 
                     <div class="field">
-                        <label class="label">Part Unit</label>
+                        <label class="label">Assembly Unit</label>
 
                         <div class="control">
                             <label class="checkbox is-block">

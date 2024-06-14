@@ -36,7 +36,7 @@ class LwItem extends Component
     public $constants;
 
     public $title = 'List of Components'; 
-    public $subtitle = "List of all components ['Detail','Assy','Buyable','MakeFrom','Standard']"; 
+    public $subtitle = "List of all components [Detail, Assy, Buyable, MakeFrom, Standard]"; 
 
     public function mount()
     {

@@ -300,7 +300,7 @@
 
 
 
-        {{-- MATERIAL --}}
+        {{-- SOURCE PART NUMBER --}}
         @if ($part_type == 'MakeFrom')
         <div class="column">
             <label class="label">Source Part Number</label>
@@ -345,7 +345,7 @@
         @if ($has_material)
         <div class="column">
             <label class="label">Material</label>
-            {{ $material_definition }}
+            <a href="/material/view/{{$malzeme_id}}" target="_blank">{{ $material_definition }}</a>
         </div>
         @endif
 

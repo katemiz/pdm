@@ -9,6 +9,7 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 
 use App\Models\CNotice;
+use App\Models\CRequest;
 use App\Models\Counter;
 use App\Models\Fnote;
 use App\Models\Malzeme;
@@ -28,14 +29,32 @@ class LwItem extends Component
 
     public $show_latest = true; /// Show only latest versions
 
-
+    public $parts_uses_material = false;
+    public $parts_by_ecn = false;
 
     public $ecns;
     public $constants;
 
+    public $title = 'List of Components'; 
+    public $subtitle = "List of all components ['Detail','Assy','Buyable','MakeFrom','Standard']"; 
 
     public function mount()
     {
+        if (request('parts_uses_material')) {
+            $this->parts_uses_material = request('parts_uses_material');
+            $malzeme = Malzeme::find($this->parts_uses_material);
+            $this->title = 'List of Components By Material Used'; 
+            $this->subtitle = $malzeme->description; 
+        }
+
+        if (request('parts_by_ecn')) {
+            $this->parts_by_ecn = request('parts_by_ecn');
+            $ecn = CNotice::find($this->parts_by_ecn);
+            $crequest = CRequest::find($ecn->c_notice_id);
+            $this->title = 'List of Components By ECN-'.$ecn->id; 
+            $this->subtitle = 'ECN-'.$ecn->id.' '.$crequest->topic; 
+        }
+
         $this->setECNs();
         $this->constants = config('product');
     }
@@ -66,6 +85,12 @@ class LwItem extends Component
             ->when($this->show_latest, function ($query) {
                 $query->where('is_latest', true);
             })
+            ->when($this->parts_uses_material, function ($query) {
+                $query->where('malzeme_id', $this->parts_uses_material);
+            })
+            ->when($this->parts_by_ecn, function ($query) {
+                $query->where('c_notice_id', $this->parts_by_ecn);
+            })
             ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
             ->orWhere('description', 'LIKE', "%".$this->query."%")
             ->orderBy($this->sortField,$this->sortDirection)
@@ -76,6 +101,12 @@ class LwItem extends Component
             $items = Item::orderBy($this->sortField,$this->sortDirection)
             ->when($this->show_latest, function ($query) {
                 $query->where('is_latest', true);
+            })
+            ->when($this->parts_uses_material, function ($query) {
+                $query->where('malzeme_id', $this->parts_uses_material);
+            })
+            ->when($this->parts_by_ecn, function ($query) {
+                $query->where('c_notice_id', $this->parts_by_ecn);
             })
             ->paginate(env('RESULTS_PER_PAGE'));
         }

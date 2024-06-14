@@ -5,8 +5,8 @@
         <div class="column is-8">
 
             <header class="mb-6">
-                <h1 class="title has-text-weight-light is-size-1">List of Components</h1>
-                <h2 class="subtitle has-text-weight-light">List of all components ['Detail','Assy','Buyable','MakeFrom','Standard']</h2>
+                <h1 class="title has-text-weight-light is-size-1">{{$title}}</h1>
+                <h2 class="subtitle has-text-weight-light">{{$subtitle}}</h2>
             </header>
 
         </div>
@@ -101,18 +101,15 @@
             @foreach ($items as $record)
             <tr wire:key="{{ $record->id }}">
 
-
-
-
                 <td>{{ $record->full_part_number }}</td>
                 <td>{{ $record->part_type }}</td>
-                <td>{{ $record->c_notice_id }}</td>
+                <td>
+                    <a href="/parts/list?parts_by_ecn={{$record->c_notice_id}}" target="_blank">
+                        {{ $record->c_notice_id }}
+                    </a>               
+                </td>
                 <td>{{ $record->description }}</td>
                 <td>{{ $record->created_at }}</td>
-
-
-
-
 {{--
                 @foreach (array_keys($constants['list']['headers']) as $col_name)
                     <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">

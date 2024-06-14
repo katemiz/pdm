@@ -219,7 +219,14 @@ class Material extends Component
     }
 
 
+    public function usedBy()
+    {
 
+
+
+        return redirect('/parts/list?parts_uses_material=814');
+
+    }
 
 
 

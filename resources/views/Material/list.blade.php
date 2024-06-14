@@ -106,6 +106,10 @@
 
                 <td class="has-text-right">
 
+                    <a href="/parts/list?parts_uses_material={{$record->id}}" target="_blank">
+                        <span class="icon"><x-carbon-connect-reference /></span>
+                    </a>
+
                     <a wire:click="viewItem({{ $record->id}})">
                         <span class="icon"><x-carbon-view/></span>
                     </a>

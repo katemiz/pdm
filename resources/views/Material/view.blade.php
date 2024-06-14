@@ -47,6 +47,14 @@
                         </p>
                         @endif
 
+
+                        <p class="control ml-1">
+                            <a class="button is-link is-light is-small" href="/parts/list?parts_uses_material={{$item->id}}" target="_blank">
+                                <span class="icon is-small"><x-carbon-connect-reference /></span>
+                                <span>Parts By Material</span>
+                            </a>
+                        </p>
+
                         {{-- @if ($canDelete && $item->canDelete)
                         <p class="control ml-1">
                             <button class="button is-danger is-light is-small" wire:click.prevent="startCRDelete({{$item->id}})">

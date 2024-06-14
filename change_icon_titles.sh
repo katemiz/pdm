@@ -5,4 +5,6 @@ sed -i 's/<title>trash-can<\/title>/<title>Delete Item<\/title>/g' ./vendor/code
 sed -i 's/<title>send<\/title>/<title>Release Item<\/title>/g' ./vendor/codeat3/blade-carbon-icons/resources/svg/send.svg
 sed -i 's/<title>stamp<\/title>/<title>Freeze Item<\/title>/g' ./vendor/codeat3/blade-carbon-icons/resources/svg/stamp.svg
 sed -i 's/<title>document--pdf<\/title>/<title>Convert to PDF<\/title>/g' ./vendor/codeat3/blade-carbon-icons/resources/svg/document-pdf.svg
+sed -i 's/<title>document--pdf<\/title>/<title>Parts with Material<\/title>/g' ./vendor/codeat3/blade-carbon-icons/resources/svg/connect-reference.svg
+
 

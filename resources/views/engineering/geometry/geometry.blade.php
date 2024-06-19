@@ -14,6 +14,27 @@
 
 
   <div class="columns">
+
+
+
+    <div class="column">
+        <a href="/engineering/geometry/circle" class="has-text-centered is-block">Circular Sections</a>
+
+        <a href="/engineering/geometry/circle">
+
+        <figure class="image">
+          <img src="{{ asset('/images/Circle.svg') }}">
+        </figure>
+        </a>
+      </div>
+
+
+
+
+
+
+
+
     <div class="column">
 
       <a wire:click="selectAction('geometry-circle')" class="has-text-centered is-block">Circle</a>
@@ -45,7 +66,7 @@
       <a href="/engineering/geometry/lshape">
 
       <figure class="image">
-        <img src="{{ asset('/images/Rectangle.svg') }}">
+        <img src="{{ asset('/images/Lshape.svg') }}">
       </figure>
       </a>
     </div>

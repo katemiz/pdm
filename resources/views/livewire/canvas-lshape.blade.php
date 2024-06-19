@@ -76,7 +76,6 @@
             ctx.fillStyle = "black";
             ctx.fillText("("+Math.round(cx*1000,3)/1000+","+Math.round(cy*1000,3)/1000+")",cox+scale*cx+5,coy-scale*cy-5);
 
-
             // Set Scale and Translation
             ctx.translate((cwidth-scale*width)/2, (cheight-scale*height)/2);
             ctx.scale(scale, scale);
@@ -86,7 +85,12 @@
 
                 ctx.moveTo(0, 0);
                 ctx.lineTo(t1, 0);
-                ctx.lineTo(t1, height-t2);
+                ctx.lineTo(t1, height-t2-r);
+
+                if (r > 0) {
+                    ctx.arc(t1+r, height-r-t2, r,Math.PI,0.5*Math.PI,true);
+                }
+
                 ctx.lineTo(width, height-t2);
                 ctx.lineTo(width, height);
                 ctx.lineTo(0, height);
@@ -96,9 +100,7 @@
                 ctx.lineWidth = .1;
 
                 // Stroke it (Do the Drawing)
-                // ctx.strokeStyle = "red";
                 ctx.fillStyle = "grey"
-                // ctx.lineWidth = 2;
                 ctx.fill();
             ctx.stroke();
         }

@@ -76,8 +76,11 @@ class LwStandardFamily extends Component
 
         return  Sfamily::when( strlen($this->query) > 2, function ($query) {
                 $query->where('description', 'LIKE', "%".$this->query."%")
+                ->orWhere('standard_number','LIKE',"%".$this->query."%")
                 ->orWhere('remarks','LIKE',"%".$this->query."%");
+
             })
+            ->where('status', 'Active')
             ->orderBy($this->sortField,$this->sortDirection)
             ->paginate(env('RESULTS_PER_PAGE'));
     }

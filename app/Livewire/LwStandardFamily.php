@@ -29,7 +29,7 @@ class LwStandardFamily extends Component
     public $constants;
 
     public $query = '';
-    public $sortField = 'description';
+    public $sortField = 'standard_number';
     public $sortDirection = 'ASC';
 
 
@@ -74,16 +74,44 @@ class LwStandardFamily extends Component
 
     public function getFamiliesList()  {
 
-        return  Sfamily::when( strlen($this->query) > 2, function ($query) {
-                $query->where('description', 'LIKE', "%".$this->query."%")
-                ->orWhere('standard_number','LIKE',"%".$this->query."%")
-                ->orWhere('remarks','LIKE',"%".$this->query."%");
 
+        if (strlen($this->query) > 2){
+
+            return Sfamily::where('status', 'Active')->where(function($query) {
+                $query->where('description', 'LIKE', "%".$this->query."%")->orWhere('standard_number','LIKE',"%".$this->query."%")->orWhere('remarks','LIKE',"%".$this->query."%");
             })
-            ->where('status', 'Active')
             ->orderBy($this->sortField,$this->sortDirection)
             ->paginate(env('RESULTS_PER_PAGE'));
+
+        } else {
+
+            return Sfamily::where('status', 'Active')
+                    ->orderBy($this->sortField,$this->sortDirection)
+                    ->paginate(env('RESULTS_PER_PAGE'));
+        } 
+
+        // return  Sfamily::where('status', 'Active')
+        
+        //     ->when( strlen($this->query) > 2, function ($query) {
+        //         $query->where('description', 'LIKE', "%".$this->query."%")
+        //         ->orWhere('standard_number','LIKE',"%".$this->query."%")
+        //         ->orWhere('remarks','LIKE',"%".$this->query."%");
+
+        //     })
+            
+        //     ->orderBy($this->sortField,$this->sortDirection)
+        //     ->paginate(env('RESULTS_PER_PAGE'));
     }
+
+
+
+
+
+
+
+
+
+
 
 
     public function getProps() {

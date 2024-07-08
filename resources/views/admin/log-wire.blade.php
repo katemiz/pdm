@@ -191,19 +191,6 @@
             @endif
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
             @if (in_array($action,['login']))
             <button wire:click="loginUsr" class="button is-link mt-6 is-fullwidth">{{__('ui.links.login.text')}}</button>
             @endif
@@ -216,27 +203,15 @@
             <button wire:click="sendResetLink" class="button is-link mt-6 is-fullwidth">{{__('ui.links.forgot.resetlink')}}</button>
             @endif
 
-
             @if (in_array($action,['reset']))
             <button wire:click="resetPwd" class="button is-link mt-6 is-fullwidth">{{__('ui.links.reset.text')}}</button>
             @endif
-
 
             @if (in_array($action,['change']))
             <button wire:click="changePwd" class="button is-link mt-6 is-fullwidth">{{__('ui.links.change.text')}}</button>
             @endif
 
-
-
-
-
-
-
-
-
         </div>
-
-
 
         <nav class="level">
             <!-- Left side -->

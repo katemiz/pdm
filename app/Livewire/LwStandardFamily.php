@@ -32,7 +32,6 @@ class LwStandardFamily extends Component
     public $sortField = 'standard_number';
     public $sortDirection = 'ASC';
 
-
     //#[Validate('required|unique:standard_families' , message: 'Attention, this standard family already exists!')]
     public $standard_number;
 

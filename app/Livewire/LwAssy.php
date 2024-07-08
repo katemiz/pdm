@@ -270,7 +270,6 @@ class LwAssy extends Component
     public function storeItem()
     {
         $this->validate();
-        $this->part_number = $this->getProductNo();
 
         try {
             $this->item = Item::create([
@@ -377,6 +376,7 @@ class LwAssy extends Component
 
         $new_no = $counter->counter_value + 1;
         $counter->update(['counter_value' => $new_no]);         // Update Counter
+
         return $new_no;
     }
 

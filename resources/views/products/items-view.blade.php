@@ -1,35 +1,3 @@
-<script>
-
-
-
-
-    function reviseConfirm() {
-
-        Swal.fire({
-            title: sa_title,
-            text: sa_text,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: confirmText,
-            cancelButtonText: cancelText,
-
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Livewire.dispatch(dispatchRoute, dispatchData)
-            } else {
-                return false
-            }
-        })
-    }
-    
-
-</script>
-
-
-
-
 <header class="mb-6">
     @switch($part_type)
 
@@ -70,17 +38,6 @@
 
 <div class="card">
 
-
-{{-- 
-    <div class="card-image has-background-warning">
-        <model-viewer alt="jsdfkjdsfdjfj" src="/images/assy1.glb" shadow-intensity="1" camera-controls touch-action="pan-y"></model-viewer>
-    </div> --}}
-
-
-
-
-
-
     <div class="card-content">
 
         {{-- TOP ITEM MENU --}}
@@ -96,18 +53,35 @@
 
                     <x-add-button/>
 
+
+
+                    @if ($part_type == 'Detail')
+                    <a wire:click="replicateConfirm({{ $uid }})" class="button is-outlined mx-2 ">
+                        <span class="icon is-small"><x-carbon-replicate /></span>
+                    </a>
+                    @endif
+
+
+
+                    @if ($part_type == 'Detail' && !$has_mirror && !$is_mirror_of  )
+                    <a wire:click="mirrorConfirm({{ $uid }})" class="button is-outlined mx-2 ">
+                        <span class="icon is-small"><x-carbon-crossroads /></span>
+                    </a>
+                    @endif
+
+
                     @if ($part_type != 'Standard')
                     <a href="/pdf/bom/{{$uid}}" class="button is-outlined mx-2 has-text-danger">
                         <span class="icon is-small"><x-carbon-document-pdf /></span>
                     </a>
                     @endif
 
+
                     @if ($part_type == 'Assy')
                     <a href="/pdf/cascadedbom/{{$uid}}" class="button is-outlined mx-2 ">
                         <span class="icon is-small"><x-carbon-volume-file-storage /></span>
                     </a>
                     @endif
-
             </div>
 
             <!-- Right side -->
@@ -129,11 +103,14 @@
 
                 @if ( !in_array($status,['Released','Frozen']) )
 
+
+                    @if (!$is_mirror_of) 
                     <p class="level-item">
                         <a href='{{ $item_edit_url }}/{{ $uid }}'>
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
                     </p>
+                    @endif 
 
                     @role(['Approver'])
                     <p class="level-item">
@@ -208,23 +185,48 @@
 
             <div class="column is-7">
 
-                @if ($part_type == 'Standard')
-                    <p class="title has-text-weight-light is-size-2">{{$standard_number}} {{$std_params}}</p>
-                    <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
-                @else
-                    <p class="title has-text-weight-light is-size-2">{{$part_number}}<span class="has-text-grey-lighter">-{{$version}}</span></p>
-                    <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
-                @endif
+                <div class="columns">
 
-                @if (count($all_revs) > 1)
-                <div class="tags has-addons">
-                    @foreach ($all_revs as $key => $revId)
-                        @if ($key != $version)
-                            <a href="{{$item_view_url}}/{{$revId}}" class="tag {{ array_key_last($all_revs) == $key ? 'is-success':'' }} is-light mr-1">R{{$key}}</a>
-                        @endif
-                    @endforeach
+                <div class="column">
+
+                    @if ($part_type == 'Standard')
+                        <p class="title has-text-weight-light is-size-2">{{$standard_number}} {{$std_params}}</p>
+                        <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
+                    @else
+                        <p class="title has-text-weight-light is-size-2">{{$part_number}}<span class="has-text-grey-lighter">-{{$version}}</span></p>
+                        <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
+                    @endif
+
+                    @if (count($all_revs) > 1)
+                    <div class="tags has-addons">
+                        @foreach ($all_revs as $key => $revId)
+                            @if ($key != $version)
+                                <a href="{{$item_view_url}}/{{$revId}}" class="tag {{ array_key_last($all_revs) == $key ? 'is-success':'' }} is-light mr-1">R{{$key}}</a>
+                            @endif
+                        @endforeach
+                    </div>
+                    @endif
+
                 </div>
-                @endif
+
+
+                @if  ($mirror_part_number) 
+                    <div class="column is-4">
+                    <p class="title has-text-weight-light is-size-2"><a href="/details/Detail/view/{{$has_mirror}}">{{$mirror_part_number}}<span class="has-text-grey-lighter">-{{$mirror_part_version}}</span></a></p>
+                    <p class="subtitle has-text-weight-light is-size-6">{{ $mirror_part_description }}</p>
+                    </div>
+                @endif 
+
+
+                @if  ($is_mirror_of) 
+                <div class="column is-8">
+                <p class="title has-text-weight-light is-size-2"><a href="/details/Detail/view/{{$is_mirror_of}}">{{$is_mirror_of_part_number}}<span class="has-text-grey-lighter">-{{$is_mirror_of_part_version}}</span></a></p>
+                <p class="subtitle has-text-weight-light is-size-6">{{ $is_mirror_of_part_description }}</p>
+                </div>
+                @endif 
+
+                </div>
+
             </div>
 
 

@@ -24,6 +24,8 @@ class Item extends Model
         'description',
         'part_number_mt',
         'part_number_wb',
+        'has_mirror',
+        'is_mirror_of',
         'standard_family_id',
         'standard_number',
         'std_params',

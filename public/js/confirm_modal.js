@@ -48,6 +48,35 @@ window.addEventListener('ConfirmModal',function(e) {
             dispatchData = {type:e.detail.type}
             break;
 
+
+
+        case 'mirror':
+
+            sa_title = 'Add Mirror Part?'
+            sa_text = 'Mirror part of this product shall be added.'
+            confirmText = 'Add'
+            cancelText ='Oops ...'
+
+            dispatchRoute = 'onMirrorConfirmed'
+            dispatchData = {type:e.detail.type}
+            break;
+
+
+
+        case 'replicate':
+
+            sa_title = 'Add Replicate Part?'
+            sa_text = 'A new part replicating this part shall be added.'
+            confirmText = 'Add'
+            cancelText ='Oops ...'
+
+            dispatchRoute = 'onReplicateConfirmed'
+            dispatchData = {type:e.detail.type}
+            break;
+
+
+
+
         case 'freeze':
 
             sa_title = 'Document will be frozen!'

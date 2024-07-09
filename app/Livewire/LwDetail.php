@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
+use Carbon\Carbon;
+
+
 
 class LwDetail extends Component
 {
@@ -56,6 +59,20 @@ class LwDetail extends Component
     public $part_number;
     public $makefrom_part_id;
     public $makefrom_part_item;
+
+    public $has_mirror = false;
+    public $is_mirror_of = false;   
+
+    public $mirror_part_number =  false;
+    public $mirror_part_version =  false;
+    public $mirror_part_description =  false;
+
+
+
+    public $is_mirror_of_part_number =  false;
+    public $is_mirror_of_part_version =  false;
+    public $is_mirror_of_part_description =  false;
+
 
     public $constants;
 
@@ -218,8 +235,6 @@ class LwDetail extends Component
 
             if ( strlen($this->query) > 2 ) {
 
-                //dd('dddd');
-
                 return Item::where('part_number', 'LIKE', "%".$this->query."%")
                     ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
                     ->orWhere('description', 'LIKE', "%".$this->query."%")
@@ -227,9 +242,6 @@ class LwDetail extends Component
                     ->paginate(env('RESULTS_PER_PAGE'));
 
             } else {
-
-                //dd('dddd2');
-
 
                 return Item::orderBy($this->sortField,$this->sortDirection)
                     ->paginate(env('RESULTS_PER_PAGE'));
@@ -336,6 +348,26 @@ class LwDetail extends Component
         $this->check_reviewed_at = $item->check_reviewed_at;
         $this->app_reviewed_at = $item->app_reviewed_at;
 
+        $this->has_mirror = $item->has_mirror > 0 ? $item->has_mirror : false;
+        $this->is_mirror_of = $item->is_mirror_of > 0 ? $item->is_mirror_of : false;
+
+        if ($item->has_mirror > 0) {
+            $mirror_part = Item::find($item->has_mirror);
+
+            $this->mirror_part_number =  $mirror_part->part_number;
+            $this->mirror_part_version =  $mirror_part->version;
+            $this->mirror_part_description =  $mirror_part->description;
+        } 
+
+
+        if ($item->is_mirror_of > 0) {
+            $is_mirror_of_part = Item::find($item->is_mirror_of);
+
+            $this->is_mirror_of_part_number =  $is_mirror_of_part->part_number;
+            $this->is_mirror_of_part_version =  $is_mirror_of_part->version;
+            $this->is_mirror_of_part_description =  $is_mirror_of_part->description;
+        } 
+
         $this->notes_id_array = [];
 
         $this->notes = $item->pnotes;
@@ -376,12 +408,9 @@ class LwDetail extends Component
             $this->malzeme_id = 0 ;
         }
 
-
         //$this->validate();
 
         $this->standard_family = Sfamily::find($this->standard_family_id);
-
-
 
         switch ($this->part_type) {
 
@@ -427,10 +456,6 @@ class LwDetail extends Component
 
                 break;
         }
-
-
-        //dd($props);
-
 
         try {
 
@@ -511,8 +536,6 @@ class LwDetail extends Component
 
                 break;
         }
-
-        //dd($props);
 
         try {
 
@@ -672,6 +695,8 @@ class LwDetail extends Component
     }
 
 
+
+
     #[On('onDeleteConfirmed')]
     public function doDelete() {
 
@@ -685,12 +710,148 @@ class LwDetail extends Component
             $previous_item->update(['is_latest' => true]);
         }
 
+        // If this DELETED part is mirror of somepart, update base pat props
+        if ( $current_item->is_mirror_of > 0 ) {
+
+            $org_part_props['has_mirror']  = null;
+            $org_part_props['updated_uid']  = Auth::id();
+    
+            Item::whereId($current_item->is_mirror_of)->update($org_part_props);
+
+            $current_item->delete();
+
+            session()->flash('message','Only mirror part has been deleted successfully!');
+
+            redirect('/details/Detail/view/'.$current_item->is_mirror_of);
+            return true;
+        } 
+
         $current_item->delete();
 
-        session()->flash('info','Item has been deleted successfully!');
+        // If part has mirror part also, delete mirror part as well
+        if ($current_item->has_mirror > 0 ) {
+
+            Item::whereId($current_item->is_mirror_of)->delete();
+            session()->flash('info','Item and its mirror part have been deleted successfully!');
+
+        } else{
+            session()->flash('info','Item has been deleted successfully!');
+        } 
 
         redirect('/parts/list');
     }
+
+
+
+
+
+
+    public function mirrorConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'mirror');
+    }
+
+
+
+
+
+    #[On('onMirrorConfirmed')]
+    public function makeMirror() {
+
+        $current_item = Item::find($this->uid);
+
+        // Create New Mirror Part
+
+        $mpart_props['description']  = 'Mirror Part of '.$current_item->part_number.'-'.$current_item->version;
+        $mpart_props['part_type']  = $current_item->part_type;
+        $mpart_props['user_id']  = Auth::id();
+        $mpart_props['updated_uid']  = Auth::id();
+        $mpart_props['weight']  = $current_item->weight;
+        $mpart_props['remarks']  = $current_item->remarks;
+        $mpart_props['malzeme_id']  = $current_item->malzeme_id;
+
+        $mpart_props['part_number']  = $this->getProductNo();
+        $mpart_props['makefrom_part_id']  = $current_item->makefrom_part_id;
+        $mpart_props['c_notice_id']  = $current_item->c_notice_id;
+        $mpart_props['unit']  = $current_item->unit;
+
+        $mpart_props['is_mirror_of']  = $this->uid;
+
+        $mpart = Item::create($mpart_props);
+  
+        // Add Mirror Parameters to the Original Part
+        $org_part_props['has_mirror']  = $mpart->id;
+        $org_part_props['updated_uid']  = Auth::id();
+
+        Item::whereId($this->uid)->update($org_part_props);
+
+        session()->flash('message','Mirror part has been created successfully!');
+
+        redirect('/details/Detail/view/'.$mpart->id);
+    }
+
+
+
+
+
+
+    public function replicateConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'replicate');
+    }
+
+
+    #[On('onReplicateConfirmed')]
+    public function makeReplicate() {
+
+        $base_part = Item::find($this->uid);
+
+        $new_part = $base_part->replicate();
+
+        $new_part->part_number  = $this->getProductNo();
+        $new_part->user_id  = Auth::id();
+        $new_part->updated_uid  = Auth::id();
+        $new_part->created_at = Carbon::now();
+
+        $new_part->save();
+
+
+        // FLAG NOTES
+
+       $available_fnotes = [];  
+
+        foreach (Fnote::where('item_id',$this->uid)->get() as $r) {
+            $available_fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
+        }
+
+
+        foreach ($available_fnotes as $fnote) {
+
+            $props['item_id'] = $new_part->id;
+            $props['no'] = $fnote['no'];
+            $props['text_tr'] = $fnote['text_tr'];
+
+            Fnote::create($props);
+        }
+
+        // PART NOTES
+        $part_notes =[];  
+
+        foreach ($base_part->pnotes as $note) {
+            array_push($part_notes,$note->id);
+        }
+
+        $new_part->pnotes()->attach(array_unique($part_notes));
+
+
+        session()->flash('message','A new part has been created successfully!');
+
+        redirect('/details/Detail/form/'.$new_part->id);
+    }
+
+
+
+
 
 
 

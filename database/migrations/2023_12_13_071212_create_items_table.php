@@ -28,6 +28,10 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->text('part_number_mt')->nullable();
             $table->text('part_number_wb')->nullable();
+
+            $table->integer('has_mirror')->nullable();
+            $table->integer('is_mirror_of')->nullable();
+
             $table->integer('standard_family_id')->nullable();
             $table->text('standard_number')->nullable();
             $table->text('std_params')->nullable();

@@ -68,6 +68,18 @@ class LwAssy extends Component
     public $part_number;
     public $remarks;
 
+
+    public $has_mirror = false;
+    public $is_mirror_of = false;   
+
+    public $mirror_part_number =  false;
+    public $mirror_part_version =  false;
+    public $mirror_part_description =  false;
+
+    public $is_mirror_of_part_number =  false;
+    public $is_mirror_of_part_version =  false;
+    public $is_mirror_of_part_description =  false;
+
     public $is_latest;
 
     public $status;

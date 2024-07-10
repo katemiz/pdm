@@ -79,6 +79,20 @@ class LwBuyable extends Component
     public $unit = 'mm';
 
 
+    public $has_mirror = false;
+    public $is_mirror_of = false;   
+
+    public $mirror_part_number =  false;
+    public $mirror_part_version =  false;
+    public $mirror_part_description =  false;
+
+    public $is_mirror_of_part_number =  false;
+    public $is_mirror_of_part_version =  false;
+    public $is_mirror_of_part_description =  false;
+
+
+
+
     public $created_by;
     public $created_at;
     public $updated_by;

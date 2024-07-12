@@ -30,6 +30,7 @@ use App\Livewire\LwSellable;
 use App\Livewire\LwStandardFamily;
 use App\Livewire\LwMom;
 use App\Livewire\LwProduct;
+use App\Livewire\LwProduct2;
 use App\Livewire\ProductNote;
 use App\Livewire\Engineering;
 use App\Livewire\Geometry;
@@ -147,5 +148,9 @@ Route::middleware(['auth'])->group(function () {
     // ENGINEERING
     Route::get('/engineering/{action}', Engineering::class);
     Route::get('/engineering/geometry/{shape}', Geometry::class);
+
+    // DENEME AMACLI
+    Route::get('/viewme', LwProduct2::class);
+
 
 });

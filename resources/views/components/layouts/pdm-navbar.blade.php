@@ -59,14 +59,14 @@
                     <div class="navbar-dropdown">
 
                         <a href="/cr/list" class="navbar-item">
-                            <span class="icon has-text-info">
+                            <span class="icon has-text-link">
                                 <x-carbon-change-catalog />
                             </span>
                             <span class="ml-2">Change Requests</span>
                         </a>
 
                         <a href="/ecn/list" class="navbar-item">
-                            <span class="icon has-text-info">
+                            <span class="icon has-text-link">
                                 <x-carbon-scis-control-tower />
                             </span>
                             <span class="ml-2">ECNs</span>
@@ -86,7 +86,7 @@
 
                     <div class="navbar-dropdown">
                         <a href="/endproducts/list" class="navbar-item">
-                            <span class="icon has-text-info">
+                            <span class="icon has-text-link">
                                 <x-carbon-box />
                             </span>
                             <span class="ml-2">Sellable Parts</span>
@@ -107,7 +107,7 @@
                         </a> --}}
 
                         <a href="/parts/list" class="navbar-item">
-                            <span class="icon has-text-info">
+                            <span class="icon has-text-link">
                                 <x-carbon-radio />
                             </span>
                             <span class="ml-2">Components</span>
@@ -135,7 +135,7 @@
                     <div class="navbar-dropdown">
 
                         <a href="/engineering/home" class="navbar-item">
-                            <span class="icon has-text-info">
+                            <span class="icon has-text-link">
                                 <x-carbon-sigma />
                             </span>
                             <span class="ml-2">Engineering Utilities</span>
@@ -144,21 +144,21 @@
                         <hr class="navbar-divider">
 
                         <a href="/material/list" class="navbar-item">
-                            <span class="icon has-text-info">
+                            <span class="icon has-text-link">
                                 <x-carbon-cube />
                             </span>
                             <span class="ml-2">Materials</span>
                         </a>
 
                         <a href="/notes/list" class="navbar-item">
-                            <span class="icon has-text-info">
+                            <span class="icon has-text-link">
                                 <x-carbon-pen-fountain />
                             </span>
                             <span class="ml-2">Product Notes</span>
                         </a>
 
                         <a href="/std-family/list" class="navbar-item">
-                            <span class="icon has-text-info">
+                            <span class="icon has-text-link">
                                 <x-carbon-catalog />
                             </span>
                             <span class="ml-2">Standard Families</span>
@@ -213,7 +213,7 @@
                 <div class="navbar-item">
                         <a href="/logware/login" class="icon-text">
 
-                        <span class="icon has-text-info">
+                        <span class="icon has-text-link">
                             <x-carbon-login />
                         </span>
                         <span class="ml-1">{{ __('ui.links.login.text')}}</span>

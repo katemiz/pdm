@@ -558,22 +558,34 @@ class LwAssy extends Component
 
         $item = Item::find($idItem);
 
-        foreach ( json_decode($item->bom) as $children) {
+        if ( strlen($item->bom) < 1 ) {
 
-            switch ($children->part_type) {
+            $this->release_errors[$item->part_number][] = [
+                'id' => $item->id,
+                'part_number' => $item->part_number,
+                'error' => 'Assembly has no children parts'
+            ];
 
-                case 'Detail':
-                    $this->checkDetailIntegrity($children->id);
-                    break;
+        } else {
 
-                case 'Buyable':
-                    $this->checkBuyableIntegrity($children->id);
-                    break;
+            foreach ( json_decode($item->bom) as $children) {
 
-                case 'Assy':
-                    $this->checkAssyIntegrity($children->id);
-                    break;
+                switch ($children->part_type) {
+
+                    case 'Detail':
+                        $this->checkDetailIntegrity($children->id);
+                        break;
+
+                    case 'Buyable':
+                        $this->checkBuyableIntegrity($children->id);
+                        break;
+
+                    case 'Assy':
+                        $this->checkAssyIntegrity($children->id);
+                        break;
+                }
             }
+
         }
     }
 

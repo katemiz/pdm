@@ -103,7 +103,6 @@
 
                 @if ( !in_array($status,['Released','Frozen']) )
 
-
                     @if (!$is_mirror_of) 
                     <p class="level-item">
                         <a href='{{ $item_edit_url }}/{{ $uid }}'>

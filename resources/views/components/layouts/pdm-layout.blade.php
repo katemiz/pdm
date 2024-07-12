@@ -20,7 +20,7 @@
         <script type="module" src="{{ asset('/js/model-viewer.min.js') }}"></script>
         
     </head>
-    <body>
+    <body class='has-background-lighter'>
         @include('components.layouts.pdm-navbar')
 
         {{ $slot }}

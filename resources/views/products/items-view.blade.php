@@ -46,7 +46,7 @@
             <!-- Left side -->
 
             <div class="level-left">
-                    <a href="{{ $list_all_url }}" class="button is-outlined mr-2">
+                    <a href="{{ $list_all_url }}" class="button mr-2">
                         <span class="icon is-small"><x-carbon-show-data-cards /></span>
                         <span>List All</span>
                     </a>
@@ -103,13 +103,13 @@
 
                 @if ( !in_array($status,['Released','Frozen']) )
 
-                    @if (!$is_mirror_of) 
+                    @if (!$is_mirror_of)
                     <p class="level-item">
                         <a href='{{ $item_edit_url }}/{{ $uid }}'>
                             <span class="icon"><x-carbon-edit /></span>
                         </a>
                     </p>
-                    @endif 
+                    @endif
 
                     @role(['Approver'])
                     <p class="level-item">
@@ -209,20 +209,20 @@
                 </div>
 
 
-                @if  ($mirror_part_number) 
+                @if  ($mirror_part_number)
                     <div class="column is-4">
                     <p class="title has-text-weight-light is-size-2"><a href="/details/Detail/view/{{$has_mirror}}">{{$mirror_part_number}}<span class="has-text-grey-lighter">-{{$mirror_part_version}}</span></a></p>
                     <p class="subtitle has-text-weight-light is-size-6">{{ $mirror_part_description }}</p>
                     </div>
-                @endif 
+                @endif
 
 
-                @if  ($is_mirror_of) 
+                @if  ($is_mirror_of)
                 <div class="column is-8">
                 <p class="title has-text-weight-light is-size-2"><a href="/details/Detail/view/{{$is_mirror_of}}">{{$is_mirror_of_part_number}}<span class="has-text-grey-lighter">-{{$is_mirror_of_part_version}}</span></a></p>
                 <p class="subtitle has-text-weight-light is-size-6">{{ $is_mirror_of_part_description }}</p>
                 </div>
-                @endif 
+                @endif
 
                 </div>
 
@@ -579,7 +579,7 @@
                         @foreach ($parents as $key => $parent)
                         <tr>
                             <th class="is-narrow">
-                                
+
                                 @switch($parent->part_type)
 
                                     @case('Detail')

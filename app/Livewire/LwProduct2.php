@@ -28,11 +28,123 @@ class LwProduct2 extends Component
     use WithPagination;
 
 
+
+    public $uid = false;
+
+
+    public $part_type = false;
+
+
+    public $query = '';
+    public $sortField = 'created_at';
+    public $sortDirection = 'DESC';
+
+    public $ecns = [];
+    public $ncategories;
+    public $fnotes  = [];
+
+
+
+
+    public $mat_family = false;
+    public $mat_form = false;
+    public $materials = [];
+
+
+
+
+    public $remarks;
+
+
+
+
+    public $canUserAdd = true;
+    public $canUserEdit = true;
+    public $canUserDelete = true;
+
+
+
+
+    public function mount()
+    {
+        $this->setPartType();
+
+        $this->getMaterialList();
+
+
+        $this->ecns = CNotice::where('status','wip')->get();
+        $this->ncategories = NoteCategory::orderBy('text_tr')->get();
+
+
+    }
+
+
+
+
+
     public function render()
     {
 
 
-        return view('products.product-view');
+        //return view('products.product-view');
+
+
+
+
+        return view('products.product-form',[
+            // 'items' => $items,
+            // 'ecns' => $ecns,
+            // 'nodes' => $this->getNodes()
+        ]);
+
+    }
+
+
+
+
+
+
+
+
+
+
+    public function setPartType() {
+
+
+        if (!request('t')) {
+            dd('no part_type defined');
+
+        } else {
+            switch (request('t')) {
+
+                case 'd':
+                    $this->part_type = 'Detail';
+                    break;
+
+                case 'a':
+                    $this->part_type = 'Assy';
+                    break;
+
+                default:
+                    $this->part_type = 'Detail';
+                    break;
+            }
+        }
+
+
+
+    }
+
+
+
+
+    public function getMaterialList() {
+
+        if ($this->mat_family && $this->mat_form) {
+            $this->materials = Malzeme::where('family', $this->mat_family)
+            ->where('form', $this->mat_form)
+            ->orderBy($this->sortField,'asc')->get();
+        }
     }
 
 

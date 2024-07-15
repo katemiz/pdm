@@ -13,7 +13,7 @@ class AddButton extends Component
      */
 
     public function __construct(
-        public string $class = 'is-outlined',
+        public string $class = '',
     ) {}
 
     /**

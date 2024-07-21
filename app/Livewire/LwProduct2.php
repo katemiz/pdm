@@ -44,7 +44,15 @@ class LwProduct2 extends Component
     public $fnotes  = [];
 
 
+    public $unit = 'mm';
 
+    #[Validate('required', message: 'Please write part name/title')]
+    public $description;
+
+    #[Validate('required|numeric', message: 'Please select ECN')]
+    public $c_notice_id;
+
+    public $weight;
 
     public $mat_family = false;
     public $mat_form = false;
@@ -56,6 +64,7 @@ class LwProduct2 extends Component
     public $remarks;
 
 
+    public $notes_id_array = [];
 
 
     public $canUserAdd = true;

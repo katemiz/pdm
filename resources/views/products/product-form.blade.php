@@ -1,6 +1,48 @@
 
 
-<section class="section container">
+<section class="section container has-background-white">
+
+
+
+    <style>
+
+
+        .sidenav {
+          height: 100%;
+          width: 0;
+
+          position: fixed;
+          z-index: 1;
+          top: 0;
+          /* left: 0; */
+          right: 0;
+          overflow-x: hidden;
+          transition: 0.5s;
+          padding-top: 60px;
+        }
+
+
+
+
+
+        @media screen and (max-height: 450px) {
+          .sidenav {padding-top: 15px;}
+          .sidenav a {font-size: 18px;}
+        }
+        </style>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <script>
 
@@ -18,6 +60,32 @@
 
         //console.log(event.target)
       }
+
+
+
+
+      let width = false;
+
+
+      function onOff() {
+
+        width = !width
+
+
+        if (width) {
+            document.getElementById("mySidenav").style.width = "75%";
+
+        } else {
+            document.getElementById("mySidenav").style.width = "0";
+
+        }
+
+
+}
+
+
+
+
 
 
     </script>
@@ -39,15 +107,45 @@
 
 
 
+    <a  onclick="onOff()">AAAAAA</a>
 
 
 
 
+    <div class="sidenav has-background-lighter p-4" id="mySidenav">
 
+      <aside class="menu ">
+        <p class="menu-label">General</p>
+        <ul class="menu-list">
+          <li><a>Dashboard</a></li>
+          <li><a>Customers</a></li>
+          <li>        <a  onclick="onOff()">OFF</a>
+          </li>
+        </ul>
+        <p class="menu-label">Administration</p>
+        <ul class="menu-list">
+          <li><a>Team Settings</a></li>
+          <li>
+            <a class="is-active">Manage Your Team</a>
+            <ul>
+              <li><a>Members</a></li>
+              <li><a>Plugins</a></li>
+              <li><a>Add a member</a></li>
+            </ul>
+          </li>
+          <li><a>Invitations</a></li>
+          <li><a>Cloud Storage Environment Settings</a></li>
+          <li><a>Authentication</a></li>
+        </ul>
+        <p class="menu-label">Transactions</p>
+        <ul class="menu-list">
+          <li><a>Payments</a></li>
+          <li><a>Transfers</a></li>
+          <li><a>Balance</a></li>
+        </ul>
+      </aside>
 
-
-
-
+    </div>
 
 
 
@@ -532,11 +630,11 @@
             </div>
 
 
-            <livewire:ck-editor
+            {{-- <livewire:ck-editor
                 wire:model="remarks"
                 label='Notes and/or remarks'
                 placeholder='Any kind of remarks/notes about part/product.'
-                :content="$remarks"/>
+                :content="$remarks"/> --}}
 
             @error('remarks')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>

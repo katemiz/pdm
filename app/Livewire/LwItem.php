@@ -81,8 +81,23 @@ class LwItem extends Component
 
         if ( strlen($this->query) > 2 ) {
 
-            $items = Item::where('part_number', 'LIKE', "%".$this->query."%")
-            ->when($this->show_latest, function ($query) {
+            // $items = Item::where('part_number', 'LIKE', "%".$this->query."%")
+            // ->when($this->show_latest, function ($query) {
+            //     $query->where('is_latest', true);
+            // })
+            // ->when($this->parts_uses_material, function ($query) {
+            //     $query->where('malzeme_id', $this->parts_uses_material);
+            // })
+            // ->when($this->parts_by_ecn, function ($query) {
+            //     $query->where('c_notice_id', $this->parts_by_ecn);
+            // })
+            // ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
+            // ->orWhere('description', 'LIKE', "%".$this->query."%")
+            // ->orderBy($this->sortField,$this->sortDirection)
+            // ->paginate(env('RESULTS_PER_PAGE'));
+
+            $items = Item::
+            when($this->show_latest, function ($query) {
                 $query->where('is_latest', true);
             })
             ->when($this->parts_uses_material, function ($query) {
@@ -91,8 +106,15 @@ class LwItem extends Component
             ->when($this->parts_by_ecn, function ($query) {
                 $query->where('c_notice_id', $this->parts_by_ecn);
             })
-            ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
-            ->orWhere('description', 'LIKE', "%".$this->query."%")
+            ->whereAny(
+                [
+                    'part_number',
+                    'standard_number',
+                    'description'
+                ] ,
+                'LIKE',
+                "%$this->query%"
+            )
             ->orderBy($this->sortField,$this->sortDirection)
             ->paginate(env('RESULTS_PER_PAGE'));
 

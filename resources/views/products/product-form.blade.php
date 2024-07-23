@@ -91,22 +91,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    <div class="card p-3">
 
     <form method="POST" enctype="multipart/form-data">
         @csrf
@@ -685,7 +670,9 @@
             {{ $error }}<br/>
         @endforeach
 
-        </form>
+    </form>
+
+    </div>
 
 
 

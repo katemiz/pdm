@@ -1,4 +1,4 @@
-<section class="section container">
+<section class="section container has-background-white">
 
     <script src="{{ asset('/js/confirm_modal.js') }}"></script>
 

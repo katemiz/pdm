@@ -13,6 +13,8 @@ use App\Models\Counter;
 use App\Models\Fnote;
 use App\Models\Malzeme;
 use App\Models\Urun;
+use App\Models\Item;
+
 use App\Models\NoteCategory;
 use App\Models\User;
 
@@ -39,6 +41,10 @@ class LwProduct2 extends Component
     public $sortField = 'created_at';
     public $sortDirection = 'DESC';
 
+    public $showNodeGui = false;
+    public $constants;
+
+
     public $ecns = [];
     public $ncategories;
     public $fnotes  = [];
@@ -59,6 +65,13 @@ class LwProduct2 extends Component
     public $materials = [];
 
 
+    public $all_revs = [];
+
+    public $treeData =[]; 
+
+
+
+    public $product;  
 
 
     public $remarks;
@@ -76,9 +89,12 @@ class LwProduct2 extends Component
 
     public function mount()
     {
+        $this->getId();
         $this->setPartType();
 
         $this->getMaterialList();
+
+       $this->setConstants(); 
 
 
         $this->ecns = CNotice::where('status','wip')->get();
@@ -103,13 +119,34 @@ class LwProduct2 extends Component
         return view('products.product-form',[
             // 'items' => $items,
             // 'ecns' => $ecns,
-            // 'nodes' => $this->getNodes()
+            'nodes' => $this->getNodes()
         ]);
 
     }
 
 
 
+    public function setConstants(){
+
+
+
+        switch (request('t')) {
+
+            case 'd':
+                $this->constants = config('assy_nodes');
+                break;
+
+            case 'a':
+                $this->constants = config('assy_nodes');
+                break;
+
+            default:
+                $this->constants = config('assy_nodes');
+            break;
+        }
+
+
+    } 
 
 
 
@@ -139,9 +176,18 @@ class LwProduct2 extends Component
                     break;
             }
         }
+    }
 
 
 
+
+    public function getId() {
+
+        if (request('uid')) {
+            $this->uid = request('uid');
+
+            $this->getProps();  
+        } 
     }
 
 
@@ -155,6 +201,121 @@ class LwProduct2 extends Component
             ->orderBy($this->sortField,'asc')->get();
         }
     }
+
+
+
+
+
+
+
+
+
+
+
+    public function getProps() {
+
+        if ( !$this->uid ) {
+            return true;
+        }
+
+        $this->product = Item::find($this->uid);
+
+        // $this->part_number = $item->part_number;
+        // $this->version = $item->version;
+        // $this->weight = $item->weight;
+        // $this->unit = $item->unit;
+
+        // $this->description = $item->description;
+        // $this->c_notice_id = $item->c_notice_id;
+        // $this->remarks = $item->remarks;
+        // $this->status = $item->status;
+        // $this->is_latest = $item->is_latest;
+
+        $this->treeData =[];  
+
+        if ($this->product->bom) {
+
+            $children = json_decode($this->product->bom);
+
+            foreach ($children as $i) {
+                $child = Item::find($i->id);
+                $i->part_type = $child->part_type;
+                $i->description = $child->description;
+
+                array_push($this->treeData, $i);
+            }
+        }
+
+
+        $this->created_by = User::find($this->product->user_id);
+        $this->created_at = $this->product->created_at;
+        $this->updated_by = User::find($this->product->updated_uid);
+        $this->updated_at = $this->product->updated_at;
+        // $this->checked_by = User::find($item->checker_id);
+        // $this->approved_by = User::find($item->approver_id);
+
+        // $this->check_reviewed_at = $item->check_reviewed_at;
+        // $this->app_reviewed_at = $item->app_reviewed_at;
+
+        $this->notes_id_array = [];
+        $this->notes = $this->product->pnotes;
+
+        foreach ($this->product->pnotes as $note) {
+            array_push($this->notes_id_array,$note->id);
+        }
+
+
+        // Revisions
+        foreach (Item::where('part_number',$this->product->part_number)->get() as $i) {
+            $this->all_revs[$i->version] = $i->id;
+        }
+
+        // Get Parents
+        $parents = Item::whereJsonContains('bom',['id' => (int) $this->uid])->get();
+        if ($parents) {
+            $this->parents = $parents;
+        }
+
+       
+    }
+
+
+
+
+
+
+
+
+
+    public function getNodes() {
+
+        if ( strlen($this->query) > 2 ) {
+
+            return Item::where('part_number', 'LIKE', "%".$this->query."%")
+                ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
+                ->orWhere('description', 'LIKE', "%".$this->query."%")
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+
+        } else {
+
+            return Item::orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

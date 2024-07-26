@@ -1,6 +1,6 @@
 
 
-<section class="section container">
+<section class="section container has-background-white">
 
     <script>
 

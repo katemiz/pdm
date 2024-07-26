@@ -36,7 +36,7 @@
 
 
 
-<div class="card">
+<div class="card has-background-lighter">
 
     <div class="card-content">
 
@@ -56,7 +56,7 @@
 
 
                     @if ($part_type == 'Detail')
-                    <a wire:click="replicateConfirm({{ $uid }})" class="button is-outlined mx-2 ">
+                    <a wire:click="replicateConfirm({{ $uid }})" class="button mx-2 ">
                         <span class="icon is-small"><x-carbon-replicate /></span>
                     </a>
                     @endif
@@ -64,21 +64,21 @@
 
 
                     @if ($part_type == 'Detail' && !$has_mirror && !$is_mirror_of  )
-                    <a wire:click="mirrorConfirm({{ $uid }})" class="button is-outlined mx-2 ">
+                    <a wire:click="mirrorConfirm({{ $uid }})" class="button mx-2 ">
                         <span class="icon is-small"><x-carbon-crossroads /></span>
                     </a>
                     @endif
 
 
                     @if ($part_type != 'Standard')
-                    <a href="/pdf/bom/{{$uid}}" class="button is-outlined mx-2 has-text-danger">
+                    <a href="/pdf/bom/{{$uid}}" class="button  mx-2 has-text-danger">
                         <span class="icon is-small"><x-carbon-document-pdf /></span>
                     </a>
                     @endif
 
 
                     @if ($part_type == 'Assy')
-                    <a href="/pdf/cascadedbom/{{$uid}}" class="button is-outlined mx-2 ">
+                    <a href="/pdf/cascadedbom/{{$uid}}" class="button mx-2 ">
                         <span class="icon is-small"><x-carbon-volume-file-storage /></span>
                     </a>
                     @endif
@@ -235,7 +235,7 @@
 
                 @if ($part_type != 'Standard')
 
-                <table class="table is-fullwidth">
+                <table class="table has-background-lighter is-fullwidth">
                     <tr>
                         <tr>
                             <th class="has-text-right">ECN</th>

@@ -1,4 +1,4 @@
-<section class="section container">
+<section class="section container has-background-white">
 
     <div class="columns">
 
@@ -63,7 +63,7 @@
     </nav>
 
     @if ($items->count() > 0)
-    <table class="table is-fullwidth">
+    <table class="table is-fullwidth has-background-lighter">
 
         <caption>{{ $items->total() }} {{ $items->total() > 1 ? ' Records' :' Record' }}</caption>
 

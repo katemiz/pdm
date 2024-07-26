@@ -145,7 +145,12 @@
 
     </script>
 
-    <section class="section container">
+    <section class="section container has-background-white">
+
+
+        <h1 class="title">dfjgıfdjgıfdg</h1>
+
+
         <p class="title has-text-weight-light is-size-1">Products</p>
         <p class="subtitle is-size-4">Products Menu - Select Type of Product</p>
 

@@ -1,9 +1,13 @@
-<div>
-    <div id="tree" class="notification mt-4" ></div>
-</div>
+{{-- <div> --}}
 
 
+<div id="tree" class="column" ></div>
 
+{{-- @if( count($treeData) < 1)
+<p class="has-text-centered">No parts yet</p>
+@endif --}}
+
+{{-- </div> --}}
 
 
 
@@ -17,6 +21,7 @@
             $('#tree').tree({
                 data: @json($treeData),
                 selectable:true,
+                closedIcon: '+',
 
                 onCreateLi: function(node, $li) {
                     // Append a link to the jqtree-element div.
@@ -26,7 +31,6 @@
                     );
                 }
             });
-
         });
     });
 
@@ -74,18 +78,15 @@
 
         if (node) {
 
-            console.log("selected node",node)
-
-            console.log("selected node qty",node.qty)
-
+            // console.log("selected node",node)
+            // console.log("selected node qty",node.qty)
 
             if (node.qty > 1) {
 
                 let newqty = node.qty-1
 
-                console.log("reducing qty",newqty)
-
-                console.log('before update',node)
+                // console.log("reducing qty",newqty)
+                // console.log('before update',node)
 
                 let aaa = {
                     name: node.name,
@@ -93,14 +94,14 @@
                     qty:newqty
                 }
 
-                console.log('aaa',aaa)
+                // console.log('aaa',aaa)
 
 
                 $('#tree').tree('updateNode',node, aaa)
 
 
 
-                console.log('after update',node)
+                // console.log('after update',node)
 
             } else {
                 $('#tree').tree('removeNode', node);
@@ -126,8 +127,26 @@
 
 
     window.addEventListener('refreshTree',function(e) {
-
         data = e.detail.data
+
+        // console.log("Refreshing")
+
+        // let tree_nodes = $('#tree').tree('toJson');
+
+        // if (tree_nodes != null && Object.keys(tree_nodes).length > 0 && !document.getElementById('noparts').classList.contains('is-hidden')) {
+
+        //     console.log("add is-hidden")
+
+        //     document.getElementById('noparts').classList.add('is-hidden')
+        // } else {
+        //     document.getElementById('noparts').classList.remove('is-hidden')
+
+        //     console.log("remove is-hidden")
+
+
+        // }
+
+
 
 
 

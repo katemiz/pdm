@@ -7,6 +7,29 @@
 
 
 
+    <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
+
+    <script src="{{ asset('/js/jquery-3.7.1.min.js') }}"></script>
+    <script src="{{ asset('/js/tree.jquery.js') }}"></script>
+
+    <link rel="stylesheet" href="{{ asset('/css/jqtree.css')}}">
+
+
+
+
+
+
+
+
+
+    <script src="{{ asset('/js/confirm_modal.js') }}"></script>
+
+    <script src="{{ asset('/js/product_tree.js') }}"></script>
+
+
+
+
+
 
 
 
@@ -85,14 +108,14 @@
 
 
 
-   @if ($part_type == "Assy") 
+   @if ($part_type == "Assy")
 
         <div class="columns">
 
         <div class="column is-3 has-background-lighter">
 
-            @if ($uid) 
-    
+            @if ($uid)
+
             <div class="card">
                 <header class="card-header">
 
@@ -110,41 +133,49 @@
                 </header>
             </div>
 
-            @endif 
+            @endif
 
 
-            <div class="columns">
-                <div class="column"><h2 class="subtitle has-text-weight-light">Product Tree</h2></div>
 
 
-                @if ( !$showNodeGui ) 
-                <div class="column is-2">
-                    <a wire:click="$toggle('showNodeGui')" class="button is-small is-link" aria-label="more options">
-                        <span class="icon">
-                            @if ( count($treeData) > 0 ) 
-                                <x-carbon-edit />
-                            @else
-                                <x-carbon-add />
-                            @endif  
-                        </span>
-                    </a>
+
+
+
+            <nav class="level">
+                <!-- Left side -->
+                <div class="level-left">
+                    <h3 class="subtitle has-text-weight-light">Product Tree</h3>
                 </div>
-                @endif 
 
-            </div>
+                <!-- Right side -->
+                <div class="level-right is-2">
 
-            
+                    @if ( !$showNodeGui )
+                    <div>
+                        <a wire:click="$toggle('showNodeGui')" class="button is-small is-link" aria-label="more options">
+                            <span class="icon">
+                                @if ( count($treeData) > 0 )
+                                    <x-carbon-edit />
+                                @else
+                                    <x-carbon-add />
+                                @endif
+                            </span>
+                        </a>
+                    </div>
+                    @endif
+
+                </div>
+            </nav>
+
+            <livewire:lw-tree :treeData="$treeData"/>
 
 
-            @if ( count($treeData) > 0 ) 
+            {{-- <p class="has-text-centered" id="noparts">
+            @if ( count($treeData) < 1 )
+                No parts yet
+            @endif
+            </p> --}}
 
-                <livewire:lw-tree :treeData="$treeData"/>
-
-            @else 
-
-                <p class="has-text-centered">No parts yet</p>
-
-            @endif 
 
 
 
@@ -155,7 +186,7 @@
 
 
             {{-- ADD CHILDREN GUI --}}
-            @if ($showNodeGui) 
+            @if ($showNodeGui)
 
 
                 <header class="mb-2">
@@ -166,18 +197,19 @@
                 <div class="notification is-info is-light">
                     Click icon to add parts to Product Tree. For multiple instance click again
                 </div>
-        
+
                 <nav class="level my-6">
                     <!-- Left side -->
                     <div class="level-left">
                         <div class="level-item has-text-centered">
                             <button wire:click="$toggle('showNodeGui')" class="button is-light is-small">
                                 <span class="icon is-small"><x-carbon-chevron-left /></span>
+                                <span>Back to Form</span>
                             </button>
                         </div>
                     </div>
                     <div class="level-right">
-        
+
                         <div class="field has-addons">
                             <div class="control">
                             <input class="input is-small" type="text" wire:model.live="query" placeholder="Search ...">
@@ -194,60 +226,60 @@
                             </a>
                             </div>
                         </div>
-        
+
                     </div>
                 </nav>
-        
-        
+
+
                 @if ($nodes->count() > 0)
                 <table class="table is-fullwidth">
-        
+
                     <caption>{{ $nodes->total() }} {{ $nodes->total() > 1 ? ' Records' :' Record' }}</caption>
-        
+
                     <thead>
                         <tr>
                             @foreach ($constants['list']['headers'] as $col_name => $headerParams)
                                 <th class="has-text-{{ $headerParams['align'] }}">
                                     {{ $headerParams['title'] }}
-        
+
                                     @if ($headerParams['sortable'])
-        
+
                                         <a class="{{ $headerParams['direction'] == 'asc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('{{$col_name}}')">
                                             <span class="icon has-text-link">
                                                 <x-carbon-chevron-sort-up />
                                             </span>
                                         </a>
-        
+
                                         <a class="{{ $headerParams['direction'] == 'desc' ? 'is-hidden': '' }}" wire:click="changeSortDirection('{{$col_name}}')">
                                             <span class="icon has-text-link">
                                                 <x-carbon-chevron-sort-down />
                                             </span>
                                         </a>
-        
+
                                     @endif
                                 </th>
                             @endforeach
-        
+
                             <th class="has-text-right"><span class="icon"><x-carbon-user-activity /></span></th>
-        
+
                         </tr>
                     </thead>
-        
+
                     <tbody>
-        
+
                         @foreach ($nodes as $record)
-        
-                            @if ($record->part_number != $product->part_number)
+
+                            @if (!$product || $record->part_number != $product->part_number)
                             <tr wire:key="{{ $record->id }}">
-        
+
                                 <td>{{ $record->full_part_number }}</td>
                                 <td>{{ $record->c_notice_id }}</td>
                                 <td>{{ $record->part_type }}</td>
                                 <td>{{ $record->description }}</td>
                                 <td>{{ $record->created_at }}</td>
-        
+
                                 <td class="has-text-right">
-        
+
                                     @if ($record->part_type == 'Standard')
                                         <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},'{{ addslashes($record->standard_number. " ". $record->std_params) }}','{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
                                             <span class="icon"><x-carbon-checkmark /></span>
@@ -257,25 +289,25 @@
                                             <span class="icon"><x-carbon-checkmark /></span>
                                         </a>
                                     @endif
-        
+
                                 </td>
-        
+
                             </tr>
                             @endif
-        
+
                         @endforeach
-        
+
                     </tbody>
                 </table>
-        
+
                 {{ $nodes->withQueryString()->links('components.pagination.bulma') }}
-        
+
                 @else
                     <div class="notification is-warning is-light">No nodes found in database</div>
                 @endif
-        
 
-            @else 
+
+            @else
                 <form method="POST" enctype="multipart/form-data">
                     @csrf
 
@@ -829,7 +861,7 @@
                     @endforeach
 
                 </form>
-            @endif 
+            @endif
 
         </div>
 
@@ -1047,10 +1079,6 @@
                         </div>
 
                     </div>
-
-
-
-
 
                     <div class="column card has-background-white-ter mb-5">
 
@@ -1392,6 +1420,6 @@
         </form>
 
 
-    @endif 
+    @endif
 
 </section>

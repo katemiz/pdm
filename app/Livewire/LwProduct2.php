@@ -29,13 +29,8 @@ class LwProduct2 extends Component
 {
     use WithPagination;
 
-
-
     public $uid = false;
-
-
     public $part_type = false;
-
 
     public $query = '';
     public $sortField = 'created_at';
@@ -67,11 +62,11 @@ class LwProduct2 extends Component
 
     public $all_revs = [];
 
-    public $treeData =[]; 
+    public $treeData =[];
 
 
 
-    public $product;  
+    public $product;
 
 
     public $remarks;
@@ -94,7 +89,7 @@ class LwProduct2 extends Component
 
         $this->getMaterialList();
 
-       $this->setConstants(); 
+       $this->setConstants();
 
 
         $this->ecns = CNotice::where('status','wip')->get();
@@ -133,11 +128,23 @@ class LwProduct2 extends Component
         switch (request('t')) {
 
             case 'd':
-                $this->constants = config('assy_nodes');
+                $this->constants = config('product');
                 break;
 
             case 'a':
                 $this->constants = config('assy_nodes');
+                break;
+
+            case 'b':
+                $this->constants = config('buyables');
+                break;
+
+            case 'mf':
+                $this->constants = config('buyables');
+                break;
+
+            case 's':
+                $this->constants = config('buyables');
                 break;
 
             default:
@@ -146,7 +153,7 @@ class LwProduct2 extends Component
         }
 
 
-    } 
+    }
 
 
 
@@ -156,8 +163,8 @@ class LwProduct2 extends Component
 
     public function setPartType() {
 
-
         if (!request('t')) {
+
             dd('no part_type defined');
 
         } else {
@@ -169,6 +176,18 @@ class LwProduct2 extends Component
 
                 case 'a':
                     $this->part_type = 'Assy';
+                    break;
+
+                case 'b':
+                    $this->part_type = 'Buyable';
+                    break;
+
+                case 'mf':
+                    $this->part_type = 'MakeFrom';
+                    break;
+
+                case 's':
+                    $this->part_type = 'Standard';
                     break;
 
                 default:
@@ -186,8 +205,8 @@ class LwProduct2 extends Component
         if (request('uid')) {
             $this->uid = request('uid');
 
-            $this->getProps();  
-        } 
+            $this->getProps();
+        }
     }
 
 
@@ -231,7 +250,7 @@ class LwProduct2 extends Component
         // $this->status = $item->status;
         // $this->is_latest = $item->is_latest;
 
-        $this->treeData =[];  
+        $this->treeData =[];
 
         if ($this->product->bom) {
 
@@ -276,7 +295,7 @@ class LwProduct2 extends Component
             $this->parents = $parents;
         }
 
-       
+
     }
 
 
@@ -308,6 +327,23 @@ class LwProduct2 extends Component
 
 
 
+    #[On('addTreeToDB')]
+    public function addTreeToDB($bomData) {
+
+        if ($this->uid) {
+
+            $props['bom'] = $bomData;
+
+            // dd($props);
+
+            $i = Item::find($this->uid);
+            $sonuc = $i->update($props);
+
+            $this->dispatch('saveResult');
+            // Log::info($i);
+            // Log::info($props);
+        }
+    }
 
 
 

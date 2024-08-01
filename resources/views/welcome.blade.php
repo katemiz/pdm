@@ -37,9 +37,17 @@
             </div>
 
             <div class="column">
-                <figure class="image my-0 mx-6">
-                    <img src="images/pdmhero.svg" alt="PDM Hero">
-                </figure>
+
+                @if(Auth::check())
+
+                    <livewire:lw-stats />
+
+
+                @else 
+                    <figure class="image my-0 mx-6">
+                        <img src="images/pdmhero.svg" alt="PDM Hero">
+                    </figure>
+               @endif 
             </div>
         </div>
 

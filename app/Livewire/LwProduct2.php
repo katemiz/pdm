@@ -72,6 +72,28 @@ class LwProduct2 extends Component
     public $remarks;
 
 
+
+    public $listeners = [
+
+        Quill::EVENT_VALUE_UPDATED
+
+    ];
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     public $notes_id_array = [];
 
 
@@ -355,7 +377,11 @@ class LwProduct2 extends Component
 
 
 
+    public function quill_value_updated($value){
 
+        $this->remarks = $value;
+
+    }
 
 
 

@@ -7,7 +7,31 @@
 
 
 
-    <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
+    {{-- <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script> --}}
+
+
+
+
+
+
+
+    <!-- QUILL EDITOR-->
+    <link href="{{asset("/css/quill.snow.css")}}" rel="stylesheet">
+    <script src="{{asset("/js/quill.js")}}"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     <script src="{{ asset('/js/jquery-3.7.1.min.js') }}"></script>
     <script src="{{ asset('/js/tree.jquery.js') }}"></script>
@@ -167,7 +191,7 @@
                 </div>
             </nav>
 
-            <livewire:lw-tree :treeData="$treeData"/>
+            <livewire:lw-tree :treeData="$treeData" :label="Remarks"/>
 
 
             {{-- <p class="has-text-centered" id="noparts">
@@ -738,6 +762,9 @@
                             placeholder='Any kind of remarks/notes about part/product.'
                             :content="$remarks"/> --}}
 
+                            <livewire:quill :value="$remarks" label="Remarks"/>
+
+
                         @error('remarks')
                         <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                         @enderror
@@ -1294,6 +1321,9 @@
                     label='Notes and/or remarks'
                     placeholder='Any kind of remarks/notes about part/product.'
                     :content="$remarks"/> --}}
+
+                    <livewire:quill :value="$remarks" label="Remarks"/>
+
 
                 @error('remarks')
                 <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>

@@ -40,7 +40,7 @@ return [
     |
     */
 
-    'layout' => 'components.layouts.pdm-layout',
+    'layout' => 'components.layouts.app',
 
     /*
     |---------------------------------------------------------------------------

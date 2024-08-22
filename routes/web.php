@@ -10,6 +10,10 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CkImgController;
 
+
+use App\Livewire\Welcome;
+
+
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
 use App\Livewire\LwDocument;
@@ -49,9 +53,12 @@ use App\Livewire\LwCompany;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
+
+Route::get('/', Welcome::class);
+
 
 
 require __DIR__.'/auth.php';

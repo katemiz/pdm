@@ -29,6 +29,8 @@ class Logware extends Component
         logout:
     */
 
+    public $isEN= true;
+
     public $lang= 'EN';
     public $action = 'login';
     public $app_title = 'App Title';
@@ -52,9 +54,19 @@ class Logware extends Component
     }
 
 
-    public function switchLang($lang)
+    public function switchLang()
     {
-        App::setLocale($lang);
+
+        if ($this->isEN) {
+            App::setLocale('EN');
+
+        } else {
+            App::setLocale('TR');
+
+        }
+
+
+        //App::setLocale($lang);
     }
 
 

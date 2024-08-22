@@ -1,4 +1,63 @@
-<section class="section container is-max-desktop">
+<section class="section w-full md:w-1/4 mx-auto">
+
+
+    <div class="flex justify-between bg-amber-50 w-full">
+        <div >
+
+            <a href="{{config('constants.company.link')}}">
+                <img src="{{asset('/images/baykus_orange.svg')}}" width="24px" alt="{{config('appconstants.kapkara.name')}}">
+            </a>
+
+        </div>
+        <div>
+
+{{$isEN}}
+
+
+<!-- Not toggled switch -->
+<div class="w-full h-full flex flex-col justify-center items-center {{ $isEN ? 'hidden':''}}" wire:click="$toggle('isTR')">
+    <div class="flex justify-center items-center">
+        <span class="">TR</span>
+    <!-- Switch Container -->
+    <div class="w-14 h-7 flex items-center bg-gray-300 rounded-full mx-3 px-1" >
+        <!-- Switch -->
+        <div class="bg-white w-5 h-5 rounded-full shadow-md transform" ></div>
+    </div>
+    <span class="">EN</span>
+</div>
+
+
+<!-- Toggled switch -->
+<div class="flex justify-center items-center mt-40 {{ $isEN ? '':'hidden'}}" wire:click="$toggle('isTR')">
+    <span class="">TR</span>
+    <!-- Switch Container -->
+    <div class="w-14 h-7 flex items-center bg-gray-300 rounded-full mx-3 px-1 bg-blue-700" >
+        <!-- Switch -->
+        <div class="bg-white w-5 h-5 rounded-full shadow-md transform translate-x-7"></div>
+    </div>
+    <span class="">EN</span>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+
+
 
     <div class="column is-half is-offset-one-quarter">
 

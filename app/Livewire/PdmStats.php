@@ -18,7 +18,7 @@ use Carbon\Carbon;
 
 
 
-class LwStats extends Component
+class PdmStats extends Component
 {
 
 
@@ -32,8 +32,7 @@ class LwStats extends Component
     public $data;
 
 
-
-
+    public $stat_data;
 
 
     public function render()
@@ -41,7 +40,47 @@ class LwStats extends Component
         $this->getNoOfParameters(); 
         $this->graphData(); 
 
-        return view('components.elements.lw-stats');
+        $this->stat_data = [
+
+            [
+                "title" => "Active Users",
+                "data" => $this->no_of_users,
+                "img" => "stats_users.svg",
+                "content" => "Number of Active PDM App Users",
+            ],
+
+
+            [
+                "title" => "Number of ECNs",
+                "data" => $this->no_of_ecns["wip"] .'/'.$this->no_of_ecns["completed"],
+                "img" => "stats_ecns.svg",
+                "content" => "Number of Engineering Change Notices (ECN). Work in Progress and Completed ECNs.",
+            ],
+
+            [
+                "title" => "Sellable Items 7 Customer Drawings",
+                "data" => $this->no_of_sellables,
+                "img" => "stats_sellables.svg",
+                "content" => "Number of Sellable Products",
+            ],
+
+            [
+                "title" => "Number of Documents",
+                "data" => $this->no_of_documents,
+                "img" => "stats_documents.svg",
+                "content" => "Number of documents created in PDM System",
+            ],
+
+
+            [
+                "title" => "Number of Components",
+                "data" => $this->no_of_items,
+                "img" => "stats_products.svg",
+                "content" => "Number of Components/Parts Created in PDM System",
+            ],
+        ];
+
+        return view('livewire.stats');
     }
 
 
@@ -60,6 +99,22 @@ class LwStats extends Component
         $this->no_of_documents = Document::where('is_latest', true)->count();
         $this->no_of_items = Item::where('is_latest', true)->count();
     } 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

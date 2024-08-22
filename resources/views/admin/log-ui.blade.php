@@ -9,14 +9,22 @@
         <meta name="theme-color" content="#317EFB"/>
 
         <title>{{ config('appconstants.app.name') }}</title>
-        <link rel="stylesheet" href="{{ asset('/css/bulma.min.css')}}">
 
-        <style>
+        <link rel="icon" type="image/x-icon" href="{{ asset('/images/favicon.ico') }}">
+
+        {{-- <link rel="stylesheet" href="{{ asset('/css/bulma.min.css')}}"> --}}
+
+        {{-- <style>
             html {height: 100%;}
             body {background: #e6e6e6; min-height: 100%;}
-        </style>
+        </style> --}}
+
+@vite('resources/css/app.css')
+@vite('resources/js/app.js')
+
+
     </head>
-    <body>
+    <body class="bg-gray-200">
 
     @livewire('logware')
 

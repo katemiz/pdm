@@ -1,57 +1,41 @@
-<x-pdm-layout title="{{ config('appconstants.app.name') }}">
+<section class="mx-auto bg-white-100">
 
-    <section class="section">
+    <div class="container mx-auto px-4">
 
-        <div class="columns">
+        <livewire:header type="Hero" title="Be Agile<br>Run Agile" subtitle="Product Data Management"/>
 
-            <div class="column is-4 ">
-                <p class="title has-text-weight-light is-size-1">Be Agile<br>Run Agile</p>
-                <p class="subtitle is-size-4">{{ config('appconstants.app.name') }}</p>
+        <div class="flex flex-wrap -mx-4">
 
-                {{-- <figure class="image my-4">
-                    <img src="images/masttech_pdm.svg" alt="Company PDM">
-                </figure> --}}
-
-
-                <article class="message  has-background-white">
-                <div class="message-body">
-                    <strong>Data-Driven Success</strong><br><br>
-                        PDM empowers businesses by organizing, tracking, and optimizing product-related data. Success lies in harnessing this data effectively.
-                </div>
-                </article>
-
-                <article class="message has-background-white">
-                <div class="message-body">
-                    <strong>Data Make Sense</strong><br><br>
-                    PDM bridges the gap between raw information and actionable insights, leading to successful product development.
-                </div>
-                </article>
-
-                <article class="message has-background-white">
-                    <div class="message-body">
-                        <strong>Order in Your Data World</strong><br><br>
-                        PDM brings structure and clarity, ensuring seamless collaboration across teams.
+            <div class="flex flex-col w-full md:w-1/3 px-4">
+                @foreach ($mottos as $motto)
+                    <div class="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl my-3 ">
+                        <div class="xl:flex">
+                            <div class="md:shrink-0 bg-blue-50">
+                                <img class="h-48 w-full object-cover object-scale-down md:h-full md:w-48" src="{{asset("/images/".$motto['img'])}}" alt="Modern building architecture">
+                            </div>
+                            <div class="p-8 bg-gray-100 shadow-md">
+                                <div class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">{{$motto['title']}}</div>
+                                <p class="mt-2 text-slate-500">{{$motto['content']}}</p>
+                            </div>
+                        </div>
                     </div>
-                </article>
-
+                @endforeach
             </div>
 
-            <div class="column">
+            <div class="w-full md:w-2/3 p-4">
 
                 @if(Auth::check())
-
-                    <livewire:lw-stats />
-
-
+                    <livewire:pdm-stats />
                 @else 
                     <figure class="image my-0 mx-6">
-                        <img src="images/pdmhero.svg" alt="PDM Hero">
+                        <img src="{{asset("/images/hero.svg")}}" alt="PDM Hero">
                     </figure>
-               @endif 
+                @endif 
             </div>
+
         </div>
 
-    </section>
 
-</x-pdm-layout>
+    </div>
 
+</section>

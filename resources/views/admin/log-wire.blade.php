@@ -1,109 +1,49 @@
-<section class="section w-full md:w-1/4 mx-auto">
+<section class="section w-full md:w-1/2  md:m-8 mx-auto">
 
 
-    <div class="flex justify-between bg-amber-50 w-full">
-        <div >
+    <div class="flex justify-between my-4 w-full">
 
+        <div>
             <a href="{{config('constants.company.link')}}">
                 <img src="{{asset('/images/baykus_orange.svg')}}" width="24px" alt="{{config('appconstants.kapkara.name')}}">
             </a>
-
         </div>
+
         <div>
+            <a wire:click="switchLang('tr')" class="inline-flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 mr-2" href="#">
+            TR
+            </a>
 
-{{$isEN}}
-
-
-<!-- Not toggled switch -->
-<div class="w-full h-full flex flex-col justify-center items-center {{ $isEN ? 'hidden':''}}" wire:click="$toggle('isTR')">
-    <div class="flex justify-center items-center">
-        <span class="">TR</span>
-    <!-- Switch Container -->
-    <div class="w-14 h-7 flex items-center bg-gray-300 rounded-full mx-3 px-1" >
-        <!-- Switch -->
-        <div class="bg-white w-5 h-5 rounded-full shadow-md transform" ></div>
-    </div>
-    <span class="">EN</span>
-</div>
-
-
-<!-- Toggled switch -->
-<div class="flex justify-center items-center mt-40 {{ $isEN ? '':'hidden'}}" wire:click="$toggle('isTR')">
-    <span class="">TR</span>
-    <!-- Switch Container -->
-    <div class="w-14 h-7 flex items-center bg-gray-300 rounded-full mx-3 px-1 bg-blue-700" >
-        <!-- Switch -->
-        <div class="bg-white w-5 h-5 rounded-full shadow-md transform translate-x-7"></div>
-    </div>
-    <span class="">EN</span>
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            <a wire:click="switchLang('en')" class="inline-flex flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 ml-2" href="#">
+            EN
+            </a>
         </div>
-      </div>
+    </div>
 
 
 
-    <div class="column is-half is-offset-one-quarter">
+    <div class="shadow-lg w-full bg-white p-4">
 
-        <nav class="level">
-            <!-- Left side -->
-            <div class="level-left">
-                {{-- <p class="has-text-weight-light my-0">
-                    <a wire:click="changeAction('forgot')">{{__('ui.links.forgot.text')}}</a>
-                </p> --}}
 
-                <a href="{{config('constants.company.link')}}">
-                    <img src="{{asset('/images/baykus_orange.svg')}}" width="24px" alt="{{config('appconstants.kapkara.name')}}">
-                </a>
-            </div>
-
-            <nav class="breadcrumb has-bullet-separator is-right level-right" aria-label="breadcrumbs">
-                <ul>
-                    <li class="{{ app()->getLocale() == 'tr' ? 'is-active':''}}">
-                    <a wire:click="switchLang('tr')">TR</a>
-                </li>
-                <li class="{{ app()->getLocale() == 'en' ? 'is-active':''}}">
-                    <a wire:click="switchLang('en')">EN</a>
-                </li>
-                </ul>
-            </nav>
-
-        </nav>
 
         <div class="box">
 
-            <p class="title has-text-centered">{{ config('appconstants.app.code') }}</p>
-            <p class="subtitle has-text-centered">{{ config('appconstants.app.name') }}</p>
+            <p class="text-4xl font-bold">{{ config('appconstants.app.code') }}</p>
+            <p class="text-gray-500">{{ config('appconstants.app.name') }}</p>
 
 
-            <div class="column is-offset-3 is-offset-4-mobile is-6 is-4-mobile my-4">
-                <figure class="image p-3 has-text-link-dark"><x-carbon-model-alt class="is-large"/></figure>
+            <div class="flex mx-auto justify-center">
+                <x-carbon-model-alt class="w-38 h-48 text-red"/>
             </div>
 
 
             {{-- EMAIL --}}
             @if (in_array($action,['login','register','forgot']))
-            <div class="field">
-                <label class="label has-text-weight-light" for="email">{{__('ui.elements.email.label')}}</label>
-                <div class="control has-icons-right">
+            <div>
+                <label class="font-semibold text-gray-600 my-14" for="email">{{__('ui.elements.email.label')}}</label>
+                <div class="flex flex-wrap items-stretch w-full mb-4 relative">
                     <input
-                        class="input"
+                        class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 p-3 relative focus:border-blue focus:shadow"
                         type="email"
                         name="email"
                         wire:model="email"
@@ -160,8 +100,8 @@
             @if (in_array($action,['login']))
             <div class="field">
 
-                <label class="label has-text-weight-light" for="email">{{__('ui.elements.password.label')}}</label>
-                <div class="control has-icons-right">
+                <label class="font-semibold text-gray-600" for="email">{{__('ui.elements.password.label')}}</label>
+                <div class=" border-y-gray-300 p-4">
 
                     <input
                         class="input"

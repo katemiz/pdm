@@ -29,7 +29,6 @@ class Logware extends Component
         logout:
     */
 
-    public $isEN= true;
 
     public $lang= 'EN';
     public $action = 'login';
@@ -41,7 +40,7 @@ class Logware extends Component
     public $password = '';
     public $cpassword ='';
 
-    public $status; 
+    public $status;
 
 
     public function render()
@@ -54,19 +53,9 @@ class Logware extends Component
     }
 
 
-    public function switchLang()
+    public function switchLang($lang)
     {
-
-        if ($this->isEN) {
-            App::setLocale('EN');
-
-        } else {
-            App::setLocale('TR');
-
-        }
-
-
-        //App::setLocale($lang);
+        App::setLocale($lang);
     }
 
 
@@ -91,7 +80,7 @@ class Logware extends Component
 
             $request->session()->regenerate();
             return redirect('/');
-        } 
+        }
 
         $this->addError('email', 'The provided credentials (email/password) do not match our records.');
         return redirect()->back();

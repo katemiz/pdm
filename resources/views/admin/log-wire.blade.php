@@ -1,70 +1,59 @@
-<section class="section w-full md:w-1/2  md:m-8 mx-auto">
+<section class="grid justify-items-center">
 
 
-    <div class="flex justify-between my-4 w-full">
 
-        <div>
-            <a href="{{config('constants.company.link')}}">
-                <img src="{{asset('/images/baykus_orange.svg')}}" width="24px" alt="{{config('appconstants.kapkara.name')}}">
-            </a>
-        </div>
-
-        <div>
-            <a wire:click="switchLang('tr')" class="inline-flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 mr-2" href="#">
-            TR
-            </a>
-
-            <a wire:click="switchLang('en')" class="inline-flex flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 ml-2" href="#">
-            EN
-            </a>
-        </div>
+    <div class="bg-yellow-200 hidden md:w-1/2">
+        asdsdf
     </div>
 
+    <div>
 
+        <div class="flex justify-between my-4 w-full">
 
-    <div class="shadow-lg w-full bg-white p-4">
-
-
-
-        <div class="box">
-
-            <p class="text-4xl font-bold">{{ config('appconstants.app.code') }}</p>
-            <p class="text-gray-500">{{ config('appconstants.app.name') }}</p>
-
-
-            <div class="flex mx-auto justify-center">
-                <x-carbon-model-alt class="w-38 h-48 text-red"/>
+            <div>
+                <a href="{{config('constants.company.link')}}">
+                    <img src="{{asset('/images/baykus_orange.svg')}}" width="24px" alt="{{config('appconstants.kapkara.name')}}">
+                </a>
             </div>
 
+            <div>
+                <a wire:click="switchLang('tr')" class="inline-flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 mr-2" href="#">
+                TR
+                </a>
+
+                <a wire:click="switchLang('en')" class="inline-flex flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 ml-2" href="#">
+                EN
+                </a>
+            </div>
+        </div>
+
+        <div class="flex flex-col shadow-lg w-full bg-white p-4 mx-auto">
+
+            <p class="text-4xl font-extrabold">{{ config('appconstants.app.code') }}</p>
+            <p class="text-gray-500">{{ config('appconstants.app.name') }}</p>
+
+            <div class="flex mx-auto justify-center">
+                <x-carbon-model-alt class="w-38 h-48 text-red-500 my-28"/>
+            </div>
 
             {{-- EMAIL --}}
             @if (in_array($action,['login','register','forgot']))
-            <div>
-                <label class="font-semibold text-gray-600 my-14" for="email">{{__('ui.elements.email.label')}}</label>
-                <div class="flex flex-wrap items-stretch w-full mb-4 relative">
-                    <input
-                        class="flex-shrink flex-grow flex-auto leading-normal w-px flex-1 p-3 relative focus:border-blue focus:shadow"
-                        type="email"
-                        name="email"
-                        wire:model="email"
-                        placeholder="{{__('ui.elements.email.placeholder')}}" required >
+                <div class="relative z-0 w-full mb-5 group">
+                    <input type="email" name="email" id="floating_email" wire:model="email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                    <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">{{__('ui.elements.email.label')}}</label>
+                
+                    @error('email')
+                    <p class="mt-2 text-sm text-red-500 dark:text-gray-400">{{ $message }}</p>
+                    @enderror
                 </div>
-                @error('email')
-                <p class="help is-danger">{{ $message }}</p>
-                @enderror
-            </div>
             @endif
 
             @if ($action ==='forgot')
-
-            <div class="notification is-info is-light">
-                <p class="subtitle">{{ __('ui.links.forgot.text' )}}</p>
-                <p>{{ __('ui.links.forgot.info' )}}</p>
-            </div>
-
+                <div class="notification is-info is-light">
+                    <p class="subtitle">{{ __('ui.links.forgot.text' )}}</p>
+                    <p>{{ __('ui.links.forgot.info' )}}</p>
+                </div>
             @endif
-
-
 
             {{-- NAME, LASTNAME --}}
             @if (in_array($action,['register']))
@@ -98,23 +87,13 @@
 
             {{-- PASSWORD --}}
             @if (in_array($action,['login']))
-            <div class="field">
-
-                <label class="font-semibold text-gray-600" for="email">{{__('ui.elements.password.label')}}</label>
-                <div class=" border-y-gray-300 p-4">
-
-                    <input
-                        class="input"
-                        type="password"
-                        name="password"
-                        wire:model="password"
-                        placeholder="{{__('ui.elements.password.placeholder')}}" required >
-                </div>
-
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="password" name="password" id="passwd" wire:model="password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                <label for="passwd" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">{{__('ui.elements.password.label')}}</label>
+            
                 @error('password')
-                <p class="help is-danger">{{ $message }}</p>
+                <p class="mt-2 text-sm text-red-500 dark:text-gray-400">{{ $message }}</p>
                 @enderror
-
             </div>
             @endif
 
@@ -138,9 +117,7 @@
 
 
             {{-- PASSWORD,CONFIRM PASSWORD, NEW PASSWORD --}}
-
             @if (in_array($action,['register','reset','change']))
-
             <div class="columns">
                 <div class="column field is-half">
 
@@ -191,7 +168,7 @@
 
 
             @if (in_array($action,['login']))
-            <button wire:click="loginUsr" class="button is-link mt-6 is-fullwidth">{{__('ui.links.login.text')}}</button>
+            <button wire:click="loginUsr" type="button" class="px-5 mt-12 py-4 w-full text-base font-medium text-center text-white bg-sky-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{__('ui.links.login.text')}}</button>
             @endif
 
             @if (in_array($action,['register']))
@@ -210,44 +187,179 @@
             <button wire:click="changePwd" class="button is-link mt-6 is-fullwidth">{{__('ui.links.change.text')}}</button>
             @endif
 
-        </div>
 
-        <nav class="level">
-            <!-- Left side -->
-            <div class="level-left">
-                {{-- <a href="{{config('constants.company.link')}}">
-                    <img src="{{asset('/images/baykus_orange.svg')}}" width="24px" alt="{{config('appconstants.kapkara.name')}}">
-                </a> --}}
-            </div>
 
-            <nav class="breadcrumb has-bullet-separator is-right level-right" aria-label="breadcrumbs">
-                <p class="has-text-right is-size-6 has-text-weight-light my-0">
 
-                    {{-- @if (in_array($action,['login','forgot','change']))
-                    <a wire:click="changeAction('register')" class="px-0">{{__('ui.links.register.text')}}</a>
-                    @endif --}}
 
-                    @if (in_array($action,['register']))
-                    <a wire:click="changeAction('login')" class="px-0">{{__('ui.links.login.text')}}</a>
-                    @endif
 
-                </p>
+
+
+
+            
+            
+
+
+
+
+
+
+
+
+
+
+
+            <nav class="level">
+                <!-- Left side -->
+                <div class="level-left">
+                    {{-- <a href="{{config('constants.company.link')}}">
+                        <img src="{{asset('/images/baykus_orange.svg')}}" width="24px" alt="{{config('appconstants.kapkara.name')}}">
+                    </a> --}}
+                </div>
+
+                <nav class="breadcrumb has-bullet-separator is-right level-right" aria-label="breadcrumbs">
+                    <p class="has-text-right is-size-6 has-text-weight-light my-0">
+
+                        {{-- @if (in_array($action,['login','forgot','change']))
+                        <a wire:click="changeAction('register')" class="px-0">{{__('ui.links.register.text')}}</a>
+                        @endif --}}
+
+                        @if (in_array($action,['register']))
+                        <a wire:click="changeAction('login')" class="px-0">{{__('ui.links.login.text')}}</a>
+                        @endif
+
+                    </p>
+                </nav>
+
             </nav>
 
-        </nav>
+
+
+        </div>
+
+    </div>
+
+</section>
 
 
 
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 px-2 py-8">
+
+
+
+<div class="grid grid-cols-2 md:max-w-[800px] mx-auto bg-white shadow-lg rounded-lg">
+
+  <div class="flex flex-col bg-teal-100 mx-auto p-4">
+
+
+    <div class="flex w-full justify-between">
+
+      <div class="flex">
+        <a href="#">
+        <img src="https://masttech.net/images/baykus_orange.svg" width="24px" alt="uuu">
+        </a>
+      </div>
+
+      <div class="flex">
+        <p>TR - EN</p>
+      </div>
+      
+    </div>
+
+
+        <div class="flex flex-col justify-between ">
+
+
+            <p class="text-3xl font-extrabold pt-4">PDM</p>
+            <p class="text-gray-500">sddsfdf sdfdsjf sdıf udsf</p>
+
+
+            <div class="mx-auto justify-center py-16">
+                <img src="https://masttech.net/images/baykus_orange.svg" width="96px" alt="uuu">
+            </div>
+
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="email" name="email" id="floating_email" wire:model="email" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                <label for="floating_email" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">safdf dss gdfg</label>
+            
+                <p class="mt-2 text-sm text-red-500 dark:text-gray-400">Messmessage</p>
+            </div>
+
+            <div class="relative z-0 w-full mb-5 group">
+                <input type="password" name="password" id="passwd" wire:model="password" class="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer" placeholder=" " required />
+                <label for="passwd" class="peer-focus:font-medium absolute text-sm text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">sadfdf</label>
+            
+                <p class="mt-2 text-sm text-red-500 dark:text-gray-400">$message</div>
+
+
+            <button wire:click="loginUsr" type="button" class="px-5 mt-12 py-4 w-full text-base font-medium text-center text-white bg-sky-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login</button>
+
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+  <div class="hidden md:block p-8 items-center justify-items-center" style="background-image: url(https://images.unsplash.com/photo-1475855581690-80accde3ae2b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80)">
+
+
+
+
+
+
+
+
+    <div class="flex flex-col h-full justify-between" >
+        <div class="text-6xl font-extrabold">Simplicity In Action</div>
+        <div class="mx-auto"><img src="https://masttech.net/images/baykus_orange.svg" width="256px" alt="uuu"></div>
     </div>
 
 
 
-    {{-- <a wire:click="changeAction('reset')" class="px-0">reset</a>
-    <a wire:click="changeAction('change')" class="px-0">change</a> --}}
 
 
 
-</section>
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
 
 
 

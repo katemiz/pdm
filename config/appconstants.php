@@ -18,7 +18,7 @@ return [
         'name' => 'kapkara',
         'logo' => 'baykus_orange.svg',
         'link' => 'https://kapkara.one',
-        'motto' => 'simplicity in action',
+        'motto' => 'Simplicity In Action',
         'title' => 'web technologies | design house',
     ],
 

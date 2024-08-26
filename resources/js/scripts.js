@@ -20,9 +20,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
+  // USER DROPDOWN
+  const userMenuButton = document.getElementById('userMenuButton');
+  const userMenu = document.getElementById('userMenu');
+
+  userMenuButton.addEventListener('mouseover', () => {
+    userMenu.classList.toggle('hidden');
+  });
+
+  userMenu.addEventListener('mouseout', () => {
+    userMenu.classList.toggle('hidden');
+  });
 
 
-  // Child Dropdown 
+
+
+
+
+  // Child Dropdown
   // const childDropdownButton = document.getElementById('dropdownNavbarLink');
   // const doubleDropdown = document.getElementById('dropdownNavbar');
 

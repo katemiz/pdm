@@ -9,20 +9,20 @@ state(['content' => "Stat explanation"]);
 
 ?>
 
-<div>
-    <div class="flex items-center justify-center">
-        <div class="w-full py-6 px-3">
-            <div class="bg-white shadow-xl rounded-lg overflow-hidden">
-                <div class="bg-cover bg-center h-56 p-4" >
-                    <div class="flex justify-end">
-                        <img src="{{asset("/images/$img")}}" alt="PDM Hero">
-                    </div>
-                </div>
-                <div class="p-4">
-                    <p class="uppercase tracking-wide text-sm font-bold text-gray-700">{{ $title}}</p>
-                    <p class="text-3xl text-gray-900">{{ $data }}</p>
-                    <p class="text-gray-700">{{ $content }}</p>
-                </div>
+
+
+
+
+<div class="flex items-center justify-center">
+    <div class="w-full">
+        <div class="shadow-xl rounded-lg">
+            <div class="flex justify-center bg-blue-50">
+              <img class="object-scale-down" src="{{asset("/images/$img")}}" alt="{{ $title}}">
+            </div>
+            <div class="p-4">
+                <p class="uppercase tracking-wide text-sm font-bold text-gray-700">{{ $title}}</p>
+                <p class="text-3xl text-gray-900 font-extrabold">{{ $data}}</p>
+                <p class="text-gray-700">{{ $content }}</p>
             </div>
         </div>
     </div>

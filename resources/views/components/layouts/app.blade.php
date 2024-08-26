@@ -17,10 +17,10 @@
         @vite('resources/css/app.css')
         @vite('resources/js/app.js')
         @vite('resources/js/scripts.js')
-        
+
     </head>
 
-    <body>
+    <body class="bg-[url('{{ asset('/images/HeroPage1.png') }}')] bg-cover bg-center h-screen">
 
         @include('components.layouts.navbar')
         {{ $slot }}

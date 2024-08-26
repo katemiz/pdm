@@ -9,9 +9,7 @@ state(['subtitle' => false]);
 
 ?>
 
-<div class="pt-4 pb-8">
-
-
+<div class="flex flex-col pt-4 pb-8">
 
     @switch($type)
 
@@ -27,7 +25,7 @@ state(['subtitle' => false]);
         @default
         @case("Page")
 
-            <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">{!! $title !!}</h1>
+            <h1 class="text-4xl font-light text-gray-800 sm:text-3xl">{!! $title !!}</h1>
 
             @if ($subtitle)
             <p class="mt-1.5 text-sm text-gray-500">{!! $subtitle !!}</p>
@@ -37,10 +35,10 @@ state(['subtitle' => false]);
 
         @case("Section")
 
-            <h1 class="text-2xl font-bold text-gray-900 sm:text-3xl">{!! $title !!}</h1>
+            <h1 class="text-3xl font-light text-gray-700 sm:text-3xl">{!! $title !!}</h1>
 
             @if ($subtitle)
-            <p class="mt-1.5 text-sm text-gray-500">{!! $subtitle !!}</p>
+            <p class="text-sm text-gray-500">{!! $subtitle !!}</p>
             @endif
 
             @break

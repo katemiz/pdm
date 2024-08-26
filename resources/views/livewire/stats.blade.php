@@ -1,19 +1,45 @@
-<section class="mx-auto bg-white-100">
+<section class="flex flex-col mx-auto gap-4">
 
-  <livewire:header type="Hero" title="Stats" subtitle="Let the numbers speak"/>
+  <livewire:header type="Section" title="Stats" subtitle="Let the numbers speak"/>
 
-  <div class="grid grid-cols-3 gap-4">
-    @foreach ($stat_data as $item)
-      <livewire:stat-card :title="$item['title']" :data="$item['data']" :img="$item['img']" :content="$item['content']"/>
-    @endforeach
+  <div class="flex flex-col md:flex-row gap-4 w-full">
+
+    <div class="w-full md:w-1/3">
+        <livewire:stat-card :title="$stat_data[0]['title']" :data="$stat_data[0]['data']" :img="$stat_data[0]['img']" :content="$stat_data[0]['content']"/>
+    </div>
+
+    <div class="w-full md:w-1/3">
+        <livewire:stat-card :title="$stat_data[1]['title']" :data="$stat_data[1]['data']" :img="$stat_data[1]['img']" :content="$stat_data[1]['content']"/>
+    </div>
+
+    <div class="w-full md:w-1/3">
+        <livewire:stat-card :title="$stat_data[2]['title']" :data="$stat_data[2]['data']" :img="$stat_data[2]['img']" :content="$stat_data[2]['content']"/>
+    </div>
+
   </div>
 
-  <div>
-    <canvas id="myChart" class="card m-6 p-6 has-background-white"></canvas>
+
+  <div class="flex flex-col md:flex-row gap-4 w-full md:w-2/3 mx-auto">
+
+    <div class="w-full md:w-1/2">
+        <livewire:stat-card :title="$stat_data[3]['title']" :data="$stat_data[3]['data']" :img="$stat_data[3]['img']" :content="$stat_data[3]['content']"/>
+    </div>
+
+    <div class="w-full md:w-1/2">
+        <livewire:stat-card :title="$stat_data[4]['title']" :data="$stat_data[4]['data']" :img="$stat_data[4]['img']" :content="$stat_data[4]['content']"/>
+    </div>
+
   </div>
-  
+
+
+  <div class="p-6 bg-lime-50 shadow-lg rounded-lg">
+    <canvas id="myChart" ></canvas>
+  </div>
+
+
+
   <script src="{{ asset('/js/charts.js') }}"></script>
-  
+
   <script>
     const ctx = document.getElementById('myChart');
 
@@ -23,20 +49,20 @@
         {
           label: 'Components',
           data: @json($data["item"]),
-          borderColor: '#36A2EB',
-          backgroundColor: '#36A2EB',
+          borderColor: '#7f1d1d',
+          backgroundColor: '#ef4444',
         },
         {
           label: 'Sellables',
           data: @json($data['sellable']),
-          borderColor: '#FF6384',
-          backgroundColor: '#FF6384',
+          borderColor: '#3f6212',
+          backgroundColor: '#22c55e',
         },
         {
           label: 'Documents',
           data: @json($data['docs']),
-          borderColor: '#CCDDCC',
-          backgroundColor: '#CCDDCC',
+          borderColor: '#1e40af',
+          backgroundColor: '#6366f1',
         }
       ]
     };

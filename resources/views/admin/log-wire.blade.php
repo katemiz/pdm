@@ -1,4 +1,4 @@
-<div class="flex flex-col md:flex-row gap-4 sm:max-w-[400px] md:max-w-[480px] my-4 mx-auto ">
+<div class="flex flex-col md:flex-row gap-4 sm:max-w-[400px] md:max-w-[480px] my-4 mx-auto">
 
     <div class="flex-1 w-full flex-col mx-auto p-4 shadow-lg rounded-lg bg-white">
 
@@ -15,13 +15,13 @@
 
                 <a
                     wire:click="switchLang('tr')"
-                    class="inline-flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 mr-2">
+                    class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 mr-2">
                 TR
                 </a>
 
                 <a
                     wire:click="switchLang('en')"
-                    class="inline-flex flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 ml-2">
+                    class="flex items-center text-sm text-gray-500 hover:text-blue-600 focus:outline-none focus:text-blue-600 dark:text-neutral-500 dark:hover:text-blue-500 dark:focus:text-blue-500 ml-2">
                 EN
                 </a>
 

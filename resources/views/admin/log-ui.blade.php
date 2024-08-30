@@ -12,21 +12,14 @@
 
         <link rel="icon" type="image/x-icon" href="{{ asset('/images/favicon.ico') }}">
 
-        {{-- <link rel="stylesheet" href="{{ asset('/css/bulma.min.css')}}"> --}}
-
-        {{-- <style>
-            html {height: 100%;}
-            body {background: #e6e6e6; min-height: 100%;}
-        </style> --}}
-
-@vite('resources/css/app.css')
-@vite('resources/js/app.js')
-
-
+        @vite('resources/css/app.css')
+        @vite('resources/js/app.js')
     </head>
-    <body class="bg-gray-200">
 
-    @livewire('logware')
+
+    <body class="bg-[url('{{ asset('/images/HeroPage1.png')}}')] bg-cover bg-center bg-no-repeat">
+
+        @livewire('logware')
 
     </body>
 </html>

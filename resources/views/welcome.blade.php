@@ -30,8 +30,11 @@
                 <livewire:pdm-stats />
             @else
 
-                <div class="relative max-w-xl mx-auto">
-                    <img class="" src="{{asset("/images/HeroPage1.png")}}" alt="PDM Future">
+                {{-- <div class="relative max-w-xl mx-auto bg-[url('./HeroPage1.png\')] bg-cover bg-center "> --}}
+
+                <div class="relative max-w-xl mx-auto bg-[url('{{ asset('/images/HeroPage1.png') }}')] bg-cover bg-center h-screen">
+
+                    {{-- <img class="" src="{{asset("/images/HeroPage1.png")}}" alt="PDM Future"> --}}
                     <div class="absolute inset-0 bg-gray-700 opacity-0 rounded-md"></div>
                     <div class="absolute inset-0 flex content-end justify-center">
                         <h2 class="text-white text-6xl font-light">{{ config('appconstants.kapkara.motto') }}</h2>
@@ -43,5 +46,17 @@
 
 
     </div>
+
+    <div class="bg-[url('{{ asset('/images/HeroPage1.png') }}')] ">
+    Just a content
+</div>
+
+
+<div class="bg-[url('{{ asset('/images/HeroPage1.png') }}')] bg-cover bg-center">
+    Just a content
+</div>
+
+<img src="{{ asset('/images/HeroPage1.png') }}" alt="Test Image">
+
 
 </section>

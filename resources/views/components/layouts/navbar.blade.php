@@ -1,229 +1,454 @@
-<nav class="flex flex-col md:flex-row items-stretch bg-gray-800">
+<header class="bg-gray-800 text-white">
 
+  <nav class="flex items-center justify-between gap-4 px-4 py-4 h-16">
 
-    <div class="flex bg-amber-300">
+    <a href="/" class="text-2xl whitespace-nowrap flex ">
+      <x-carbon-model-alt class="w-8"/> 
+      <span class="px-2 font-extrabold">{{ config('appconstants.app.code') }}</span>       
+    </a>
 
-        {{-- APP LOGO --}}
-        <a href="/" class="flex items-center space-x-3 ml-2 rtl:space-x-reverse text-orange-500 p-4">
-        <x-carbon-model-alt class="w-8"/>
-        <span class="font-bold text-lg">{{ config('appconstants.app.code') }}</span>
-        </a>
+    <div id="menu" class="absolute left-0 top-16 max-md:bg-gray-200 w-full flex flex-col gap-6 p-4 md:static md:flex-row md:justify-between">
 
-    </div>
+        <ul class="flex flex-col text-black md:flex-row">
 
+          {{-- ADMIN MENU --}}
+          <li class="relative p-2 md:text-white justify-center md:hover:bg-gray-400 md:hover:text-gray-800">
 
+            <button id="adminButton" class="inline-flex items-center font-extrabold md:font-normal">
 
+              <div class="text-blue-600 md:text-yellow-400">
+                <x-carbon-letter-aa class="w-6"/>
+              </div>
 
+              <span class="px-2">Admin</span>
 
+              <div class="text-slate-400 hover:text-black">
+                <x-carbon-chevron-down class="w-5"/>
+              </div>
 
-    <div class="flex-1 items-center text-white">
-
-        {{-- MAIN MENU --}}
-        <div class="items-center justify-between hidden w-full md:flex p-4" id="menu">
-
-            <livewire:dropdown did='deneme' btitle='Admin' />
-
-
-
-
-            @if(Auth::check())
-            @role(['admin'])
-
-            <div class="flex flex-row bg-sky-200">
-
-                <button class="idAdminButton" type="button" class="inline-flex text-white items-center me-2">
-                    <x-carbon-letter-aa class="w-6 h-6 mr-2 text-amber-500"/>
-                    Admin
-                </button>
-
-                <!-- User Dropdown Menu -->
-                <div id="adminMenu" class="z-50 hidden absolute bg-teal-300 top-[30px] right-0 my-4 text-base list-none divide-y divide-gray-100 rounded-lg shadow-lg">
-
-                    <ul class="py-2">
-
-                        <li>
-                            <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Change Password</a>
-                        </li>
-
-                        <li>
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <a :href="route('logout')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('ui.links.logout.text') }}
-                            </a>
-                        </form>
-                        </li>
-
-                    </ul>
-
-                </div>
-
-            </div>
-
-            @endrole
-            @endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            <ul class="flex flex-col md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0">
-
-            <li>
-                <a href="/" class="block py-2 px-3 md:bg-transparent hover:bg-gray-600 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
-            </li>
-
-            <li>
-                <a href="#" class="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Admin</a>
-            </li>
-
-            <li>
-                <a href="#" class="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Services</a>
-            </li>
-
-            <li>
-                <a href="#" class="block py-2 px-3 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Pricing</a>
-            </li>
-
-            <li class="relative">
-                <button id="dropdownNavbarLink" data-dropdown-toggle="dropdownNavbar" class="flex relative items-center justify-between w-full py-2 px-3 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 md:w-auto dark:text-white md:dark:hover:text-blue-500 dark:focus:text-white dark:hover:bg-gray-700 md:dark:hover:bg-transparent">
-                DropdownB <x-carbon-chevron-down class="w-5 h-5 me-2 pl-1" />
-                </button>
-
-                <!-- Dropdown menu -->
-                <div id="dropdownNavbar" class="z-10 hidden absolute font-normal bg-white divide-y divide-gray-100 shadow w-44 dark:bg-gray-700 dark:divide-gray-600">
-
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownLargeButton">
-
-                    <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Dashboard</a>
-                    </li>
-
-                    <li aria-labelledby="dropdownNavbarLink" class="relative">
-
-                    <button id="doubleDropdownButton" data-dropdown-toggle="doubleDropdown" data-dropdown-placement="right-start" type="button" class="flex items-center justify-between absolute w-full px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                        Dropdown <x-carbon-chevron-down class="w-4 h-4 me-2" />
-                    </button>
-
-                    <div id="doubleDropdown" class="z-10 hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="doubleDropdownButton">
-                        <li>
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Overview</a>
-                        </li>
-                        <li>
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">My downloads</a>
-                        </li>
-                        <li>
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Billing</a>
-                        </li>
-                        <li>
-                            <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Rewards</a>
-                        </li>
-                        </ul>
-                    </div>
-
-                    </li>
-
-                    <li>
-                    <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Earnings</a>
-                    </li>
-
-                </ul>
-
-                <div class="py-1">
-                    <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Sign out</a>
-                </div>
-                </div>
-
-            </li>
-
-            <li>
-                <a href="#" class="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">Contact</a>
-            </li>
-
-            </ul>
-        </div>
-
-    </div>
-
-
-    <div class="flex pr-2">
-        {{-- USER MENU --}}
-        <div class="flex items-center md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse" >
-
-            @if(Auth::check())
-
-            <button id="userMenuButton" type="button" class="flex text-white" >
-                <span>{{ Auth::user()->name }} {{ Auth::user()->lastname }}</span>
-                <x-carbon-chevron-down class="w-5 h-5 me-2 pl-1" />
             </button>
 
-            <!-- User Dropdown Menu -->
-            <div id="userMenu" class="z-50 hidden absolute bg-teal-300 top-[30px] right-0 my-4 text-base list-none divide-y divide-gray-100 rounded-lg shadow-lg">
+            <div id="adminMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-gray-50 w-full md:w-64 left-0">
 
-                <div class="px-4 py-3">
-                    <span class="block text-sm text-gray-900 dark:text-white">{{ Auth::user()->name }} {{ Auth::user()->lastname }}</span>
-                    <span class="block text-sm text-gray-500 truncate dark:text-gray-400">{{ Auth::user()->email }}</span>
-                </div>
+              <ul class="flex flex-col">
 
-                <ul class="py-2">
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
+                  
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-user-multiple class="w-6"/>
+                    </div>
+                    <span class="px-2">Users</span>
+                  </button>
+              
+                </li>
 
-                    <li>
-                        <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white">Change Password</a>
-                    </li>
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">              
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-person class="w-6"/>
+                    </div>
+                    <span class="px-2">Roles</span>
+                  </button>
+                </li>
 
-                    <li>
-                    <!-- Authentication -->
-                    <form method="POST" action="{{ route('logout') }}">
-                        @csrf
 
-                        <a :href="route('logout')" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                                onclick="event.preventDefault();
-                                            this.closest('form').submit();">
-                            {{ __('ui.links.logout.text') }}
-                        </a>
-                    </form>
-                    </li>
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">                                     
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-password class="w-6"/>
+                    </div>
+                    <span class="px-2">Permissions</span>
+                  </button>
+                </li>
 
-                </ul>
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">                                     
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-building class="w-6"/>
+                    </div>
+                    <span class="px-2">Companies</span>
+                  </button>
+                </li>
 
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">                                     
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-business-processes class="w-6"/>
+                    </div>
+                    <span class="px-2">Projects</span>
+                  </button>
+                </li>
+
+              </ul>
             </div>
 
-            @else
-            <a href="/logware/login" type="button" class="text-white text-right inline-flex items-center me-2">
-                <x-carbon-login class="w-6 h-6 mr-2"/>
-                {{ __('ui.links.login.text')}}
-            </a>
-            @endif
+          </li>
 
+
+
+          {{-- REQUESTS MENU --}}
+          <li class="relative p-2 md:text-white justify-center md:hover:bg-gray-400 md:hover:text-gray-800">
+
+            <button id="requestButton" class="inline-flex items-center font-extrabold md:font-normal">
+
+              <div class="text-blue-600 md:text-yellow-400">
+                <x-carbon-intent-request-scale-in class="w-6"/>
+              </div>
+
+              <span class="px-2">Requests</span>
+
+              <div class="text-slate-400 hover:text-black">
+                <x-carbon-chevron-down class="w-5"/>
+              </div>
+
+            </button>
+
+            <div id="requestMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-gray-50 w-full md:w-96 left-0">
+
+              <ul class="flex flex-col">
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
+                  
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-change-catalog class="w-6"/>
+                    </div>
+                    <span class="px-2 whitespace-nowrap">Change Requests</span>
+                  </button>
+              
+                </li>
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">              
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-scis-control-tower class="w-6"/>
+                    </div>
+                    <span class="px-2 whitespace-nowrap">Engineering Change Requests (ECN)</span>
+                  </button>
+                </li>
+
+              </ul>
+            </div>
+
+          </li>
+
+
+
+          {{-- PRODUCTS MENU --}}
+          <li class="relative p-2 md:text-white justify-center md:hover:bg-gray-400 md:hover:text-gray-800">
+
+            <button id="productButton" class="inline-flex items-center font-extrabold md:font-normal">
+
+              <div class="text-blue-600 md:text-yellow-400">
+                <x-carbon-industry class="w-6"/>
+              </div>
+
+              <span class="px-2">Products</span>
+
+              <div class="text-slate-400 hover:text-black">
+                <x-carbon-chevron-down class="w-5"/>
+              </div>
+
+            </button>
+
+            <div id="productMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-gray-50 w-full md:w-96 left-0">
+
+              <ul class="flex flex-col">
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
+                  
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-box class="w-6"/>
+                    </div>
+                    <span class="px-2 whitespace-nowrap">Sellables</span>
+                  </button>
+              
+                </li>
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">              
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-radio class="w-6"/>
+                    </div>
+                    <span class="px-2 whitespace-nowrap">Components</span>
+                  </button>
+                </li>
+
+              </ul>
+            </div>
+
+          </li>
+
+
+
+          {{-- DOCUMENTS --}}
+          <li class="hover:bg-gray-400 p-2 md:text-white">
+              <button class="inline-flex items-center font-extrabold md:font-normal">
+                <div class="text-blue-600 md:text-yellow-400">
+                  <x-carbon-document-attachment class="w-6"/>
+                </div>
+                <span class="px-2">Documents</span>
+              </button>
+          </li> 
+        
+        
+
+          {{-- ENGINEERING MENU --}}
+          <li class="relative p-2 md:text-white justify-center md:hover:bg-gray-400 md:hover:text-gray-800">
+
+            <button id="engineeringButton" class="inline-flex items-center font-extrabold md:font-normal">
+
+              <div class="text-blue-600 md:text-yellow-400">
+                <x-carbon-function-math class="w-6"/>
+              </div>
+
+              <span class="px-2">Engineering</span>
+
+              <div class="text-slate-400 hover:text-black">
+                <x-carbon-chevron-down class="w-5"/>
+              </div>
+
+            </button>
+
+            <div id="engineeringMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-gray-50 w-full md:w-96 left-0">
+
+              <ul class="flex flex-col">
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
+                  
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-sigma class="w-6"/>
+                    </div>
+                    <span class="px-2 whitespace-nowrap">Engineering Utilities</span>
+                  </button>
+              
+                </li>
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">              
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-cube class="w-6"/>
+                    </div>
+                    <span class="px-2 whitespace-nowrap">Materials</span>
+                  </button>
+                </li>
+
+
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">              
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-pen-fountain class="w-6"/>
+                    </div>
+                    <span class="px-2 whitespace-nowrap">Product Notes</span>
+                  </button>
+                </li>
+
+
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">              
+                  <button class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-catalog class="w-6"/>
+                    </div>
+                    <span class="px-2 whitespace-nowrap">Standard Families</span>
+                  </button>
+                </li>
+
+              </ul>
+            </div>
+
+          </li>
+
+
+
+          {{-- MOM --}}
+          <li class="hover:bg-gray-400 p-2 md:text-white">
+            <button class="inline-flex items-center font-extrabold md:font-normal">
+              <div class="text-blue-600 md:text-yellow-400">
+                <x-carbon-report-data class="w-6"/>
+              </div>
+              <span class="px-2">MOM</span>
+            </button>
+          </li> 
+                                  
+        </ul>
+
+
+
+        {{-- USER MENU : LOGIN/LOGOUT --}}
+        <div class="flex flex-col items-center md:flex-row">
+
+          @if(Auth::check())
+
+            <button id="usrButton" class="inline-flex items-center">
+
+              <span class="px-2">{{ Auth::user()->name }} {{ Auth::user()->lastname }}</span>
+
+              <div class="text-slate-400 hover:text-black">
+                <x-carbon-chevron-down class="w-5"/>
+              </div>
+
+            </button>
+
+            <div id="usrMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-gray-50 w-full md:w-48 right-0 shadow-lg border border-gray-800">
+
+              <ul class="flex flex-col">
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
+                  
+                  <a href="/profile" class="inline-flex items-center">
+                    <div class="text-blue-600 md:text-yellow-400">
+                      <x-carbon-password class="w-6"/>
+                    </div>
+                    <span class="px-2 whitespace-nowrap">Change Password</span>
+                  </a>
+              
+                </li>
+
+                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">   
+                  
+                  <form method="POST" action="{{ route('logout') }}">
+                  @csrf
+                    <button :href="route('logout')" class="inline-flex items-center">
+                      <div class="text-blue-600 md:text-yellow-400">
+                        <x-carbon-logout class="w-6"/>
+                      </div>
+                      <span class="px-2 whitespace-nowrap">{{ __('ui.links.logout.text') }}</span>
+                    </button>
+                  </form>
+
+                </li>
+
+              </ul>
+            </div>
+
+          @else
+      
+            <a href="/logware/login" class="inline-flex items-center bg-blue-400 md:bg-transparent w-full p-4">
+              <div class="text-blue-600 md:text-yellow-400 ">
+                <x-carbon-login class="w-6"/>
+              </div>
+              <span class="px-2">{{ __('ui.links.login.text')}}</span>
+            </a>
+
+          @endif
+      
         </div>
+
+    </div>
+
+    <div id="hamburger" class="flex flex-col items-center gap-8 md:hidden">
+        <x-carbon-menu class="w-6"/>
     </div>
 
 
+  </nav>
+  
+  <script>
+
+
+    // HAMBURGER MENU
+    const hamburger = document.getElementById('hamburger')
+    const menu = document.getElementById('menu')
+
+    hamburger.addEventListener('click', () => {
+      menu.classList.toggle('top-16')
+      menu.classList.toggle('hidden')
+    })
+
+
+    // ADMIN MENU
+    const adminButton = document.getElementById('adminButton')
+    const adminMenu = document.getElementById('adminMenu')
+    
+    adminButton.addEventListener('click', () => {
+      adminMenu.classList.toggle('md:hidden')
+      adminMenu.classList.toggle('top-8')
+    })
+
+    adminMenu.addEventListener('mouseleave', () => {
+      adminMenu.classList.toggle('md:hidden')
+      adminMenu.classList.toggle('top-8')
+    })
+
+
+    // REQUESTS MENU
+    const requestButton = document.getElementById('requestButton')
+    const requestMenu = document.getElementById('requestMenu')
+    
+    requestButton.addEventListener('click', () => {
+      requestMenu.classList.toggle('md:hidden')
+      requestMenu.classList.toggle('top-8')
+    })
+
+    requestMenu.addEventListener('mouseleave', () => {
+      requestMenu.classList.toggle('md:hidden')
+      requestMenu.classList.toggle('top-8')
+    })
+
+
+    // PRODUCTS MENU
+    const productButton = document.getElementById('productButton')
+    const productMenu = document.getElementById('productMenu')
+    
+    productButton.addEventListener('click', () => {
+      productMenu.classList.toggle('md:hidden')
+      productMenu.classList.toggle('top-8')
+    })
+
+    productMenu.addEventListener('mouseleave', () => {
+      productMenu.classList.toggle('md:hidden')
+      productMenu.classList.toggle('top-8')
+    })
+
+
+    // ENGINEERING MENU
+    const engineeringButton = document.getElementById('engineeringButton')
+    const engineeringMenu = document.getElementById('engineeringMenu')
+    
+    engineeringButton.addEventListener('click', () => {
+      engineeringMenu.classList.toggle('md:hidden')
+      productMenu.classList.toggle('top-8')
+    })
+
+    engineeringMenu.addEventListener('mouseleave', () => {
+      engineeringMenu.classList.toggle('md:hidden')
+      engineeringMenu.classList.toggle('top-8')
+    })
+
+
+    // USER MENU
+    const usrButton = document.getElementById('usrButton')
+    const usrMenu = document.getElementById('usrMenu')
+    
+
+    if (usrMenu != null) {
+
+      usrButton.addEventListener('click', () => {
+        usrMenu.classList.toggle('md:hidden')
+        usrMenu.classList.toggle('top-8')
+      })
+
+      usrMenu.addEventListener('mouseleave', () => {
+        usrMenu.classList.toggle('md:hidden')
+        usrMenu.classList.toggle('top-8')
+      })
+    }
 
 
 
 
 
 
-</nav>
 
+</script>
+  
+  
+</header>
 
 
 

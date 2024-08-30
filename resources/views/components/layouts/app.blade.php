@@ -20,6 +20,7 @@
 
     </head>
 
+    {{-- <body class="bg-[url({{ asset('/images/HeroPage1.png') }})] bg-cover bg-center h-screen"> --}}
     <body class="bg-[url('{{ asset('/images/HeroPage1.png') }}')] bg-cover bg-center h-screen">
 
         @include('components.layouts.navbar')

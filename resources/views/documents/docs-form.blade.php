@@ -1,11 +1,11 @@
-<section class="section container">
+<section class="container mx-auto p-4 bg-yellow-100">
 
     <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
-    <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">{{ $constants['create']['title'] }}</h1>
-        <h2 class="subtitle has-text-weight-light">{{ $uid ? $constants['update']['subtitle'] : $constants['create']['subtitle'] }}</h2>
-    </header>
+    <livewire:header type="Page" title="{{ $constants['create']['title'] }}" subtitle="{{ $uid ? $constants['update']['subtitle'] : $constants['create']['subtitle'] }}"/>
+
+
+
 
     @if ($uid)
     <p class="title has-text-weight-light is-size-2">{{'D'.$document_no. ' R'.$revision }}</p>
@@ -16,7 +16,9 @@
         @csrf
 
 
-        <div class="field">
+        <livewire:select-radio wire:model="company_id" :dizin="$companies">
+
+        {{-- <div class="field">
             <label class="label">Select Company</label>
             <div class="control">
                 @foreach ($companies as $company)
@@ -30,7 +32,7 @@
             @error('company_id')
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
-        </div>
+        </div> --}}
 
 
 
@@ -163,5 +165,19 @@
     </div>
     @endif --}}
 
+
+
+    <script>
+
+        window.addEventListener('radioValueChanged', e => {
+
+            console.log(e.detail.selectValue);
+            console.log(e.detail.variable);
+
+            Livewire.dispatch('startQuerySearch', {query:event.detail.query});
+
+
+        });
+    </script>
 
 </section>

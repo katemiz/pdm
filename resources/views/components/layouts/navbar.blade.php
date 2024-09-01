@@ -157,13 +157,11 @@
 
 
           {{-- DOCUMENTS --}}
-          <li class="hover:bg-gray-400 p-2 md:text-white">
-              <button class="inline-flex items-center font-extrabold md:font-normal">
-                <div class="text-blue-600 md:text-yellow-400">
-                  <x-carbon-document-attachment class="w-6"/>
-                </div>
+          <li class="hover:bg-sky-900 p-2 md:text-white">
+              <a href="/documents/list" class="inline-flex items-center font-extrabold md:font-normal">
+                <x-carbon-document-attachment class="w-6 text-blue-600 md:text-yellow-400"/>
                 <span class="px-2">Documents</span>
-              </button>
+              </a>
           </li>
 
 
@@ -231,12 +229,10 @@
 
 
           {{-- MOM --}}
-          <li class="hover:bg-gray-400 p-2 md:text-white">
+          <li class="hover:bg-sky-900 p-2 md:text-white">
             <button class="inline-flex items-center font-extrabold md:font-normal">
-              <div class="text-blue-600 md:text-yellow-400">
-                <x-carbon-report-data class="w-6"/>
-              </div>
-              <span class="px-2">MOM</span>
+                <x-carbon-report-data class="w-6 text-blue-600 md:text-yellow-400"/>
+                <span class="px-2">MOM</span>
             </button>
           </li>
 

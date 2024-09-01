@@ -24,29 +24,20 @@
 
         </div>
 
+        @if(Auth::check())
 
-            @if(Auth::check())
+            <div class="w-full md:w-2/3 p-4 items-center justify-center">
+                <livewire:pdm-stats />
+            </div>
 
-                <div class="w-full md:w-2/3 p-4 items-center justify-center">
-                    <livewire:pdm-stats />
-                </div>
+        @else
 
-            @else
+            <div class="w-full md:w-2/3 p-4 items-center justify-center bg-[url('{{ asset('/images/HeroPage3.png')}}')] bg-cover bg-center bg-no-repeat">
+                <h2 class="text-white text-6xl font-extrabold text-center py-32">{{ config('appconstants.kapkara.motto') }}</h2>
+            </div>
 
-                <div class="w-full md:w-2/3 p-4 items-center justify-center bg-[url('{{ asset('/images/HeroPage3.png')}}')] bg-cover bg-center bg-no-repeat">
-                    <h2 class="text-white text-6xl font-extrabold text-center py-32">{{ config('appconstants.kapkara.motto') }}</h2>
-                </div>
-
-            @endif
-
+        @endif
 
     </div>
-
-
-</div>
-
-
-
-
 
 </section>

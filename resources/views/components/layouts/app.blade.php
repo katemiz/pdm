@@ -20,13 +20,7 @@
 
     </head>
 
-
-
-
-    <body class="">
-
-
-    {{-- <body class="bg-[url('{{ asset('/images/HeroPage1.png') }}')] bg-cover bg-center h-screen"> --}}
+    <body class="bg-gray-200">
 
         @include('components.layouts.navbar')
         {{ $slot }}

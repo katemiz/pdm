@@ -29,16 +29,18 @@ class LwDocument extends Component
 
     public $action = 'LIST'; // LIST,FORM,VIEW,CFORM,CVIEW,PFORM,PVIEW
 
+    public $datatable_props;
+
+    public $hasActions = true;
 
     public $constants;
 
     public $show_latest = true; /// Show only latest revisions
-    public $is_html = false;
 
     public $uid = false;
     public $pid = false;
 
-    public $query = '';
+    public $query = false;
     public $sortField = 'created_at';
     public $sortDirection = 'DESC';
 
@@ -51,13 +53,11 @@ class LwDocument extends Component
     public $toc = [];    /// Table of Contents
     public $is_latest;
 
-
     public $company;
     public $companies = [];
 
     #[Validate('required', message: 'Please select company')]
     public $company_id;
-
 
     #[Validate('required', message: 'Document title is missing')]
     public $title;
@@ -91,18 +91,20 @@ class LwDocument extends Component
     public $language = 'TR';
 
 
+
+
+
+
+
+
+
+
     public function mount()
     {
         if (request('action')) {
             $this->action = strtoupper(request('action'));
 
-            if ( in_array($this->action,['LIST','FORM','VIEW']) ) {
-                $this->is_html = false;
-            }
 
-            if ( in_array($this->action,['CFORM','CVIEW','PFORM','PVIEW']) ) {
-                $this->is_html = true;
-            }
         }
 
         if (request('id')) {
@@ -125,11 +127,11 @@ class LwDocument extends Component
 
     public function render()
     {
+        $this->datatable_props = Document::getTableModel();
+
         $this->setProps();
 
-        if ($this->is_html) {
-            return view('documents.documentor');
-        }
+
 
         return view('documents.docs',[
             'documents' => $this->getDocumentsList()
@@ -137,9 +139,24 @@ class LwDocument extends Component
     }
 
 
+    #[On('startQuerySearch')]
+    public function querySearch($query)
+    {
+        $this->query = $query;
+    }
+
+
+
+
     public function setCompanyProps()
     {
-        $this->companies = Company::all();
+        //$this->companies = Company::all();
+
+        foreach (Company::all() as $c) {
+            $this->companies[$c->id] = $c->name;
+        }
+
+
         $this->company_id =  Auth::user()->company_id;
         $this->company =  Company::find($this->company_id);
     }
@@ -167,16 +184,41 @@ class LwDocument extends Component
 
 
     public function getDocumentsList()  {
-        return Document::when($this->show_latest, function ($query) {
-            $query->where('is_latest', true);
-        })
-        ->whereAny([
-            'title',
-            'remarks',
-            'document_no',
-        ], 'LIKE', "%".$this->query."%")
-        ->orderBy($this->sortField,$this->sortDirection)
-        ->paginate(env('RESULTS_PER_PAGE'));
+
+        // session()->flash('msg',[
+        //     'type' => 'default',
+        //     'text' =>'Document have been deleted successfullyrtryty.'
+        // ]);
+
+
+        if ($this->query) {
+
+            return Document::when($this->show_latest, function ($query) {
+                $query->where('is_latest', true);
+            })
+            ->orWhereAny([
+                'title',
+                'remarks',
+                'document_no',
+            ], 'LIKE', "%".$this->query."%")
+            ->orderBy($this->sortField,$this->sortDirection)
+            ->paginate(env('RESULTS_PER_PAGE'));
+
+        } else {
+
+            if ($this->show_latest) {
+
+                return Document::where('is_latest', true)
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+
+            } else {
+
+                return Document::all()
+                ->orderBy($this->sortField,$this->sortDirection)
+                ->paginate(env('RESULTS_PER_PAGE'));
+            }
+        }
     }
 
 
@@ -228,9 +270,8 @@ class LwDocument extends Component
     }
 
 
-    public function viewItem($uid,$is_html) {
-        $this->is_html = $is_html;
-        $this->action = $is_html ? 'CVIEW':'VIEW';
+    public function viewItem($uid) {
+        $this->action = 'VIEW';
         $this->uid = $uid;
     }
 
@@ -269,7 +310,6 @@ class LwDocument extends Component
             $this->language = $c->language;
             $this->company_id = $c->company_id;
             $this->title = $c->title;
-            $this->is_html = $c->is_html;
             $this->is_latest = $c->is_latest;
             $this->remarks = $c->remarks;
             $this->status = $c->status;
@@ -278,9 +318,6 @@ class LwDocument extends Component
             $this->created_by = User::find($c->user_id)->email;
             $this->updated_by = User::find($c->updated_uid)->email;
 
-            // if ($c->is_html) {
-            //     $this->fileOrHtml = 'HTML';
-            // }
 
             // Revisions
             foreach (Document::where('document_no',$this->document_no)->get() as $doc) {
@@ -307,31 +344,21 @@ class LwDocument extends Component
     }
 
 
-    public function triggerDelete($type, $uid) {
+    public function triggerDelete($uid) {
 
-        if ($type === 'delete') {
-            $this->uid = $uid;
-        }
-
-        // if ($type === 'verification') {
-        //     $this->vid = $uid;
-        // }
-
-        $this->dispatch('ConfirmModal', type:$type);
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'delete');
     }
 
 
     #[On('onDeleteConfirmed')]
-    public function deleteItem($type)
+    public function deleteItem()
     {
-        if ($type === 'document') {
-            Document::find($this->uid)->delete();
-            session()->flash('message','Document have been deleted successfully.');
+        Document::find($this->uid)->delete();
+        session()->flash('message','Document have been deleted successfully.');
 
-            $this->action = 'LIST';
-            $this->resetPage();
-        }
-
+        $this->action = 'LIST';
+        $this->resetPage();
     }
 
 
@@ -343,7 +370,6 @@ class LwDocument extends Component
         $props['doc_type'] = $this->doc_type;
         $props['language'] = $this->language;
         $props['company_id'] = $this->company_id;
-        $props['is_html'] = $this->is_html;
         $props['toc'] = json_encode($this->toc);
         $props['title'] = $this->title;
         $props['remarks'] = $this->remarks;
@@ -364,11 +390,9 @@ class LwDocument extends Component
         // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
         $this->dispatch('triggerAttachment',modelId: $this->uid);
 
-        if ($this->is_html) {
-            $this->action = 'CVIEW';
-        } else {
-            $this->action = 'VIEW';
-        }
+
+        $this->action = 'VIEW';
+
     }
 
 

@@ -196,7 +196,7 @@ class LwDocument extends Component
             return Document::when($this->show_latest, function ($query) {
                 $query->where('is_latest', true);
             })
-            ->orWhereAny([
+            ->whereAny([
                 'title',
                 'remarks',
                 'document_no',

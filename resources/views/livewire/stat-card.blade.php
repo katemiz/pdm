@@ -9,10 +9,6 @@ state(['content' => "Stat explanation"]);
 
 ?>
 
-
-
-
-
 <div class="flex items-center justify-center">
     <div class="w-full">
         <div class="shadow-xl rounded-lg">

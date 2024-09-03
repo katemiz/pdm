@@ -12,6 +12,16 @@ new class extends Component {
         $this->dispatch('queryChanged', query:'');
     }
 
+
+    public function addItem()
+    {
+        $this->query = '';
+        $this->dispatch('addTriggered');
+    }
+
+
+
+
     public function updated($variable) {
 
         if ($variable == 'query') {

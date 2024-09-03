@@ -37,6 +37,12 @@
 
 
 
+
+
+
+
+
+
         <div class="field">
             <label class="label">Select Document Type</label>
             <div class="control">
@@ -73,7 +79,7 @@
 
 
 
-
+{{-- 
         <div class="field">
             <label class="label">Document Title</label>
             <div class="control">
@@ -84,19 +90,38 @@
                 <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
 
-        </div>
+        </div> --}}
 
 
-        <livewire:ck-editor
-            wire:model="remarks"
-            cktype="STANDARD"
-            label='Document Synopsis / Notes / Remarks'
-            placeholder='Document Synopsis / Notes / Remarks ....'
-            :content="$remarks"/>
 
-        @error('remarks')
-            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-        @enderror
+
+
+
+@livewire('form-input', [
+    'name' => 'username',
+    'placeholder' => 'Enter your username'
+])
+
+        {{-- <livewire:form-input name='title' :value="$title" label="Document Title" placeholder="Deneme placeholder"/> --}}
+
+
+
+
+        <livewire:quill :value="$remarks" label="Document Synopsis / Notes / Remarks" />
+
+
+        <h1>Variable in parent = {{ $remarks }}</h1>
+
+
+
+        <livewire:quill :value="$title" label="Document Synopsis / Notes / Remarks" />
+
+
+        <h1>Variable in parent = {{ $title }}</h1>
+
+
+
+
 
         <div class="field block">
             <label class="label">Attach Original Document</label>

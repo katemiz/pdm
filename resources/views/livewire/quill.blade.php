@@ -1,14 +1,16 @@
-<div class="field">
 
-    <label class="label" for="{{ $quillId }}">{{$label}}</label>
+<div>
+
+
+<div class="flex flex-col gap-2"   wire:ignore>
+
+    <label class="" for="{{ $quillId }}">{{$label}}</label>
 
     <!-- Create the editor container -->
-    <div class="control" id="{{ $quillId }}" wire:ignore></div>
+
+    <div id="{{ $quillId }}"></div>
 
  
-
-
-
     <!-- Initialize Quill editor -->
     <script>
 
@@ -21,7 +23,16 @@
             @this.set('value', value)
         })
 
+
+
+
     </script>
+
+
+</div>
+
+<h2>VALUE in Livewire Componet= {{ $value }}</h2>
+
 
 </div>
 

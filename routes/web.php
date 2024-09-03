@@ -42,6 +42,11 @@ use App\Livewire\Geometry;
 
 use App\Livewire\LwCompany;
 
+
+use App\Livewire\DocumentCreate;
+use App\Livewire\DocumentUpdate;
+
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -129,8 +134,13 @@ Route::middleware(['auth'])->group(function () {
 
 
     // DOCUMENTS
-    Route::get('/documents/{action}/{id?}', LwDocument::class);
+    //Route::get('/documents/{action}/{id?}', LwDocument::class);
     Route::get('/documents-html/{action}/{id?}', LwHtmlDocument::class);
+
+
+    Route::get('/documents/form', DocumentCreate::class);
+    Route::get('/documents/form/{id}', DocumentUpdate::class);
+
 
 
     // MOMs

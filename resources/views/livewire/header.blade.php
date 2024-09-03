@@ -28,7 +28,7 @@ state(['subtitle' => false]);
             <h1 class="text-4xl font-light text-gray-800 sm:text-3xl">{!! $title !!}</h1>
 
             @if ($subtitle)
-            <p class="mt-1.5 text-sm text-gray-500">{!! $subtitle !!}</p>
+            <p class="mt-1 text-xl text-gray-500">{!! $subtitle !!}</p>
             @endif
 
             @break
@@ -38,7 +38,7 @@ state(['subtitle' => false]);
             <h1 class="text-3xl font-light text-gray-700 sm:text-3xl">{!! $title !!}</h1>
 
             @if ($subtitle)
-            <p class="text-sm text-gray-500">{!! $subtitle !!}</p>
+            <p class="text-lg text-gray-500">{!! $subtitle !!}</p>
             @endif
 
             @break

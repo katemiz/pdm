@@ -32,9 +32,7 @@ class Document extends Model
         'reject_reason_check',
         'reject_reason_app',
         'check_reviewed_at',
-        'status',
-        'nested_height_in',
-        'product_weight_kg'
+        'status'
     ];
 
 
@@ -59,9 +57,9 @@ class Document extends Model
 
             'id' => [
                 'label' => 'No',
-                'visibility' => true,
+                'visibility' => false,
                 'sortable' => false,
-                'hasViewLink' => true,
+                'hasViewLink' => false,
             ],
 
             'user_id' => [
@@ -71,6 +69,14 @@ class Document extends Model
                 'hasViewLink' => false,
             ],
 
+
+            'DocNo' => [
+                'label' => 'Document No',
+                'visibility' => true,
+                'sortable' => true,
+                'hasViewLink' => true,
+            ],
+
             'company_id' => [
                 'label' => 'Company',
                 'visibility' => false,
@@ -78,15 +84,16 @@ class Document extends Model
                 'hasViewLink' => false,
             ],
 
-            'document_no' => [
-                'label' => 'Document No',
+            'title' => [
+                'label' => 'Title',
                 'visibility' => true,
                 'sortable' => true,
                 'hasViewLink' => false,
             ],
 
-            'title' => [
-                'label' => 'Title',
+
+            'Author' => [
+                'label' => 'Author',
                 'visibility' => true,
                 'sortable' => true,
                 'hasViewLink' => false,

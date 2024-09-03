@@ -15,7 +15,9 @@ class Quill extends Component
 
     public function mount($value = ''){
         $this->value = $value;
-        $this->quillId = 'quill'.rand(0, 1000);
+        $this->quillId = 'q'.rand(0, 1000);
+
+
     }
 
     

@@ -17,7 +17,7 @@
     </head>
 
 
-    <body class="bg-[url('{{ asset('/images/HeroPage1.png')}}')] bg-cover bg-center bg-no-repeat">
+    <body style="background-image: url('{{ asset('/images/HeroPage1.png') }}');" class="bg-cover bg-center bg-no-repeat">
 
         @livewire('logware')
 

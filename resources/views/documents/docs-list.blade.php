@@ -1,4 +1,4 @@
-<div class="container mx-auto p-4 bg-yellow-100">
+<div class="mx-auto p-4">
 
 
     <div class="flex flex-col md:flex-row justify-between items-center">
@@ -30,18 +30,18 @@
                     {{ $documents->total() }} {{ $documents->total() > 1 ? ' Records' :' Record' }}
                 </caption>
 
-                <thead class="text-xs text-gray-700 uppercase bg-slate-200 dark:bg-gray-700 dark:text-gray-400">
+                <thead class="text-gray-700 font-light bg-slate-200">
                 <tr>
                     @foreach ($datatable_props as $prop)
 
                         @if ($prop['visibility'])
-                        <th scope="col" class="px-6 py-3">
-                            <div class="flex items-center">
+                        <th scope="col" class="px-4 py-2">
+                            <div class="flex items-center text-base">
 
                                 {{ $prop['label'] }}
 
                                 @if ($prop['sortable'])
-                                <a href="#"><x-carbon-chevron-sort class="w-3 h-3 ms-1.5"/></a>
+                                    <a href="#"><x-carbon-chevron-sort class="w-3 h-3 ms-1.5"/></a>
                                 @endif
                             </div>
                         </th>
@@ -50,7 +50,7 @@
                     @endforeach
 
                     @if ($hasActions)
-                        <th scope="col" class="px-6 py-3 text-right">Actions</th>
+                        <th scope="col" class="px-4 py-2 text-right text-base">Actions</th>
                     @endif
                 </tr>
                 </thead>
@@ -63,7 +63,7 @@
                             @foreach ($datatable_props as $key => $prop)
 
                                 @if ($prop['visibility'])
-                                    <td class="px-6 py-4">
+                                    <td class="px-4 py-2 text-base">
 
                                         @if ($prop['hasViewLink'])
                                             <a href="/documents/view/{{ $record->id }}" class="inline-flex text-blue-700">
@@ -80,7 +80,7 @@
 
                             @if ($hasActions)
 
-                                <td scope="col" class="px-6 py-3 text-right">
+                                <td scope="col" class="px-4 py-2 text-base text-right">
 
 
                                     <a href="/documents/view/{{ $record->id }}" class="inline-flex text-blue-700">
@@ -120,13 +120,6 @@
 
 
 
-
-
-
-
-
-
-
     @else
 
         <livewire:tablenoitem addtext="Add Document" noitemtext="No documents found in the database!"/>
@@ -149,14 +142,7 @@
 
 
     window.addEventListener('addTriggered', e => {
-
         window.location.href = "/documents/form"
-
-        // Livewire.dispatch('startQuerySearch', {query:event.detail.query});
-
-
-        // console.log('add triggered');
-        //window.livewire.emit('updateParentVariable', event.detail);
     });
 
 

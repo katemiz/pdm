@@ -1,4 +1,4 @@
-<section class="section container">
+<section class="container mx-auto">
 
     <script src="{{ asset('/js/confirm_modal.js') }}"></script>
 

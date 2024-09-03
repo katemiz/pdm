@@ -19,6 +19,8 @@ class DocumentCreate extends Component
  
     public function render()
     {
+
+        //dd($this->form);
         return view('livewire.document-create');
     }
 }

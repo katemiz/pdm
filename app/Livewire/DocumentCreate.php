@@ -9,6 +9,15 @@ use App\Models\Document;
 class DocumentCreate extends Component
 {
     public DocumentForm $form; 
+
+    public $synopsis;
+
+
+    public function mount() {
+
+        $this->form->setDocumentProps();
+    }
+
  
     public function save()
     {

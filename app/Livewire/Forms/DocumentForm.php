@@ -5,7 +5,11 @@ namespace App\Livewire\Forms;
 use Livewire\Attributes\Validate;
 use Livewire\Form;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 use App\Models\Document;
+use App\Models\Company;
 
 
 class DocumentForm extends Form
@@ -15,8 +19,52 @@ class DocumentForm extends Form
     #[Validate('required|min:5')]
     public $title = '';
  
+
+
+    // COMPANY
+    public $company_id;
+    public $company;
+    public $companies = [];
+
+    // DOCUMENT TYPE
+    public $doc_types = [
+        'GR' => 'General Document',
+        'TR' => 'Test Report',
+        'AR' => 'Analysis Report',
+        'MN' => 'User Manual',
+        'ME' => 'Memo',
+        'PR' => 'Presentation'
+    ];
+
+    #[Validate('required', message: 'Please select document type')]
+    public $doc_type = 'GR';
+
+    public $languages = [
+        'EN' => 'English',
+        'TR' => 'Türkçe'
+    ];
+
+
+    // DOCUMENT SYNOPSIS
     #[Validate('required|min:5')]
-    public $content = '';
+    public $synopsis = 'Synopsis conetent';
+
+
+
+
+    public function setDocumentProps() {
+
+        foreach (Company::all() as $c) {
+            $this->companies[$c->id] = $c->name;
+        }
+    
+
+        $this->company_id =  Auth::user()->company_id;
+        $this->company =  Company::find($this->company_id);
+
+
+    }
+
 
 
 
@@ -27,7 +75,7 @@ class DocumentForm extends Form
  
         $this->title = $document->title;
  
-        $this->content = $document->content;
+        $this->synopsis = $document->synopsis;
     }
 
 
@@ -36,6 +84,8 @@ class DocumentForm extends Form
     public function store()
     {
         $this->validate();
+
+        dd([$this->title,$this->synopsis,$this->company_id,$this->doc_type]);
  
         Post::create($this->only(['title', 'content']));
     }

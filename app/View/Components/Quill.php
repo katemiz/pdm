@@ -10,19 +10,17 @@ class Quill extends Component
     public $name;
     public $value;
     public $qid;
+    public $placeholder;
 
-    public $count;
-
-    public function __construct($label= 'Default Label For Quill Editor',$name, $value = null)
+    public function __construct($name,$label= 'Default Label For Quill Editor', $placeholder = 'Default placeholder for editor', $value = null)
     {
         $this->qid = 'q'.rand(0, 1000);
 
         $this->label = $label;
         $this->name = $name;
         $this->value = $value;
+        $this->placeholder = $placeholder;
 
-
-        $this->count = 55555;
     }
 
     public function render()

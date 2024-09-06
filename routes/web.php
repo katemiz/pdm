@@ -42,7 +42,7 @@ use App\Livewire\Geometry;
 
 use App\Livewire\LwCompany;
 
-
+use App\Livewire\DocumentView;
 use App\Livewire\DocumentCreate;
 use App\Livewire\DocumentUpdate;
 
@@ -137,7 +137,7 @@ Route::middleware(['auth'])->group(function () {
     //Route::get('/documents/{action}/{id?}', LwDocument::class);
     Route::get('/documents-html/{action}/{id?}', LwHtmlDocument::class);
 
-
+    Route::get('/documents/{id}', DocumentView::class);
     Route::get('/documents/form', DocumentCreate::class);
     Route::get('/documents/form/{id}', DocumentUpdate::class);
 

@@ -10,13 +10,16 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\Document;
 use App\Models\Company;
+use App\Models\Counter;
+
 
 
 class DocumentForm extends Form
 {
     public ?Document $document;
 
-    #[Validate('required|min:5')]
+    #[Validate('required', message: 'Please add document title')]
+    #[Validate('min:16', message: 'Docuemnt title is too short. At least 16 characters')]
     public $title = '';
  
 
@@ -39,15 +42,25 @@ class DocumentForm extends Form
     #[Validate('required', message: 'Please select document type')]
     public $doc_type = 'GR';
 
+    // DOCUMENT TYPE
     public $languages = [
         'EN' => 'English',
         'TR' => 'Türkçe'
     ];
 
+    #[Validate('required', message: 'Please select document language')]
+    public $language = 'TR';
+
 
     // DOCUMENT SYNOPSIS
-    #[Validate('required|min:5')]
-    public $synopsis = 'Synopsis conetent';
+    #[Validate('required', message: 'Please add a synopsis for document content.')]
+    #[Validate('min:16', message: 'Synopsis is too short. At least 16 characters')]
+    public $synopsis = '';
+
+    #[Validate('required', message: 'Please provide a post title')]
+    #[Validate('min:3', message: 'This title is too short')]
+    public $synopsis2 = '';
+
 
 
 
@@ -85,9 +98,19 @@ class DocumentForm extends Form
     {
         $this->validate();
 
-        dd([$this->title,$this->synopsis,$this->company_id,$this->doc_type]);
- 
-        Post::create($this->only(['title', 'content']));
+        $props['user_id'] = Auth::id();
+        $props['document_no'] = $this->getDocumentNo();
+        $props['updated_uid'] = Auth::id();
+        $props['doc_type'] = $this->doc_type;
+        $props['language'] = $this->language;
+        $props['company_id'] = $this->company_id;
+        $props['title'] = $this->title;
+        $props['remarks'] = $this->synopsis;
+
+        $id = Document::create($props)->id;
+        session()->flash('message','Document has been created successfully.');
+
+        return $this->redirect('/documents/', ['id' => $id]);
     }
 
 
@@ -99,6 +122,41 @@ class DocumentForm extends Form
             $this->all()
         );
     }
+
+
+
+    public function getDocumentNo() {
+
+        $parameter = 'document_no';
+        $initial_no = config('appconstants.counters.document_no');
+        $counter = Counter::find($parameter);
+
+        if ($counter == null) {
+            Counter::create([
+                'counter_type' => $parameter,
+                'counter_value' => $initial_no
+            ]);
+
+            return $initial_no;
+        }
+
+        $new_no = $counter->counter_value + 1;
+        $counter->update(['counter_value' => $new_no]);         // Update Counter
+        return $new_no;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 }

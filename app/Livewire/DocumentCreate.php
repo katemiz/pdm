@@ -10,8 +10,6 @@ class DocumentCreate extends Component
 {
     public DocumentForm $form; 
 
-    public $synopsis;
-
 
     public function mount() {
 

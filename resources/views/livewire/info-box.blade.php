@@ -1,10 +1,32 @@
 <?php
 
-use function Livewire\Volt\{state};
+use function Livewire\Volt\{computed, state};
+use App\Models\User;
 
 state('createdBy');
 state('created_at');
 state('status');
+
+
+
+$author = computed(function () {
+    return User::find($this->createdBy)->get();
+});
+
+
+
+$modifier = computed(function () {
+    return User::find($this->createdBy)->get();
+});
+
+ 
+
+ 
+
+ 
+?>
+
+
 
 
 
@@ -13,7 +35,7 @@ state('status');
 
     <div class="column has-background-white-ter	">
         {{-- <label class="label">Created By</label> --}}
-        <p class="is-size-7 has-text-grey">{{ $createdBy->name }} {{ $createdBy->lastname }}</p>
+        <p class="is-size-7 has-text-grey">{{ $this->author->name }} {{ $this->author->lastname }}</p>
         <p>{{ $created_at }}</p>
     </div>
 

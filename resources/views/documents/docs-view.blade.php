@@ -13,16 +13,7 @@
     @endif
 
 
-
-
-
-
-
-    {{ print_r($document->status)}}
-
-
-
-    <livewire:info-box :created_by="$document->user_id" :created_at="$document->created_at" :status="$document->status" />
+    <livewire:info-box modelname="Document" :id="$id" />
 
 
 

@@ -135,11 +135,24 @@ Route::middleware(['auth'])->group(function () {
 
     // DOCUMENTS
     //Route::get('/documents/{action}/{id?}', LwDocument::class);
-    Route::get('/documents-html/{action}/{id?}', LwHtmlDocument::class);
+    //Route::get('/documents-html/{action}/{id?}', LwHtmlDocument::class);
 
-    Route::get('/documents/{id}', DocumentView::class);
-    Route::get('/documents/form', DocumentCreate::class);
-    Route::get('/documents/form/{id}', DocumentUpdate::class);
+    Route::get('/document/view/{id}', DocumentView::class);
+    Route::get('/document/form', DocumentCreate::class);
+    Route::get('/document/form/{id}', DocumentUpdate::class);
+
+
+    // Route::get('/document/form/{id?}', function ($id = null) {
+    //     if ($id) {
+    //         dd('aa');
+    //         return new DocumentUpdate($id);
+    //     } else {
+    //         dd('bb');
+
+    //         return new DocumentCreate();
+    //     }
+    // });
+
 
 
 

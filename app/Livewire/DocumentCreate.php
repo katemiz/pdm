@@ -1,14 +1,17 @@
 <?php
- 
+
 namespace App\Livewire;
- 
+
 use App\Livewire\Forms\DocumentForm;
 use Livewire\Component;
+use Livewire\Attributes\On;
+
 use App\Models\Document;
- 
+
+
 class DocumentCreate extends Component
 {
-    public DocumentForm $form; 
+    public DocumentForm $form;
 
 
     public function mount() {
@@ -16,18 +19,37 @@ class DocumentCreate extends Component
         $this->form->setDocumentProps();
     }
 
- 
+
     public function save()
     {
-        $this->form->store(); 
-    
-        return $this->redirect('/documents');
+        // FORM PARAMETERS SAVE
+        $id = $this->form->store();
+
+        // ATTACHMENTS
+        $this->dispatch('triggerAttachment', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
+
+        return $this->redirect('/document/view/', ['id' => $id]);
     }
- 
+
     public function render()
     {
 
-        //dd($this->form);
+        // dd($this->form);
         return view('livewire.document-create');
     }
+
+
+
+
+    #[On('triggerBefore')]
+    public function testt() {
+
+        dd('trying to upload triggerAttachment');
+
+    }
+
+
+
+
+
 }

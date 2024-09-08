@@ -25,11 +25,13 @@ use App\Mail\AppMail;
 
 class DocumentView extends Component
 {
+    public $id;
     public $document;
 
     public function render()
     {
         if (request('id')) {
+            $this->id = request('id');
 
             $this->document = Document::find(request('id'));
         } else {

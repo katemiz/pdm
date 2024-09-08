@@ -21,7 +21,7 @@ class DocumentForm extends Form
     #[Validate('required', message: 'Please add document title')]
     #[Validate('min:16', message: 'Docuemnt title is too short. At least 16 characters')]
     public $title = '';
- 
+
 
 
     // COMPANY
@@ -70,7 +70,7 @@ class DocumentForm extends Form
         foreach (Company::all() as $c) {
             $this->companies[$c->id] = $c->name;
         }
-    
+
 
         $this->company_id =  Auth::user()->company_id;
         $this->company =  Company::find($this->company_id);
@@ -81,13 +81,13 @@ class DocumentForm extends Form
 
 
 
-     
+
     public function setPost(Document $document)
     {
         $this->document = $document;
- 
+
         $this->title = $document->title;
- 
+
         $this->synopsis = $document->synopsis;
     }
 
@@ -107,17 +107,22 @@ class DocumentForm extends Form
         $props['title'] = $this->title;
         $props['remarks'] = $this->synopsis;
 
+        $props['toc'] = json_encode([]);
+
+
         $id = Document::create($props)->id;
+
         session()->flash('message','Document has been created successfully.');
 
-        return $this->redirect('/documents/', ['id' => $id]);
+        return $id;
+
     }
 
 
     public function update()
     {
         $this->validate();
- 
+
         $this->document->update(
             $this->all()
         );
@@ -167,4 +172,4 @@ class DocumentForm extends Form
 
 
 
- 
+

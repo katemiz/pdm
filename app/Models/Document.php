@@ -5,12 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
 use App\Models\User;
 
-class Document extends Model
+class Document extends Model implements HasMedia
 {
     use HasFactory;
-
+    use InteractsWithMedia;
 
     protected $table = 'documents';
 
@@ -35,20 +38,15 @@ class Document extends Model
         'status'
     ];
 
-
-
-
     public function getAuthorAttribute($value) {
         $author = User::find($this->user_id);
         return $author->name.' '.strtoupper($author->lastname);
     }
 
+
     public function getDocNoAttribute($value) {
         return 'D'.$this->document_no.' R'.$this->revision;
     }
-
-
-
 
 
     public static function getTableModel() {
@@ -113,11 +111,7 @@ class Document extends Model
                 'hasViewLink' => false,
             ],
 
-
-
         ];
-
-
     }
 
 

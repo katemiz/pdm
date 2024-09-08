@@ -9,12 +9,6 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\Attributes\On;
 
-
-use Illuminate\Support\Facades\Log;
-
-
-use App\Models\GenericModel;
-
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 
@@ -24,44 +18,34 @@ class FileList extends Component
 
     public $id;
     public $model;
-
+    public $is_editable = false;
+    public $show_header = false;
 
     public $label;
-    public $modelname;
     public $collection;
     public $media = [];
 
     public $media_id;
 
+    public function mount($model,$label,$is_editable = false,$show_header=false) {
 
-
-    // public function mount() {
-
-    // }
+        $this->model = $model;
+        $this->is_editable = $is_editable;
+        $this->show_header = $show_header;
+        $this->label = $label;
+    }
 
 
 
 
     public function render()
     {
-        $this->setModel();
         $this->media = $this->model->getMedia($this->collection);
         return view('livewire.file-list');
     }
 
 
 
-
-    public function setModel() {
-
-
-
-        $model_full_path = '\\App\\Models\\'.$this->modelname;
-        $model = new $model_full_path;
-
-        $this->model = $model->find($this->id);
-
-    }
 
 
     public function triggerMediaDelete($idMedia) {

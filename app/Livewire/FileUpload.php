@@ -12,12 +12,6 @@ use Livewire\WithFileUploads;
 use Livewire\Attributes\On;
 
 
-use Illuminate\Support\Facades\Log;
-
-
-
-
-
 class FileUpload extends Component
 {
     use WithFileUploads;
@@ -29,7 +23,6 @@ class FileUpload extends Component
     {
         return view('livewire.file-upload');
     }
-
 
     public function removeFile($fileToRemove) {
 
@@ -51,7 +44,6 @@ class FileUpload extends Component
         }
     }
 
-
     public function setModel($model_name,$mid) {
 
         $model_full_path = '\\App\\Models\\'.$model_name;
@@ -59,10 +51,4 @@ class FileUpload extends Component
 
         return $model->find($mid);
     }
-
-
-
-
-
-
 }

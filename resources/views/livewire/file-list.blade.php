@@ -1,21 +1,33 @@
 @if ( $media->count() > 0 )
 
-    <div class="flex min-h-screen items-center justify-center">
+    <div class="flex items-center justify-center py-4 my-4">
 
         <div class="overflow-x-auto w-full">
 
-            <p class="mb-2">{{ $label }}</p>
 
-            <table class="min-w-full bg-white shadow-md ">
+            <caption class="caption-top text-center">
+            {{ $label }}
+            </caption>
 
-                <thead>
-                <tr class="bg-gray-200 text-gray-700">
-                    <th class="py-3 px-4 text-left">Filename</th>
-                    <th class="py-3 px-4 text-left">MIME Type</th>
-                    <th class="py-3 px-4 text-left">Size</th>
-                    <th class="py-3 px-4 text-left">Actions</th>
-                </tr>
-                </thead>
+            <table class="min-w-full bg-gray-100 shadow-md ">
+
+                @if ($show_header)
+
+                    <thead>
+                    <tr class="bg-gray-200 text-gray-700">
+                        <th class="py-3 px-4 text-left">Filename</th>
+                        <th class="py-3 px-4 text-left">MIME Type</th>
+                        <th class="py-3 px-4 text-left">Size</th>
+
+                        @if ($is_editable)
+                        <th class="py-3 px-4 text-left">Actions</th>
+                        @endif
+                    </tr>
+                    </thead>
+
+                @endif
+
+
 
                 <tbody class="text-blue-gray-900">
 
@@ -32,11 +44,16 @@
 
                             <td class="py-1 px-4">{{ $m->mime_type }}</td>
                             <td class="py-1 px-4">{{ $m->size }}</td>
+
+
+
+                            @if ($is_editable)
                             <td class="py-1 px-4">
                                 <a wire:click="triggerMediaDelete({{$m->id}})" class="font-medium text-blue-600 hover:text-blue-800">
                                     <x-carbon-trash-can class="w-5 h-5 me-2 text-red-500" />
                                 </a>
                             </td>
+                            @endif
                         </tr>
 
                     @endforeach

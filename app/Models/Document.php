@@ -49,6 +49,17 @@ class Document extends Model implements HasMedia
     }
 
 
+    public function getRevisionsAttribute($value) {
+
+
+
+        //return Document::select('id','revision')->where('document_no',$this->document_no)->order_by('revision', 'ASC');
+        return Document::select('id','revision')->where('document_no',$this->document_no)->get()->toArray();
+
+
+    }
+
+
     public static function getTableModel() {
 
         return  [

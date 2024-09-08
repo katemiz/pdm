@@ -42,7 +42,8 @@
     @endif
 
     <div class="flex-grow text-right">
-        <p class="uppercase tracking-wide text-sm text-indigo-500 font-semibold">STATUS</p>
+        <p class="uppercase tracking-wide text-sm text-indigo-500">STATUS</p>
+
         <p class="text-sm text-gray-400">{{ $status }}</p>
     </div>
 

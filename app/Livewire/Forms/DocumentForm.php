@@ -112,7 +112,10 @@ class DocumentForm extends Form
 
         $id = Document::create($props)->id;
 
-        session()->flash('message','Document has been created successfully.');
+        session()->flash('msg',[
+            'type' => 'success',
+            'text' => 'Document has been created successfully.'
+        ]);
 
         return $id;
 

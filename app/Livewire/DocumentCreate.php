@@ -28,7 +28,7 @@ class DocumentCreate extends Component
         // ATTACHMENTS
         $this->dispatch('triggerAttachment', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
 
-        return $this->redirect('/document/view/', ['id' => $id]);
+        return $this->redirect('/document/view/'.$id);
     }
 
     public function render()
@@ -41,12 +41,6 @@ class DocumentCreate extends Component
 
 
 
-    #[On('triggerBefore')]
-    public function testt() {
-
-        dd('trying to upload triggerAttachment');
-
-    }
 
 
 

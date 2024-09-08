@@ -9,14 +9,9 @@ use Livewire\Component;
 
 use App\Models\User;
 
-
-
-
-
-
 class InfoBox extends Component
 {
-    public $modelname;
+    public $model;
     public $id;
 
     public $author;
@@ -30,37 +25,32 @@ class InfoBox extends Component
     public $check_reviewed_at = false;
     public $app_reviewed_at = false;
 
+    public function mount($model) {
 
-    public function mount(String $modelname, Int $id) {
+        $this->id = $model->id;
 
-        $model_full_path = '\\App\\Models\\'.$modelname;
-        $model = new $model_full_path;
+        $this->author = User::find($model->user_id);
+        $this->modifier = User::find($model->updated_uid);
 
-        $item = $model->find($id);
+        $this->created_at = $model->created_at;
+        $this->modified_at = $model->updated_at;
 
+        $this->status = $model->status;
 
-        $this->author = User::find($item->user_id);
-        $this->modifier = User::find($item->updated_uid);
-
-        $this->created_at = $item->created_at;
-        $this->modified_at = $item->updated_at;
-
-        $this->status = $item->status;
-
-        if ($item->checker_id !='') {
-            $this->checker_id = $item->checker_id;
+        if ($model->checker_id !='') {
+            $this->checker = User::find($model->checker_id);
         }
 
-        if ($item->check_reviewed_at != '') {
-            $this->check_reviewed_at = $item->check_reviewed_at;
+        if ($model->check_reviewed_at != '') {
+            $this->check_reviewed_at = $model->check_reviewed_at;
         }
 
-        if ($item->approver_id !='') {
-            $this->approver_id = $item->approver_id;
+        if ($model->approver_id !='') {
+            $this->approver = User::find($model->approver_id);
         }
 
-        if ($item->app_reviewed_at !='') {
-            $this->app_reviewed_at = $item->app_reviewed_at;
+        if ($model->app_reviewed_at !='') {
+            $this->app_reviewed_at = $model->app_reviewed_at;
         }
     }
 
@@ -69,11 +59,4 @@ class InfoBox extends Component
     {
         return view('livewire.info-box');
     }
-
-
-
-
-
-
-
 }

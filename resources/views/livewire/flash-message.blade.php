@@ -14,7 +14,7 @@ $css = computed(function () {
             return [
                 'text-color' => 'text-blue-800',
                 'bg-color' => 'bg-blue-100',
-                'type-text' => 'Info Alert!'
+                'type-text' => 'Info!'
             ];
             break;
 
@@ -23,7 +23,7 @@ $css = computed(function () {
             return [
                 'text-color' => 'text-green-800',
                 'bg-color' => 'bg-green-100',
-                'type-text' => 'Success Alert!'
+                'type-text' => 'Success!'
             ];
             break;
 
@@ -32,7 +32,7 @@ $css = computed(function () {
             return [
                 'text-color' => 'text-green-800',
                 'bg-color' => 'bg-green-100',
-                'type-text' => 'Success Alert!'
+                'type-text' => 'Warning!'
             ];
             break;
 
@@ -41,7 +41,7 @@ $css = computed(function () {
             return [
                 'text-color' => 'text-yellow-800',
                 'bg-color' => 'bg-yellow-50',
-                'type-text' => 'Warning Alert!'
+                'type-text' => 'Error!'
             ];
             break;
 
@@ -60,5 +60,5 @@ $css = computed(function () {
 ?>
 
 <div class="p-4 mb-4 text-sm {{ $this->css['text-color'] }} rounded-lg {{ $this->css['bg-color'] }}" role="alert">
-    <span class="font-medium">{{ $this->css['type-text'] }}</span> {{ $this->msg['text'] }}.
+    <span class="font-medium mr-4">{{ $this->css['type-text'] }}</span> {{ $this->msg['text'] }}.
 </div>

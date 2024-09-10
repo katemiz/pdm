@@ -23,6 +23,7 @@ class DocumentView extends Component
         if (request('id')) {
             $this->id = request('id');
             $this->document = Document::find(request('id'));
+
         } else {
 
             dd('Ooops ...');

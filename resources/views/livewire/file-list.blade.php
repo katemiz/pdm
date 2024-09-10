@@ -1,13 +1,12 @@
-@if ( $media->count() > 0 )
+<div class="flex items-center justify-center py-4 my-4">
 
-    <div class="flex items-center justify-center py-4 my-4">
-
-        <div class="overflow-x-auto w-full">
+    <div class="overflow-x-auto w-full">
 
 
-            <caption class="caption-top text-center">
-            {{ $label }}
-            </caption>
+        <div class="text-xl font-bold">{{ $label }}</div>
+
+        @if ( $media->count() > 0 )
+
 
             <table class="min-w-full bg-gray-100 shadow-md ">
 
@@ -61,52 +60,57 @@
                 </tbody>
             </table>
 
-        </div>
+        @else
+
+
+            <div class="p-4 mt-4 text-sm text-amber-800 rounded-lg bg-amber-100" role="alert">
+                No files found.
+            </div>
+
+        @endif
 
     </div>
 
-    <script >
+</div>
 
-        window.addEventListener('deleteConfirm',function(e) {
+<script >
 
-            Swal.fire({
-                title: 'Do you want delete attached file?',
-                text: 'Once deleted, there is no reverting back!',
-                icon: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sure, Delete File',
-                cancelButtonText: 'No, Ooops ...',
+    window.addEventListener('deleteConfirm',function(e) {
 
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Livewire.dispatch("deleteConfirmed", {id:e.detail.type})
-                } else {
-                    return false
-                }
-            })
+        Swal.fire({
+            title: 'Do you want delete attached file?',
+            text: 'Once deleted, there is no reverting back!',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sure, Delete File',
+            cancelButtonText: 'No, Ooops ...',
 
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch("deleteConfirmed", {id:e.detail.type})
+            } else {
+                return false
+            }
         })
 
+    })
 
 
-        window.addEventListener('mediaDeleted',function(e) {
 
-            Swal.fire({
-                position: 'top-end',
-                icon: 'success',
-                title: 'File has been deleted',
-                showConfirmButton: false,
-                timer: 1500
-            })
+    window.addEventListener('mediaDeleted',function(e) {
 
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'File has been deleted',
+            showConfirmButton: false,
+            timer: 1500
         })
 
-    </script>
+    })
 
-@else
+</script>
 
-    <div>QQQQQQQQQQQQQQQQQQQQQQ</div>
 
-@endif

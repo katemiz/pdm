@@ -7,7 +7,7 @@
       <span class="px-2 font-extrabold">{{ config('appconstants.app.code') }}</span>
     </a>
 
-    <div id="menu" class="absolute left-0 top-16 max-md:bg-gray-200 w-full flex flex-col gap-6 p-4 md:static md:flex-row md:justify-between  items-center ">
+    <div id="menu" class="absolute left-0 top-16 max-md:bg-gray-200 w-full flex flex-col gap-6 p-4 md:static md:flex-row md:justify-between items-center ">
 
         <ul class="flex flex-col text-black md:flex-row px-2 w-full z-50">
 
@@ -241,16 +241,16 @@
 
 
         {{-- USER MENU : LOGIN/LOGOUT --}}
-        <div class="flex flex-col items-center md:flex-row">
+        <div class="flex flex-col items-center md:flex-row w-full">
 
           @if(Auth::check())
 
-            <button id="usrButton" class="inline-flex items-center">
-                <span class="px-2 whitespace-nowrap">{{ Auth::user()->name }} {{ Auth::user()->lastname }}</span>
-                <x-carbon-chevron-down class="w-5"/>
+            <button id="usrButton" class="inline-flex items-center text-gray-600 bg-yellow-300">
+              <span class="px-2 whitespace-nowrap w-full">{{ Auth::user()->name }} {{ Auth::user()->lastname }}</span>
+              <x-carbon-chevron-down class="w-5"/>
             </button>
 
-            <div id="usrMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-gray-50 w-full md:w-48 right-0 shadow-lg border border-gray-800">
+            <div id="usrMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-gray-50 w-full md:w-48 right-0 shadow-lg md:border md:border-gray-800">
 
               <ul class="flex flex-col">
 

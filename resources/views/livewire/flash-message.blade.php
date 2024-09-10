@@ -30,8 +30,8 @@ $css = computed(function () {
         case 'warning':
 
             return [
-                'text-color' => 'text-green-800',
-                'bg-color' => 'bg-green-100',
+                'text-color' => 'text-amber-800',
+                'bg-color' => 'bg-amber-100',
                 'type-text' => 'Warning!'
             ];
             break;

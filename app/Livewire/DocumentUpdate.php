@@ -2,31 +2,43 @@
 
 namespace App\Livewire;
 
-use App\Livewire\Forms\PostForm;
+use App\Livewire\Forms\DocumentForm;
 use Livewire\Component;
 use App\Models\Post;
 
 class DocumentUpdate extends Component
 {
-    public PostForm $form;
+    public DocumentForm $form;
 
-    public function mount(Post $post)
+    public $id;
+
+    public function mount()
     {
-        $this->form->setPost($post);
+        $this->form->setDocumentProps();
+
+        if (request('id')) {
+
+            $this->id = request('id');
+            $this->form->setDocument(request('id'));
+        } else {
+            dd('Ooops...');
+        }
+
     }
 
-    public function save()
+    public function update()
     {
+        // FORM PARAMETERS UPDATE
+        $id = $this->form->update($this->id);
 
-        $this->form->update();
+        // ATTACHMENTS
+        $this->dispatch('triggerAttachment', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
 
-        return $this->redirect('/posts');
+        return $this->redirect('/document/view/'.$this->id);
     }
 
     public function render()
     {
-        dd('fff');
-
-        return view('livewire.create-document');
+        return view('documents.docs-form');
     }
 }

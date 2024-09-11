@@ -1,5 +1,6 @@
-<div class="mx-auto p-4">
+<section class="container mx-auto p-4">
 
+    <script src="{{ asset('/js/confirm_modal.js') }}"></script>
 
     <div class="flex flex-col md:flex-row justify-between items-center">
         <div>
@@ -15,7 +16,6 @@
     @if(session('msg'))
         <livewire:flash-message :msg="session('msg')">
     @endif
-
 
 
     @if ($documents->count() > 0)
@@ -66,7 +66,7 @@
                                     <td class="px-4 py-2 text-base">
 
                                         @if ($prop['hasViewLink'])
-                                            <a href="/documents/view/{{ $record->id }}" class="inline-flex text-blue-700">
+                                            <a href="/document/view/{{ $record->id }}" class="inline-flex text-blue-700">
                                                 {{ $record[$key] }}
                                             </a>
                                         @else
@@ -83,7 +83,7 @@
                                 <td scope="col" class="px-4 py-2 text-base text-right">
 
 
-                                    <a href="/documents/view/{{ $record->id }}" class="inline-flex text-blue-700">
+                                    <a href="/document/view/{{ $record->id }}" class="inline-flex text-blue-700">
                                         <x-carbon-view class="w-6 h-6"/>
                                     </a>
 
@@ -91,7 +91,7 @@
 
                                         @if ( !in_array($record->status,['Frozen','Released']) )
 
-                                            <a href="/documents/form/{{ $record->id }}" class="inline-flex text-blue-700">
+                                            <a href="/document/form/{{ $record->id }}" class="inline-flex text-blue-700">
                                                 <x-carbon-edit  class="w-6 h-6 ms-1.5"/>
                                             </a>
                                             <a wire:click="triggerDelete({{ $record->id }})" class="inline-flex text-red-700">
@@ -114,11 +114,7 @@
             </table>
         </div>
 
-
-
         {{ $documents->links() }}
-
-
 
     @else
 
@@ -130,23 +126,16 @@
 
 
     <script>
+        
+        window.addEventListener('queryChanged', e => {
+            Livewire.dispatch('startQuerySearch', {query:event.detail.query});
+        });
 
-
-    window.addEventListener('queryChanged', e => {
-
-        console.log(e.detail.query);
-        Livewire.dispatch('startQuerySearch', {query:event.detail.query});
-
-
-    });
-
-
-    window.addEventListener('addTriggered', e => {
-        window.location.href = "/documents/form"
-    });
-
+        window.addEventListener('addTriggered', e => {
+            window.location.href = "/document/form"
+        });
 
     </script>
-</div>
+</section>
 
 

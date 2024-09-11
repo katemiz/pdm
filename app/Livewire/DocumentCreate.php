@@ -13,7 +13,6 @@ class DocumentCreate extends Component
 {
     public DocumentForm $form;
 
-
     public function mount() {
 
         $this->form->setDocumentProps();
@@ -35,15 +34,7 @@ class DocumentCreate extends Component
     {
 
         // dd($this->form);
-        return view('livewire.document-create');
+        return view('documents.docs-form');
     }
-
-
-
-
-
-
-
-
 
 }

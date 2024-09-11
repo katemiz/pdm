@@ -16,7 +16,6 @@ use App\Livewire\Welcome;
 
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
-use App\Livewire\LwDocument;
 use App\Livewire\LwPermission;
 use App\Livewire\LwProject;
 use App\Livewire\LwRole;
@@ -42,6 +41,7 @@ use App\Livewire\Geometry;
 
 use App\Livewire\LwCompany;
 
+use App\Livewire\DocumentList;
 use App\Livewire\DocumentView;
 use App\Livewire\DocumentCreate;
 use App\Livewire\DocumentUpdate;
@@ -137,6 +137,7 @@ Route::middleware(['auth'])->group(function () {
     //Route::get('/documents/{action}/{id?}', LwDocument::class);
     //Route::get('/documents-html/{action}/{id?}', LwHtmlDocument::class);
 
+    Route::get('/document/list', DocumentList::class);
     Route::get('/document/view/{id}', DocumentView::class);
     Route::get('/document/form', DocumentCreate::class);
     Route::get('/document/form/{id}', DocumentUpdate::class);

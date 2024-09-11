@@ -241,12 +241,12 @@
 
 
         {{-- USER MENU : LOGIN/LOGOUT --}}
-        <div class="flex flex-col items-center md:flex-row w-full">
+        <div class="flex flex-col items-center md:flex-row">
 
           @if(Auth::check())
 
-            <button id="usrButton" class="inline-flex items-center text-gray-600 bg-yellow-300">
-              <span class="px-2 whitespace-nowrap w-full">{{ Auth::user()->name }} {{ Auth::user()->lastname }}</span>
+            <button id="usrButton" class="inline-flex items-center text-gray-600 text-slate-50">
+              <span class="px-2 whitespace-nowrap">{{ Auth::user()->name }} {{ Auth::user()->lastname }}</span>
               <x-carbon-chevron-down class="w-5"/>
             </button>
 

@@ -23,6 +23,8 @@ class DocumentForm extends Form
     public $title = '';
 
 
+    // DOC NO WITH REVISION
+    public $docNo = false;
 
     // COMPANY
     public $company_id;
@@ -71,24 +73,29 @@ class DocumentForm extends Form
             $this->companies[$c->id] = $c->name;
         }
 
-
         $this->company_id =  Auth::user()->company_id;
         $this->company =  Company::find($this->company_id);
-
-
     }
 
 
 
 
 
-    public function setPost(Document $document)
+    public function setDocument(Int $id)
     {
-        $this->document = $document;
 
-        $this->title = $document->title;
+        $this->document = Document::find($id);
 
-        $this->synopsis = $document->synopsis;
+        $this->docNo = $this->document->docNo;
+
+        $this->title = $this->document->title;
+        $this->synopsis = $this->document->remarks;
+
+        $this->doc_type = $this->document->doc_type;
+
+        $this->language = $this->document->language;
+
+
     }
 
 
@@ -122,13 +129,28 @@ class DocumentForm extends Form
     }
 
 
-    public function update()
+    public function update($id)
     {
         $this->validate();
 
-        $this->document->update(
-            $this->all()
-        );
+        $props['updated_uid'] = Auth::id();
+        $props['doc_type'] = $this->doc_type;
+        $props['language'] = $this->language;
+        $props['company_id'] = $this->company_id;
+        $props['title'] = $this->title;
+        $props['remarks'] = $this->synopsis;
+
+        $props['toc'] = json_encode([]);
+
+
+        Document::find($id)->update($props);
+
+        session()->flash('msg',[
+            'type' => 'success',
+            'text' => 'Document has been updated successfully.'
+        ]);
+
+        return true;
     }
 
 

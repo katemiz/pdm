@@ -7,7 +7,7 @@ return [
         "subtitle" => "List of all Documents",
         "addButton" => [
             "text"=>"Add Document",
-            "route"=>"/documents/form"
+            "route"=>"/document/form"
         ],
         "filterText" => "Search ...",
         "listCaption" => false,
@@ -60,9 +60,9 @@ return [
 
         ],
         "actions" => [
-            "r" => "/documents/view/",
-            "w" => "/documents/form/",
-            "x" => "/documents/delete/"
+            "r" => "/document/view/",
+            "w" => "/document/form/",
+            "x" => "/document/delete/"
         ],
         "noitem" => "No documents found in database yet!",
         "delete_confirm" => [

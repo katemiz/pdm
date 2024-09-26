@@ -20,7 +20,7 @@ class DocumentForm extends Form
 
     #[Validate('required', message: 'Please add document title')]
     #[Validate('min:16', message: 'Docuemnt title is too short. At least 16 characters')]
-    public $title = '';
+    public String $title = '';
 
 
     // DOC NO WITH REVISION
@@ -59,13 +59,6 @@ class DocumentForm extends Form
     #[Validate('min:16', message: 'Synopsis is too short. At least 16 characters')]
     public $synopsis = '';
 
-    #[Validate('required', message: 'Please provide a post title')]
-    #[Validate('min:3', message: 'This title is too short')]
-    public $synopsis2 = '';
-
-
-
-
 
     public function setDocumentProps() {
 
@@ -83,19 +76,12 @@ class DocumentForm extends Form
 
     public function setDocument(Int $id)
     {
-
         $this->document = Document::find($id);
-
         $this->docNo = $this->document->docNo;
-
         $this->title = $this->document->title;
         $this->synopsis = $this->document->remarks;
-
         $this->doc_type = $this->document->doc_type;
-
         $this->language = $this->document->language;
-
-
     }
 
 
@@ -141,7 +127,6 @@ class DocumentForm extends Form
         $props['remarks'] = $this->synopsis;
 
         $props['toc'] = json_encode([]);
-
 
         Document::find($id)->update($props);
 

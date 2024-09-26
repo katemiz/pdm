@@ -4,10 +4,8 @@ namespace App\Livewire;
 
 use App\Livewire\Forms\DocumentForm;
 use Livewire\Component;
+
 use Livewire\Attributes\On;
-
-use App\Models\Document;
-
 
 class DocumentCreate extends Component
 {

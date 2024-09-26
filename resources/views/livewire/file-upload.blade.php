@@ -12,15 +12,15 @@
                 id="fupload"
                 {{ $this->is_multiple ? 'multiple' : '' }} /> --}}
 
-            <input 
-                wire:model="dosyalar"
+            <input
+                wire:model="attachments"
                 id="fupload"
                 type="file"
-                class="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded" 
-                {{ $isMultiple ? 'multiple' : '' }}
+                class="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded"
+                {{ $is_multiple ? 'multiple' : '' }}
             />
-            
-            
+
+
             {{-- <span class="file-cta">
                 <span class="file-icon"><x-carbon-document-multiple-02 /></span>
                 <span class="file-label has-text-centered">{{ $this->is_multiple ? 'Add Files' : 'File' }}</span>
@@ -29,7 +29,7 @@
         {{-- </label> --}}
     </div>
 
-    
+
     <div class="flex flex-col flex-grow w-1/2 pl-6" id="files_div">
 
         {{-- @if (count($dosyalar) > 1 && $isMultiple)
@@ -47,19 +47,19 @@
 
         {{-- <div id="files_div" class="py-0"> --}}
 
-            @if (count($dosyalar) > 0)
+            @if (count($attachments) > 0)
 
-                @foreach ($dosyalar as $dosya)
+                @foreach ($attachments as $attachment)
 
                     <div class="flex m-1">
 
                         <div class="flex bg-red-400 px-1 py-1 items-center">
-                            <a wire:click="removeFile('{{$dosya->getClientOriginalName()}}')">
+                            <a wire:click="removeFile('{{$attachment->getClientOriginalName()}}')">
                                 <x-carbon-close class="w-6 h-6 text-white" />
                             </a>
                         </div>
 
-                        <div class="w-full  px-2 py-1">{{$dosya->getClientOriginalName()}}</div>
+                        <div class="w-full  px-2 py-1">{{$attachment->getClientOriginalName()}}</div>
                     </div>
 
                 @endforeach
@@ -70,7 +70,7 @@
     </div>
 
 
-    @error('dosyalar') <span class="error">{{ $message }}</span> @enderror
+    @error('attachments') <span class="error">{{ $message }}</span> @enderror
 
 </div>
 
@@ -81,6 +81,6 @@
         let files = document.getElementById("fupload").files;
         console.log(files)
     }
-    
+
 </script>
 

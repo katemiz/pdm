@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class PdmLayout extends Component
+class SILPdmLayout extends Component
 {
     /**
      * Create a new component instance.

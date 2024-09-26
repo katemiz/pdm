@@ -2,12 +2,7 @@
 
 namespace App\Livewire;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-
 use Livewire\Component;
-use App\Livewire\FileList;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\On;
 
@@ -16,33 +11,45 @@ class FileUpload extends Component
 {
     use WithFileUploads;
 
-    public $isMultiple = false;
-    public $dosyalar = [];
+    public Bool $is_multiple;
+    public Array $attachments;
+
+
+    public function mount($is_multiple = false, $attachments = []) {
+        $this->is_multiple = $is_multiple;
+        $this->attachments = $attachments;
+    }
+
 
     public function render()
     {
         return view('livewire.file-upload');
     }
 
+
     public function removeFile($fileToRemove) {
 
-        foreach ($this->dosyalar as $key => $dosya) {
+        foreach ($this->attachments as $key => $dosya) {
             if ($dosya->getClientOriginalName() == $fileToRemove) {
-                unset($this->dosyalar[$key]);
+                unset($this->attachments[$key]);
             }
         }
     }
 
 
-    #[On('triggerAttachment')]
+    #[On('startUpload')]
     public function uploadAttach(Int $mid,String $collection, String $model_name) {
+
+        //dd($this->attachments);
 
         $model = $this->setModel($model_name,$mid);
 
-        foreach ($this->dosyalar as $dosya) {
+
+        foreach ($this->attachments as $dosya) {
             $model->addMedia($dosya)->toMediaCollection($collection);
         }
     }
+
 
     public function setModel($model_name,$mid) {
 

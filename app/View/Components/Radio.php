@@ -6,12 +6,12 @@ use Illuminate\View\Component;
 
 class Radio extends Component
 {
-    public $label;
-    public $name;
-    public $options;
-    public $selected;
+    public String $label;
+    public String $name;
+    public Array $options;
+    public ?String $selected;
 
-    public function __construct($label= 'Default Label For Radio Group',$name, $options, $selected = null)
+    public function __construct($name, $options, $label= 'Default Label For Radio Group',$selected = null)
     {
         $this->label = $label;
         $this->name = $name;
@@ -24,3 +24,6 @@ class Radio extends Component
         return view('components.radio');
     }
 }
+
+
+

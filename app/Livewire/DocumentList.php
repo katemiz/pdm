@@ -132,10 +132,6 @@ class DocumentList extends Component
         return view('documents.docs-list',[
             'documents' => $this->getDocumentsList()
         ]);
-
-        // return view('documents.docs',[
-        //     'documents' => $this->getDocumentsList()
-        // ]);
     }
 
 

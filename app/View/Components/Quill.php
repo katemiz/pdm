@@ -6,11 +6,11 @@ use Illuminate\View\Component;
 
 class Quill extends Component
 {
-    public $label;
-    public $name;
-    public $value;
-    public $qid;
-    public $placeholder;
+    public String $label;
+    public String $name;
+    public ?String $value;
+    public String $qid;
+    public String $placeholder;
 
     public function __construct($name,$label= 'Default Label For Quill Editor', $placeholder = 'Default placeholder for editor', $value = null)
     {

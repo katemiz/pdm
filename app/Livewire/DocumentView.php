@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Livewire\Component;
 use Livewire\Attributes\On;
 
-
 use App\Models\Document;
 
 
@@ -23,7 +22,6 @@ class DocumentView extends Component
         if (request('id')) {
             $this->id = request('id');
             $this->document = Document::find(request('id'));
-
         } else {
 
             dd('Ooops ...');
@@ -51,7 +49,14 @@ class DocumentView extends Component
     }
 
 
+    public function edit() {
+        return $this->redirect('/document/form/'.$this->id);
+    }
 
+
+    public function add() {
+        return $this->redirect('/document/form');
+    }
 
 
 

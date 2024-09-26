@@ -16,7 +16,7 @@ use App\Models\Attachment;
 use Illuminate\Support\Facades\Log;
 
 
-class FileUpload extends Component
+class SILFileUpload extends Component
 {
     use WithFileUploads;
 

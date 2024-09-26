@@ -23,9 +23,7 @@
 
         <x-quill wire:model="form.synopsis" label="Document Synopsis" name="synopsis" :value="$this->form->synopsis" />
 
-        <x-quill wire:model="form.synopsis2" label="Document Synopsis" name="synopsis2" :value="$this->form->synopsis2" />
-
-        <livewire:file-upload model_name="Document" multiple="{{true}}" />
+        <livewire:file-upload model_name="Document" is_multiple="true" />
 
         <div class="text-right">
             <button type="submit"

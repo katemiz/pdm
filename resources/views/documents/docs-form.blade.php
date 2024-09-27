@@ -23,6 +23,10 @@
 
         <x-quill wire:model="form.synopsis" label="Document Synopsis" name="synopsis" :value="$this->form->synopsis" />
 
+        @if ($this->form->docNo)
+        <livewire:file-list :model="$this->form->document" collection="Doc" label="Files" is_editable="true"/>
+        @endif
+
         <livewire:file-upload model_name="Document" is_multiple="true" />
 
         <div class="text-right">

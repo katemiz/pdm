@@ -22,20 +22,19 @@ class DocumentUpdate extends Component
         } else {
             dd('Ooops...');
         }
-
     }
+
 
     public function update()
     {
-        // ATTACHMENTS
-        $this->dispatch('startUpload', mid: $this->id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
-
-
 
         // FORM PARAMETERS UPDATE
         $this->form->update($this->id);
 
-        //return $this->redirect('/document/view/'.$this->id);
+        // ATTACHMENTS
+        $this->dispatch('startUpload', mid: $this->id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
+
+        return $this->redirect('/document/view/'.$this->id);
     }
 
     public function render()

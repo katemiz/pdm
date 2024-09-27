@@ -23,7 +23,7 @@ class DocumentCreate extends Component
         $id = $this->form->store();
 
         // ATTACHMENTS
-        $this->dispatch('triggerAttachment', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
+        $this->dispatch('startUpload', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
 
         return $this->redirect('/document/view/'.$id);
     }

@@ -35,7 +35,8 @@ class Document extends Model implements HasMedia
         'reject_reason_check',
         'reject_reason_app',
         'check_reviewed_at',
-        'status'
+        'status',
+        'updated_at'
     ];
 
     public function getAuthorAttribute($value) {

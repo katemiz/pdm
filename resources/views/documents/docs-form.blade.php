@@ -27,14 +27,29 @@
         <livewire:file-list :model="$this->form->document" collection="Doc" label="Files" is_editable="true"/>
         @endif
 
-        <livewire:file-upload model_name="Document" is_multiple="true" />
+        {{-- <livewire:file-upload model_name="Document" is_multiple="true" /> --}}
 
-        <div class="text-right">
-            <button type="submit"
-                class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
-                {{ $this->form->docNo ? 'Update Document' : 'Add Document' }}
-            </button>
-        </div>
+
+
+
+            {{-- <input type="file" wire:model="photos" multiple>
+         
+            @error('photos') <span class="error">{{ $message }}</span> @enderror --}}
+         
+
+
+
+
+
+            <x-file-upload :files="$files" name="files" is_multiple="true" />
+
+
+            <div class="text-right">
+                <button type="submit"
+                    class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
+                    {{ $this->form->docNo ? 'Update Document' : 'Add Document' }}
+                </button>
+            </div>
 
     </form>
 

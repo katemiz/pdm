@@ -4,12 +4,25 @@ namespace App\Livewire;
 
 use App\Livewire\Forms\DocumentForm;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 use Livewire\Attributes\On;
 
+use App\Models\Document;
+
+
 class DocumentCreate extends Component
 {
+    use WithFileUploads;
+
     public DocumentForm $form;
+
+
+
+    #[Validate(['files.*' => 'max:50000'])]
+    public $files = [];
+
+
 
     public function mount() {
 
@@ -23,7 +36,13 @@ class DocumentCreate extends Component
         $id = $this->form->store();
 
         // ATTACHMENTS
-        $this->dispatch('startUpload', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
+        $model = Document::find($this->id);
+
+        foreach ($this->files as $file) {
+            $model->addMedia($file)->toMediaCollection('Doc');
+        }
+
+        //$this->dispatch('startUpload', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
 
         return $this->redirect('/document/view/'.$id);
     }

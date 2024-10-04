@@ -138,7 +138,7 @@ Route::middleware(['auth'])->group(function () {
     //Route::get('/documents-html/{action}/{id?}', LwHtmlDocument::class);
 
     Route::get('/document/list', DocumentList::class);
-    Route::get('/document/view/{id}', DocumentView::class);
+    Route::get('/document/view/{id}', DocumentView::class)->name('docView');
     Route::get('/document/form', DocumentCreate::class);
     Route::get('/document/form/{id}', DocumentUpdate::class);
 

@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
 use Livewire\Attributes\On;
 
@@ -34,6 +35,12 @@ class DocumentView extends Component
     public function render()
     {
         $this->document = Document::find(request('id'));
+
+
+        Log::info('VIEW ACTION , rendering');
+        Log::info(time());
+
+
         return view('documents.docs-view');
     }
 

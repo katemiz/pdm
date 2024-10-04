@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 use Livewire\Component;
@@ -41,6 +42,11 @@ class FileList extends Component
     public function render()
     {
         $this->media = $this->model->getMedia($this->collection);
+
+        Log::info('FILE LIST ACTION, getting files');
+        Log::info(time());
+
+
         return view('livewire.file-list');
     }
 
@@ -53,7 +59,6 @@ class FileList extends Component
         $this->media_id = $idMedia;
         $this->dispatch('deleteConfirm', media_id:$idMedia);
     }
-
 
 
 

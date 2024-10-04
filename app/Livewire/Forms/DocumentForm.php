@@ -51,13 +51,17 @@ class DocumentForm extends Form
     ];
 
     #[Validate('required', message: 'Please select document language')]
-    public $language = 'TR';
+    public String $language = 'TR';
 
 
     // DOCUMENT SYNOPSIS
     #[Validate('required', message: 'Please add a synopsis for document content.')]
     #[Validate('min:16', message: 'Synopsis is too short. At least 16 characters')]
-    public $synopsis = '';
+    public String $synopsis = '';
+
+
+    // FILES
+    public $files = [];
 
 
     public function setDocumentProps() {
@@ -128,7 +132,16 @@ class DocumentForm extends Form
 
         $props['toc'] = json_encode([]);
 
-        Document::find($id)->update($props);
+        $document = Document::find($id);
+
+        $document->update($props);
+
+        //dd($this->files);
+
+
+        // foreach ($this->files as $dosya) {
+        //     $document->addMedia($dosya)->toMediaCollection('Doc');
+        // }
 
         session()->flash('msg',[
             'type' => 'success',

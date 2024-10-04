@@ -3,10 +3,6 @@
 @props(['files'])
 
 
-
-
-
-
 <div class="flex bg-white p-3">
 
     <div class="flex w-1/2 bg-teal-100">
@@ -40,8 +36,6 @@
            @endforeach
 
        @endif
-
-        AAAAA
 
     </div>
 

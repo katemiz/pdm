@@ -73,4 +73,13 @@ class DocumentUpdate extends Component
     {
         return view('documents.docs-form');
     }
+
+
+
+    public function removeFile() {
+        dd('sdfdsf');
+    }
+
+
+
 }

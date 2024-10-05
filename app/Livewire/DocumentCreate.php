@@ -13,45 +13,45 @@ use App\Models\Document;
 
 class DocumentCreate extends Component
 {
-    use WithFileUploads;
+    // use WithFileUploads;
 
-    public DocumentForm $form;
-
-
-
-    #[Validate(['files.*' => 'max:50000'])]
-    public $files = [];
+    // public DocumentForm $form;
 
 
 
-    public function mount() {
-
-        $this->form->setDocumentProps();
-    }
+    // #[Validate(['files.*' => 'max:50000'])]
+    // public $files = [];
 
 
-    public function save()
-    {
-        // FORM PARAMETERS SAVE
-        $id = $this->form->store();
 
-        // ATTACHMENTS
-        $model = Document::find($this->id);
+    // public function mount() {
 
-        foreach ($this->files as $file) {
-            $model->addMedia($file)->toMediaCollection('Doc');
-        }
+    //     $this->form->setDocumentProps();
+    // }
 
-        //$this->dispatch('startUpload', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
 
-        return $this->redirect('/document/view/'.$id);
-    }
+    // public function save()
+    // {
+    //     // FORM PARAMETERS SAVE
+    //     $id = $this->form->store();
 
-    public function render()
-    {
+    //     // ATTACHMENTS
+    //     $model = Document::find($this->id);
 
-        // dd($this->form);
-        return view('documents.docs-form');
-    }
+    //     foreach ($this->files as $file) {
+    //         $model->addMedia($file)->toMediaCollection('Doc');
+    //     }
+
+    //     //$this->dispatch('startUpload', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
+
+    //     return $this->redirect('/document/view/'.$id);
+    // }
+
+    // public function render()
+    // {
+
+    //     // dd($this->form);
+    //     return view('documents.docs-form');
+    // }
 
 }

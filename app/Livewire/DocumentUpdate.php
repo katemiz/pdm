@@ -12,17 +12,17 @@ use App\Models\Document;
 
 class DocumentUpdate extends Component
 {
-    use WithFileUploads;
+    // use WithFileUploads;
 
-    public DocumentForm $form;
+    // public DocumentForm $form;
 
-    public Int $id;
+    // public Int $id;
 
-    #[Validate(['files.*' => 'image|max:1024'])]
-    public $files = [];
- 
+    // #[Validate(['files.*' => 'image|max:1024'])]
+    // public $files = [];
 
-    public function mount()
+
+    public function mountOK()
     {
         $this->form->setDocumentProps();
 
@@ -36,18 +36,9 @@ class DocumentUpdate extends Component
     }
 
 
-    public function update()
+    public function updateOK()
     {
 
-//        Log::info('FIRST ACTION , dispatch');
-//        Log::info(time());
-
-
-        // ATTACHMENTS
-        // $this->dispatch('startUpload', mid: $this->id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
-
-//        Log::info('SECOND ACTION , update record');
-//        Log::info(time());
 
         // FORM PARAMETERS UPDATE
         $this->form->update($this->id);
@@ -69,14 +60,14 @@ class DocumentUpdate extends Component
         //return $this->redirect('/document/view/'.$this->id);
     }
 
-    public function render()
+    public function renderOK()
     {
         return view('documents.docs-form');
     }
 
 
 
-    public function removeFile() {
+    public function removeFileOK() {
         dd('sdfdsf');
     }
 

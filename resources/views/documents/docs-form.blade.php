@@ -33,9 +33,9 @@
 
 
             {{-- <input type="file" wire:model="photos" multiple>
-         
+
             @error('photos') <span class="error">{{ $message }}</span> @enderror --}}
-         
+
 
 
 

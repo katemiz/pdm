@@ -5,18 +5,18 @@
 
 <div class="flex bg-white p-3">
 
-    <div class="flex w-1/2 bg-teal-100">
-            <input
-                wire:model="files"
-                name="{{$name}}"
-                id="uploadInput"
-                type="file"
-                class="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded"
-                {{ $is_multiple ? 'multiple' : '' }}
-            />
+    <div class="flex w-1/3 bg-teal-100">
+        <input
+            wire:model="files"
+            name="{{$name}}"
+            id="uploadInput"
+            type="file"
+            class="w-full text-gray-500 font-medium text-sm bg-gray-100 file:cursor-pointer cursor-pointer file:border-0 file:py-2 file:px-4 file:mr-4 file:bg-gray-800 file:hover:bg-gray-700 file:text-white rounded"
+            {{ $is_multiple ? 'multiple' : '' }}
+        />
     </div>
 
-    <div class="flex flex-col flex-grow w-1/2 pl-6" id="files_div">
+    <div class="flex flex-col flex-grow w-2/3 pl-6" id="files_div">
 
        @if (count($files) > 0)
 
@@ -48,8 +48,6 @@
 <script>
 
     document.getElementById("uploadInput").onchange = ()=>{
-
-
         let files = document.getElementById("uploadInput").files;
         console.log(files)
     }

@@ -17,6 +17,8 @@ class DocumentCreateUpdate extends Component
 
     public DocumentForm $form;
 
+    public $id = false;
+
 
 
     #[Validate(['files.*' => 'max:50000'])]
@@ -27,7 +29,24 @@ class DocumentCreateUpdate extends Component
     public function mount() {
 
         $this->form->setDocumentProps();
+
+        if (request('id')) {
+
+            $this->id = request('id');
+            $this->form->setDocument($this->id);
+        }
     }
+
+
+    public function render()
+    {
+        return view('documents.docs-form');
+    }
+
+
+
+
+
 
 
     public function save()
@@ -42,16 +61,49 @@ class DocumentCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('Doc');
         }
 
-        //$this->dispatch('startUpload', mid: $id,collection:"Doc",model_name:"Document" )->to(FileUpload::class);
-
         return $this->redirect('/document/view/'.$id);
     }
 
-    public function render()
-    {
 
-        // dd($this->form);
-        return view('documents.docs-form');
+
+
+
+
+
+
+
+    public function update()
+    {
+        // FORM PARAMETERS UPDATE
+        $this->form->update($this->id);
+
+        $model = Document::find($this->id);
+
+        foreach ($this->files as $file) {
+            $model->addMedia($file)->toMediaCollection('Doc');
+        }
+
+        return $this->redirect('/document/view/'.$this->id);
     }
+
+
+
+
+
+
+
+    public function removeFile($fileToRemove) {
+
+        foreach ($this->files as $key => $dosya) {
+            if ($dosya->getClientOriginalName() == $fileToRemove) {
+                unset($this->files[$key]);
+            }
+        }
+    }
+
+
+
+
+
 
 }

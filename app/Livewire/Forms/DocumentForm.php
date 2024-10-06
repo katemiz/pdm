@@ -106,7 +106,6 @@ class DocumentForm extends Form
 
         $props['toc'] = json_encode([]);
 
-
         $id = Document::create($props)->id;
 
         session()->flash('msg',[
@@ -115,7 +114,6 @@ class DocumentForm extends Form
         ]);
 
         return $id;
-
     }
 
 
@@ -135,13 +133,6 @@ class DocumentForm extends Form
         $document = Document::find($id);
 
         $document->update($props);
-
-        //dd($this->files);
-
-
-        // foreach ($this->files as $dosya) {
-        //     $document->addMedia($dosya)->toMediaCollection('Doc');
-        // }
 
         session()->flash('msg',[
             'type' => 'success',

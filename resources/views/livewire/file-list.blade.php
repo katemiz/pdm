@@ -78,7 +78,7 @@
     window.addEventListener('deleteConfirm',function(e) {
 
         Swal.fire({
-            title: 'Do you want delete attached file?',
+            title: 'Delete attached file?',
             text: 'Once deleted, there is no reverting back!',
             icon: 'question',
             showCancelButton: true,

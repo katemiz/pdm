@@ -7,12 +7,20 @@
   @endif
 
 
-  <div class="flex flex-col  bg-gray-100 gap-4 p-4">
+
+
+
+
+  <div class="flex flex-col gap-4 p-4 bg-gray-100" >
 
       <div class="flex flex-col md:flex-row ">
 
         <div class="w-3/4">
-          <p class="text-6xl mb-2 font-light">{{ $document->docNo }}</p>
+            <p class="text-6xl mb-2 font-light">{{ $document->docNo }}</p>
+
+            @if (!$document->is_latest)
+            <p class="text-base text-red-400">Do Not Use. Use Latest Revision</p>
+            @endif
         </div>
 
         <div class="w-1/4 text-right">
@@ -48,7 +56,7 @@
         <div class="text-base">{!! $document->remarks !!}</div>
       @endif
 
-      
+
 
       <livewire:file-list :model="$document" collection="Doc" label="Files"/>
 

@@ -49,6 +49,20 @@ return [
         ],
 
 
+
+
+        // Disk for uploaded files linked to database items
+        'attachments' => [
+            'driver' => 'local',
+            'root' => storage_path('app/attachments'),
+        ],
+
+
+
+
+
+
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

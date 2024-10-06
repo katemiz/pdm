@@ -5,20 +5,13 @@
         <h3 class="mb-1 font-semibold text-gray-900 text-md">{{ $label }}</h3>
 
         <!-- Create the editor container -->
-        <div id="{{ $qid }}"></div>
+        <div id="{{ $qid }}">{!! $value !!}</div>
 
         <!-- Initialize Quill editor -->
         <script>
             const quill{{ $qid }} = new Quill('#{{ $qid }}', {
                 theme: 'snow'
             });
-
-            // if (@json($value)) {
-            //     quill{{ $qid }}.root.innerHTML = @json($value)
-
-            // } else {
-            //     quill{{ $qid }}.root.innerHTML = @json($placeholder)
-            // }
 
             quill{{ $qid }}.on('text-change', function() {
                 let parent = document.getElementById('{{ $qid }}')

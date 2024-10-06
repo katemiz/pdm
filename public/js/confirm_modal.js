@@ -102,7 +102,7 @@ window.addEventListener('ConfirmModal',function(e) {
 
         case 'attach':
 
-            sa_title = 'Do you want delete attached file?'
+            sa_title = 'Delete attached file?'
             sa_text = 'Once deleted, there is no reverting back!'
             confirmText = 'Delete File'
             cancelText ='Cancel'

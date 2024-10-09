@@ -1,56 +1,33 @@
 @if (count($revisions) > 1)
 
-
-
-
     <div class="flex flex-row justify-between">
 
-        <div class="uppercase text-sm text-gray-600">Revision History</div>
-        <div class="flex">
+        <nav class="flex flex-col text-gray-700" aria-label="Breadcrumb">
 
-            <nav class="flex flex-col text-gray-700" aria-label="Breadcrumb">
+            <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
 
-                <label for="revisions" class="uppercase text-sm text-gray-600">Revision History</label>
+                @foreach ($revisions as $key => $revision)
 
-                <ol class="inline-flex items-center space-x-1 md:space-x-2 rtl:space-x-reverse">
+                    <li class="inline-flex items-center">
 
-                    @foreach ($revisions as $key => $revision)
-
-                        @if ($key == 0)
-
-                            <li class="inline-flex items-center">
-                                <a wire:click="showRevision({{ $revision['id'] }})"
-                                    class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
-                                    R{{ $revision['revision'] }}
-                                </a>
-                            </li>
-
-                        @else
-
-                            <li>
-                                <div class="flex items-center">
-                                    <x-carbon-chevron-right class="w-4 h-4" />
-                                    <a wire:click="showRevision({{ $revision['id'] }})"
-                                        class="inline-flex items-center text-sm font-medium text-gray-700 hover:text-blue-600">
-                                        R{{ $revision['revision'] }}
-                                    </a>
-                                </div>
-                            </li>
-
+                        @if ($key != 0)
+                            <x-carbon-chevron-right class="w-4 h-4 text-gray-400" />
                         @endif
-                    @endforeach
 
-                </ol>
+                        <a wire:click="showRevision({{ $revision['id'] }})"
+                            class="inline-flex items-center text-base text-blue-600 hover:text-blue-600 {{ $key != 0 ? 'ml-4':''}} {{ $rev == $revision['revision'] ? 'font-extrabold': ''}}">
+                            R{{ $revision['revision'] }}
+                        </a>
 
-            </nav>
+                    </li>
 
+                @endforeach
 
-        </div>
+            </ol>
 
+        </nav>
 
     </div>
-
-
 
 @else
     <!-- No revisions -->

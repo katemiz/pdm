@@ -20,7 +20,7 @@
 
     @if ($documents->count() > 0)
 
-        <livewire:datatable-search />
+        <livewire:datatable-search add_command="Add Document"/>
 
         <div class="relative overflow-x-auto my-4">
 
@@ -80,7 +80,7 @@
 
                             @if ($hasActions)
 
-                                <td scope="col" class="px-4 py-2 text-base text-right">
+                                <td scope="col" class="px-4 py-2 text-base text-right whitespace-nowrap">
 
 
                                     <a href="/document/view/{{ $record->id }}" class="inline-flex text-blue-700">

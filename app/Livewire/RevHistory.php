@@ -12,6 +12,7 @@ class RevHistory extends Component
     public $model;
     public $redirect;
     public $revisions = [];
+    public $rev;
 
     public function mount($model,$redirect) {
 

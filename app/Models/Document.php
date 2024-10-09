@@ -76,7 +76,7 @@ class Document extends Model implements HasMedia
 
 
             'DocNo' => [
-                'label' => 'Document No',
+                'label' => 'Doc No',
                 'visibility' => true,
                 'sortable' => true,
                 'hasViewLink' => true,

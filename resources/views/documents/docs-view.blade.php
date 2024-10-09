@@ -48,7 +48,7 @@
       </div>
 
 
-      <livewire:rev-history :model="$document" redirect="/document/view/"/>
+      <livewire:rev-history :model="$document" redirect="/document/view/" :rev="$document->revision"/>
 
 
       @if ($document->remarks)

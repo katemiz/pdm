@@ -7,10 +7,6 @@
   @endif
 
 
-
-
-
-
   <div class="flex flex-col gap-4 p-4 bg-gray-100" >
 
       <div class="flex flex-col md:flex-row ">
@@ -32,6 +28,10 @@
           <button wire:click="add" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
             <x-carbon-add-large class="w-4 h-4" />
           </button>
+
+          <a href="/document/list" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+            <x-carbon-list class="w-4 h-4" />
+          </a>
 
           <button wire:click="delete" class="bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
             <x-carbon-trash-can class="w-4 h-4" />

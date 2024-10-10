@@ -14,7 +14,7 @@ state(['subtitle' => false]);
     @switch($type)
 
         @case("Hero")
-            <h1 class="text-5xl font-light my-6">{!! $title !!}</h1>
+            <h1 class="text-6xl font-light my-6 sm:text-5xl">{!! $title !!}</h1>
 
             @if ($subtitle)
                 <h2 class="text-2xl mb-8 text-gray-500">{!! $subtitle !!}</h2>
@@ -25,7 +25,7 @@ state(['subtitle' => false]);
         @default
         @case("Page")
 
-            <h1 class="text-4xl font-light text-gray-800 sm:text-3xl">{!! $title !!}</h1>
+            <h1 class="text-5xl font-light text-gray-800 sm:text-3xl">{!! $title !!}</h1>
 
             @if ($subtitle)
             <p class="mt-1 text-xl text-gray-500">{!! $subtitle !!}</p>
@@ -35,7 +35,7 @@ state(['subtitle' => false]);
 
         @case("Section")
 
-            <h1 class="text-3xl font-light text-gray-700 sm:text-3xl">{!! $title !!}</h1>
+            <h1 class="text-4xl font-light text-gray-700 sm:text-3xl">{!! $title !!}</h1>
 
             @if ($subtitle)
             <p class="text-lg text-gray-500">{!! $subtitle !!}</p>

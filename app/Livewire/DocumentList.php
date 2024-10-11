@@ -27,7 +27,7 @@ class DocumentList extends Component
 {
     use WithPagination;
 
-    public $action = 'LIST'; // LIST,FORM,VIEW,CFORM,CVIEW,PFORM,PVIEW
+    //public $action = 'LIST'; // LIST,FORM,VIEW,CFORM,CVIEW,PFORM,PVIEW
 
     public $datatable_props;
 
@@ -101,20 +101,20 @@ class DocumentList extends Component
 
     public function mount()
     {
-        if (request('action')) {
-            $this->action = strtoupper(request('action'));
-        }
+        // if (request('action')) {
+        //     $this->action = strtoupper(request('action'));
+        // }
 
-        if (request('id')) {
+        // if (request('id')) {
 
-            if ( in_array($this->action,['LIST','FORM','VIEW','CFORM','CVIEW']) ) {
-                $this->uid = request('id');
-            }
+        //     if ( in_array($this->action,['LIST','FORM','VIEW','CFORM','CVIEW']) ) {
+        //         $this->uid = request('id');
+        //     }
 
-            if ( in_array($this->action,['PFORM','PVIEW']) ) {
-                $this->pid = request('id');
-            }
-        }
+        //     if ( in_array($this->action,['PFORM','PVIEW']) ) {
+        //         $this->pid = request('id');
+        //     }
+        // }
 
         $this->constants = config('documents');
 
@@ -266,37 +266,37 @@ class DocumentList extends Component
     }
 
 
-    public function viewItem($uid) {
-        $this->action = 'VIEW';
-        $this->uid = $uid;
-    }
+    // public function viewItem($uid) {
+    //     $this->action = 'VIEW';
+    //     $this->uid = $uid;
+    // }
 
 
-    public function editItem($uid) {
-        $this->action = 'FORM';
-        $this->uid = $uid;
-    }
+    // public function editItem($uid) {
+    //     $this->action = 'FORM';
+    //     $this->uid = $uid;
+    // }
 
 
-    public function addItem() {
-        $this->uid = false;
-        $this->action = 'FORM';
+    // public function addItem() {
+    //     $this->uid = false;
+    //     $this->action = 'FORM';
 
-        $this->reset('code','name');
-    }
+    //     $this->reset('code','name');
+    // }
 
-    #[On('addContent')]
-    public function addContentPage() {
+    // #[On('addContent')]
+    // public function addContentPage() {
 
-        //$this->paction = 'PFORM';
+    //     //$this->paction = 'PFORM';
 
-        dd($this->uid);
-    }
+    //     dd($this->uid);
+    // }
 
 
     public function setProps() {
 
-        if ($this->uid && in_array($this->action,['VIEW','FORM','CVIEW','CFORM']) ) {
+        if ($this->uid ) {
 
             $c = Document::find($this->uid);
 
@@ -321,22 +321,7 @@ class DocumentList extends Component
             }
         }
 
-        if ($this->pid && in_array($this->action,['PVIEW','PFORM']) ) {
 
-            // $p = Page::find($this->pid);
-
-            // $this->uid = $p->document_id;
-            // $this->ptitle = $p->title;
-            // $this->pcontent = $p->content;
-            // $this->pcreated_at = $p->created_at;
-            // $this->pupdated_at = $p->updated_at;
-            // $this->pcreated_by = User::find($p->user_id);
-            // $this->pupdated_by = User::find($p->updated_uid);
-
-            $c = Document::find($this->uid);
-
-            $this->toc = $c->toc;
-        }
     }
 
 
@@ -351,47 +336,49 @@ class DocumentList extends Component
     public function deleteItem()
     {
         Document::find($this->uid)->delete();
-        session()->flash('message','Document have been deleted successfully.');
 
-        $this->action = 'LIST';
+        session()->flash('msg',[
+            'type' => 'success',
+            'text' => 'Document and it\'s files has been deleted successfully.'
+        ]);
+
+        // $this->action = 'LIST';
         $this->resetPage();
     }
 
 
-    public function storeUpdateItem () {
+    // public function storeUpdateItem () {
 
-        $this->validate();
+    //     $this->validate();
 
-        $props['updated_uid'] = Auth::id();
-        $props['doc_type'] = $this->doc_type;
-        $props['language'] = $this->language;
-        $props['company_id'] = $this->company_id;
-        $props['toc'] = json_encode($this->toc);
-        $props['title'] = $this->title;
-        $props['remarks'] = $this->remarks;
+    //     $props['updated_uid'] = Auth::id();
+    //     $props['doc_type'] = $this->doc_type;
+    //     $props['language'] = $this->language;
+    //     $props['company_id'] = $this->company_id;
+    //     $props['toc'] = json_encode($this->toc);
+    //     $props['title'] = $this->title;
+    //     $props['remarks'] = $this->remarks;
 
-        if ( $this->uid ) {
-            // update
-            Document::find($this->uid)->update($props);
-            session()->flash('message','Document has been updated successfully.');
+    //     if ( $this->uid ) {
+    //         // update
+    //         Document::find($this->uid)->update($props);
+    //         session()->flash('message','Document has been updated successfully.');
 
-        } else {
-            // create
-            $props['user_id'] = Auth::id();
-            $props['document_no'] = $this->getDocumentNo();
-            $this->uid = Document::create($props)->id;
-            session()->flash('message','Document has been created successfully.');
-        }
+    //     } else {
+    //         // create
+    //         $props['user_id'] = Auth::id();
+    //         $props['document_no'] = $this->getDocumentNo();
+    //         $this->uid = Document::create($props)->id;
+    //         session()->flash('message','Document has been created successfully.');
+    //     }
 
-        // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
-        $this->dispatch('triggerAttachment',modelId: $this->uid);
-
-
-        $this->action = 'VIEW';
-
-    }
+    //     // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
+    //     $this->dispatch('triggerAttachment',modelId: $this->uid);
 
 
+    //     $this->action = 'VIEW';
+
+    // }
 
 
 
@@ -399,25 +386,27 @@ class DocumentList extends Component
 
 
 
-    public function getDocumentNo() {
 
-        $parameter = 'document_no';
-        $initial_no = config('appconstants.counters.document_no');
-        $counter = Counter::find($parameter);
 
-        if ($counter == null) {
-            Counter::create([
-                'counter_type' => $parameter,
-                'counter_value' => $initial_no
-            ]);
+    // public function getDocumentNo() {
 
-            return $initial_no;
-        }
+    //     $parameter = 'document_no';
+    //     $initial_no = config('appconstants.counters.document_no');
+    //     $counter = Counter::find($parameter);
 
-        $new_no = $counter->counter_value + 1;
-        $counter->update(['counter_value' => $new_no]);         // Update Counter
-        return $new_no;
-    }
+    //     if ($counter == null) {
+    //         Counter::create([
+    //             'counter_type' => $parameter,
+    //             'counter_value' => $initial_no
+    //         ]);
+
+    //         return $initial_no;
+    //     }
+
+    //     $new_no = $counter->counter_value + 1;
+    //     $counter->update(['counter_value' => $new_no]);         // Update Counter
+    //     return $new_no;
+    // }
 
 
     public function freezeConfirm($uid) {

@@ -121,10 +121,4 @@ class Document extends Model implements HasMedia
         ];
     }
 
-
-
-
-
-
-
 }

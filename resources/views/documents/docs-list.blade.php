@@ -20,7 +20,7 @@
 
     @if ($documents->count() > 0)
 
-        <livewire:datatable-search add_command="Add Document"/>
+        <livewire:datatable-search add_command="Add Document" />
 
         <div class="relative overflow-x-auto my-4">
 

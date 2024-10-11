@@ -49,9 +49,25 @@ $id = computed(function () {
 
           @foreach ($this->menu as $row)
             <li>
+
+                @if ( isset($row['href']) )
                 <a href="{{ $row['href'] }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                     {{ $row['title'] }}
-                </a>
+                </a>                    
+                @endif
+
+
+
+
+                @if ( isset($row['wireclick']) )
+                <a wire.click="{{ $row['wireclick'] }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                    {{ $row['title'] }}
+                </a>                    
+                @endif
+
+
+
+
             </li>
           @endforeach
 

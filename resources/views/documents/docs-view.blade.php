@@ -1,5 +1,7 @@
 <div class="container mx-auto p-4">
 
+  <script src="{{ asset('/js/confirm_modal.js') }}"></script>
+
   <livewire:header type="Page" title="Documents" subtitle="Document Details and Properties" />
 
   @if(session('msg'))
@@ -33,11 +35,11 @@
             <x-carbon-list class="w-4 h-4" />
           </a>
 
-          <button wire:click="delete" class="bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
+          <a href="javascript:confirmDelete()" class="bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
             <x-carbon-trash-can class="w-4 h-4" />
-          </button>
+          </a>
 
-          <livewire:dropdown :menu="[ ['title' =>'Title of Submenu','href'=> '/aa/b/'],['title' =>'Title of Submenu','href'=> '/aa/b/']]"/>
+          <livewire:dropdown :menu="$dd_menu"/>
 
         </div>
 
@@ -63,5 +65,31 @@
   </div>
 
   <livewire:info-box :model="$document" />
+
+
+  <script>
+
+    function confirmDelete() {
+
+      Swal.fire({
+        title: 'Delete Document?',
+        text: 'Once deleted, there is no reverting back!',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Delete',
+        cancelButtonText: 'Ooops ...',
+
+      }).then((result) => {
+          if (result.isConfirmed) {
+              Livewire.dispatch('onDeleteConfirmed')
+          } else {
+              return false
+          }
+      })
+    }
+
+  </script>
 
 </div>

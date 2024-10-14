@@ -20,15 +20,7 @@ class DocumentView extends Component
 
 
 
-    public $dd_menu = [ 
-        ['title' =>'Freeze Document','href'=> '/aa/b/'],
-        ['title' =>'Release Document','wireclick'=> '/aa/b/'],
-        ['title' =>'Revise Document','wireclick'=> '/aa/b/']
-
-    ];
-
-
-
+    public $dd_menu = [];
 
 
 
@@ -41,12 +33,14 @@ class DocumentView extends Component
             dd('Ooops ...');
             return false;
         }
+
     }
 
 
     public function render()
     {
         $this->document = Document::find($this->id );
+        $this->setMoreMenu();
 
         return view('documents.docs-view');
     }
@@ -84,6 +78,39 @@ class DocumentView extends Component
         ]);
 
         return $this->redirect('/document/list');
+    }
+
+
+
+    public function setMoreMenu() {
+
+        // FREEZE DOCUMENT
+        if ( in_array($this->document->status,['Verbatim']) ) {
+            $this->dd_menu[] = [
+                'title' =>'Freeze Document',
+                'href'=> '/aa/b/',
+                'icon' => 'overflow-menu-vertical'
+
+            ];
+        };
+
+        // RELEASE DOCUMENT
+        if ( in_array($this->document->status,['Verbatim']) ) {
+            $this->dd_menu[] = [
+                'title' =>'Release Document',
+                'href'=> '/aa/b/',
+                'icon' => 'overflow-menu-vertical'
+            ];
+        };
+
+        // REVISE DOCUMENT
+        if ( in_array($this->document->status,['Frozen','Released']) ) {
+            $this->dd_menu[] = [
+                'title' =>'Revise Document',
+                'href'=> '/aa/b/',
+                'icon' => 'overflow-menu-vertical'
+            ];
+        };
     }
 
 

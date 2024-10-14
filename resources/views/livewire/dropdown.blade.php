@@ -3,7 +3,6 @@
 use function Livewire\Volt\{state};
 use function Livewire\Volt\{computed};
 
-
 state(['title' => "More ..."]);  // Triggering Button Title
 
 state(['menu' => [
@@ -20,13 +19,9 @@ state(['menu' => [
     ]
 ]]);
 
-
 $id = computed(function () {
     return 'u'.rand(0, 1000);
 })
-
-
-
 
 ?>
 
@@ -41,32 +36,34 @@ $id = computed(function () {
         >
         <x-carbon-overflow-menu-vertical class="w-5"/>
     </button>
-    
+
     <!-- Dropdown menu -->
-    <div id="{{ $this->id }}Menu" class="z-10 absolute right-0 top-10 text-left hidden bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+    <div id="{{ $this->id }}Menu" class="z-10 absolute right-0 top-10 text-left hidden bg-[#3b5998] divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
 
         <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
 
           @foreach ($this->menu as $row)
             <li>
 
-                @if ( isset($row['href']) )
-                <a href="{{ $row['href'] }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+                {{-- @if ( isset($row['icon']) )
+                <a class="text-white bg-[#3b5998] hover:bg-gray-100 hover:text-gray-600 w-full ml-2 text-sm inline-flex items-center">
+                    <x-carbon-overflow-menu-vertical class="w-5"/>
                     {{ $row['title'] }}
-                </a>                    
+                </a>
+                @endif --}}
+
+                @if ( isset($row['href']) )
+                <a href="{{ $row['href'] }}" class="px-4 py-2 hover:bg-gray-100 inline-flex text-white hover:text-gray-600">
+                    <x-carbon-{{ $row['icon'] }} class="w-5"/>
+                    {{ $row['title'] }}
+                </a>
                 @endif
-
-
-
 
                 @if ( isset($row['wireclick']) )
                 <a wire.click="{{ $row['wireclick'] }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
                     {{ $row['title'] }}
-                </a>                    
+                </a>
                 @endif
-
-
-
 
             </li>
           @endforeach

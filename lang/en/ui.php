@@ -46,7 +46,7 @@ return [
     "links" => [
         "forgot" => [
             "text" => 'Forgot password?',
-            "info" => 'No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
+            "info" => 'Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
             "resetlink" => 'Send Reset Link'
         ],
 

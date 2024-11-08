@@ -68,11 +68,55 @@
                     @enderror
 
                 </div>
+
+                <a wire:click="changeAction('forgot')" class="text-center text-blue-600">{{__('ui.links.forgot.text')}}</a>
+
+            @endif
+
+            @if (in_array($action,['forgot']))
+                <livewire:flash-message :msg="$msg">
             @endif
 
 
 
-            <button wire:click="loginUsr" type="button" class="px-5 mt-12 py-4 w-full text-base font-medium text-center text-white bg-gray-900 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">{{__('ui.links.login.text')}}</button>
+
+
+            @if (session('status'))
+
+            {{ session('status') }}
+
+            @endif
+
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+
+
+
+
+
+
+
+
+
+
+
+            @if (in_array($action,['forgot']))
+                <button wire:click="sendResetLink" type="button" class="px-5 mt-6 py-4 w-full text-base font-medium text-center text-white bg-gray-900 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    {{__('ui.links.reset.text')}}
+                </button>
+            @else
+                <button wire:click="loginUsr" type="button" class="px-5 mt-6 py-4 w-full text-base font-medium text-center text-white bg-gray-900 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    {{__('ui.links.login.text')}}
+                </button>
+            @endif
 
         </div>
 
@@ -88,6 +132,20 @@
         </div>
 
     </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
 
 

@@ -3,7 +3,7 @@
 use function Livewire\Volt\{state};
 use function Livewire\Volt\{computed};
 
-state(['msg' => ["type" => "default","text"=> "successfully completed"]]);
+state(['msg' => ["type" => "default","header" => false,"text"=> "successfully completed"]]);
 
 $css = computed(function () {
 
@@ -60,5 +60,10 @@ $css = computed(function () {
 ?>
 
 <div class="p-4 mb-4 text-sm {{ $this->css['text-color'] }} rounded-lg {{ $this->css['bg-color'] }}" role="alert">
-    <span class="font-medium mr-4">{{ $this->css['type-text'] }}</span> {{ $this->msg['text'] }}.
+
+    @if ($this->msg['header'])
+        <p class="font-medium pb-4">{{ $this->msg['header'] }}</p>
+    @endif
+
+    {{ $this->msg['text'] }}.
 </div>

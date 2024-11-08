@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
 
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
@@ -42,9 +43,15 @@ class Logware extends Component
 
     public $status;
 
+    public $msg;
+
 
     public function render()
     {
+
+        $this->msg = ['type' => 'info','header' => __('ui.links.forgot.text'),'text' => __('ui.links.forgot.info')];
+
+
         if (request('action')) {
             $this->action = request('action');
         }
@@ -118,6 +125,24 @@ class Logware extends Component
 
     public function resetPwd($opt)
     {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
@@ -126,9 +151,47 @@ class Logware extends Component
     }
 
 
-    public function sendResetLink($opt)
+    public function sendResetLink(Request $request)
     {
+
+
+        $this->validate([
+            'email' => ['required', 'email'],
+        ]);
+
+
+
+
+
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+
+        //dd($this->email);
+
+        dd($status);
+
+        dd(Password::RESET_LINK_SENT);
+     
+        return $status === Password::RESET_LINK_SENT
+                    ? back()->with(['status' => __($status)])
+                    : back()->withErrors(['email' => __($status)]);
+
+
+
+
+
+
+
+
+
+
+
+
     }
+
+
+
 
     public function logout(Request $request): RedirectResponse
     {

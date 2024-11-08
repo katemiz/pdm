@@ -76,4 +76,36 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class)->withTimestamps();
     }
 
+
+
+
+
+
+
+    use App\Notifications\ResetPasswordNotification;
+ 
+    /**
+     * Send a password reset notification to the user.
+     *
+     * @param  string  $token
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $url = 'https://example.com/reset-password?token='.$token;
+     
+        $this->notify(new ResetPasswordNotification($url));
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

@@ -14,62 +14,17 @@
           {{-- ADMIN MENU --}}
           <li class="relative p-2 md:text-white justify-center md:hover:bg-sky-900">
 
-            <button id="adminButton" class="inline-flex items-center font-extrabold md:font-normal w-full p-4 md:p-0 border border-gray-400 md:border-0">
-                <x-carbon-credentials class="w-6 text-blue-600 md:text-amber-400"/>
-                <span class="px-2">Admin</span>
-                <x-carbon-chevron-down class="w-5"/>
-            </button>
+            <x-nav-link id="admBtn" type="dropdown">Admin</x-nav-link>
 
             <div id="adminMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-white w-full md:w-64 left-0 md:shadow-lg md:border md:border-gray-800">
 
               <ul class="flex flex-col text-black">
 
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 md:pl-2">
-
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-user-multiple class="w-6"/>
-                    </div>
-                    <span class="px-2 ">Users</span>
-                  </button>
-
-                </li>
-
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 md:pl-2">
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-person class="w-6"/>
-                    </div>
-                    <span class="px-2">Roles</span>
-                  </button>
-                </li>
-
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 md:pl-2">
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-password class="w-6"/>
-                    </div>
-                    <span class="px-2">Permissions</span>
-                  </button>
-                </li>
-
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 md:pl-2">
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-building class="w-6"/>
-                    </div>
-                    <span class="px-2">Companies</span>
-                  </button>
-                </li>
-
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 md:pl-2">
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-business-processes class="w-6"/>
-                    </div>
-                    <span class="px-2">Projects</span>
-                  </button>
-                </li>
+                <x-nav-link href="/document/list" type="submenu">Users</x-nav-link>
+                <x-nav-link href="/document/list" type="submenu">Roles</x-nav-link>
+                <x-nav-link href="/document/list" type="submenu">Permissions</x-nav-link>
+                <x-nav-link href="/document/list" type="submenu">Companies</x-nav-link>
+                <x-nav-link href="/document/list" type="submenu">Projects</x-nav-link>
 
               </ul>
             </div>
@@ -81,33 +36,14 @@
           {{-- REQUESTS MENU --}}
           <li class="relative p-2 md:text-white justify-center md:hover:bg-sky-900">
 
-            <button id="requestButton" class="inline-flex items-center font-extrabold md:font-normal">
-                <x-carbon-intent-request-scale-in class="w-6 text-blue-600 md:text-amber-400"/>
-                <span class="px-2">Requests</span>
-                <x-carbon-chevron-down class="w-5"/>
-            </button>
+            <x-nav-link id="reqBtn" type="dropdown">Requests</x-nav-link>
 
             <div id="requestMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-white w-full md:w-96 left-0 md:shadow-lg md:border md:border-gray-800">
 
               <ul class="flex flex-col text-black">
 
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 md:pl-2">
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                        <x-carbon-change-catalog class="w-6"/>
-                    </div>
-                    <span class="px-2 whitespace-nowrap">Change Requests</span>
-                  </button>
-                </li>
-
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 md:pl-2">
-                <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-scis-control-tower class="w-6"/>
-                    </div>
-                    <span class="px-2 whitespace-nowrap">Engineering Change Requests (ECN)</span>
-                  </button>
-                </li>
+                <x-nav-link href="/document/list" type="submenu">Change Requests</x-nav-link>
+                <x-nav-link href="/document/list" type="submenu">Engineering Change Requests (ECN)</x-nav-link>
 
               </ul>
             </div>
@@ -119,37 +55,16 @@
           {{-- PRODUCTS MENU --}}
           <li class="relative p-2 md:text-white justify-center md:hover:bg-sky-900">
 
-            <button id="productButton" class="inline-flex items-center font-extrabold md:font-normal">
-                <x-carbon-industry class="w-6 text-blue-600 md:text-amber-400"/>
-                <span class="px-2">Products</span>
-                <x-carbon-chevron-down class="w-5"/>
-            </button>
+            <x-nav-link id="productsBtn" type="dropdown">Products</x-nav-link>
 
             <div id="productMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-white w-full md:w-64 left-0 md:shadow-lg md:border md:border-gray-800">
 
-              <ul class="flex flex-col">
+                <ul class="flex flex-col text-black">
 
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
+                    <x-nav-link href="/document/list" type="submenu">Sellables</x-nav-link>
+                    <x-nav-link href="/document/list" type="submenu">Components</x-nav-link>
 
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-box class="w-6"/>
-                    </div>
-                    <span class="px-2 whitespace-nowrap">Sellables</span>
-                  </button>
-
-                </li>
-
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-radio class="w-6"/>
-                    </div>
-                    <span class="px-2 whitespace-nowrap">Components</span>
-                  </button>
-                </li>
-
-              </ul>
+                </ul>
             </div>
 
           </li>
@@ -157,84 +72,30 @@
 
 
           {{-- DOCUMENTS --}}
-          <li class="hover:bg-sky-900 p-2 md:text-white">
-              <a href="/document/list" class="inline-flex items-center font-extrabold md:font-normal">
-                <x-carbon-document-attachment class="w-6 text-blue-600 md:text-yellow-400"/>
-                <span class="px-2">Documents</span>
-              </a>
-          </li>
-
+          <x-nav-link href="/document/list" type="menu_link" :active="request()->is('/document/list')">Documents</x-nav-link>
 
 
           {{-- ENGINEERING MENU --}}
           <li class="relative p-2 md:text-white justify-center md:hover:bg-sky-900">
 
-            <button id="engineeringButton" class="inline-flex items-center font-extrabold md:font-normal">
-                <x-carbon-function-math class="w-6 text-blue-600 md:text-yellow-400"/>
-                <span class="px-2">Engineering</span>
-                <x-carbon-chevron-down class="w-5"/>
-            </button>
+            <x-nav-link id="engBtn" type="dropdown">Engineering</x-nav-link>
 
             <div id="engineeringMenu" class="md:absolute mt-4 md:hidden flex flex-col bg-white w-full md:w-72 left-0 md:shadow-lg md:border md:border-gray-800">
 
-              <ul class="flex flex-col">
+                <ul class="flex flex-col text-black">
 
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
+                    <x-nav-link href="/document/list" type="submenu">Engineering Utilities</x-nav-link>
+                    <x-nav-link href="/document/list" type="submenu">Materials</x-nav-link>
+                    <x-nav-link href="/document/list" type="submenu">Product Notes</x-nav-link>
+                    <x-nav-link href="/document/list" type="submenu">Standard Families</x-nav-link>
 
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-sigma class="w-6"/>
-                    </div>
-                    <span class="px-2 whitespace-nowrap">Engineering Utilities</span>
-                  </button>
-
-                </li>
-
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-cube class="w-6"/>
-                    </div>
-                    <span class="px-2 whitespace-nowrap">Materials</span>
-                  </button>
-                </li>
-
-
-
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-pen-fountain class="w-6"/>
-                    </div>
-                    <span class="px-2 whitespace-nowrap">Product Notes</span>
-                  </button>
-                </li>
-
-
-
-                <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 bg-gray-100 text-black md:pl-2">
-                  <button class="inline-flex items-center">
-                    <div class="text-blue-600">
-                      <x-carbon-catalog class="w-6"/>
-                    </div>
-                    <span class="px-2 whitespace-nowrap">Standard Families</span>
-                  </button>
-                </li>
-
-              </ul>
+                </ul>
             </div>
 
           </li>
 
-
-
           {{-- MOM --}}
-          <li class="hover:bg-sky-900 p-2 md:text-white">
-            <button class="inline-flex items-center font-extrabold md:font-normal">
-                <x-carbon-report-data class="w-6 text-blue-600 md:text-yellow-400"/>
-                <span class="px-2">MOM</span>
-            </button>
-          </li>
+          <x-nav-link href="/mom" type="menu_link" :active="request()->is('/mom')">MOM</x-nav-link>
 
         </ul>
 
@@ -245,7 +106,7 @@
 
           @if(Auth::check())
 
-            <button id="usrButton" class="inline-flex items-center text-gray-600 text-slate-50">
+            <button id="usrButton" class="inline-flex items-center text-slate-50">
               <span class="px-2 whitespace-nowrap">{{ Auth::user()->name }} {{ Auth::user()->lastname }}</span>
               <x-carbon-chevron-down class="w-5"/>
             </button>
@@ -318,7 +179,7 @@
 
 
     // ADMIN MENU
-    const adminButton = document.getElementById('adminButton')
+    const adminButton = document.getElementById('admBtn')
     const adminMenu = document.getElementById('adminMenu')
 
     adminButton.addEventListener('click', () => {
@@ -333,7 +194,7 @@
 
 
     // REQUESTS MENU
-    const requestButton = document.getElementById('requestButton')
+    const requestButton = document.getElementById('reqBtn')
     const requestMenu = document.getElementById('requestMenu')
 
     requestButton.addEventListener('click', () => {
@@ -348,7 +209,7 @@
 
 
     // PRODUCTS MENU
-    const productButton = document.getElementById('productButton')
+    const productButton = document.getElementById('productsBtn')
     const productMenu = document.getElementById('productMenu')
 
     productButton.addEventListener('click', () => {
@@ -363,7 +224,7 @@
 
 
     // ENGINEERING MENU
-    const engineeringButton = document.getElementById('engineeringButton')
+    const engineeringButton = document.getElementById('engBtn')
     const engineeringMenu = document.getElementById('engineeringMenu')
 
     engineeringButton.addEventListener('click', () => {

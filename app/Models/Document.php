@@ -64,6 +64,7 @@ class Document extends Model implements HasMedia
                 'label' => 'No',
                 'visibility' => false,
                 'sortable' => false,
+                'wrapText' => true,
                 'hasViewLink' => false,
             ],
 
@@ -71,14 +72,15 @@ class Document extends Model implements HasMedia
                 'label' => 'Prepared By',
                 'visibility' => false,
                 'sortable' => false,
+                'wrapText' => true,
                 'hasViewLink' => false,
             ],
 
-
             'DocNo' => [
-                'label' => 'Doc No',
+                'label' => 'No',
                 'visibility' => true,
                 'sortable' => true,
+                'wrapText' => false,
                 'hasViewLink' => true,
             ],
 
@@ -86,6 +88,7 @@ class Document extends Model implements HasMedia
                 'label' => 'Company',
                 'visibility' => false,
                 'sortable' => false,
+                'wrapText' => true,
                 'hasViewLink' => false,
             ],
 
@@ -93,6 +96,7 @@ class Document extends Model implements HasMedia
                 'label' => 'Title',
                 'visibility' => true,
                 'sortable' => true,
+                'wrapText' => true,
                 'hasViewLink' => false,
             ],
 
@@ -101,6 +105,7 @@ class Document extends Model implements HasMedia
                 'label' => 'Author',
                 'visibility' => true,
                 'sortable' => true,
+                'wrapText' => true,
                 'hasViewLink' => false,
             ],
 
@@ -108,6 +113,7 @@ class Document extends Model implements HasMedia
                 'label' => 'Created At',
                 'visibility' => true,
                 'sortable' => true,
+                'wrapText' => true,
                 'hasViewLink' => false,
             ],
 
@@ -115,6 +121,7 @@ class Document extends Model implements HasMedia
                 'label' => 'Updated At',
                 'visibility' => false,
                 'sortable' => false,
+                'wrapText' => true,
                 'hasViewLink' => false,
             ],
 

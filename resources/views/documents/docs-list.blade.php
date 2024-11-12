@@ -63,7 +63,7 @@
                             @foreach ($datatable_props as $key => $prop)
 
                                 @if ($prop['visibility'])
-                                    <td class="px-4 py-2 text-base">
+                                    <td class="px-4 py-2 text-base {{ !$prop['wrapText'] ? 'whitespace-nowrap':'' }}">
 
                                         @if ($prop['hasViewLink'])
                                             <a href="/document/view/{{ $record->id }}" class="inline-flex text-blue-700">
@@ -114,7 +114,7 @@
             </table>
         </div>
 
-        {{ $documents->links() }}
+        {{ $documents->links('components.pagination.tailwind') }}
 
     @else
 
@@ -126,7 +126,7 @@
 
 
     <script>
-        
+
         window.addEventListener('queryChanged', e => {
             Livewire.dispatch('startQuerySearch', {query:event.detail.query});
         });

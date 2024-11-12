@@ -3,7 +3,7 @@
   <nav class="flex items-center justify-between gap-4 px-4 py-4 h-16">
 
     <a href="/" class="text-2xl whitespace-nowrap flex ">
-      <x-carbon-model-alt class="w-8 text-amber-600"/>
+      <x-carbon-model-alt class="w-8 text-blue-600"/>
       <span class="px-2 font-extrabold">{{ config('appconstants.app.code') }}</span>
     </a>
 

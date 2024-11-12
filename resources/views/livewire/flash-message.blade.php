@@ -61,7 +61,7 @@ $css = computed(function () {
 
 <div class="p-4 mb-4 text-sm {{ $this->css['text-color'] }} rounded-lg {{ $this->css['bg-color'] }}" role="alert">
 
-    @if ($this->msg['header'])
+    @if ( isset($this->msg['header']) )
         <p class="font-medium pb-4">{{ $this->msg['header'] }}</p>
     @endif
 

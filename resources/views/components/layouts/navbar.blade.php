@@ -72,7 +72,7 @@
 
 
           {{-- DOCUMENTS --}}
-          <x-nav-link href="/document/list" type="menu_link" :active="request()->is('/document/list')">Documents</x-nav-link>
+          <x-nav-link href="/docs" type="menu_link" :active="request()->is('/documents')">Documents</x-nav-link>
 
 
           {{-- ENGINEERING MENU --}}

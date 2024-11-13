@@ -130,7 +130,7 @@ class DocumentForm extends Form
 
         $props['toc'] = json_encode([]);
 
-        $document = Document::find($id);
+        $document = Document::findOrFail($id);
 
         $document->update($props);
 

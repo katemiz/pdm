@@ -19,12 +19,8 @@ class DocumentCreateUpdate extends Component
 
     public $id = false;
 
-
-
     #[Validate(['files.*' => 'max:50000'])]
     public $files = [];
-
-
 
     public function mount() {
 
@@ -40,12 +36,8 @@ class DocumentCreateUpdate extends Component
 
     public function render()
     {
-        return view('documents.docs-form');
+        return view('documents.form');
     }
-
-
-
-
 
 
 
@@ -77,7 +69,7 @@ class DocumentCreateUpdate extends Component
         // FORM PARAMETERS UPDATE
         $this->form->update($this->id);
 
-        $model = Document::find($this->id);
+        $model = Document::findOrFail($this->id);
 
         foreach ($this->files as $file) {
             $model->addMedia($file)->toMediaCollection('Doc');

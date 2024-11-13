@@ -23,7 +23,7 @@ use Mail;
 use App\Mail\AppMail;
 
 
-class DocumentList extends Component
+class Documents extends Component
 {
     use WithPagination;
 
@@ -129,7 +129,7 @@ class DocumentList extends Component
 
         $this->setProps();
 
-        return view('documents.docs-list',[
+        return view('documents.index',[
             'documents' => $this->getDocumentsList()
         ]);
     }
@@ -279,6 +279,8 @@ class DocumentList extends Component
 
 
     // public function addItem() {
+
+    //     dd('sdgfg');
     //     $this->uid = false;
     //     $this->action = 'FORM';
 
@@ -482,7 +484,7 @@ class DocumentList extends Component
 
         $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
         $msgdata['subject'] = 'D'.$this->document_no.' R'.$this->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
-        $msgdata['url'] = url('/').'/document/view/'.$this->uid;
+        $msgdata['url'] = url('/').'/docs/'.$this->uid;
         $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
 
         $msgdata['document_no'] = $this->document_no;

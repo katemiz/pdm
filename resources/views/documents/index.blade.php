@@ -66,7 +66,7 @@
                                     <td class="px-4 py-2 text-base {{ !$prop['wrapText'] ? 'whitespace-nowrap':'' }}">
 
                                         @if ($prop['hasViewLink'])
-                                            <a href="/document/view/{{ $record->id }}" class="inline-flex text-blue-700">
+                                            <a href="/docs/{{ $record->id }}" class="inline-flex text-blue-700">
                                                 {{ $record[$key] }}
                                             </a>
                                         @else
@@ -82,8 +82,7 @@
 
                                 <td scope="col" class="px-4 py-2 text-base text-right whitespace-nowrap">
 
-
-                                    <a href="/document/view/{{ $record->id }}" class="inline-flex text-blue-700">
+                                    <a href="/docs/{{ $record->id }}" class="inline-flex text-blue-700">
                                         <x-carbon-view class="w-6 h-6"/>
                                     </a>
 
@@ -91,12 +90,12 @@
 
                                         @if ( !in_array($record->status,['Frozen','Released']) )
 
-                                            <a href="/document/form/{{ $record->id }}" class="inline-flex text-blue-700">
+                                            <a href="/docs-form/{{ $record->id }}" class="inline-flex text-blue-700">
                                                 <x-carbon-edit  class="w-6 h-6 ms-1.5"/>
                                             </a>
-                                            <a wire:click="triggerDelete({{ $record->id }})" class="inline-flex text-red-700">
+                                            {{-- <a wire:click="triggerDelete({{ $record->id }})" class="inline-flex text-red-700">
                                                 <x-carbon-trash-can  class="w-6 h-6 ms-1.5"/>
-                                            </a>
+                                            </a> --}}
 
                                         @endif
 
@@ -132,7 +131,7 @@
         });
 
         window.addEventListener('addTriggered', e => {
-            window.location.href = "/document/form"
+            window.location.href = "/docs-form"
         });
 
     </script>

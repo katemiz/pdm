@@ -39,10 +39,10 @@ class DocumentView extends Component
 
     public function render()
     {
-        $this->document = Document::find($this->id );
+        $this->document = Document::findOrFail($this->id );
         $this->setMoreMenu();
 
-        return view('documents.docs-view');
+        return view('documents.show');
     }
 
 
@@ -57,12 +57,12 @@ class DocumentView extends Component
 
 
     public function edit() {
-        return $this->redirect('/document/form/'.$this->id);
+        return $this->redirect('/docs-form/'.$this->id);
     }
 
 
     public function add() {
-        return $this->redirect('/document/form');
+        return $this->redirect('/docs-form');
     }
 
 

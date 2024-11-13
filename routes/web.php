@@ -41,7 +41,7 @@ use App\Livewire\Geometry;
 
 use App\Livewire\LwCompany;
 
-use App\Livewire\DocumentList;
+use App\Livewire\Documents;
 use App\Livewire\DocumentView;
 use App\Livewire\DocumentCreateUpdate;
 use App\Livewire\DocumentUpdate;
@@ -134,26 +134,20 @@ Route::middleware(['auth'])->group(function () {
 
 
     // DOCUMENTS
-    //Route::get('/documents/{action}/{id?}', LwDocument::class);
-    //Route::get('/documents-html/{action}/{id?}', LwHtmlDocument::class);
-
-    Route::get('/document/list', DocumentList::class);
-    Route::get('/document/view/{id}', DocumentView::class)->name('docView');
-    //Route::get('/document/form', DocumentCreate::class);
-    Route::get('/document/form/{id?}', DocumentCreateUpdate::class);
+    // Route::get('/document/list', DocumentList::class);
+    // Route::get('/document/view/{id}', DocumentView::class)->name('docView');
+    // Route::get('/document/form/{id?}', DocumentCreateUpdate::class);
 
 
-    // Route::get('/document/form/{id?}', function ($id = null) {
-    //     if ($id) {
-    //         dd('aa');
-    //         return new DocumentUpdate($id);
-    //     } else {
-    //         dd('bb');
 
-    //         return new DocumentCreate();
-    //     }
-    // });
+    Route::get('/docs', Documents::class);
+    Route::get('/docs/{id}', DocumentView::class)->name('docView');
+    Route::get('/docs-form/{id?}', DocumentCreateUpdate::class);
 
+
+    Route::post('/docs', DocumentCreateUpdate::class);
+    Route::patch('/docs/{id}', DocumentCreateUpdate::class);
+    Route::delete('/docs/{id}', DocumentCreateUpdate::class);
 
 
 

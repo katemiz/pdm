@@ -31,7 +31,7 @@
             <x-carbon-add-large class="w-4 h-4" />
           </button>
 
-          <a href="/document/list" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+          <a href="/docs" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
             <x-carbon-list class="w-4 h-4" />
           </a>
 

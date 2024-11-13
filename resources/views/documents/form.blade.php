@@ -31,7 +31,13 @@
         <x-file-upload :files="$files" name="files" is_multiple="true" />
 
 
-        <div class="text-right">
+        <div class="flex items-justify my-4">
+
+
+            <a href="/docs" class="bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
+                <x-carbon-trash-can class="w-4 h-4" /> Cancel
+              </a>
+
             <button type="submit"
                 class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">
                 {{ $this->form->docNo ? 'Update Document' : 'Add Document' }}

@@ -23,21 +23,43 @@
 
         <div class="w-1/4 text-right">
 
-          <button wire:click="edit" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
-            <x-carbon-pen class="w-4 h-4" />
-          </button>
+          {{-- EDIT --}}
+          <span class='has-tooltip'>
+            <x-tooltip>Edit Document</x-tooltip>
 
-          <button wire:click="add" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
-            <x-carbon-add-large class="w-4 h-4" />
-          </button>
+            <button wire:click="edit" class="dugme bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+              <x-carbon-pen class="w-4 h-4" />
+            </button>
+          </span>
+          
+          {{-- ADD NEW --}}
+          <span class='has-tooltip'>
+            <x-tooltip>Add New</x-tooltip>
 
-          <a href="/docs" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
-            <x-carbon-list class="w-4 h-4" />
-          </a>
+            <button wire:click="add" class="dugme bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center" >
+              <x-carbon-add-large class="w-4 h-4" />
+            </button>
+          </span>
 
-          <a href="javascript:confirmDelete()" class="bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
-            <x-carbon-trash-can class="w-4 h-4" />
-          </a>
+          {{-- LIST ALL --}}
+          <span class='has-tooltip'>
+            <a href="/docs" class="dugme bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+              <x-carbon-list class="w-4 h-4" />
+            </a>
+
+            <x-tooltip>List All Documents</x-tooltip>
+          </span>
+
+
+          {{-- DELETE --}}
+          <span class='has-tooltip'>
+            <a href="javascript:confirmDelete()" class="dugme bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
+              <x-carbon-trash-can class="w-4 h-4" />
+            </a>
+
+            <x-tooltip>Delete Document</x-tooltip>
+          </span>
+
 
           <livewire:dropdown :menu="$dd_menu"/>
 

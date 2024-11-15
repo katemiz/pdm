@@ -131,7 +131,7 @@
         });
 
         window.addEventListener('addTriggered', e => {
-            window.location.href = "/docs-form"
+            window.location.href = "/docs/form"
         });
 
     </script>

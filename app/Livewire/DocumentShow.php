@@ -11,13 +11,10 @@ use App\Models\Document;
 
 
 
-class DocumentView extends Component
+class DocumentShow extends Component
 {
     public $id;
     public $document;
-
-
-
 
 
     public $dd_menu = [];
@@ -57,12 +54,12 @@ class DocumentView extends Component
 
 
     public function edit() {
-        return $this->redirect('/docs-form/'.$this->id);
+        return $this->redirect('/docs/form/'.$this->id);
     }
 
 
     public function add() {
-        return $this->redirect('/docs-form');
+        return $this->redirect('/docs/form');
     }
 
 

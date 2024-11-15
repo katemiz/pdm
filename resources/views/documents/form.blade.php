@@ -2,7 +2,15 @@
 
     <livewire:header type="Page" title="Documents" subtitle="{{ $this->form->docNo ? 'Update Existing Document Parameters' : 'Create a New Document' }}" />
 
-    <form wire:submit="{{ $this->form->docNo ? 'update' : 'save' }}">
+    <form wire:submit="{{ $this->form->docNo ? 'update' : 'save' }}" action="post">
+
+        @csrf
+
+        @if ($this->form->docNo)
+
+        @method('patch')
+            
+        @endif
 
 
         @if ($this->form->docNo)
@@ -31,12 +39,12 @@
         <x-file-upload :files="$files" name="files" is_multiple="true" />
 
 
-        <div class="flex items-justify my-4">
+        <div class="flex justify-end my-4">
 
 
-            <a href="/docs" class="bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
-                <x-carbon-trash-can class="w-4 h-4" /> Cancel
-              </a>
+            <a href="/docs" class="text-white focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
+                Cancel
+            </a>
 
             <button type="submit"
                 class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">

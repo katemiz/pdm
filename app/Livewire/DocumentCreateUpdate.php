@@ -47,13 +47,13 @@ class DocumentCreateUpdate extends Component
         $id = $this->form->store();
 
         // ATTACHMENTS
-        $model = Document::find($this->id);
+        $model = Document::find($id);
 
         foreach ($this->files as $file) {
             $model->addMedia($file)->toMediaCollection('Doc');
         }
 
-        return $this->redirect('/document/view/'.$id);
+        return $this->redirect('/docs/'.$id);
     }
 
 
@@ -75,7 +75,7 @@ class DocumentCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('Doc');
         }
 
-        return $this->redirect('/document/view/'.$this->id);
+        return $this->redirect('/docs/'.$this->id);
     }
 
 

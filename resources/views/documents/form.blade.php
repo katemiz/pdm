@@ -9,7 +9,7 @@
         @if ($this->form->docNo)
 
         @method('patch')
-            
+
         @endif
 
 
@@ -42,7 +42,7 @@
         <div class="flex justify-end my-4">
 
 
-            <a href="/docs" class="text-white focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
+            <a href="{{ $this->form->docNo ? '/docs/'.$this->form->uid : '/docs' }}" class="text-white focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium text-sm px-5 py-2.5 me-2 mb-2 bg-red-700 hover:bg-red-800 p-2 rounded inline-flex items-center">
                 Cancel
             </a>
 

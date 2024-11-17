@@ -27,40 +27,30 @@
           <span class='has-tooltip'>
             <x-tooltip>Edit Document</x-tooltip>
 
-            <button wire:click="edit" class="dugme bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
-              <x-carbon-pen class="w-4 h-4" />
+            <button wire:click="edit" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+              <x-ikon name="Edit" />
             </button>
           </span>
-          
+
           {{-- ADD NEW --}}
           <span class='has-tooltip'>
             <x-tooltip>Add New</x-tooltip>
 
-            <button wire:click="add" class="dugme bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center" >
-              <x-carbon-add-large class="w-4 h-4" />
+            <button wire:click="add" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center" >
+                <x-ikon name="Add" />
             </button>
           </span>
 
           {{-- LIST ALL --}}
           <span class='has-tooltip'>
-            <a href="/docs" class="dugme bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
-              <x-carbon-list class="w-4 h-4" />
+            <a href="/docs" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+              <x-ikon name="List" />
             </a>
 
             <x-tooltip>List All Documents</x-tooltip>
           </span>
 
-
-          {{-- DELETE --}}
-          <span class='has-tooltip'>
-            <a href="javascript:confirmDelete()" class="dugme bg-red-700 hover:bg-red-800 text-white p-2 rounded inline-flex items-center">
-              <x-carbon-trash-can class="w-4 h-4" />
-            </a>
-
-            <x-tooltip>Delete Document</x-tooltip>
-          </span>
-
-
+          {{-- MORE BUTTON --}}
           <livewire:dropdown :menu="$dd_menu"/>
 
         </div>

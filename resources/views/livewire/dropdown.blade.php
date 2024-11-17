@@ -9,124 +9,63 @@ state(['menu' => [
     [
         "title" => 'Menu Item',
         "href" => '/action',
-        "icon" => 'chevron-down'
+        "icon" => 'Edit'
     ],
 
     [
         "title" => 'Menu Item',
         "href" => '/action',
-        "icon" => 'chevron-down'
+        "icon" => 'View'
     ]
 ]]);
 
-$id = computed(function () {
-    return 'u'.rand(0, 1000);
-})
-
 ?>
 
-<div class="relative inline-flex has-tooltip">
 
+<span x-data="{ open: false }" class="has-tooltip relative">
 
+    <a @click="open = !open" class="ml-12 bg-gray-700 hover:bg-gray-800 text-white p-2 rounded inline-flex items-center">
+        <x-carbon-overflow-menu-vertical class="w-4 h-4"/>
+    </a>
 
-    <button
-        id="{{ $this->id }}"
-        data-dropdown-toggle="dropdownHover"
-        data-dropdown-trigger="hover"
-        class="ml-16 bg-gray-700 hover:bg-gray-800 text-white p-2 rounded inline-flex items-center"
-        type="button"
-        >
-        <x-carbon-overflow-menu-vertical class="w-5"/>
-    </button>
+    <x-tooltip>More</x-tooltip>
 
-    <x-tooltip>More ...</x-tooltip>
+    <div
+        x-show="open"
+        x-transition:enter="transition ease-out duration-100"
+        x-transition:enter-start="transform opacity-0 scale-95"
+        x-transition:enter-end="transform opacity-100 scale-100"
+        x-transition:leave="transition ease-in duration-75"
+        x-transition:leave-start="transform opacity-100 scale-100"
+        x-transition:leave-end="transform opacity-0 scale-95"
+        class="absolute top-8 right-0 w-64 px-2 py-2 bg-white rounded-lg shadow border">
 
+        <ul class="space-y-1">
 
-    <!-- Dropdown menu -->
-    <div id="{{ $this->id }}Menu" class="z-10 absolute right-0 top-10 text-left hidden bg-[#3b5998] divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
+            @foreach ($this->menu as $row)
+            <li class="font-medium p-2 hover:bg-gray-200">
 
-        <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownHoverButton">
+                <a
+                    @if ( isset($row["href"]) )
+                    href="{{ $row["href"] }}"
+                    @endif
 
-          @foreach ($this->menu as $row)
-            <li>
+                    @if ( isset($row["wireclick"]) )
+                    wire.click="{{ $row["wireclick"] }}"
+                    @endif
 
-                {{-- @if ( isset($row['icon']) )
-                <a class="text-white bg-[#3b5998] hover:bg-gray-100 hover:text-gray-600 w-full ml-2 text-sm inline-flex items-center">
-                    <x-carbon-overflow-menu-vertical class="w-5"/>
+                    class="flex items-center transform transition-colors duration-200 border-r-4 border-transparent hover:border-indigo-700">
+                    <div class="mr-3 text-blue-700">
+                        <x-ikon name="{{ $row['icon'] }}" />
+                    </div>
                     {{ $row['title'] }}
                 </a>
-                @endif --}}
-
-                @if ( isset($row['href']) )
-                <a href="{{ $row['href'] }}" class="px-4 py-2 hover:bg-gray-100 inline-flex text-white hover:text-gray-600">
-                    <x-carbon-{{ $row['icon'] }} class="w-5"/>
-                    {{ $row['title'] }}
-                </a>
-                @endif
-
-                @if ( isset($row['wireclick']) )
-                <a wire.click="{{ $row['wireclick'] }}" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-                    {{ $row['title'] }}
-                </a>
-                @endif
 
             </li>
-          @endforeach
+            @endforeach
 
         </ul>
     </div>
 
+  </span>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <script>
-        const triggerButton = document.getElementById("{{ $this->id }}");
-        const m = document.getElementById("{{ $this->id }}Menu");
-
-        triggerButton.addEventListener('click', () => {
-            m.classList.toggle('hidden');
-        });
-
-        // triggerButton.addEventListener('click',  () => {
-        //     m.classList.toggle('hidden');
-        // });
-    </script>
-
-</div>

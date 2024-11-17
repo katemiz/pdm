@@ -18,9 +18,10 @@
     @endif
 
 
-    @if ($documents->count() > 0)
+    <livewire:datatable-search add_command="Add Document" />
 
-        <livewire:datatable-search add_command="Add Document" />
+
+    @if ($documents->count() > 0)
 
         <div class="relative overflow-x-auto my-4">
 
@@ -90,7 +91,7 @@
 
                                         @if ( !in_array($record->status,['Frozen','Released']) )
 
-                                            <a href="/docs-form/{{ $record->id }}" class="inline-flex text-blue-700">
+                                            <a href="/docs/form/{{ $record->id }}" class="inline-flex text-blue-700">
                                                 <x-carbon-edit  class="w-6 h-6 ms-1.5"/>
                                             </a>
                                             {{-- <a wire:click="triggerDelete({{ $record->id }})" class="inline-flex text-red-700">

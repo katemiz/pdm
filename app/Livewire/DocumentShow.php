@@ -86,7 +86,7 @@ class DocumentShow extends Component
             $this->dd_menu[] = [
                 'title' =>'Freeze Document',
                 'href'=> '/aa/b/',
-                'icon' => 'overflow-menu-vertical'
+                'icon' => 'Freeze'
 
             ];
         };
@@ -96,7 +96,7 @@ class DocumentShow extends Component
             $this->dd_menu[] = [
                 'title' =>'Release Document',
                 'href'=> '/aa/b/',
-                'icon' => 'overflow-menu-vertical'
+                'icon' => 'Release'
             ];
         };
 
@@ -105,9 +105,23 @@ class DocumentShow extends Component
             $this->dd_menu[] = [
                 'title' =>'Revise Document',
                 'href'=> '/aa/b/',
-                'icon' => 'overflow-menu-vertical'
+                'icon' => 'Revise'
             ];
         };
+
+
+        // DELETE DOCUMENT
+        if ( in_array($this->document->status,['Verbatim']) ) {
+            $this->dd_menu[] = [
+                'title' =>'Delete Document',
+                'href'=> 'javascript:confirmDelete()',
+                'icon' => 'Delete'
+            ];
+        };
+
+
+        $this->dd_menu = (object) $this->dd_menu;
+
     }
 
 

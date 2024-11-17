@@ -19,9 +19,11 @@ class DocumentForm extends Form
     public ?Document $document;
 
     #[Validate('required', message: 'Please add document title')]
-    #[Validate('min:16', message: 'Docuemnt title is too short. At least 16 characters')]
+    #[Validate('min:16', message: 'Document title is too short. At least 16 characters')]
     public String $title = '';
 
+    // RECORD ID
+    public $uid;
 
     // DOC NO WITH REVISION
     public $docNo = false;
@@ -80,6 +82,7 @@ class DocumentForm extends Form
 
     public function setDocument(Int $id)
     {
+        $this->uid = $id;
         $this->document = Document::find($id);
         $this->docNo = $this->document->docNo;
         $this->title = $this->document->title;

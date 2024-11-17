@@ -27,8 +27,6 @@ class Documents extends Component
 {
     use WithPagination;
 
-    //public $action = 'LIST'; // LIST,FORM,VIEW,CFORM,CVIEW,PFORM,PVIEW
-
     public $datatable_props;
 
     public $hasActions = true;
@@ -101,25 +99,8 @@ class Documents extends Component
 
     public function mount()
     {
-        // if (request('action')) {
-        //     $this->action = strtoupper(request('action'));
-        // }
-
-        // if (request('id')) {
-
-        //     if ( in_array($this->action,['LIST','FORM','VIEW','CFORM','CVIEW']) ) {
-        //         $this->uid = request('id');
-        //     }
-
-        //     if ( in_array($this->action,['PFORM','PVIEW']) ) {
-        //         $this->pid = request('id');
-        //     }
-        // }
-
         $this->constants = config('documents');
-
         $this->setCompanyProps();
-
     }
 
 
@@ -146,12 +127,9 @@ class Documents extends Component
 
     public function setCompanyProps()
     {
-        //$this->companies = Company::all();
-
         foreach (Company::all() as $c) {
             $this->companies[$c->id] = $c->name;
         }
-
 
         $this->company_id =  Auth::user()->company_id;
         $this->company =  Company::find($this->company_id);
@@ -160,15 +138,6 @@ class Documents extends Component
     public function checkSessionVariables() {
 
         return true;
-
-        // if (session('current_project_id')) {
-        //     $this->project_id = session('current_project_id');
-        //     $this->company_id = Project::find($this->project_id)->company_id;
-        // }
-
-        // if (session('current_eproduct_id')) {
-        //     $this->endproduct_id = session('current_eproduct_id');
-        // }
     }
 
 

@@ -1,6 +1,6 @@
 <div class="container mx-auto p-4">
 
-  <script src="{{ asset('/js/confirm_modal.js') }}"></script>
+  {{-- <script src="{{ asset('/js/confirm_modal.js') }}"></script> --}}
 
   <livewire:header type="Page" title="Documents" subtitle="Document Details and Properties" />
 
@@ -24,13 +24,15 @@
         <div class="w-1/4 text-right">
 
           {{-- EDIT --}}
-          <span class='has-tooltip'>
-            <x-tooltip>Edit Document</x-tooltip>
+          @if ($permissions->edit)
+            <span class='has-tooltip'>
+              <x-tooltip>Edit Document</x-tooltip>
 
-            <button wire:click="edit" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
-              <x-ikon name="Edit" />
-            </button>
-          </span>
+              <button wire:click="edit" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+                <x-ikon name="Edit" />
+              </button>
+            </span>
+          @endif
 
           {{-- ADD NEW --}}
           <span class='has-tooltip'>
@@ -51,14 +53,21 @@
           </span>
 
           {{-- MORE BUTTON --}}
-          <livewire:dropdown :menu="$dd_menu"/>
+          {{-- <livewire:dropdown :menu="$dd_menu"/> --}}
+
+          
+
+          <x-ddown :menu="$moreMenu"/>
 
         </div>
 
       </div>
 
-      <div>
+
+
+      <div class="flex justify-between">
         <p class="text-xl">{{ $document->title }}</p>
+        <x-badge>{{ $document->doc_types[$document->doc_type] }}</x-badge>
       </div>
 
 

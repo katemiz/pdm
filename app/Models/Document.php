@@ -17,6 +17,15 @@ class Document extends Model implements HasMedia
 
     protected $table = 'documents';
 
+    public $doc_types = [
+        'GR' => 'General Document',
+        'TR' => 'Test Report',
+        'AR' => 'Analysis Report',
+        'MN' => 'User Manual',
+        'ME' => 'Memo',
+        'PR' => 'Presentation'
+    ];
+
     protected $fillable = [
         'user_id',
         'company_id',
@@ -127,5 +136,9 @@ class Document extends Model implements HasMedia
 
         ];
     }
+
+
+
+
 
 }

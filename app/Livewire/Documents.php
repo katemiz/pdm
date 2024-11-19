@@ -68,14 +68,14 @@ class Documents extends Component
     public $remarks;
     public $status;
 
-    public $doc_types = [
-        'GR' => 'General Document',
-        'TR' => 'Test Report',
-        'AR' => 'Analysis Report',
-        'MN' => 'User Manual',
-        'ME' => 'Memo',
-        'PR' => 'Presentation'
-    ];
+    // public $doc_types = [
+    //     'GR' => 'General Document',
+    //     'TR' => 'Test Report',
+    //     'AR' => 'Analysis Report',
+    //     'MN' => 'User Manual',
+    //     'ME' => 'Memo',
+    //     'PR' => 'Presentation'
+    // ];
 
     #[Validate('required', message: 'Please select document type')]
     public $doc_type = 'GR';

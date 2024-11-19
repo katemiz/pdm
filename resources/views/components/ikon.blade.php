@@ -2,7 +2,6 @@
 @props(['size' => false])
 
 
-
 @switch($size)
     @case("XS")
         @php
@@ -51,10 +50,6 @@
 
 @switch($name)
 
-
-
-
-
     @case("Add")
         <x-carbon-add-large class="{{ $size }}" />
         @break
@@ -67,18 +62,30 @@
         <x-carbon-pen class="{{ $size }}" />
         @break
 
+    @case("Freeze")
+        <x-carbon-stamp class="{{ $size }}" />
+        @break
+
     @case("List")
         <x-carbon-list class="{{ $size }}" />
         @break
 
+    @case("More")
+        <x-carbon-overflow-menu-vertical class="{{ $size }}" />
+        @break
 
+    @case("Release")
+        <x-carbon-send class="{{ $size }}" />
+        @break
 
-
-
-
+    @case("Revise")
+        <x-carbon-version class="{{ $size }}" />
+        @break
 
     @default
         <x-carbon-pen class="{{ $size }}" />
         @break
 
 @endswitch
+
+

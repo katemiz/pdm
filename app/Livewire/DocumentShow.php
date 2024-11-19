@@ -16,10 +16,9 @@ class DocumentShow extends Component
     public $id;
     public $document;
 
+    public $moreMenu = [];
 
-    public $dd_menu = [];
-
-
+    public $permissions;
 
     public function mount() {
 
@@ -30,13 +29,13 @@ class DocumentShow extends Component
             dd('Ooops ...');
             return false;
         }
-
     }
 
 
     public function render()
     {
         $this->document = Document::findOrFail($this->id );
+        $this->setPermissions();
         $this->setMoreMenu();
 
         return view('documents.show');
@@ -64,36 +63,69 @@ class DocumentShow extends Component
 
 
 
-    #[On('onDeleteConfirmed')]
-    public function deleteItem()
-    {
-        Document::find($this->id)->delete();
 
-        session()->flash('msg',[
-            'type' => 'success',
-            'text' => 'Document has been deleted successfully.'
-        ]);
 
-        return $this->redirect('/document/list');
+
+
+
+    public function setPermissions() {
+
+        $this->permissions = (object) [
+            "show" => true,
+            "edit" => false,
+            "delete" => false,
+            "freeze" => false,
+            "release" => false,
+            "revise" => false
+        ];
+
+        // SHOW/READ
+        $this->permissions->show = true;
+
+        // EDIT
+        if ( in_array($this->document->status,['Verbatim']) ) {
+            $this->permissions->edit = true;
+        }
+
+        // DELETE
+        if ( in_array($this->document->status,['Verbatim']) ) {
+            $this->permissions->delete = true;
+        }
+
+        // FREEZE
+        if ( in_array($this->document->status,['Verbatim']) ) {
+            $this->permissions->freeze = true;
+        }
+
+        // RELEASE
+        if ( in_array($this->document->status,['Verbatim']) ) {
+            $this->permissions->release = true;
+        }
+
+        // REVISE
+        if ( in_array($this->document->status,['Released']) ) {
+            $this->permissions->revise = true;
+        }
     }
+
+
 
 
 
     public function setMoreMenu() {
 
         // FREEZE DOCUMENT
-        if ( in_array($this->document->status,['Verbatim']) ) {
-            $this->dd_menu[] = [
+        if ( $this->permissions->freeze ) {
+            $this->moreMenu[] = [
                 'title' =>'Freeze Document',
-                'href'=> '/aa/b/',
+                'wireclick'=> "freezeConfirm()",
                 'icon' => 'Freeze'
-
             ];
         };
 
         // RELEASE DOCUMENT
-        if ( in_array($this->document->status,['Verbatim']) ) {
-            $this->dd_menu[] = [
+        if ( $this->permissions->release ) {
+            $this->moreMenu[] = [
                 'title' =>'Release Document',
                 'href'=> '/aa/b/',
                 'icon' => 'Release'
@@ -101,8 +133,8 @@ class DocumentShow extends Component
         };
 
         // REVISE DOCUMENT
-        if ( in_array($this->document->status,['Frozen','Released']) ) {
-            $this->dd_menu[] = [
+        if ( $this->permissions->revise ) {
+            $this->moreMenu[] = [
                 'title' =>'Revise Document',
                 'href'=> '/aa/b/',
                 'icon' => 'Revise'
@@ -111,8 +143,8 @@ class DocumentShow extends Component
 
 
         // DELETE DOCUMENT
-        if ( in_array($this->document->status,['Verbatim']) ) {
-            $this->dd_menu[] = [
+        if ( $this->permissions->delete ) {
+            $this->moreMenu[] = [
                 'title' =>'Delete Document',
                 'href'=> 'javascript:confirmDelete()',
                 'icon' => 'Delete'
@@ -120,7 +152,7 @@ class DocumentShow extends Component
         };
 
 
-        $this->dd_menu = (object) $this->dd_menu;
+        $this->moreMenu = (object) $this->moreMenu;
 
     }
 
@@ -170,37 +202,60 @@ class DocumentShow extends Component
 
 
 
+    /*
+    FREEZE
+    */
 
+    public function freezeConfirm() {
 
-
-
-
-
-
-
-
-
-    public function freezeConfirm($uid) {
-        $this->uid = $uid;
-        $this->dispatch('ConfirmModal', type:'freeze');
-
-        session()->flash('message','Document has been frozen successfully.');
+        $this->dispatch('ConfirmModal', type:'freeze',name:'Document');
+        session()->flash('msg',[
+            'type' => 'success',
+            'text' => 'Document has been frozen successfully.'
+        ]);
     }
 
+    #[On('onFreezeConfirmed')]
+    public function doFreeze() {
+
+        Document::find($this->id)->update(['status' =>'Frozen']);
+    }
+
+
+
+    /*
+    RELEASE
+    */
 
     public function releaseConfirm($uid) {
         $this->uid = $uid;
         $this->dispatch('ConfirmModal', type:'doc_release');
     }
 
+    #[On('onReleaseConfirmed')]
+    public function doRelease() {
 
+        $doc = Document::find($this->uid);
 
-    #[On('onFreezeConfirmed')]
-    public function doFreeze() {
+        $props['status'] = 'Released';
+        $props['approver_id'] = Auth::id();
+        $props['app_revised_at'] = time();
+
+        $doc->update($props);
+
+        $this->setProps();
+
         $this->action = 'VIEW';
-        Document::find($this->uid)->update(['status' =>'Frozen']);
+
+        // Send EMails
+        $this->sendMail();
     }
 
+
+
+    /*
+    REVISE
+    */
 
     public function reviseConfirm($uid) {
         $this->uid = $uid;
@@ -229,25 +284,32 @@ class DocumentShow extends Component
     }
 
 
-    #[On('onReleaseConfirmed')]
-    public function doRelease() {
+    /*
+    DELETE
+    */
 
-        $doc = Document::find($this->uid);
 
-        $props['status'] = 'Released';
-        $props['approver_id'] = Auth::id();
-        $props['app_revised_at'] = time();
 
-        $doc->update($props);
+    #[On('onDeleteConfirmed')]
+    public function deleteItem()
+    {
+        Document::find($this->id)->delete();
 
-        $this->setProps();
+        session()->flash('msg',[
+            'type' => 'success',
+            'text' => 'Document has been deleted successfully.'
+        ]);
 
-        $this->action = 'VIEW';
-
-        // Send EMails
-        $this->sendMail();
+        return $this->redirect('/document/list');
     }
 
+
+
+
+
+    /*
+    SEND MAIL on ACTION COMPLETED
+    */
 
     public function sendMail() {
 

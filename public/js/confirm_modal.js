@@ -3,8 +3,9 @@ window.addEventListener('ConfirmModal',function(e) {
     let sa_title, sa_text, confirmText, cancelText
     let dispatchRoute, dispatchData
 
-    switch (e.detail.type) {
 
+
+    switch (e.detail.type) {
 
 
         case 'assy_release':
@@ -18,10 +19,18 @@ window.addEventListener('ConfirmModal',function(e) {
             dispatchData = {type:e.detail.type}
             break;
 
+        case 'part_release':
+
+            sa_title = 'Part Release ?'
+            sa_text = 'This part shall be released and PDM users shall be informed by email. Do you want to continue?'
+            confirmText = 'Release'
+            cancelText ='Cancel'
 
 
 
-
+            dispatchRoute = 'onReleaseConfirmed'
+            dispatchData = {type:e.detail.type}
+            break;
 
         case 'doc_release':
 
@@ -111,6 +120,7 @@ window.addEventListener('ConfirmModal',function(e) {
             dispatchData = {}
             break;
     }
+
 
     Swal.fire({
         title: sa_title,

@@ -269,7 +269,7 @@
 
             <article class="message is-danger">
                 <div class="message-header">
-                <p>Assy Release Not Performed : Missing Actions!</p>
+                <p>Release Not Performed : Missing Actions!</p>
                 </div>
 
                 <div class="message-body">

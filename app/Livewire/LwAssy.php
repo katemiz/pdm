@@ -70,7 +70,7 @@ class LwAssy extends Component
 
 
     public $has_mirror = false;
-    public $is_mirror_of = false;   
+    public $is_mirror_of = false;
 
     public $mirror_part_number =  false;
     public $mirror_part_version =  false;
@@ -229,7 +229,7 @@ class LwAssy extends Component
         $this->status = $item->status;
         $this->is_latest = $item->is_latest;
 
-        $this->treeData =[];  
+        $this->treeData =[];
 
         if ($item->bom) {
 
@@ -243,7 +243,6 @@ class LwAssy extends Component
                 array_push($this->treeData, $i);
             }
         }
-
 
         $this->created_by = User::find($item->user_id);
         $this->created_at = $item->created_at;
@@ -261,7 +260,6 @@ class LwAssy extends Component
         foreach ($item->pnotes as $note) {
             array_push($this->notes_id_array,$note->id);
         }
-
 
         // Revisions
         foreach (Item::where('part_number',$this->part_number)->get() as $i) {
@@ -521,9 +519,7 @@ class LwAssy extends Component
     #[On('onReleaseConfirmed')]
     public function doRelease() {
 
-
         $this->release_errors = false;
-
 
         $this->checkAssyIntegrity($this->uid);
 
@@ -542,12 +538,7 @@ class LwAssy extends Component
             // Send EMails
 
             $this->sendReleaseMail();
-
-
         }
-
-
-
     }
 
 
@@ -667,9 +658,6 @@ class LwAssy extends Component
                 'error' => 'Drawing file (pdf) not attached'
             ];
         }
-
-
-
     }
 
 
@@ -830,7 +818,6 @@ class LwAssy extends Component
         $msgdata['remarks'] = $this->remarks;
 
         $msgdata['parts_list'] = $this->parts_list;
-
 
         $allCompanyUsers = User::where('company_id',$this->company_id)->get();
 

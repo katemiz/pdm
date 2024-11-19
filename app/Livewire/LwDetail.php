@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Attachment;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\On;
@@ -61,7 +62,7 @@ class LwDetail extends Component
     public $makefrom_part_item;
 
     public $has_mirror = false;
-    public $is_mirror_of = false;   
+    public $is_mirror_of = false;
 
     public $mirror_part_number =  false;
     public $mirror_part_version =  false;
@@ -355,7 +356,7 @@ class LwDetail extends Component
             $this->mirror_part_number =  $mirror_part->part_number;
             $this->mirror_part_version =  $mirror_part->version;
             $this->mirror_part_description =  $mirror_part->description;
-        } 
+        }
 
 
         if ($item->is_mirror_of > 0) {
@@ -364,7 +365,7 @@ class LwDetail extends Component
             $this->is_mirror_of_part_number =  $is_mirror_of_part->part_number;
             $this->is_mirror_of_part_version =  $is_mirror_of_part->version;
             $this->is_mirror_of_part_description =  $is_mirror_of_part->description;
-        } 
+        }
 
         $this->notes_id_array = [];
 
@@ -537,7 +538,9 @@ class LwDetail extends Component
 
         try {
 
-            Item::whereId($this->uid)->update($props);
+            Item::find($this->uid)->update($props);
+
+            //dd([$props,$this->uid]);
 
             $aaa = Item::find($this->uid);
 
@@ -635,6 +638,163 @@ class LwDetail extends Component
     }
 
 
+
+    public function releaseConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'part_release');
+    }
+
+
+    #[On('onReleaseConfirmed')]
+    public function doRelease() {
+
+        $this->release_errors = false;
+
+        $this->checkDetailIntegrity($this->uid);
+
+        if ( !$this->release_errors ) {
+
+            $this->releaseDetail($this->uid);
+
+            //$this->setProps();
+
+            $this->action = 'VIEW';
+
+            session()->flash('message','Part has been released and email has been sent to PDM users successfully.');
+
+            // Send EMails
+            $this->sendReleaseMail();
+        }
+    }
+
+
+    public function checkDetailIntegrity($id) {
+
+        $d = Item::find($id);
+
+        if ( $d->c_notice_id == NULL ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'No ECN defined'
+            ];
+        }
+
+        if ( $d->weight == NULL || $d->weight < 0 ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'Weight not defined'
+            ];
+        }
+
+
+        $attachments = Attachment::where('model_name','Product')
+            ->where('model_item_id',$id)->get();
+
+
+        $has_step = false;
+        $has_dxf = false;
+        $has_dwg = false;
+
+        foreach ($attachments as $dosya) {
+
+            $ext = substr(strrchr($dosya->original_file_name, '.'), 1);
+
+            if ($dosya->tag == 'STEP' && in_array($ext, ['STEP','stp','step'])) {
+                $has_step = true;
+            }
+
+            if ($dosya->tag == 'STEP' && in_array($ext, ['DXF','dxf'])) {
+                $has_dxf = true;
+            }
+
+            if ($dosya->tag == 'DWG-BOM' && in_array($ext, ['pdf','PDF'])) {
+                $has_dwg = true;
+            }
+        }
+
+        if ( !$has_step ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'STEP file not attached'
+            ];
+        }
+
+        if ( !$has_dxf ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'DXF file not attached'
+            ];
+        }
+
+        if ( !$has_dwg ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'Drawing file (pdf) not attached'
+            ];
+        }
+    }
+
+
+    public function releaseDetail($id) {
+
+        $rel = Item::find($id);
+
+        $this->parts_list[] = [$rel->id,$rel->part_number,$rel->description];
+
+        $props['status'] = 'Released';
+        $props['approver_id'] = Auth::id();
+        $props['app_reviewed_at'] = Carbon::now();
+
+        $rel->update($props);
+    }
+
+
+
+
+    public function sendReleaseMail() {
+
+        $msgdata['blade'] = 'emails.dataset_released';  // Blade file to be used
+        $msgdata['subject'] = 'Teknik Veri Yayınlanma Bildirimi / Dataset Release Notification';
+        $msgdata['url'] = url('/').'/products-assy/view/'.$this->uid;
+        $msgdata['url_title'] = 'Ürün Verisi Bağlantısı / Dataset Link';
+
+        $msgdata['part_number'] = $this->part_number;
+        $msgdata['description'] = $this->description;
+        $msgdata['version'] = $this->version;
+        $msgdata['remarks'] = $this->remarks;
+
+        $msgdata['parts_list'] = $this->parts_list;
+
+
+        $this->company_id =  Auth::user()->company_id;
+
+
+        $allCompanyUsers = User::where('company_id',$this->company_id)->get();
+
+        $toArr = [];
+
+        foreach ($allCompanyUsers as $key => $u) {
+            array_push($toArr, $u->email);
+        }
+
+        Mail::to($toArr)->send(new AppMail($msgdata));
+    }
+
+
+
+
+
+
     public function reviseConfirm($uid) {
         $this->uid = $uid;
         $this->dispatch('ConfirmModal', type:'revise');
@@ -713,7 +873,7 @@ class LwDetail extends Component
 
             $org_part_props['has_mirror']  = null;
             $org_part_props['updated_uid']  = Auth::id();
-    
+
             Item::whereId($current_item->is_mirror_of)->update($org_part_props);
 
             $current_item->delete();
@@ -722,7 +882,7 @@ class LwDetail extends Component
 
             redirect('/details/Detail/view/'.$current_item->is_mirror_of);
             return true;
-        } 
+        }
 
         $current_item->delete();
 
@@ -734,7 +894,7 @@ class LwDetail extends Component
 
         } else{
             session()->flash('info','Item has been deleted successfully!');
-        } 
+        }
 
         redirect('/parts/list');
     }
@@ -776,7 +936,7 @@ class LwDetail extends Component
         $mpart_props['is_mirror_of']  = $this->uid;
 
         $mpart = Item::create($mpart_props);
-  
+
         // Add Mirror Parameters to the Original Part
         $org_part_props['has_mirror']  = $mpart->id;
         $org_part_props['updated_uid']  = Auth::id();
@@ -816,7 +976,7 @@ class LwDetail extends Component
 
         // FLAG NOTES
 
-       $available_fnotes = [];  
+       $available_fnotes = [];
 
         foreach (Fnote::where('item_id',$this->uid)->get() as $r) {
             $available_fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
@@ -833,7 +993,7 @@ class LwDetail extends Component
         }
 
         // PART NOTES
-        $part_notes =[];  
+        $part_notes =[];
 
         foreach ($base_part->pnotes as $note) {
             array_push($part_notes,$note->id);

@@ -656,11 +656,11 @@ class LwDetail extends Component
 
             $this->releaseDetail($this->uid);
 
-            //$this->setProps();
-
             $this->action = 'VIEW';
 
             session()->flash('message','Part has been released and email has been sent to PDM users successfully.');
+
+            $this->getProps();
 
             // Send EMails
             $this->sendReleaseMail();
@@ -760,12 +760,11 @@ class LwDetail extends Component
 
 
 
-
     public function sendReleaseMail() {
 
         $msgdata['blade'] = 'emails.dataset_released';  // Blade file to be used
         $msgdata['subject'] = 'Teknik Veri Yayınlanma Bildirimi / Dataset Release Notification';
-        $msgdata['url'] = url('/').'/products-assy/view/'.$this->uid;
+        $msgdata['url'] = url('/').'/Detail/view/'.$this->uid;
         $msgdata['url_title'] = 'Ürün Verisi Bağlantısı / Dataset Link';
 
         $msgdata['part_number'] = $this->part_number;

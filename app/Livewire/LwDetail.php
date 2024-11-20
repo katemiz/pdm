@@ -24,6 +24,9 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
+use Mail;
+use App\Mail\AppMail;
+
 use Carbon\Carbon;
 
 

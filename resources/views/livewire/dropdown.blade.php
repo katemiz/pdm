@@ -1,27 +1,3 @@
-<?php
-
-use function Livewire\Volt\{state};
-use function Livewire\Volt\{computed};
-
-state(['title' => "More ..."]);  // Triggering Button Title
-
-state(['menu' => [
-    [
-        "title" => 'Menu Item',
-        "href" => '/action',
-        "icon" => 'Edit'
-    ],
-
-    [
-        "title" => 'Menu Item',
-        "href" => '/action',
-        "icon" => 'View'
-    ]
-]]);
-
-?>
-
-
 <span x-data="{ open: false }" class="has-tooltip relative">
 
     <a @click="open = !open" class="ml-12 bg-gray-700 cursor-pointer hover:bg-gray-800 text-white p-2 rounded inline-flex items-center">
@@ -42,7 +18,7 @@ state(['menu' => [
 
         <ul class="space-y-1">
 
-            @foreach ($this->menu as $row)
+            @foreach ($menu as $row)
             <li class="font-medium p-2 hover:bg-gray-200">
 
                 <a

@@ -15,7 +15,7 @@
                         @endif
 
                         <a wire:click="showRevision({{ $revision['id'] }})"
-                            class="inline-flex items-center text-base text-blue-600 hover:text-blue-600 {{ $key != 0 ? 'ml-4':''}} {{ $rev == $revision['revision'] ? 'font-extrabold': ''}}">
+                            class="inline-flex items-center cursor-pointer text-base text-blue-600 hover:text-blue-600 {{ $key != 0 ? 'ml-4':''}} {{ $rev == $revision['revision'] ? 'font-extrabold': ''}}">
                             R{{ $revision['revision'] }}
                         </a>
 

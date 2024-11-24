@@ -33,8 +33,8 @@ return new class extends Migration
             $table->foreignId('approver_id')->nullable();
             $table->string('reject_reason_check')->nullable();
             $table->string('reject_reason_app')->nullable();
-            $table->date('check_reviewed_at')->nullable();
-            $table->date('app_reviewed_at')->nullable();
+            $table->dateTime('check_reviewed_at')->nullable();
+            $table->dateTime('app_reviewed_at')->nullable();
             $table->string('status')->default('Verbatim');
             $table->timestamps();
         });

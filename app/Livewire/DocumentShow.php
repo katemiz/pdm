@@ -7,23 +7,28 @@ use Illuminate\Http\Request;
 use Livewire\Component;
 use Livewire\Attributes\On;
 
+use Illuminate\Support\Facades\Auth;
+
 use App\Models\Document;
 
+use Illuminate\Support\Carbon;
 
 
 class DocumentShow extends Component
 {
-    public $id;
+    public $uid;
     public $document;
 
     public $moreMenu = [];
 
     public $permissions;
 
+    public $modelTitle = 'Document';
+
     public function mount() {
 
         if (request('id')) {
-            $this->id = request('id');
+            $this->uid = request('id');
         } else {
 
             dd('Ooops ...');
@@ -34,7 +39,7 @@ class DocumentShow extends Component
 
     public function render()
     {
-        $this->document = Document::findOrFail($this->id );
+        $this->document = Document::findOrFail($this->uid );
         $this->setPermissions();
         $this->setMoreMenu();
 
@@ -53,7 +58,7 @@ class DocumentShow extends Component
 
 
     public function edit() {
-        return $this->redirect('/docs/form/'.$this->id);
+        return $this->redirect('/docs/form/'.$this->uid);
     }
 
 
@@ -103,8 +108,19 @@ class DocumentShow extends Component
         }
 
         // REVISE
-        if ( in_array($this->document->status,['Released']) ) {
-            $this->permissions->revise = true;
+        if ( in_array($this->document->status,['Released','Frozen']) ) {
+
+            // Do we have already revised version?
+
+            $revised = Document::where([
+                ["document_no",'=',$this->document->document_no],
+                ["revision", '>', $this->document->revision]
+            ])->first();
+
+            if ($revised == null) {
+                $this->permissions->revise = true;
+            }
+
         }
     }
 
@@ -118,7 +134,7 @@ class DocumentShow extends Component
         if ( $this->permissions->freeze ) {
             $this->moreMenu[] = [
                 'title' =>'Freeze Document',
-                'wireclick'=> "freezeConfirm()",
+                'wireclick'=> "triggerModal('freeze','$this->modelTitle')",
                 'icon' => 'Freeze'
             ];
         };
@@ -127,7 +143,7 @@ class DocumentShow extends Component
         if ( $this->permissions->release ) {
             $this->moreMenu[] = [
                 'title' =>'Release Document',
-                'href'=> '/aa/b/',
+                'wireclick'=> "triggerModal('release','$this->modelTitle')",
                 'icon' => 'Release'
             ];
         };
@@ -136,7 +152,7 @@ class DocumentShow extends Component
         if ( $this->permissions->revise ) {
             $this->moreMenu[] = [
                 'title' =>'Revise Document',
-                'href'=> '/aa/b/',
+                'wireclick'=> "triggerModal('revise','$this->modelTitle')",
                 'icon' => 'Revise'
             ];
         };
@@ -146,14 +162,11 @@ class DocumentShow extends Component
         if ( $this->permissions->delete ) {
             $this->moreMenu[] = [
                 'title' =>'Delete Document',
-                'href'=> 'javascript:confirmDelete()',
+                'wireclick'=> "triggerModal('delete','$this->modelTitle')",
                 'icon' => 'Delete'
             ];
         };
 
-
-        $this->moreMenu = (object) $this->moreMenu;
-
     }
 
 
@@ -198,39 +211,36 @@ class DocumentShow extends Component
 
 
 
-
-
-
-
     /*
-    FREEZE
+    WHEN FREEZE CONFIRMED
     */
 
+    #[On('onFreezeConfirmed')]
     public function freezeConfirm() {
 
-        $this->dispatch('ConfirmModal', type:'freeze',name:'Document');
+
+        $props['status'] = 'Frozen';
+        $props['approver_id'] = Auth::id();
+        $props['app_reviewed_at'] = Carbon::now()->toDateTimeString();
+
+
+        Document::find($this->uid)->update($props);
+
+        dd($props);
+
         session()->flash('msg',[
             'type' => 'success',
             'text' => 'Document has been frozen successfully.'
         ]);
+
+        return redirect('/docs/'.$this->uid);
+
     }
-
-    #[On('onFreezeConfirmed')]
-    public function doFreeze() {
-
-        Document::find($this->id)->update(['status' =>'Frozen']);
-    }
-
 
 
     /*
-    RELEASE
+    WHEN RELEASE CONFIRMED
     */
-
-    public function releaseConfirm($uid) {
-        $this->uid = $uid;
-        $this->dispatch('ConfirmModal', type:'doc_release');
-    }
 
     #[On('onReleaseConfirmed')]
     public function doRelease() {
@@ -245,7 +255,10 @@ class DocumentShow extends Component
 
         $this->setProps();
 
-        $this->action = 'VIEW';
+        session()->flash('msg',[
+            'type' => 'success',
+            'text' => 'Document has been frozen successfully.'
+        ]);
 
         // Send EMails
         $this->sendMail();
@@ -253,47 +266,52 @@ class DocumentShow extends Component
 
 
 
+
+
     /*
-    REVISE
+    WHEN REVISE CONFIRMED
     */
 
-    public function reviseConfirm($uid) {
-        $this->uid = $uid;
-        $this->dispatch('ConfirmModal', type:'revise');
-    }
-
-
     #[On('onReviseConfirmed')]
-    public function doRevise() {
+    public function doRevise($type,$withoutFiles) {
 
         $original_doc = Document::find($this->uid);
 
         $revised_doc = $original_doc->replicate();
         $revised_doc->status = 'Verbatim';
         $revised_doc->revision = $original_doc->revision+1;
+        $revised_doc->approver_id = null;
+        $revised_doc->app_reviewed_at = null;
         $revised_doc->save();
 
-        // Do not Copy files!
-        // Delibrate decision
+        if ($withoutFiles) {
+
+            // COPY FILES TO NEW REVISION
+        }
 
         $original_doc->update(['is_latest' => false]);
         $this->uid = $revised_doc->id;
 
-        $this->dispatch('refreshFileListNewId', modelId:$this->uid);
-        $this->action = 'VIEW';
+        session()->flash('msg',[
+            'type' => 'success',
+            'text' => 'Document has been revised successfully.'
+        ]);
+
+        return redirect('/docs/'.$this->uid);
+
+
     }
 
 
     /*
-    DELETE
+    WHEN DELETE CONFIRMED
     */
-
 
 
     #[On('onDeleteConfirmed')]
     public function deleteItem()
     {
-        Document::find($this->id)->delete();
+        Document::find($this->uid)->delete();
 
         session()->flash('msg',[
             'type' => 'success',

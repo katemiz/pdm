@@ -1,7 +1,5 @@
 <div class="container mx-auto p-4">
 
-  {{-- <script src="{{ asset('/js/confirm_modal.js') }}"></script> --}}
-
   <livewire:header type="Page" title="Documents" subtitle="Document Details and Properties" />
 
   @if(session('msg'))
@@ -53,11 +51,11 @@
           </span>
 
           {{-- MORE BUTTON --}}
-          {{-- <livewire:dropdown :menu="$dd_menu"/> --}}
 
-          
+          @if (count($moreMenu) > 0)
+          <livewire:dropdown :menu="$moreMenu"/>
+          @endif
 
-          <x-ddown :menu="$moreMenu"/>
 
         </div>
 
@@ -71,7 +69,7 @@
       </div>
 
 
-      <livewire:rev-history :model="$document" redirect="/document/view/" :rev="$document->revision"/>
+      <livewire:rev-history :model="$document" redirect="/docs/" :rev="$document->revision"/>
 
 
       @if ($document->remarks)

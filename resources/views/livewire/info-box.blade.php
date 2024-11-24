@@ -16,6 +16,7 @@
 
     </div>
 
+
     @if ($checker)
     <div class="pr-6">
         <p class="uppercase tracking-wide text-sm text-indigo-500 ">CHECKED</p>
@@ -29,9 +30,13 @@
     @endif
 
 
+
+
+
+
     @if ($approver)
     <div class="pr-6">
-        <p class="uppercase tracking-wide text-sm text-indigo-500 ">CHECKED</p>
+        <p class="uppercase tracking-wide text-sm text-indigo-500 ">{{ Str::upper($status) }}</p>
         <p class="text-sm text-gray-500">{{ $approver->email }}</p>
         <p class="text-sm text-gray-400">{{ $approver->name }} {{ $approver->lastname }}</p>
 

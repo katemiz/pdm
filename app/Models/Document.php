@@ -44,6 +44,7 @@ class Document extends Model implements HasMedia
         'reject_reason_check',
         'reject_reason_app',
         'check_reviewed_at',
+        'app_reviewed_at',
         'status',
         'updated_at'
     ];

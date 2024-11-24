@@ -1,0 +1,4 @@
+
+
+alter table documents modify column app_reviewed_at  datetime null;
+alter table documents modify column check_reviewed_at  datetime null;

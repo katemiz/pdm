@@ -1,15 +1,22 @@
 window.addEventListener('ConfirmModal',function(e) {
 
-    alert("fired")
-
     let sa_title, sa_text, confirmText, cancelText
     let dispatchRoute, dispatchData
 
     // e.detail.type [Action Type]
     // e.detail.name [Data Name]
 
-    switch (e.detail.type) {
+    let thirdButton = false;
+    let thirdButtonText = false;
 
+    // Colors
+    let confirmButtonColor = "#3085d6";
+    let denyButtonColor ="#3085d6";
+
+    let cancelButtonColor ="#d33";
+
+
+    switch (e.detail.type) {
 
 
         case 'freeze':
@@ -20,11 +27,8 @@ window.addEventListener('ConfirmModal',function(e) {
             cancelText ='Cancel'
 
             dispatchRoute = 'onFreezeConfirmed'
-            dispatchData = {}
 
             break;
-
-
 
         case 'assy_release':
 
@@ -34,13 +38,7 @@ window.addEventListener('ConfirmModal',function(e) {
             cancelText ='Cancel'
 
             dispatchRoute = 'onReleaseConfirmed'
-            dispatchData = {type:e.detail.type}
             break;
-
-
-
-
-
 
         case 'doc_release':
 
@@ -50,10 +48,7 @@ window.addEventListener('ConfirmModal',function(e) {
             cancelText ='Cancel'
 
             dispatchRoute = 'onReleaseConfirmed'
-            dispatchData = {type:e.detail.type}
             break;
-
-
 
 
         case 'delete':
@@ -64,10 +59,7 @@ window.addEventListener('ConfirmModal',function(e) {
             cancelText ='Oops ...'
 
             dispatchRoute = 'onDeleteConfirmed'
-            dispatchData = {type:e.detail.type}
             break;
-
-
 
         case 'mirror':
 
@@ -77,7 +69,6 @@ window.addEventListener('ConfirmModal',function(e) {
             cancelText ='Oops ...'
 
             dispatchRoute = 'onMirrorConfirmed'
-            dispatchData = {type:e.detail.type}
             break;
 
 
@@ -90,7 +81,6 @@ window.addEventListener('ConfirmModal',function(e) {
             cancelText ='Oops ...'
 
             dispatchRoute = 'onReplicateConfirmed'
-            dispatchData = {type:e.detail.type}
             break;
 
 
@@ -100,13 +90,15 @@ window.addEventListener('ConfirmModal',function(e) {
 
         case 'revise':
 
-            sa_title = 'Do you want revise this document?'
+            thirdButton = true
+            thirdButtonText = 'Revise without files'
+
+            sa_title = 'Revise '+e.detail.name+'?'
             sa_text = 'New revision will be editable.'
-            confirmText = 'Revise'
+            confirmText = 'Revise with files'
             cancelText ='Cancel'
 
             dispatchRoute = 'onReviseConfirmed'
-            dispatchData = {}
             break;
 
         case 'attach':
@@ -117,7 +109,6 @@ window.addEventListener('ConfirmModal',function(e) {
             cancelText ='Cancel'
 
             dispatchRoute = 'deleteAttach'
-            dispatchData = {}
             break;
     }
 
@@ -131,13 +122,41 @@ window.addEventListener('ConfirmModal',function(e) {
         confirmButtonText: confirmText,
         cancelButtonText: cancelText,
 
+        confirmButtonColor:confirmButtonColor,
+        cancelButtonColor:cancelButtonColor,
+        denyButtonColor:denyButtonColor,
+
+        showDenyButton: thirdButton,
+        denyButtonText: thirdButtonText
+
     }).then((result) => {
+
         if (result.isConfirmed) {
+
+            dispatchData = {type:e.detail.type,withoutFiles:false}
             Livewire.dispatch(dispatchRoute, dispatchData)
+        }
+
+        if (result.isDenied) {
+
+            dispatchData = {type:e.detail.type,withoutFiles:true}
+            Livewire.dispatch(dispatchRoute, dispatchData)
+
         } else {
             return false
         }
     })
+
+
+
+
+
+
+
+
+
+
+
 });
 
 
@@ -154,3 +173,10 @@ window.addEventListener('attachDeleted',function(e) {
         timer: 1500
     })
 })
+
+
+
+
+
+
+

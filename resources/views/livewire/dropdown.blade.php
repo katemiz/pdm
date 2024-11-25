@@ -1,4 +1,4 @@
-<span x-data="{ open: false }" class="has-tooltip relative">
+<span x-data="{ open: false }" class="has-tooltip relative" @click.outside="open = false">
 
     <a @click="open = !open" class="ml-12 bg-gray-700 cursor-pointer hover:bg-gray-800 text-white p-2 rounded inline-flex items-center">
         <x-ikon name="More"/>

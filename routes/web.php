@@ -44,7 +44,11 @@ use App\Livewire\LwCompany;
 use App\Livewire\Documents;
 use App\Livewire\DocumentShow;
 use App\Livewire\DocumentCreateUpdate;
-use App\Livewire\DocumentUpdate;
+
+
+use App\Livewire\Users;
+use App\Livewire\UserShow;
+use App\Livewire\UserCreateUpdate;
 
 
 /*
@@ -74,6 +78,21 @@ INTERFACE
 */
 
 Route::middleware(['auth'])->group(function () {
+
+
+    // USERS
+    // *****************************************************************************
+    Route::get('/usrs', Users::class);
+    Route::get('/usrs/form/{id?}', UserCreateUpdate::class);
+    Route::get('/usrs/{id}', UserShow::class)->name('usrView');
+
+    Route::post('/usrs', UserCreateUpdate::class);
+    Route::patch('/usrs/{id}', UserCreateUpdate::class);
+    Route::delete('/usrs/{id}', UserCreateUpdate::class);
+
+
+
+
 
     // USERS
     Route::get('/admin-users/{action}/{id?}', LwUser::class);

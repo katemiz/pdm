@@ -20,12 +20,12 @@
 
         {{-- SUBMENU --}}
         <li class="hover:bg-gray-800 hover:text-white w-full pl-4 py-2 md:pl-2">
-            <button class="inline-flex items-center">
+            <a {{ $attributes }} class="inline-flex items-center">
                 <div class="text-blue-600">
                     <x-nav-icon>{{ $slot }}</x-nav-icon>
                 </div>
                 <span class="px-2 whitespace-nowrap">{{ $slot }}</span>
-            </button>
+            </a>
         </li>
 
         @break

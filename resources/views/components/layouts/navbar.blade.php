@@ -20,8 +20,8 @@
 
               <ul class="flex flex-col text-black">
 
-                <x-nav-link href="/document/list" type="submenu">Users</x-nav-link>
-                <x-nav-link href="/document/list" type="submenu">Roles</x-nav-link>
+                <x-nav-link href="/usrs" type="submenu">Users</x-nav-link>
+                <x-nav-link href="/docs" type="submenu">Roles</x-nav-link>
                 <x-nav-link href="/document/list" type="submenu">Permissions</x-nav-link>
                 <x-nav-link href="/document/list" type="submenu">Companies</x-nav-link>
                 <x-nav-link href="/document/list" type="submenu">Projects</x-nav-link>

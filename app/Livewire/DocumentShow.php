@@ -3,26 +3,24 @@
 namespace App\Livewire;
 
 use Illuminate\Http\Request;
-
 use Livewire\Component;
 use Livewire\Attributes\On;
 
 use Illuminate\Support\Facades\Auth;
 
 use App\Models\Document;
+use App\Models\User;
 
 use Illuminate\Support\Carbon;
 
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class DocumentShow extends Component
 {
     public $uid;
     public $document;
-
     public $moreMenu = [];
-
     public $permissions;
-
     public $modelTitle = 'Document';
 
     public function mount() {
@@ -47,16 +45,6 @@ class DocumentShow extends Component
     }
 
 
-    // #[On('showRevision')]
-    // public function showNewRevision(Int $id) {
-
-    //     dd('showingNewRevision');
-
-    //     $this->id = $id;
-    //     $this->document = Document::find(request('id'));
-    // }
-
-
     public function edit() {
         return $this->redirect('/docs/form/'.$this->uid);
     }
@@ -65,12 +53,6 @@ class DocumentShow extends Component
     public function add() {
         return $this->redirect('/docs/form');
     }
-
-
-
-
-
-
 
 
     public function setPermissions() {
@@ -103,7 +85,7 @@ class DocumentShow extends Component
         }
 
         // RELEASE
-        if ( in_array($this->document->status,['Verbatim']) ) {
+        if ( in_array($this->document->status,['Verbatim','Frozen']) ) {
             $this->permissions->release = true;
         }
 
@@ -123,9 +105,6 @@ class DocumentShow extends Component
 
         }
     }
-
-
-
 
 
     public function setMoreMenu() {
@@ -166,67 +145,20 @@ class DocumentShow extends Component
                 'icon' => 'Delete'
             ];
         };
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /*
     WHEN FREEZE CONFIRMED
     */
-
     #[On('onFreezeConfirmed')]
     public function freezeConfirm() {
-
 
         $props['status'] = 'Frozen';
         $props['approver_id'] = Auth::id();
         $props['app_reviewed_at'] = Carbon::now()->toDateTimeString();
 
-
         Document::find($this->uid)->update($props);
-
-        dd($props);
 
         session()->flash('msg',[
             'type' => 'success',
@@ -234,14 +166,12 @@ class DocumentShow extends Component
         ]);
 
         return redirect('/docs/'.$this->uid);
-
     }
 
 
     /*
     WHEN RELEASE CONFIRMED
     */
-
     #[On('onReleaseConfirmed')]
     public function doRelease() {
 
@@ -253,27 +183,20 @@ class DocumentShow extends Component
 
         $doc->update($props);
 
-        $this->setProps();
-
-        session()->flash('msg',[
-            'type' => 'success',
-            'text' => 'Document has been frozen successfully.'
-        ]);
-
         // Send EMails
-        $this->sendMail();
+        $this->sendMail($doc);
+
+        return redirect('/docs/'.$this->uid);
     }
-
-
-
 
 
     /*
     WHEN REVISE CONFIRMED
     */
-
     #[On('onReviseConfirmed')]
-    public function doRevise($type,$withoutFiles) {
+    public function doRevise($type,$withFiles) {
+
+        $msgtext = 'Document has been revised (without files) successfully.';
 
         $original_doc = Document::find($this->uid);
 
@@ -282,99 +205,121 @@ class DocumentShow extends Component
         $revised_doc->revision = $original_doc->revision+1;
         $revised_doc->approver_id = null;
         $revised_doc->app_reviewed_at = null;
+
         $revised_doc->save();
 
-        if ($withoutFiles) {
+        $this->uid = $revised_doc->id;
+
+        if ($withFiles) {
 
             // COPY FILES TO NEW REVISION
+            $orgMedia = $original_doc->getMedia('Doc');
+            
+            $revised_doc = Document::find($this->uid);
+            
+            foreach ($orgMedia as $mediaItem) {
+
+                $newMediaItem = new Media();
+                $mediaItem->copy($revised_doc, 'Doc');
+            }
+
+            $msgtext = 'Document has been revised with files successfully.';
         }
 
         $original_doc->update(['is_latest' => false]);
-        $this->uid = $revised_doc->id;
 
         session()->flash('msg',[
             'type' => 'success',
-            'text' => 'Document has been revised successfully.'
+            'text' => $msgtext
         ]);
 
         return redirect('/docs/'.$this->uid);
-
-
     }
 
 
     /*
     WHEN DELETE CONFIRMED
     */
-
-
     #[On('onDeleteConfirmed')]
-    public function deleteItem()
+    public function doDelete()
     {
-        Document::find($this->uid)->delete();
+        $doc = Document::find($this->uid);
+
+        $allMedia = $doc->getMedia('Doc');
+            
+        foreach ($allMedia as $media) {
+            $media->delete();
+        }
+
+        // Do we have previous revision?  If so make it latest
+        if ($doc->revision > 1) {
+
+            $prevDoc = Document::where([
+                ['document_no','=',$doc->document_no],
+                ['revision','=',$doc->revision - 1]
+            ])->first();
+    
+            $prevDoc->update(['is_latest' => true]);
+        }
+
+        // Attached Media is deleted. Previous Rev made latest. Delete Doc
+        $doc->delete();
 
         session()->flash('msg',[
             'type' => 'success',
-            'text' => 'Document has been deleted successfully.'
+            'text' => 'Document and media has been deleted successfully.'
         ]);
 
-        return $this->redirect('/document/list');
+        if ( isset($prevDoc) ) {
+            return $this->redirect('/docs/'.$prevDoc->id);
+        }
+
+        return $this->redirect('/docs');
     }
-
-
-
 
 
     /*
     SEND MAIL on ACTION COMPLETED
     */
 
-    public function sendMail() {
+    public function sendMail($doc) {
 
         $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
-        $msgdata['subject'] = 'D'.$this->document_no.' R'.$this->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
+        $msgdata['subject'] = 'D'.$doc->document_no.' R'.$doc->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
         $msgdata['url'] = url('/').'/document/view/'.$this->uid;
         $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
 
-        $msgdata['document_no'] = $this->document_no;
-        $msgdata['title'] = $this->title;
-        $msgdata['revision'] = $this->revision;
-        $msgdata['remarks'] = $this->remarks;
+        $msgdata['document_no'] = $doc->document_no;
+        $msgdata['title'] = $doc->title;
+        $msgdata['revision'] = $doc->revision;
+        $msgdata['remarks'] = $doc->remarks;
 
-        $allCompanyUsers = User::where('company_id',$this->company_id)->get();
+        $allCompanyUsers = User::where('company_id',$doc->company_id)->get();
 
         $toArr = [];
 
-        foreach ($allCompanyUsers as $key => $u) {
-            array_push($toArr, $u->email);
+        foreach ($allCompanyUsers as $usr) {
+            if ($usr->status == 'active') {
+                array_push($toArr, $usr->email);
+            }
         }
 
         if (count($toArr) > 0) {
-            session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
+
+            session()->flash('msg',[
+                'type' => 'success',
+                'text' => 'Document has been released and email has been sent to PDM users successfully.'
+            ]);
+
             Mail::to($toArr)->send(new AppMail($msgdata));
+
         } else {
-            session()->flash('message','Document has been <b>released</b> but NO email been sent since no users found!');
+
+            session()->flash('msg',[
+                'type' => 'warning',
+                'text' => 'Document has been <b>released</b> but NO email been sent since no users found!'
+            ]);
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

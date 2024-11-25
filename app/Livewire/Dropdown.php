@@ -32,6 +32,5 @@ class Dropdown extends Component
     public function triggerModal($actionType,$modelName) {
 
         $this->dispatch('ConfirmModal',type:$actionType,name:$modelName);
-
     }
 }

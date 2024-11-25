@@ -40,10 +40,10 @@ window.addEventListener('ConfirmModal',function(e) {
             dispatchRoute = 'onReleaseConfirmed'
             break;
 
-        case 'doc_release':
+        case 'release':
 
-            sa_title = 'Document Release ?'
-            sa_text = 'This document shall be released and PDM users shall be informed by email. Do you want to continue?'
+            sa_title = e.detail.name +' Release ?'
+            sa_text = 'This '+e.detail.name +' shall be released and PDM users shall be informed by email. Do you want to continue?'
             confirmText = 'Release'
             cancelText ='Cancel'
 
@@ -53,7 +53,7 @@ window.addEventListener('ConfirmModal',function(e) {
 
         case 'delete':
 
-            sa_title = 'Do you really want to delete this item?'
+            sa_title = 'Delete '+e.detail.name+' ? Really ?'
             sa_text = 'Once deleted, there is no reverting back!'
             confirmText = 'Delete'
             cancelText ='Oops ...'
@@ -133,13 +133,17 @@ window.addEventListener('ConfirmModal',function(e) {
 
         if (result.isConfirmed) {
 
-            dispatchData = {type:e.detail.type,withoutFiles:false}
+            // Revise with files
+
+            dispatchData = {type:e.detail.type,withFiles:true}
             Livewire.dispatch(dispatchRoute, dispatchData)
         }
 
         if (result.isDenied) {
 
-            dispatchData = {type:e.detail.type,withoutFiles:true}
+            // Revise without files
+
+            dispatchData = {type:e.detail.type,withFiles:false}
             Livewire.dispatch(dispatchRoute, dispatchData)
 
         } else {

@@ -86,7 +86,7 @@ class DocumentForm extends Form
         $this->document = Document::find($id);
         $this->docNo = $this->document->docNo;
         $this->title = $this->document->title;
-        $this->synopsis = $this->document->remarks;
+        $this->synopsis = $this->document->remarks ? $this->document->remarks:'';
         $this->doc_type = $this->document->doc_type;
         $this->language = $this->document->language;
     }

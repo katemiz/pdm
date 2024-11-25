@@ -77,8 +77,6 @@
         <div class="text-base">{!! $document->remarks !!}</div>
       @endif
 
-
-
       <livewire:file-list :model="$document" collection="Doc" label="Files"/>
 
   </div>
@@ -86,7 +84,7 @@
   <livewire:info-box :model="$document" />
 
 
-  <script>
+  <!-- <script>
 
     function confirmDelete() {
 
@@ -109,6 +107,6 @@
       })
     }
 
-  </script>
+  </script> -->
 
 </div>

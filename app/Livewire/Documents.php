@@ -68,15 +68,6 @@ class Documents extends Component
     public $remarks;
     public $status;
 
-    // public $doc_types = [
-    //     'GR' => 'General Document',
-    //     'TR' => 'Test Report',
-    //     'AR' => 'Analysis Report',
-    //     'MN' => 'User Manual',
-    //     'ME' => 'Memo',
-    //     'PR' => 'Presentation'
-    // ];
-
     #[Validate('required', message: 'Please select document type')]
     public $doc_type = 'GR';
 
@@ -87,14 +78,6 @@ class Documents extends Component
 
     #[Validate('required', message: 'Please select document language')]
     public $language = 'TR';
-
-
-
-
-
-
-
-
 
 
     public function mount()
@@ -123,8 +106,6 @@ class Documents extends Component
     }
 
 
-
-
     public function setCompanyProps()
     {
         foreach (Company::all() as $c) {
@@ -135,26 +116,24 @@ class Documents extends Component
         $this->company =  Company::find($this->company_id);
     }
 
+
     public function checkSessionVariables() {
 
         return true;
     }
 
 
-
-
-
-
-
-
-
     public function getDocumentsList()  {
 
-        // session()->flash('msg',[
-        //     'type' => 'default',
-        //     'text' =>'Document have been deleted successfullyrtryty.'
-        // ]);
+        switch ($this->sortField) {
+            case 'DocNo':
+                $this->sortField = 'document_no';
+                break;
 
+            case 'Author':
+                $this->sortField = 'user_id';
+                break;
+        }
 
         if ($this->query) {
 
@@ -179,11 +158,23 @@ class Documents extends Component
 
             } else {
 
-                return Document::all()
-                ->orderBy($this->sortField,$this->sortDirection)
+                return Document::orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
             }
         }
+
+
+        switch ($this->sortField) {
+            case 'document_no':
+                $this->sortField = 'DocNo';
+                break;
+
+            case 'user_id':
+                $this->sortField = 'Author';
+                break;
+        }
+
+
     }
 
 
@@ -216,18 +207,18 @@ class Documents extends Component
 
 
 
-    public function changeSortDirection ($key) {
+    // public function changeSortDirection ($key) {
 
-        $this->sortField = $key;
+    //     $this->sortField = $key;
 
-        if ($this->constants['list']['headers'][$key]['direction'] == 'asc') {
-            $this->constants['list']['headers'][$key]['direction'] = 'desc';
-        } else {
-            $this->constants['list']['headers'][$key]['direction'] = 'asc';
-        }
+    //     if ($this->constants['list']['headers'][$key]['direction'] == 'asc') {
+    //         $this->constants['list']['headers'][$key]['direction'] = 'desc';
+    //     } else {
+    //         $this->constants['list']['headers'][$key]['direction'] = 'asc';
+    //     }
 
-        $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
-    }
+    //     $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
+    // }
 
 
     public function resetFilter() {
@@ -291,31 +282,29 @@ class Documents extends Component
                 $this->all_revs[$doc->revision] = $doc->id;
             }
         }
-
-
     }
 
 
-    public function triggerDelete($uid) {
+    // public function triggerDelete($uid) {
 
-        $this->uid = $uid;
-        $this->dispatch('ConfirmModal', type:'delete');
-    }
+    //     $this->uid = $uid;
+    //     $this->dispatch('ConfirmModal', type:'delete');
+    // }
 
 
-    #[On('onDeleteConfirmed')]
-    public function deleteItem()
-    {
-        Document::find($this->uid)->delete();
+    // #[On('onDeleteConfirmed')]
+    // public function deleteItem()
+    // {
+    //     Document::find($this->uid)->delete();
 
-        session()->flash('msg',[
-            'type' => 'success',
-            'text' => 'Document and it\'s files has been deleted successfully.'
-        ]);
+    //     session()->flash('msg',[
+    //         'type' => 'success',
+    //         'text' => 'Document and it\'s files has been deleted successfully.'
+    //     ]);
 
-        // $this->action = 'LIST';
-        $this->resetPage();
-    }
+    //     // $this->action = 'LIST';
+    //     $this->resetPage();
+    // }
 
 
     // public function storeUpdateItem () {
@@ -380,109 +369,118 @@ class Documents extends Component
     // }
 
 
-    public function freezeConfirm($uid) {
-        $this->uid = $uid;
-        $this->dispatch('ConfirmModal', type:'freeze');
+    // public function freezeConfirm($uid) {
+    //     $this->uid = $uid;
+    //     $this->dispatch('ConfirmModal', type:'freeze');
 
-        session()->flash('message','Document has been frozen successfully.');
-    }
-
-
-    public function releaseConfirm($uid) {
-        $this->uid = $uid;
-        $this->dispatch('ConfirmModal', type:'doc_release');
-    }
+    //     session()->flash('message','Document has been frozen successfully.');
+    // }
 
 
-
-    #[On('onFreezeConfirmed')]
-    public function doFreeze() {
-        $this->action = 'VIEW';
-        Document::find($this->uid)->update(['status' =>'Frozen']);
-    }
+    // public function releaseConfirm($uid) {
+    //     $this->uid = $uid;
+    //     $this->dispatch('ConfirmModal', type:'doc_release');
+    // }
 
 
-    public function reviseConfirm($uid) {
-        $this->uid = $uid;
-        $this->dispatch('ConfirmModal', type:'revise');
-    }
+
+    // #[On('onFreezeConfirmed')]
+    // public function doFreeze() {
+    //     $this->action = 'VIEW';
+    //     Document::find($this->uid)->update(['status' =>'Frozen']);
+    // }
 
 
-    #[On('onReviseConfirmed')]
-    public function doRevise() {
-
-        $original_doc = Document::find($this->uid);
-
-        $revised_doc = $original_doc->replicate();
-        $revised_doc->status = 'Verbatim';
-        $revised_doc->revision = $original_doc->revision+1;
-        $revised_doc->save();
-
-        // Do not Copy files!
-        // Delibrate decision
-
-        $original_doc->update(['is_latest' => false]);
-        $this->uid = $revised_doc->id;
-
-        $this->dispatch('refreshFileListNewId', modelId:$this->uid);
-        $this->action = 'VIEW';
-    }
+    // public function reviseConfirm($uid) {
+    //     $this->uid = $uid;
+    //     $this->dispatch('ConfirmModal', type:'revise');
+    // }
 
 
-    #[On('onReleaseConfirmed')]
-    public function doRelease() {
+    // #[On('onReviseConfirmed')]
+    // public function doRevise() {
 
-        $doc = Document::find($this->uid);
+    //     $original_doc = Document::find($this->uid);
 
-        $props['status'] = 'Released';
-        $props['approver_id'] = Auth::id();
-        $props['app_revised_at'] = time();
+    //     $revised_doc = $original_doc->replicate();
+    //     $revised_doc->status = 'Verbatim';
+    //     $revised_doc->revision = $original_doc->revision+1;
+    //     $revised_doc->save();
 
-        $doc->update($props);
+    //     // Do not Copy files!
+    //     // Delibrate decision
 
-        $this->setProps();
+    //     $original_doc->update(['is_latest' => false]);
+    //     $this->uid = $revised_doc->id;
 
-        $this->action = 'VIEW';
-
-        // Send EMails
-        $this->sendMail();
-    }
+    //     $this->dispatch('refreshFileListNewId', modelId:$this->uid);
+    //     $this->action = 'VIEW';
+    // }
 
 
-    public function sendMail() {
+    // #[On('onReleaseConfirmed')]
+    // public function doRelease() {
 
-        $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
-        $msgdata['subject'] = 'D'.$this->document_no.' R'.$this->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
-        $msgdata['url'] = url('/').'/docs/'.$this->uid;
-        $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
+    //     $doc = Document::find($this->uid);
 
-        $msgdata['document_no'] = $this->document_no;
-        $msgdata['title'] = $this->title;
-        $msgdata['revision'] = $this->revision;
-        $msgdata['remarks'] = $this->remarks;
+    //     $props['status'] = 'Released';
+    //     $props['approver_id'] = Auth::id();
+    //     $props['app_revised_at'] = time();
 
-        $allCompanyUsers = User::where('company_id',$this->company_id)->get();
+    //     $doc->update($props);
 
-        $toArr = [];
+    //     $this->setProps();
 
-        foreach ($allCompanyUsers as $key => $u) {
-            array_push($toArr, $u->email);
-        }
+    //     $this->action = 'VIEW';
 
-        if (count($toArr) > 0) {
-            session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
-            Mail::to($toArr)->send(new AppMail($msgdata));
+    //     // Send EMails
+    //     $this->sendMail();
+    // }
+
+
+    // public function sendMail() {
+
+    //     $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
+    //     $msgdata['subject'] = 'D'.$this->document_no.' R'.$this->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
+    //     $msgdata['url'] = url('/').'/docs/'.$this->uid;
+    //     $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
+
+    //     $msgdata['document_no'] = $this->document_no;
+    //     $msgdata['title'] = $this->title;
+    //     $msgdata['revision'] = $this->revision;
+    //     $msgdata['remarks'] = $this->remarks;
+
+    //     $allCompanyUsers = User::where('company_id',$this->company_id)->get();
+
+    //     $toArr = [];
+
+    //     foreach ($allCompanyUsers as $key => $u) {
+    //         array_push($toArr, $u->email);
+    //     }
+
+    //     if (count($toArr) > 0) {
+    //         session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
+    //         Mail::to($toArr)->send(new AppMail($msgdata));
+    //     } else {
+    //         session()->flash('message','Document has been <b>released</b> but NO email been sent since no users found!');
+    //     }
+    // }
+
+
+
+
+
+
+    public function sort($columnName) {
+
+
+
+        if ($columnName == $this->sortField) {
+            $this->sortDirection = $this->sortDirection == 'ASC' ?  'DESC' :'ASC';
         } else {
-            session()->flash('message','Document has been <b>released</b> but NO email been sent since no users found!');
+            $this->sortField = $columnName;
         }
     }
-
-
-
-
-
-
-
 
 
 

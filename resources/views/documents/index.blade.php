@@ -32,17 +32,29 @@
                 </caption>
 
                 <thead class="text-gray-700 font-light bg-slate-200">
-                <tr>
-                    @foreach ($datatable_props as $prop)
+                <tr class="bg-gray-100">
+                    @foreach ($datatable_props as $key => $prop)
 
                         @if ($prop['visibility'])
-                        <th scope="col" class="px-4 py-2">
-                            <div class="flex items-center text-base">
+                        <th class="p-4 border border-gray-200">
+                            <div class="flex items-center text-base justify-between">
 
                                 {{ $prop['label'] }}
 
                                 @if ($prop['sortable'])
-                                    <a href="#"><x-carbon-chevron-sort class="w-3 h-3 ms-1.5"/></a>
+                                    <a wire:click="sort('{{$key}}')" class="hover:text-red-400">
+                                        @if ($key == $sortField)
+
+                                            @if ($sortDirection == 'ASC')
+                                                <x-ikon name="SortUp" size="L" />
+                                            @else
+                                                <x-ikon name="SortDown" size="L" />
+                                            @endif
+
+                                        @else
+                                            <x-ikon name="Sort" size="L" />                                            
+                                        @endif
+                                    </a>
                                 @endif
                             </div>
                         </th>
@@ -51,7 +63,7 @@
                     @endforeach
 
                     @if ($hasActions)
-                        <th scope="col" class="px-4 py-2 text-right text-base">Actions</th>
+                        <th class="p-4 text-right text-base border border-gray-200">Actions</th>
                     @endif
                 </tr>
                 </thead>

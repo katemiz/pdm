@@ -82,6 +82,22 @@
         <x-carbon-version class="{{ $size }}" />
         @break
 
+    @case("Sort")
+        <x-carbon-chevron-sort class="{{ $size }}" />
+        @break        
+
+    @case("SortUp")
+        <x-carbon-chevron-up-outline class="{{ $size }}" />
+        @break
+
+    @case("SortDown")
+        <x-carbon-chevron-down-outline class="{{ $size }}" />
+        @break
+
+
+
+
+
     @default
         <x-carbon-pen class="{{ $size }}" />
         @break

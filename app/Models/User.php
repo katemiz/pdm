@@ -10,12 +10,19 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
+
 use App\Models\Company;
 
-class User extends Authenticatable
+
+class User extends Authenticatable implements HasMedia
 {
     use HasApiTokens, HasFactory, Notifiable;
     use HasRoles;
+
+    use InteractsWithMedia;
+
 
     /**
      * The attributes that are mass assignable.
@@ -28,6 +35,8 @@ class User extends Authenticatable
         'lastname',
         'email',
         'password',
+        'status',
+        'notes'
     ];
 
     /**

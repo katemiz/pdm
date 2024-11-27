@@ -73,6 +73,7 @@
         document.getElementById("fupload").onchange = ()=>{
           let files = document.getElementById("fupload").files;
             console.log(files)
+            console.log('ddddd')
         }
         
         

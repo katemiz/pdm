@@ -42,7 +42,7 @@
                                 {{ $prop['label'] }}
 
                                 @if ($prop['sortable'])
-                                    <a wire:click="sort('{{$key}}')" class="hover:text-red-400">
+                                    <a wire:click="sort('{{$key}}')" class="hover:text-orange-400 {{ $key == $sortField ? "text-blue-600" :''}}">
                                         @if ($key == $sortField)
 
                                             @if ($sortDirection == 'ASC')

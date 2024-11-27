@@ -3,7 +3,7 @@
 @props(['files'])
 
 
-<div class="flex bg-white p-3">
+<div class="flex bg-white py-3">
 
     <div class="flex w-1/3 bg-teal-100">
         <input
@@ -49,7 +49,6 @@
 
     document.getElementById("uploadInput").onchange = ()=>{
         let files = document.getElementById("uploadInput").files;
-        console.log(files)
     }
 
 </script>

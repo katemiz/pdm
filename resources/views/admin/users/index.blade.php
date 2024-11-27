@@ -1,6 +1,6 @@
 <section class="container mx-auto p-4">
 
-    <script src="{{ asset('/js/confirm_modal.js') }}"></script>
+    {{-- <script src="{{ asset('/js/confirm_modal.js') }}"></script> --}}
 
     <div class="flex flex-col md:flex-row justify-between items-center">
         <div>
@@ -18,17 +18,17 @@
     @endif
 
 
-    <livewire:datatable-search add_command="Add Document" />
+    <livewire:datatable-search add_command="Add User" add_redirect="/usrs/form"/>
 
 
-    @if ($documents->count() > 0)
+    @if ($users->count() > 0)
 
         <div class="relative overflow-x-auto my-4">
 
             <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 rounded-lg">
 
                 <caption class="caption-top py-4">
-                    {{ $documents->total() }} {{ $documents->total() > 1 ? ' Records' :' Record' }}
+                    {{ $users->total() }} {{ $users->total() > 1 ? ' Records' :' Record' }}
                 </caption>
 
                 <thead class="text-gray-700 font-light bg-slate-200">
@@ -42,7 +42,7 @@
                                 {{ $prop['label'] }}
 
                                 @if ($prop['sortable'])
-                                    <a wire:click="sort('{{$key}}')" class="hover:text-red-400">
+                                    <a wire:click="sort('{{$key}}')" class="hover:text-orange-600  {{ $key == $sortField ? "text-blue-600" :''}}">
                                         @if ($key == $sortField)
 
                                             @if ($sortDirection == 'ASC')
@@ -69,7 +69,7 @@
                 </thead>
 
                 <tbody>
-                    @foreach ($documents as $record)
+                    @foreach ($users as $record)
 
                         <tr class="bg-white">
 
@@ -79,7 +79,7 @@
                                     <td class="px-4 py-2 text-base border border-gray-200 {{ !$prop['wrapText'] ? 'whitespace-nowrap':'' }}">
 
                                         @if ($prop['hasViewLink'])
-                                            <a href="/docs/{{ $record->id }}" class="inline-flex text-blue-700">
+                                            <a href="/usrs/{{ $record->id }}" class="inline-flex text-blue-700">
                                                 {{ $record[$key] }}
                                             </a>
                                         @else
@@ -95,7 +95,7 @@
 
                                 <td scope="col" class="px-4 py-2 text-base text-right whitespace-nowrap border border-gray-200">
 
-                                    <a href="/docs/{{ $record->id }}" class="inline-flex text-blue-700">
+                                    <a href="/usrs/{{ $record->id }}" class="inline-flex text-blue-700">
                                         <x-carbon-view class="w-6 h-6"/>
                                     </a>
 
@@ -103,12 +103,9 @@
 
                                         @if ( !in_array($record->status,['Frozen','Released']) )
 
-                                            <a href="/docs/form/{{ $record->id }}" class="inline-flex text-blue-700">
+                                            <a href="/usrs/form/{{ $record->id }}" class="inline-flex text-blue-700">
                                                 <x-carbon-edit  class="w-6 h-6 ms-1.5"/>
                                             </a>
-                                            {{-- <a wire:click="triggerDelete({{ $record->id }})" class="inline-flex text-red-700">
-                                                <x-carbon-trash-can  class="w-6 h-6 ms-1.5"/>
-                                            </a> --}}
 
                                         @endif
 
@@ -126,11 +123,11 @@
             </table>
         </div>
 
-        {{ $documents->links('components.pagination.tailwind') }}
+        {{ $users->links('components.pagination.tailwind') }}
 
     @else
 
-        <livewire:tablenoitem addtext="Add Document" noitemtext="No documents found in the database!"/>
+        <livewire:tablenoitem addtext="Add User" noitemtext="No users found in the database!"/>
 
     @endif
 
@@ -143,9 +140,7 @@
             Livewire.dispatch('startQuerySearch', {query:event.detail.query});
         });
 
-        window.addEventListener('addTriggered', e => {
-            window.location.href = "/docs/form"
-        });
+
 
     </script>
 </section>

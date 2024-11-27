@@ -2,3 +2,7 @@
 
 alter table documents modify column app_reviewed_at  datetime null;
 alter table documents modify column check_reviewed_at  datetime null;
+
+
+alter table users add column user_id bigint unsigned after id;
+alter table users add column notes text after password;

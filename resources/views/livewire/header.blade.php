@@ -14,7 +14,7 @@ state(['subtitle' => false]);
     @switch($type)
 
         @case("Hero")
-            <h1 class="text-6xl font-light my-6 sm:text-5xl">{!! $title !!}</h1>
+            <h1 class="text-6xl font-light mt-6 sm:text-5xl">{!! $title !!}</h1>
 
             @if ($subtitle)
                 <h2 class="text-2xl mb-8 text-gray-500">{!! $subtitle !!}</h2>

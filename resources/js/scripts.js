@@ -180,6 +180,15 @@ window.addEventListener('attachDeleted',function(e) {
 
 
 
+/*
+This function is triggered when "+" Add Button in index (listing of items) is clicked
+*/
+
+window.addEventListener('addTriggered', e => {
+    window.location.href = e.detail.redirect
+})
+
+
 
 
 

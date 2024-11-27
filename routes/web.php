@@ -84,7 +84,7 @@ Route::middleware(['auth'])->group(function () {
     // *****************************************************************************
     Route::get('/usrs', Users::class);
     Route::get('/usrs/form/{id?}', UserCreateUpdate::class);
-    Route::get('/usrs/{id}', UserShow::class)->name('usrView');
+    Route::get('/usrs/{id}', UserShow::class);
 
     Route::post('/usrs', UserCreateUpdate::class);
     Route::patch('/usrs/{id}', UserCreateUpdate::class);

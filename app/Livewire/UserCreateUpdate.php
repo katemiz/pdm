@@ -2,20 +2,20 @@
 
 namespace App\Livewire;
 
-use App\Livewire\Forms\DocumentForm;
+use App\Livewire\Forms\UserForm;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 use Livewire\Attributes\On;
 
-use App\Models\Document;
+use App\Models\User;
 
 
 class UserCreateUpdate extends Component
 {
     use WithFileUploads;
 
-    public DocumentForm $form;
+    public UserForm $form;
 
     public $id = false;
 
@@ -24,19 +24,18 @@ class UserCreateUpdate extends Component
 
     public function mount() {
 
-        $this->form->setDocumentProps();
+        $this->form->setRelatedProps();
 
         if (request('id')) {
-
             $this->id = request('id');
-            $this->form->setDocument($this->id);
+            $this->form->setUser($this->id);
         }
     }
 
 
     public function render()
     {
-        return view('documents.form');
+        return view('admin.users.form');
     }
 
 
@@ -47,21 +46,14 @@ class UserCreateUpdate extends Component
         $id = $this->form->store();
 
         // ATTACHMENTS
-        $model = Document::find($id);
+        $model = User::find($id);
 
         foreach ($this->files as $file) {
-            $model->addMedia($file)->toMediaCollection('Doc');
+            $model->addMedia($file)->toMediaCollection('User');
         }
 
-        return $this->redirect('/docs/'.$id);
+        return $this->redirect('/usrs/'.$id);
     }
-
-
-
-
-
-
-
 
 
     public function update()
@@ -69,20 +61,14 @@ class UserCreateUpdate extends Component
         // FORM PARAMETERS UPDATE
         $this->form->update($this->id);
 
-        $model = Document::findOrFail($this->id);
+        $model = User::findOrFail($this->id);
 
         foreach ($this->files as $file) {
-            $model->addMedia($file)->toMediaCollection('Doc');
+            $model->addMedia($file)->toMediaCollection('User');
         }
 
-        return $this->redirect('/docs/'.$this->id);
+        return $this->redirect('/usrs/'.$this->id);
     }
-
-
-
-
-
-
 
     public function removeFile($fileToRemove) {
 

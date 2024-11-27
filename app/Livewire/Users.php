@@ -36,7 +36,6 @@ class Users extends Component
     public $show_active_only = true; /// Show only latest revisions
 
     public $uid = false;
-    public $pid = false;
 
     public $query = false;
     public $sortField = 'lastname';
@@ -68,6 +67,11 @@ class Users extends Component
     public $remarks;
     public $status;
 
+    public $addBtn = [
+        'title' => 'Add User',
+        'redirect' => '/usrs/form'
+    ];
+
 
 
     #[Validate('required', message: 'Please select document type')]
@@ -92,7 +96,7 @@ class Users extends Component
 
     public function mount()
     {
-        $this->constants = config('documents');
+        $this->constants = config('users');
         $this->setCompanyProps();
     }
 
@@ -104,7 +108,7 @@ class Users extends Component
         $this->setProps();
 
         return view('admin.users.index',[
-            'documents' => $this->getUsersList()
+            'users' => $this->getUsersList()
         ]);
     }
 

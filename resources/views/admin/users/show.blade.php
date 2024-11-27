@@ -1,6 +1,6 @@
 <div class="container mx-auto p-4">
 
-  <livewire:header type="Page" title="Documents" subtitle="Document Details and Properties" />
+  <livewire:header type="Page" title="Users" subtitle="User Details and Properties" />
 
   @if(session('msg'))
       <livewire:flash-message :msg="session('msg')">
@@ -12,11 +12,7 @@
       <div class="flex flex-col md:flex-row ">
 
         <div class="w-3/4">
-            <p class="text-6xl mb-2 font-light">{{ $document->docNo }}</p>
-
-            @if (!$document->is_latest)
-            <p class="text-base text-red-400">Do Not Use. Use Latest Revision</p>
-            @endif
+            <p class="text-6xl mb-2 font-light">{{ $user->email }}</p>
         </div>
 
         <div class="w-1/4 text-right">
@@ -24,7 +20,7 @@
           {{-- EDIT --}}
           @if ($permissions->edit)
             <span class='has-tooltip'>
-              <x-tooltip>Edit Document</x-tooltip>
+              <x-tooltip>Edit User</x-tooltip>
 
               <button wire:click="edit" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
                 <x-ikon name="Edit" />
@@ -34,7 +30,7 @@
 
           {{-- ADD NEW --}}
           <span class='has-tooltip'>
-            <x-tooltip>Add New</x-tooltip>
+            <x-tooltip>Add New User</x-tooltip>
 
             <button wire:click="add" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center" >
                 <x-ikon name="Add" />
@@ -43,11 +39,11 @@
 
           {{-- LIST ALL --}}
           <span class='has-tooltip'>
-            <a href="/docs" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+            <a href="/usrs" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
               <x-ikon name="List" />
             </a>
 
-            <x-tooltip>List All Documents</x-tooltip>
+            <x-tooltip>List All Users</x-tooltip>
           </span>
 
           {{-- MORE BUTTON --}}
@@ -64,49 +60,22 @@
 
 
       <div class="flex justify-between">
-        <p class="text-xl">{{ $document->title }}</p>
-        <x-badge>{{ $document->doc_types[$document->doc_type] }}</x-badge>
+        <p class="text-xl">{{ $user->name }} {{ $user->lastname }}</p>
+        <x-badge>{{ $user->email }}</x-badge>
       </div>
 
 
-      <livewire:rev-history :model="$document" redirect="/docs/" :rev="$document->revision"/>
 
 
-      @if ($document->remarks)
-        <div class="text-xl font-bold">Remarks</div>
-        <div class="text-base">{!! $document->remarks !!}</div>
+      @if ($user->notes)
+        <div class="text-xl font-bold">Notes</div>
+        <div class="text-base">{!! $user->notes !!}</div>
       @endif
 
-      <livewire:file-list :model="$document" collection="Doc" label="Files"/>
+      <livewire:file-list :model="$user" collection="User" label="Files"/>
 
   </div>
 
-  <livewire:info-box :model="$document" />
-
-
-  <!-- <script>
-
-    function confirmDelete() {
-
-      Swal.fire({
-        title: 'Delete Document?',
-        text: 'Once deleted, there is no reverting back!',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Ooops ...',
-
-      }).then((result) => {
-          if (result.isConfirmed) {
-              Livewire.dispatch('onDeleteConfirmed')
-          } else {
-              return false
-          }
-      })
-    }
-
-  </script> -->
+  {{-- <livewire:info-box :model="$user" /> --}}
 
 </div>

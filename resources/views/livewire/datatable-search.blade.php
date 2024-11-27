@@ -4,6 +4,8 @@ use Livewire\Volt\Component;
 new class extends Component {
 
     public $add_command = "Add Item";
+    public $add_redirect;
+
     public $query = '';
 
     public function resetQuery()
@@ -16,10 +18,8 @@ new class extends Component {
     public function addItem()
     {
         $this->query = '';
-        $this->dispatch('addTriggered');
+        $this->dispatch('addTriggered',redirect:$this->add_redirect);
     }
-
-
 
 
     public function updated($variable) {

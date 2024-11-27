@@ -8,7 +8,6 @@ use Livewire\Attributes\On;
 
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\Document;
 use App\Models\User;
 
 use Illuminate\Support\Carbon;
@@ -18,10 +17,10 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 class UserShow extends Component
 {
     public $uid;
-    public $document;
+    public $user;
     public $moreMenu = [];
     public $permissions;
-    public $modelTitle = 'Document';
+    public $modelTitle = 'User';
 
     public function mount() {
 
@@ -37,21 +36,21 @@ class UserShow extends Component
 
     public function render()
     {
-        $this->document = Document::findOrFail($this->uid );
+        $this->user = User::findOrFail($this->uid );
         $this->setPermissions();
         $this->setMoreMenu();
 
-        return view('documents.show');
+        return view('admin.users.show');
     }
 
 
     public function edit() {
-        return $this->redirect('/docs/form/'.$this->uid);
+        return $this->redirect('/usrs/form/'.$this->uid);
     }
 
 
     public function add() {
-        return $this->redirect('/docs/form');
+        return $this->redirect('/usrs/form');
     }
 
 
@@ -70,39 +69,28 @@ class UserShow extends Component
         $this->permissions->show = true;
 
         // EDIT
-        if ( in_array($this->document->status,['Verbatim']) ) {
+        if ( in_array($this->user->status,['active','inactive']) ) {
             $this->permissions->edit = true;
         }
 
         // DELETE
-        if ( in_array($this->document->status,['Verbatim']) ) {
+        if ( in_array($this->user->status,['Verbatim']) ) {
             $this->permissions->delete = true;
         }
 
         // FREEZE
-        if ( in_array($this->document->status,['Verbatim']) ) {
+        if ( in_array($this->user->status,['Verbatim']) ) {
             $this->permissions->freeze = true;
         }
 
         // RELEASE
-        if ( in_array($this->document->status,['Verbatim','Frozen']) ) {
+        if ( in_array($this->user->status,['Verbatim','Frozen']) ) {
             $this->permissions->release = true;
         }
 
         // REVISE
-        if ( in_array($this->document->status,['Released','Frozen']) ) {
-
-            // Do we have already revised version?
-
-            $revised = Document::where([
-                ["document_no",'=',$this->document->document_no],
-                ["revision", '>', $this->document->revision]
-            ])->first();
-
-            if ($revised == null) {
-                $this->permissions->revise = true;
-            }
-
+        if ( in_array($this->user->status,['Released','Frozen']) ) {
+            $this->permissions->revise = true;
         }
     }
 
@@ -162,10 +150,10 @@ class UserShow extends Component
 
         session()->flash('msg',[
             'type' => 'success',
-            'text' => 'Document has been frozen successfully.'
+            'text' => 'User has been frozen successfully.'
         ]);
 
-        return redirect('/docs/'.$this->uid);
+        return redirect('/usrs/'.$this->uid);
     }
 
 
@@ -186,7 +174,7 @@ class UserShow extends Component
         // Send EMails
         $this->sendMail($doc);
 
-        return redirect('/docs/'.$this->uid);
+        return redirect('/usrs/'.$this->uid);
     }
 
 
@@ -196,7 +184,7 @@ class UserShow extends Component
     #[On('onReviseConfirmed')]
     public function doRevise($type,$withFiles) {
 
-        $msgtext = 'Document has been revised (without files) successfully.';
+        $msgtext = 'User has been revised (without files) successfully.';
 
         $original_doc = Document::find($this->uid);
 

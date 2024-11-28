@@ -51,12 +51,8 @@ class UserForm extends Form
 
 
     // STATUS
+    #[Validate('required', message: 'Please select status')]
     public $status;
-    public $statusArr = [
-        'active' => 'Active',
-        'inactive' => 'Inactive'
-    ];
-
 
     // FILES
     public $files = [];
@@ -67,9 +63,6 @@ class UserForm extends Form
         foreach (Company::all() as $c) {
             $this->companies[$c->id] = $c->name;
         }
-
-        $this->company_id =  Auth::user()->company_id;
-        $this->company =  Company::find($this->company_id);
 
         $this->status = 'active';
     }
@@ -84,8 +77,10 @@ class UserForm extends Form
         $this->lastname = $this->user->lastname;
         $this->email = $this->user->email ? $this->user->email:'';
         $this->password = $this->user->password;
+        $this->company_id = $this->user->company_id;
         $this->status = $this->user->status;
         $this->notes = $this->user->notes;
+        $this->company =  Company::find($this->company_id);
     }
 
     public function store()
@@ -93,18 +88,22 @@ class UserForm extends Form
         $this->validate();
 
         $props['user_id'] = Auth::id();
+        $props['updated_uid'] = Auth::id();
         $props['name'] = $this->name;
         $props['lastname'] = $this->lastname;
         $props['email'] = $this->email;
-        $props['password'] = $this->preparePassword();
+        $props['password'] = $this->preparePassword()->hashed;
         $props['company_id'] = $this->company_id;
         $props['notes'] = $this->notes;
 
         $id = User::create($props)->id;
 
+        // INFORM USER WITH E-MAIL
+        $this->informUserWithMail($id,$this->preparePassword()->plain);
+
         session()->flash('msg',[
             'type' => 'success',
-            'text' => 'User has been created successfully.'
+            'text' => 'User has been created and and information mail sent successfully.'
         ]);
 
         return $id;
@@ -115,7 +114,7 @@ class UserForm extends Form
     {
         $this->validate();
 
-        $props['user_id'] = Auth::id();
+        $props['updated_uid'] = Auth::id();
         $props['name'] = $this->name;
         $props['lastname'] = $this->lastname;
         $props['email'] = $this->email;
@@ -138,7 +137,38 @@ class UserForm extends Form
 
     public function preparePassword() {
 
-        $new_password = Str::password(6);
-        return Hash::make($new_password);
+        $password = Str::password(6);
+
+        $passwd = [
+            'plain' => $password,
+            'hashed' => Hash::make($password)
+        ];
+
+        return (object) $passwd;
     }
+
+
+    public function informUserWithMail($id,$passwdPlain)
+    {
+        $newUser = User::findOrFail($id);
+
+        $msgData = [
+            'blade' => 'emails.user_created',                                       // Blade Mail Template
+            'from_name' => env('MAIL_FROM_NAME'),                                   // PDM Mail Sender
+            'title' => 'New User Created / Yeni Kullanıcı Hesabı',                  // Mail Title
+            'subject' => 'PDM Account Created / PDM Hesabınız Oluşturulmuştur',     // Mail Subject
+            'email' => $newUser->email,                                             // User's Mail
+            'name' => $newUser->name,                                               // User's Name
+            'lastname' => strtoupper($newUser->lastname),                           // User's Lastname
+            'password' => $passwdPlain,                                             // User's password [readable]
+            'body' => 'Your account has been created with the following password.',
+            'signature' => env('MAIL_SIGNATURE'),                                   // PDM Signature
+            'action_title' => 'Go to App / Giriş',                                  // Clickable link title
+            'action_url' => url('/')                                                // Clickable link
+        ];
+
+        Mail::to($msgData['email'])->send(new AppMail($msgData));
+        //Mail::to('katemiz@masttech.com')->send(new AppMail($msgData));
+    }
+
 }

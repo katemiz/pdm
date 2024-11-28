@@ -23,21 +23,8 @@ class User extends Authenticatable implements HasMedia
 
     use InteractsWithMedia;
 
+    protected $guarded = [];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $fillable = [
-        'company_id',
-        'name',
-        'lastname',
-        'email',
-        'password',
-        'status',
-        'notes'
-    ];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -84,98 +71,5 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->belongsToMany(Project::class)->withTimestamps();
     }
-
-
-
-
-
-
-
-
-
-
-    public static function getTableModel() {
-
-        return  [
-
-            'id' => [
-                'label' => 'No',
-                'visibility' => false,
-                'sortable' => false,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-
-            'name' => [
-                'label' => 'Name',
-                'visibility' => true,
-                'sortable' => true,
-                'wrapText' => false,
-                'hasViewLink' => true,
-            ],
-
-            'lastname' => [
-                'label' => 'Lastname',
-                'visibility' => true,
-                'sortable' => true,
-                'wrapText' => true,
-                'hasViewLink' => true,
-            ],
-
-            'company_id' => [
-                'label' => 'Company',
-                'visibility' => false,
-                'sortable' => false,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-            'email' => [
-                'label' => 'E-Mail',
-                'visibility' => true,
-                'sortable' => true,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-
-            'status' => [
-                'label' => 'Status',
-                'visibility' => true,
-                'sortable' => false,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-
-            'created_at' => [
-                'label' => 'Created At',
-                'visibility' => true,
-                'sortable' => true,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-            'updated_at' => [
-                'label' => 'Updated At',
-                'visibility' => false,
-                'sortable' => false,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-        ];
-    }
-
-
-
-
-
-
-
-
-
-
 
 }

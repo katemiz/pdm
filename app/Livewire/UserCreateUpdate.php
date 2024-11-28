@@ -39,7 +39,6 @@ class UserCreateUpdate extends Component
     }
 
 
-
     public function save()
     {
         // FORM PARAMETERS SAVE
@@ -70,6 +69,7 @@ class UserCreateUpdate extends Component
         return $this->redirect('/usrs/'.$this->id);
     }
 
+
     public function removeFile($fileToRemove) {
 
         foreach ($this->files as $key => $dosya) {
@@ -78,10 +78,5 @@ class UserCreateUpdate extends Component
             }
         }
     }
-
-
-
-
-
 
 }

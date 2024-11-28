@@ -27,11 +27,7 @@ class Documents extends Component
 {
     use WithPagination;
 
-    public $datatable_props;
-
     public $hasActions = true;
-
-    public $constants;
 
     public $show_latest = true; /// Show only latest revisions
 
@@ -82,15 +78,12 @@ class Documents extends Component
 
     public function mount()
     {
-        $this->constants = config('documents');
         $this->setCompanyProps();
     }
 
 
     public function render()
     {
-        $this->datatable_props = Document::getTableModel();
-
         $this->setProps();
 
         return view('documents.index',[
@@ -163,7 +156,6 @@ class Documents extends Component
             }
         }
 
-
         switch ($this->sortField) {
             case 'document_no':
                 $this->sortField = 'DocNo';
@@ -173,8 +165,6 @@ class Documents extends Component
                 $this->sortField = 'Author';
                 break;
         }
-
-
     }
 
 
@@ -205,55 +195,9 @@ class Documents extends Component
     }
 
 
-
-
-    // public function changeSortDirection ($key) {
-
-    //     $this->sortField = $key;
-
-    //     if ($this->constants['list']['headers'][$key]['direction'] == 'asc') {
-    //         $this->constants['list']['headers'][$key]['direction'] = 'desc';
-    //     } else {
-    //         $this->constants['list']['headers'][$key]['direction'] = 'asc';
-    //     }
-
-    //     $this->sortDirection = $this->constants['list']['headers'][$key]['direction'];
-    // }
-
-
     public function resetFilter() {
         $this->query = '';
     }
-
-
-    // public function viewItem($uid) {
-    //     $this->action = 'VIEW';
-    //     $this->uid = $uid;
-    // }
-
-
-    // public function editItem($uid) {
-    //     $this->action = 'FORM';
-    //     $this->uid = $uid;
-    // }
-
-
-    // public function addItem() {
-
-    //     dd('sdgfg');
-    //     $this->uid = false;
-    //     $this->action = 'FORM';
-
-    //     $this->reset('code','name');
-    // }
-
-    // #[On('addContent')]
-    // public function addContentPage() {
-
-    //     //$this->paction = 'PFORM';
-
-    //     dd($this->uid);
-    // }
 
 
     public function setProps() {
@@ -285,195 +229,7 @@ class Documents extends Component
     }
 
 
-    // public function triggerDelete($uid) {
-
-    //     $this->uid = $uid;
-    //     $this->dispatch('ConfirmModal', type:'delete');
-    // }
-
-
-    // #[On('onDeleteConfirmed')]
-    // public function deleteItem()
-    // {
-    //     Document::find($this->uid)->delete();
-
-    //     session()->flash('msg',[
-    //         'type' => 'success',
-    //         'text' => 'Document and it\'s files has been deleted successfully.'
-    //     ]);
-
-    //     // $this->action = 'LIST';
-    //     $this->resetPage();
-    // }
-
-
-    // public function storeUpdateItem () {
-
-    //     $this->validate();
-
-    //     $props['updated_uid'] = Auth::id();
-    //     $props['doc_type'] = $this->doc_type;
-    //     $props['language'] = $this->language;
-    //     $props['company_id'] = $this->company_id;
-    //     $props['toc'] = json_encode($this->toc);
-    //     $props['title'] = $this->title;
-    //     $props['remarks'] = $this->remarks;
-
-    //     if ( $this->uid ) {
-    //         // update
-    //         Document::find($this->uid)->update($props);
-    //         session()->flash('message','Document has been updated successfully.');
-
-    //     } else {
-    //         // create
-    //         $props['user_id'] = Auth::id();
-    //         $props['document_no'] = $this->getDocumentNo();
-    //         $this->uid = Document::create($props)->id;
-    //         session()->flash('message','Document has been created successfully.');
-    //     }
-
-    //     // ATTACHMENTS, TRIGGER ATTACHMENT COMPONENT
-    //     $this->dispatch('triggerAttachment',modelId: $this->uid);
-
-
-    //     $this->action = 'VIEW';
-
-    // }
-
-
-
-
-
-
-
-
-
-    // public function getDocumentNo() {
-
-    //     $parameter = 'document_no';
-    //     $initial_no = config('appconstants.counters.document_no');
-    //     $counter = Counter::find($parameter);
-
-    //     if ($counter == null) {
-    //         Counter::create([
-    //             'counter_type' => $parameter,
-    //             'counter_value' => $initial_no
-    //         ]);
-
-    //         return $initial_no;
-    //     }
-
-    //     $new_no = $counter->counter_value + 1;
-    //     $counter->update(['counter_value' => $new_no]);         // Update Counter
-    //     return $new_no;
-    // }
-
-
-    // public function freezeConfirm($uid) {
-    //     $this->uid = $uid;
-    //     $this->dispatch('ConfirmModal', type:'freeze');
-
-    //     session()->flash('message','Document has been frozen successfully.');
-    // }
-
-
-    // public function releaseConfirm($uid) {
-    //     $this->uid = $uid;
-    //     $this->dispatch('ConfirmModal', type:'doc_release');
-    // }
-
-
-
-    // #[On('onFreezeConfirmed')]
-    // public function doFreeze() {
-    //     $this->action = 'VIEW';
-    //     Document::find($this->uid)->update(['status' =>'Frozen']);
-    // }
-
-
-    // public function reviseConfirm($uid) {
-    //     $this->uid = $uid;
-    //     $this->dispatch('ConfirmModal', type:'revise');
-    // }
-
-
-    // #[On('onReviseConfirmed')]
-    // public function doRevise() {
-
-    //     $original_doc = Document::find($this->uid);
-
-    //     $revised_doc = $original_doc->replicate();
-    //     $revised_doc->status = 'Verbatim';
-    //     $revised_doc->revision = $original_doc->revision+1;
-    //     $revised_doc->save();
-
-    //     // Do not Copy files!
-    //     // Delibrate decision
-
-    //     $original_doc->update(['is_latest' => false]);
-    //     $this->uid = $revised_doc->id;
-
-    //     $this->dispatch('refreshFileListNewId', modelId:$this->uid);
-    //     $this->action = 'VIEW';
-    // }
-
-
-    // #[On('onReleaseConfirmed')]
-    // public function doRelease() {
-
-    //     $doc = Document::find($this->uid);
-
-    //     $props['status'] = 'Released';
-    //     $props['approver_id'] = Auth::id();
-    //     $props['app_revised_at'] = time();
-
-    //     $doc->update($props);
-
-    //     $this->setProps();
-
-    //     $this->action = 'VIEW';
-
-    //     // Send EMails
-    //     $this->sendMail();
-    // }
-
-
-    // public function sendMail() {
-
-    //     $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
-    //     $msgdata['subject'] = 'D'.$this->document_no.' R'.$this->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
-    //     $msgdata['url'] = url('/').'/docs/'.$this->uid;
-    //     $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
-
-    //     $msgdata['document_no'] = $this->document_no;
-    //     $msgdata['title'] = $this->title;
-    //     $msgdata['revision'] = $this->revision;
-    //     $msgdata['remarks'] = $this->remarks;
-
-    //     $allCompanyUsers = User::where('company_id',$this->company_id)->get();
-
-    //     $toArr = [];
-
-    //     foreach ($allCompanyUsers as $key => $u) {
-    //         array_push($toArr, $u->email);
-    //     }
-
-    //     if (count($toArr) > 0) {
-    //         session()->flash('message','Document has been released and email has been sent to PDM users successfully.');
-    //         Mail::to($toArr)->send(new AppMail($msgdata));
-    //     } else {
-    //         session()->flash('message','Document has been <b>released</b> but NO email been sent since no users found!');
-    //     }
-    // }
-
-
-
-
-
-
     public function sort($columnName) {
-
-
 
         if ($columnName == $this->sortField) {
             $this->sortDirection = $this->sortDirection == 'ASC' ?  'DESC' :'ASC';
@@ -481,9 +237,5 @@ class Documents extends Component
             $this->sortField = $columnName;
         }
     }
-
-
-
-
 
 }

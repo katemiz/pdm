@@ -2,8 +2,12 @@
 
 use function Livewire\Volt\{state};
 
-state(['addtext' => "Add Item"]);
-state(['noitemtext' => "No items found in database!"]);
+state(['addBtn' => [
+        'title' => 'Add User',
+        'redirect' => '/usrs/form'
+]]);
+
+state(['noItemText' => "No items found in database!"]);
 
 $addItem = fn () => $this->dispatch('addTriggered') ;
 
@@ -21,7 +25,7 @@ $addItem = fn () => $this->dispatch('addTriggered') ;
     <div class="p-4 my-4 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
 
         <div class="flex flex-col md:flex-row justify-between">
-            <div><span class="font-medium">No Item!</span> {{ $noitemtext }}</div>
+            <div><span class="font-medium">No Item!</span> {{ $noItemText }}</div>
             <div class="text-right text-gray-400">{{ now() }}</div>
         </div>
     </div>

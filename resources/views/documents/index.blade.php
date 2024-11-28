@@ -4,7 +4,7 @@
 
     <div class="flex flex-col md:flex-row justify-between items-center">
         <div>
-            <livewire:header type="Page" title="{{ $constants['list']['title'] }}" subtitle="{{ $constants['list']['subtitle'] }}"/>
+            <livewire:header type="Page" title="{{ config('conf_documents.index.title') }}" subtitle="{{ config('conf_documents.index.subtitle') }}"/>
         </div>
 
         <div class="">
@@ -18,7 +18,7 @@
     @endif
 
 
-    <livewire:datatable-search add_command="Add Document" />
+    <livewire:datatable-search :addBtn="config('conf_documents.addBtn')"/>
 
 
     @if ($documents->count() > 0)
@@ -33,7 +33,7 @@
 
                 <thead class="text-gray-700 font-light bg-slate-200">
                 <tr class="bg-gray-100">
-                    @foreach ($datatable_props as $key => $prop)
+                    @foreach (config('conf_documents.table') as $key => $prop)
 
                         @if ($prop['visibility'])
                         <th class="p-4 border border-gray-200">
@@ -73,7 +73,7 @@
 
                         <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
 
-                            @foreach ($datatable_props as $key => $prop)
+                            @foreach (config('conf_documents.table') as $key => $prop)
 
                                 @if ($prop['visibility'])
                                     <td class="px-4 py-2 text-base {{ !$prop['wrapText'] ? 'whitespace-nowrap':'' }}">
@@ -130,7 +130,7 @@
 
     @else
 
-        <livewire:tablenoitem addtext="Add Document" noitemtext="No documents found in the database!"/>
+        <livewire:tablenoitem :addBtn="config('conf_documents.addBtn')" :noItemText="config('conf_documents.noItemText')"/>
 
     @endif
 

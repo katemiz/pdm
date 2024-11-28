@@ -1,6 +1,6 @@
 <div class="container mx-auto p-4">
 
-  <livewire:header type="Page" title="Documents" subtitle="Document Details and Properties" />
+  <livewire:header type="Hero" title="{{ config('conf_documents.show.title') }}" subtitle="{{ config('conf_documents.show.subtitle') }}"/>
 
   @if(session('msg'))
       <livewire:flash-message :msg="session('msg')">
@@ -65,7 +65,7 @@
 
       <div class="flex justify-between">
         <p class="text-xl">{{ $document->title }}</p>
-        <x-badge>{{ $document->doc_types[$document->doc_type] }}</x-badge>
+        <x-badge>{{ config('conf_documents.docTypes')[$document->doc_type] }}</x-badge>
       </div>
 
 
@@ -82,31 +82,5 @@
   </div>
 
   <livewire:info-box :model="$document" />
-
-
-  <!-- <script>
-
-    function confirmDelete() {
-
-      Swal.fire({
-        title: 'Delete Document?',
-        text: 'Once deleted, there is no reverting back!',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Delete',
-        cancelButtonText: 'Ooops ...',
-
-      }).then((result) => {
-          if (result.isConfirmed) {
-              Livewire.dispatch('onDeleteConfirmed')
-          } else {
-              return false
-          }
-      })
-    }
-
-  </script> -->
 
 </div>

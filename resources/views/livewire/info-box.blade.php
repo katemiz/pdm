@@ -5,7 +5,6 @@
         <p class="text-sm text-gray-500">{{ $author->email }}</p>
         <p class="text-sm text-gray-400">{{ $author->name }} {{ $author->lastname }}</p>
         <p class="text-sm text-gray-400">{{ $created_at }}</p>
-
     </div>
 
     <div class="pr-6">
@@ -30,10 +29,6 @@
     @endif
 
 
-
-
-
-
     @if ($approver)
     <div class="pr-6">
         <p class="uppercase tracking-wide text-sm text-indigo-500 ">{{ Str::upper($status) }}</p>
@@ -55,12 +50,11 @@
     <div class="pl-6">
         <div class="card-image ">
             <figure class="image is-64x64  is-inline-block">
-                {!! QrCode::size(64)->generate(url('/').'/document/view/'.$id) !!}
+                {!! QrCode::size(64)->generate(url('/').config('conf_users.viewBtn.redirect').$id) !!}
             </figure>
         </div>
     </div>
 
+
+
 </div>
-
-
-

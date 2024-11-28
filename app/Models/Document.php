@@ -17,37 +17,7 @@ class Document extends Model implements HasMedia
 
     protected $table = 'documents';
 
-    public $doc_types = [
-        'GR' => 'General Document',
-        'TR' => 'Test Report',
-        'AR' => 'Analysis Report',
-        'MN' => 'User Manual',
-        'ME' => 'Memo',
-        'PR' => 'Presentation'
-    ];
-
-    protected $fillable = [
-        'user_id',
-        'company_id',
-        'updated_uid',
-        'document_no',
-        'revision',
-        'is_html',
-        'is_latest',
-        'doc_type',
-        'language',
-        'title',
-        'remarks',
-        'toc',
-        'checker_id',
-        'approver_id',
-        'reject_reason_check',
-        'reject_reason_app',
-        'check_reviewed_at',
-        'app_reviewed_at',
-        'status',
-        'updated_at'
-    ];
+    protected $guarded = [];
 
     public function getAuthorAttribute($value) {
         $author = User::find($this->user_id);
@@ -64,82 +34,5 @@ class Document extends Model implements HasMedia
         //return Document::select('id','revision')->where('document_no',$this->document_no)->order_by('revision', 'ASC');
         return Document::select('id','revision')->where('document_no',$this->document_no)->get()->toArray();
     }
-
-
-    public static function getTableModel() {
-
-        return  [
-
-            'id' => [
-                'label' => 'No',
-                'visibility' => false,
-                'sortable' => false,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-            'user_id' => [
-                'label' => 'Prepared By',
-                'visibility' => false,
-                'sortable' => false,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-            'DocNo' => [
-                'label' => 'No',
-                'visibility' => true,
-                'sortable' => true,
-                'wrapText' => false,
-                'hasViewLink' => true,
-            ],
-
-            'company_id' => [
-                'label' => 'Company',
-                'visibility' => false,
-                'sortable' => false,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-            'title' => [
-                'label' => 'Title',
-                'visibility' => true,
-                'sortable' => true,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-
-            'Author' => [
-                'label' => 'Author',
-                'visibility' => true,
-                'sortable' => true,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-            'created_at' => [
-                'label' => 'Created At',
-                'visibility' => true,
-                'sortable' => true,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-            'updated_at' => [
-                'label' => 'Updated At',
-                'visibility' => false,
-                'sortable' => false,
-                'wrapText' => true,
-                'hasViewLink' => false,
-            ],
-
-        ];
-    }
-
-
-
-
 
 }

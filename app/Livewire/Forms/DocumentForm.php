@@ -33,24 +33,10 @@ class DocumentForm extends Form
     public $company;
     public $companies = [];
 
-    // DOCUMENT TYPE
-    public $doc_types = [
-        'GR' => 'General Document',
-        'TR' => 'Test Report',
-        'AR' => 'Analysis Report',
-        'MN' => 'User Manual',
-        'ME' => 'Memo',
-        'PR' => 'Presentation'
-    ];
 
     #[Validate('required', message: 'Please select document type')]
     public $doc_type = 'GR';
 
-    // DOCUMENT TYPE
-    public $languages = [
-        'EN' => 'English',
-        'TR' => 'Türkçe'
-    ];
 
     #[Validate('required', message: 'Please select document language')]
     public String $language = 'TR';

@@ -1,6 +1,11 @@
 <section class="container mx-auto p-4">
 
-    <livewire:header type="Hero" title="Users" subtitle="{{ $this->form->uid ? 'Update Existing User Parameters' : 'Create a New User' }}" />
+    <livewire:header 
+    type="Hero" 
+    title="{{ $this->form->uid ? config('conf_users.form_edit.title') : config('conf_users.form_add.title') }}" 
+    subtitle="{{ $this->form->uid ? config('conf_users.form_edit.subtitle') : config('conf_users.form_add.subtitle') }}"
+    />
+
 
     <form wire:submit="{{ $this->form->uid ? 'update' : 'save' }}" action="post">
 
@@ -10,7 +15,7 @@
         @method('patch')
         @endif
 
-        <x-radio label="Select Company" name="company_id" :options="$this->form->companies" :selected="$this->form->company_id"
+        <x-radio label="Select Company" name="company_id" :options="$this->form->companies" 
             wire:model="form.company_id" />
 
         <x-input-text wire:model="form.name" name="name" label="User Name"
@@ -24,9 +29,8 @@
 
         <x-quill wire:model="form.notes" label="Notes" name="notes" :value="$this->form->notes" />
 
-        <x-radio label="Status" name="status" :options="$this->form->statusArr" :selected="$this->form->status"
+        <x-radio label="Status" name="status" :options="config('conf_users.statusArr')" :selected="$this->form->status"
             wire:model="form.status" />
-
 
         @if ($this->form->uid)
         <livewire:file-list :model="$this->form->user" collection="User" label="Files" is_editable="true"/>

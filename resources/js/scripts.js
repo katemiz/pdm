@@ -181,12 +181,22 @@ window.addEventListener('attachDeleted',function(e) {
 
 
 /*
-This function is triggered when "+" Add Button in index (listing of items) is clicked
+This function is triggered when "+" Add Button in index (listing of items) is clicked [All index files]
 */
 
 window.addEventListener('addTriggered', e => {
     window.location.href = e.detail.redirect
 })
+
+
+/*
+This function is triggered when searching in tables (listing of items) [All index files]
+*/
+
+window.addEventListener('queryChanged', e => {
+    Livewire.dispatch('startQuerySearch', {query:e.detail.query});
+});
+
 
 
 

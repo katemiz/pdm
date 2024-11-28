@@ -27,11 +27,7 @@ class Users extends Component
 {
     use WithPagination;
 
-    public $datatable_props;
-
     public $hasActions = true;
-
-    public $constants;
 
     public $show_active_only = true; /// Show only latest revisions
 
@@ -42,13 +38,6 @@ class Users extends Component
     public $sortDirection = 'ASC';
 
     public $logged_user;
-
-    public $all_revs = [];
-
-    public $document_no;
-    public $revision;
-    public $toc = [];    /// Table of Contents
-    public $is_latest;
 
     public $company;
     public $companies = [];
@@ -67,44 +56,15 @@ class Users extends Component
     public $remarks;
     public $status;
 
-    public $addBtn = [
-        'title' => 'Add User',
-        'redirect' => '/usrs/form'
-    ];
-
-
-
-    #[Validate('required', message: 'Please select document type')]
-    public $doc_type = 'GR';
-
-    public $languages = [
-        'EN' => 'English',
-        'TR' => 'Türkçe'
-    ];
-
-    #[Validate('required', message: 'Please select document language')]
-    public $language = 'TR';
-
-
-
-
-
-
-
-
-
 
     public function mount()
     {
-        $this->constants = config('users');
         $this->setCompanyProps();
     }
 
 
     public function render()
     {
-        $this->datatable_props = User::getTableModel();
-
         $this->setProps();
 
         return view('admin.users.index',[
@@ -120,6 +80,9 @@ class Users extends Component
     }
 
 
+    public function resetFilter() {
+        $this->query = '';
+    }
 
 
     public function setCompanyProps()
@@ -131,6 +94,7 @@ class Users extends Component
         $this->company_id =  Auth::user()->company_id;
         $this->company =  Company::find($this->company_id);
     }
+
 
     public function checkSessionVariables() {
 
@@ -178,20 +142,7 @@ class Users extends Component
     }
 
 
-    // public function checkCurrentProduct() {
 
-    //     /*
-    //     session('current_project_id');
-    //     session('current_project_name');
-
-    //     session('current_eproduct_id');
-    //     session('current_eproduct_name');
-    //     */
-
-    //     if (!session('current_project_id') && !session('current_product_id')) {
-    //         return redirect('/product-selector/rl');
-    //     }
-    // }
 
 
     public function getCompaniesList()  {
@@ -210,9 +161,7 @@ class Users extends Component
 
 
 
-    public function resetFilter() {
-        $this->query = '';
-    }
+
 
 
 
@@ -236,12 +185,6 @@ class Users extends Component
             $this->updated_at = $c->updated_at;
             $this->created_by = User::find($c->user_id)->email;
             $this->updated_by = User::find($c->updated_uid)->email;
-
-
-            // Revisions
-            foreach (Document::where('document_no',$this->document_no)->get() as $doc) {
-                $this->all_revs[$doc->revision] = $doc->id;
-            }
         }
     }
 

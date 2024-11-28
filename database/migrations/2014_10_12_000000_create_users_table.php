@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(User::class);
+            $table->integer('updated_uid');
             $table->string('name');
             $table->string('lastname');
             $table->foreignIdFor(Company::class)->nullable();

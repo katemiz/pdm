@@ -1,6 +1,6 @@
 <div class="container mx-auto p-4">
 
-  <livewire:header type="Page" title="Users" subtitle="User Details and Properties" />
+  <livewire:header type="Hero" title="{{ config('conf_users.show.title') }}" subtitle="{{ config('conf_users.show.subtitle') }}"/>
 
   @if(session('msg'))
       <livewire:flash-message :msg="session('msg')">
@@ -61,7 +61,7 @@
 
       <div class="flex justify-between">
         <p class="text-xl">{{ $user->name }} {{ $user->lastname }}</p>
-        <x-badge>{{ $user->email }}</x-badge>
+        <x-badge>{{ $user->email }} / {{ $this->company }}</x-badge>
       </div>
 
 
@@ -76,6 +76,6 @@
 
   </div>
 
-  {{-- <livewire:info-box :model="$user" /> --}}
+  <livewire:info-box :model="$user" :viewBtn="config('conf_users.viewBtn')"/>
 
 </div>

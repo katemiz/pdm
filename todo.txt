@@ -6,3 +6,7 @@ alter table documents modify column check_reviewed_at  datetime null;
 
 alter table users add column user_id bigint unsigned after id;
 alter table users add column notes text after password;
+alter table users add column updated_uid int after user_id;
+
+update users set status='Active' where status='active';
+update users set status='Inactive' where status='inactive';

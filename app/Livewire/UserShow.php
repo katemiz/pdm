@@ -8,7 +8,9 @@ use Livewire\Attributes\On;
 
 use Illuminate\Support\Facades\Auth;
 
+use App\Models\Company;
 use App\Models\User;
+
 
 use Illuminate\Support\Carbon;
 
@@ -21,6 +23,8 @@ class UserShow extends Component
     public $moreMenu = [];
     public $permissions;
     public $modelTitle = 'User';
+
+    public $company;
 
     public function mount() {
 
@@ -37,6 +41,8 @@ class UserShow extends Component
     public function render()
     {
         $this->user = User::findOrFail($this->uid );
+        $this->company =  Company::find($this->user->company_id)->name;
+
         $this->setPermissions();
         $this->setMoreMenu();
 
@@ -69,29 +75,10 @@ class UserShow extends Component
         $this->permissions->show = true;
 
         // EDIT
-        if ( in_array($this->user->status,['active','inactive']) ) {
+        if ( in_array($this->user->status,['Active','Inactive']) ) {
             $this->permissions->edit = true;
         }
-
-        // DELETE
-        if ( in_array($this->user->status,['Verbatim']) ) {
-            $this->permissions->delete = true;
-        }
-
-        // FREEZE
-        if ( in_array($this->user->status,['Verbatim']) ) {
-            $this->permissions->freeze = true;
-        }
-
-        // RELEASE
-        if ( in_array($this->user->status,['Verbatim','Frozen']) ) {
-            $this->permissions->release = true;
-        }
-
-        // REVISE
-        if ( in_array($this->user->status,['Released','Frozen']) ) {
-            $this->permissions->revise = true;
-        }
+        
     }
 
 

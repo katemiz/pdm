@@ -25,6 +25,8 @@ class InfoBox extends Component
     public $check_reviewed_at = false;
     public $app_reviewed_at = false;
 
+    public $viewBtn;
+
     public function mount($model) {
 
         $this->id = $model->id;
@@ -37,19 +39,19 @@ class InfoBox extends Component
 
         $this->status = $model->status;
 
-        if ($model->checker_id !='') {
+        if ( isset($model->checker_id) && $model->checker_id !='') {
             $this->checker = User::find($model->checker_id);
         }
 
-        if ($model->check_reviewed_at != '') {
+        if ( isset($model->check_reviewed_at) && $model->check_reviewed_at != '') {
             $this->check_reviewed_at = $model->check_reviewed_at;
         }
 
-        if ($model->approver_id !='') {
+        if ( isset($model->approver_id) && $model->approver_id !='') {
             $this->approver = User::find($model->approver_id);
         }
 
-        if ($model->app_reviewed_at !='') {
+        if ( isset($model->app_reviewed_at) && $model->app_reviewed_at !='') {
             $this->app_reviewed_at = $model->app_reviewed_at;
         }
     }

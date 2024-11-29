@@ -23,16 +23,15 @@ use Mail;
 use App\Mail\AppMail;
 
 
-class Documents extends Component
+class Materials extends Component
 {
     use WithPagination;
 
     public $hasActions = true;
 
-    public $show_latest = true; /// Show only latest revisions
+    public $show_active = true; // Show active only
 
     public $uid = false;
-    // public $pid = false;
 
     public $query = false;
     public $sortField = 'created_at';
@@ -66,6 +65,8 @@ class Documents extends Component
 
     #[Validate('required', message: 'Please select document type')]
     public $doc_type = 'GR';
+
+
 
     #[Validate('required', message: 'Please select document language')]
     public $language = 'TR';

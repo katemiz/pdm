@@ -8,5 +8,10 @@ alter table users add column user_id bigint unsigned after id;
 alter table users add column notes text after password;
 alter table users add column updated_uid int after user_id;
 
+update users set updated_uid=user_id where updated_uid is NULL;
+
 update users set status='Active' where status='active';
 update users set status='Inactive' where status='inactive';
+
+alter table materials add column updated_uid int after user_id;
+alter table materials add column revision int not null default 1 after updated_uid;

@@ -1,6 +1,31 @@
 <?php
 
+
+
+/*
+
+    modelTitle          : Variable to be used in javascript confirm dialogs. [Delete, Freeze, Release etc Confirm]
+
+
+*/
+
 return [
+
+    'modelTitle' => 'Materials',
+
+    'redirects' => [
+        'index' => 'materials.show',
+        'show' => '/materials/form/',
+        'form' => '/materials'
+    ],
+
+    'views' => [
+
+        'index' => 'materials.index',
+        'show' => 'materials.show',
+        'form' => 'materials.form'
+    ],
+
 
     'index' => [
         'title' => 'Documents',

@@ -23,29 +23,21 @@ use Mail;
 use App\Mail\AppMail;
 
 
-class Documents extends Component
+class Roles extends Component
 {
     use WithPagination;
 
     public $hasActions = true;
 
-    public $show_latest = true; /// Show only latest revisions
+    public $show_active_only = true; /// Show only latest revisions
 
     public $uid = false;
-    // public $pid = false;
 
     public $query = false;
-    public $sortField = 'created_at';
-    public $sortDirection = 'DESC';
+    public $sortField = 'lastname';
+    public $sortDirection = 'ASC';
 
     public $logged_user;
-
-    public $all_revs = [];
-
-    public $document_no;
-    public $revision;
-    public $toc = [];    /// Table of Contents
-    public $is_latest;
 
     public $company;
     public $companies = [];
@@ -64,12 +56,6 @@ class Documents extends Component
     public $remarks;
     public $status;
 
-    #[Validate('required', message: 'Please select document type')]
-    public $doc_type = 'GR';
-
-    #[Validate('required', message: 'Please select document language')]
-    public $language = 'TR';
-
 
     public function mount()
     {
@@ -81,8 +67,8 @@ class Documents extends Component
     {
         $this->setProps();
 
-        return view('documents.index',[
-            'documents' => $this->getDocumentsList()
+        return view('admin.users.index',[
+            'users' => $this->getUsersList()
         ]);
     }
 
@@ -91,6 +77,11 @@ class Documents extends Component
     public function querySearch($query)
     {
         $this->query = $query;
+    }
+
+
+    public function resetFilter() {
+        $this->query = '';
     }
 
 
@@ -111,72 +102,47 @@ class Documents extends Component
     }
 
 
-    public function getDocumentsList()  {
 
-        switch ($this->sortField) {
-            case 'DocNo':
-                $this->sortField = 'document_no';
-                break;
 
-            case 'Author':
-                $this->sortField = 'user_id';
-                break;
-        }
+
+
+
+
+
+    public function getUsersList()  {
 
         if ($this->query) {
 
-            return Document::when($this->show_latest, function ($query) {
-                $query->where('is_latest', true);
+            return User::when($this->show_active_only, function ($query) {
+                $query->where('status', 'active');
             })
             ->whereAny([
-                'title',
-                'remarks',
-                'document_no',
+                'name',
+                'lastname',
+                'email',
             ], 'LIKE', "%".$this->query."%")
             ->orderBy($this->sortField,$this->sortDirection)
             ->paginate(env('RESULTS_PER_PAGE'));
 
         } else {
 
-            if ($this->show_latest) {
+            if ($this->show_active_only) {
 
-                return Document::where('is_latest', true)
+                return User::where('status', 'active')
                 ->orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
-
+    
             } else {
-
-                return Document::orderBy($this->sortField,$this->sortDirection)
+    
+                return User::orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
             }
-        }
 
-        switch ($this->sortField) {
-            case 'document_no':
-                $this->sortField = 'DocNo';
-                break;
-
-            case 'user_id':
-                $this->sortField = 'Author';
-                break;
         }
     }
 
 
-    public function checkCurrentProduct() {
 
-        /*
-        session('current_project_id');
-        session('current_project_name');
-
-        session('current_eproduct_id');
-        session('current_eproduct_name');
-        */
-
-        if (!session('current_project_id') && !session('current_product_id')) {
-            return redirect('/product-selector/rl');
-        }
-    }
 
 
     public function getCompaniesList()  {
@@ -190,9 +156,14 @@ class Documents extends Component
     }
 
 
-    public function resetFilter() {
-        $this->query = '';
-    }
+
+
+
+
+
+
+
+
 
 
     public function setProps() {
@@ -214,12 +185,6 @@ class Documents extends Component
             $this->updated_at = $c->updated_at;
             $this->created_by = User::find($c->user_id)->email;
             $this->updated_by = User::find($c->updated_uid)->email;
-
-
-            // Revisions
-            foreach (Document::where('document_no',$this->document_no)->get() as $doc) {
-                $this->all_revs[$doc->revision] = $doc->id;
-            }
         }
     }
 
@@ -232,5 +197,9 @@ class Documents extends Component
             $this->sortField = $columnName;
         }
     }
+
+
+
+
 
 }

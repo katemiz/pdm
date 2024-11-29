@@ -18,7 +18,7 @@ use App\Livewire\Cr;
 use App\Livewire\Ecn;
 use App\Livewire\LwPermission;
 use App\Livewire\LwProject;
-use App\Livewire\LwRole;
+// use App\Livewire\LwRole;
 use App\Livewire\LwUser;
 
 use App\Livewire\ChangePassword;
@@ -41,10 +41,22 @@ use App\Livewire\Geometry;
 
 use App\Livewire\LwCompany;
 
+
+
+
+
+
 use App\Livewire\Documents;
 use App\Livewire\DocumentShow;
 use App\Livewire\DocumentCreateUpdate;
 
+use App\Livewire\Materials;
+use App\Livewire\MaterialShow;
+use App\Livewire\MaterialCreateUpdate;
+
+use App\Livewire\Roles;
+use App\Livewire\RoleShow;
+use App\Livewire\RoleCreateUpdate;
 
 use App\Livewire\Users;
 use App\Livewire\UserShow;
@@ -62,9 +74,6 @@ use App\Livewire\UserCreateUpdate;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/', Welcome::class);
 
@@ -90,19 +99,44 @@ Route::middleware(['auth'])->group(function () {
     Route::patch('/usrs/{id}', UserCreateUpdate::class);
     Route::delete('/usrs/{id}', UserCreateUpdate::class);
 
+                        // CHANGE PASSWORDS
+                        Route::get('/admin-users/{action}/{id?}', LwUser::class);
+                        Route::get('/profile', ChangePassword::class);
 
 
 
 
-    // USERS
-    Route::get('/admin-users/{action}/{id?}', LwUser::class);
-    Route::get('/profile', ChangePassword::class);
+    // ROLES
+    // *****************************************************************************
+    Route::get('/usrs', Roles::class);
+    Route::get('/usrs/form/{id?}', RoleCreateUpdate::class);
+    Route::get('/usrs/{id}', RoleShow::class);
+
+    Route::post('/usrs', RoleCreateUpdate::class);
+    Route::patch('/usrs/{id}', RoleCreateUpdate::class);
+    Route::delete('/usrs/{id}', RoleCreateUpdate::class);
+
+
+
+    // MATERIALS
+    // *****************************************************************************
+    Route::get('/materials', Materials::class);
+    Route::get('/materials/form/{id?}', MaterialCreateUpdate::class);
+    Route::get('/materials/{id}', MaterialShow::class);
+
+    Route::post('/materials', MaterialCreateUpdate::class);
+    Route::patch('/materials/{id}', MaterialCreateUpdate::class);
+    Route::delete('/materials/{id}', MaterialCreateUpdate::class);
+
+
+
+
 
     // CK IMG UPLOAD
     Route::post('/ckimages', [CkImgController::class, 'store'])->name('ckimages');
 
-    // ROLES
-    Route::get('/admin-roles/{action}/{id?}', LwRole::class);
+    // // ROLES
+    // Route::get('/admin-roles/{action}/{id?}', LwRole::class);
 
     // PERMISSIONS
     Route::get('/admin-permissions/{action}/{id?}', LwPermission::class);

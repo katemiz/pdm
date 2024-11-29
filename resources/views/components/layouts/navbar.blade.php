@@ -84,10 +84,10 @@
 
                 <ul class="flex flex-col text-black">
 
-                    <x-nav-link href="/document/list" type="submenu">Engineering Utilities</x-nav-link>
-                    <x-nav-link href="/document/list" type="submenu">Materials</x-nav-link>
-                    <x-nav-link href="/document/list" type="submenu">Product Notes</x-nav-link>
-                    <x-nav-link href="/document/list" type="submenu">Standard Families</x-nav-link>
+                    <x-nav-link href="/utilities" type="submenu">Engineering Utilities</x-nav-link>
+                    <x-nav-link href="/materials" type="submenu">Materials</x-nav-link>
+                    <x-nav-link href="/notes" type="submenu">Product Notes</x-nav-link>
+                    <x-nav-link href="/standards" type="submenu">Standard Families</x-nav-link>
 
                 </ul>
             </div>

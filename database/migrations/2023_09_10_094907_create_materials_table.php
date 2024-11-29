@@ -17,6 +17,10 @@ return new class extends Migration
         Schema::create('materials', function (Blueprint $table) {
             $table->id()->startingValue(801);
             $table->foreignIdFor(User::class);
+            $table->integer('updated_uid');
+
+            $table->integer('revision')->default(1);
+
             $table->text('form');
             $table->text('family');
             $table->text('description');

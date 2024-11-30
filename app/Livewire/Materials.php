@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Attachment;
 use App\Models\Counter;
 use App\Models\Company;
-use App\Models\Document;
+use App\Models\Material;
 use App\Models\User;
 
 use Mail;
@@ -34,8 +34,8 @@ class Materials extends Component
     public $uid = false;
 
     public $query = false;
-    public $sortField = 'created_at';
-    public $sortDirection = 'DESC';
+    public $sortField = 'description';
+    public $sortDirection = 'ASC';
 
     public $logged_user;
 
@@ -82,8 +82,8 @@ class Materials extends Component
     {
         $this->setProps();
 
-        return view('documents.index',[
-            'documents' => $this->getDocumentsList()
+        return view('materials.index',[
+            'materials' => $this->getMaterialsList()
         ]);
     }
 
@@ -112,22 +112,12 @@ class Materials extends Component
     }
 
 
-    public function getDocumentsList()  {
-
-        switch ($this->sortField) {
-            case 'DocNo':
-                $this->sortField = 'document_no';
-                break;
-
-            case 'Author':
-                $this->sortField = 'user_id';
-                break;
-        }
+    public function getMaterialsList()  {
 
         if ($this->query) {
 
-            return Document::when($this->show_latest, function ($query) {
-                $query->where('is_latest', true);
+            return Material::when($this->show_active, function ($query) {
+                $query->where('status', 'Active');
             })
             ->whereAny([
                 'title',
@@ -139,27 +129,17 @@ class Materials extends Component
 
         } else {
 
-            if ($this->show_latest) {
+            if ($this->show_active) {
 
-                return Document::where('is_latest', true)
+                return Material::where('status', 'Active')
                 ->orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
 
             } else {
 
-                return Document::orderBy($this->sortField,$this->sortDirection)
+                return Material::orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
             }
-        }
-
-        switch ($this->sortField) {
-            case 'document_no':
-                $this->sortField = 'DocNo';
-                break;
-
-            case 'user_id':
-                $this->sortField = 'Author';
-                break;
         }
     }
 
@@ -200,7 +180,7 @@ class Materials extends Component
 
         if ($this->uid ) {
 
-            $c = Document::find($this->uid);
+            $c = Material::find($this->uid);
 
             $this->document_no = $c->document_no;
             $this->revision = $c->revision;
@@ -218,7 +198,7 @@ class Materials extends Component
 
 
             // Revisions
-            foreach (Document::where('document_no',$this->document_no)->get() as $doc) {
+            foreach (Material::where('document_no',$this->document_no)->get() as $doc) {
                 $this->all_revs[$doc->revision] = $doc->id;
             }
         }

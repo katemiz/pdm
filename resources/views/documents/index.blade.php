@@ -1,7 +1,5 @@
 <section class="container mx-auto p-4">
 
-    <script src="{{ asset('/js/confirm_modal.js') }}"></script>
-
     <div class="flex flex-col md:flex-row justify-between items-center">
         <div>
             <livewire:header type="Page" title="{{ config('conf_documents.index.title') }}" subtitle="{{ config('conf_documents.index.subtitle') }}"/>
@@ -18,7 +16,7 @@
     @endif
 
 
-    <livewire:datatable-search :addBtn="config('conf_documents.addBtn')"/>
+    <livewire:datatable-search :addBtnTitle="config('conf_documents.index.addBtnTitle')" :addBtnRoute="config('conf_documents.form_create.route')"/>
 
 
     @if ($documents->count() > 0)
@@ -52,7 +50,7 @@
                                             @endif
 
                                         @else
-                                            <x-ikon name="Sort" size="L" />                                            
+                                            <x-ikon name="Sort" size="L" />
                                         @endif
                                     </a>
                                 @endif
@@ -96,20 +94,15 @@
                                 <td scope="col" class="px-4 py-2 text-base text-right whitespace-nowrap">
 
                                     <a href="/docs/{{ $record->id }}" class="inline-flex text-blue-700">
-                                        <x-carbon-view class="w-6 h-6"/>
+                                        <x-ikon name="View" size="L"/>
                                     </a>
 
                                     @role(['EngineeringDept'])
 
                                         @if ( !in_array($record->status,['Frozen','Released']) )
-
-                                            <a href="/docs/form/{{ $record->id }}" class="inline-flex text-blue-700">
-                                                <x-carbon-edit  class="w-6 h-6 ms-1.5"/>
+                                            <a href="/docs/{{ $record->id }}/edit" class="inline-flex text-blue-700">
+                                                <x-ikon name="Edit" size="L"/>
                                             </a>
-                                            {{-- <a wire:click="triggerDelete({{ $record->id }})" class="inline-flex text-red-700">
-                                                <x-carbon-trash-can  class="w-6 h-6 ms-1.5"/>
-                                            </a> --}}
-
                                         @endif
 
                                     @endrole
@@ -130,24 +123,13 @@
 
     @else
 
-        <livewire:tablenoitem :addBtn="config('conf_documents.addBtn')" :noItemText="config('conf_documents.noItemText')"/>
+        <livewire:tablenoitem
+            :addBtnTitle="config('conf_documents.index.addBtnTitle')"
+            :addBtnRoute="config('conf_documents.form_create.route')"
+            :noItemText="config('conf_documents.index.noItemText')"/>
 
     @endif
 
-
-
-
-    <script>
-
-        window.addEventListener('queryChanged', e => {
-            Livewire.dispatch('startQuerySearch', {query:event.detail.query});
-        });
-
-        window.addEventListener('addTriggered', e => {
-            window.location.href = "/docs/form"
-        });
-
-    </script>
 </section>
 
 

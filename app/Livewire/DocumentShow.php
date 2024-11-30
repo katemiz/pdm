@@ -12,6 +12,7 @@ use App\Models\Document;
 use App\Models\User;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -21,9 +22,11 @@ class DocumentShow extends Component
     public $document;
     public $moreMenu = [];
     public $permissions;
-    public $modelTitle = 'Document';
+    public $modelTitle;
 
     public function mount() {
+
+        $this->modelTitle = config('conf_documents.modelTitle');
 
         if (request('id')) {
             $this->uid = request('id');
@@ -45,13 +48,16 @@ class DocumentShow extends Component
     }
 
 
+
     public function edit() {
-        return $this->redirect('/docs/form/'.$this->uid);
+
+        $redirect = Str::replace('{id}',$this->uid,config('conf_documents.form_edit.route'));
+        return $this->redirect($redirect);
     }
 
 
     public function add() {
-        return $this->redirect('/docs/form');
+        return $this->redirect(config('conf_documents.form_create.route'));
     }
 
 
@@ -165,7 +171,8 @@ class DocumentShow extends Component
             'text' => 'Document has been frozen successfully.'
         ]);
 
-        return redirect('/docs/'.$this->uid);
+        $redirect = Str::replace('{id}',$this->uid,config('conf_documents.show.route'));
+        return redirect($redirect);
     }
 
 
@@ -186,7 +193,8 @@ class DocumentShow extends Component
         // Send EMails
         $this->sendMail($doc);
 
-        return redirect('/docs/'.$this->uid);
+        $redirect = Str::replace('{id}',$this->uid,config('conf_documents.show.route'));
+        return redirect($redirect);
     }
 
 
@@ -214,9 +222,9 @@ class DocumentShow extends Component
 
             // COPY FILES TO NEW REVISION
             $orgMedia = $original_doc->getMedia('Doc');
-            
+
             $revised_doc = Document::find($this->uid);
-            
+
             foreach ($orgMedia as $mediaItem) {
 
                 $newMediaItem = new Media();
@@ -233,7 +241,8 @@ class DocumentShow extends Component
             'text' => $msgtext
         ]);
 
-        return redirect('/docs/'.$this->uid);
+        $redirect = Str::replace('{id}',$this->uid,config('conf_documents.show.route'));
+        return redirect($redirect);
     }
 
 
@@ -246,7 +255,7 @@ class DocumentShow extends Component
         $doc = Document::find($this->uid);
 
         $allMedia = $doc->getMedia('Doc');
-            
+
         foreach ($allMedia as $media) {
             $media->delete();
         }
@@ -258,7 +267,7 @@ class DocumentShow extends Component
                 ['document_no','=',$doc->document_no],
                 ['revision','=',$doc->revision - 1]
             ])->first();
-    
+
             $prevDoc->update(['is_latest' => true]);
         }
 
@@ -271,10 +280,12 @@ class DocumentShow extends Component
         ]);
 
         if ( isset($prevDoc) ) {
-            return $this->redirect('/docs/'.$prevDoc->id);
+            $redirect = Str::replace('{id}',$prevDoc->id,config('conf_documents.show.route'));
+            return $this->redirect($redirect);
         }
 
-        return $this->redirect('/docs');
+        return $this->redirect(config('conf_documents.index.route'));
+
     }
 
 

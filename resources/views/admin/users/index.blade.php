@@ -16,7 +16,8 @@
     @endif
 
 
-    <livewire:datatable-search :addBtn="config('conf_users.addBtn')"/>
+    <livewire:datatable-search :addBtnTitle="config('conf_users.index.addBtnTitle')" :addBtnRoute="config('conf_users.form_create.route')"/>
+
 
 
     @if ($users->count() > 0)
@@ -50,7 +51,7 @@
                                             @endif
 
                                         @else
-                                            <x-ikon name="Sort" size="L" />                                            
+                                            <x-ikon name="Sort" size="L" />
                                         @endif
                                     </a>
                                 @endif
@@ -94,15 +95,15 @@
                                 <td scope="col" class="px-4 py-2 text-base text-right whitespace-nowrap border border-gray-200">
 
                                     <a href="/usrs/{{ $record->id }}" class="inline-flex text-blue-700">
-                                        <x-carbon-view class="w-6 h-6"/>
+                                        <x-ikon name="View" size="L"/>
                                     </a>
 
                                     @role(['EngineeringDept'])
 
                                         @if ( !in_array($record->status,['Frozen','Released']) )
 
-                                            <a href="/usrs/form/{{ $record->id }}" class="inline-flex text-blue-700">
-                                                <x-carbon-edit  class="w-6 h-6 ms-1.5"/>
+                                            <a href="/usrs/{{ $record->id }}/edit" class="inline-flex text-blue-700">
+                                                <x-ikon name="Edit" size="L"/>
                                             </a>
 
                                         @endif
@@ -125,7 +126,10 @@
 
     @else
 
-        <livewire:tablenoitem :addBtn="config('conf_users.addBtn')" :noItemText="config('conf_users.noItemText')"/>
+        <livewire:tablenoitem
+            :addBtnTitle="config('conf_users.index.addBtnTitle')"
+            :addBtnRoute="config('conf_users.form_create.route')"
+            :noItemText="config('conf_users.index.noItemText')"/>
 
     @endif
 

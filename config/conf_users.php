@@ -1,34 +1,47 @@
 <?php
 
+/*
+    modelTitle          : Variable to be used in javascript confirm dialogs. [Delete, Freeze, Release etc Confirm]
+*/
+
 return [
+
+    'modelTitle' => 'Users',
+
 
     'index' => [
         'title' => 'Users',
         'subtitle' => 'List of All Users',
+        'route' => '/usrs',
+        'addBtnTitle' => 'Add User',
+        'noItemText' => 'No users found in the database!'
     ],
 
-    'form_add' => [
+    'form_create' => [
         'title' => 'Users',
         'subtitle' => 'Add New User',
+        'route' => '/usrs/create'
     ],
+
 
     'form_edit' => [
         'title' => 'Users',
         'subtitle' => 'Modify User Attributes',
+        'route' => '/usrs/{id}/edit'
     ],
 
     'show' => [
         'title' => 'Users',
         'subtitle' => 'User Details and Properties',
+        'route' => '/usrs/{id}'
     ],
 
-    'addBtn' => [
-        'title' => 'Add User',
-        'redirect' => '/usrs/form'
+    'store' => [
+        'route' => '/usrs'
     ],
 
-    'viewBtn' => [
-        'redirect' => '/usrs/'
+    'update' => [
+        'route' => '/usrs/{id}'
     ],
 
     'statusArr' => [
@@ -106,5 +119,4 @@ return [
 
     ],
 
-    'noItemText' => 'No users found in the database!'
 ];

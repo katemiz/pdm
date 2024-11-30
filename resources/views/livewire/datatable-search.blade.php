@@ -3,10 +3,8 @@ use Livewire\Volt\Component;
 
 new class extends Component {
 
-    public $addBtn = [
-        'title' => 'Add Item',
-        'redirect' => '/'
-    ];
+    public $addBtnTitle = 'Add Item';
+    public $addBtnRoute = '/';
 
     public $query = '';
 
@@ -20,7 +18,7 @@ new class extends Component {
     public function addItem()
     {
         $this->query = '';
-        $this->dispatch('addTriggered',redirect:$this->addBtn['redirect']);
+        $this->dispatch('addTriggered',redirect:$this->addBtnRoute);
     }
 
 
@@ -46,7 +44,7 @@ new class extends Component {
 
       <button wire:click='addItem' class="flex items-center justify-center text-white bg-blue-700 hover:bg-blue-900 font-medium rounded-lg text-sm px-4 py-2">
           <x-carbon-add class="h-5 w-5 mr-2"/>
-          {{ $this->addBtn['title'] }}
+          {{ $this->addBtnTitle }}
       </button>
 
       <div class="flex items-center space-x-3 w-full md:w-auto">

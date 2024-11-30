@@ -168,8 +168,7 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        App\Providers\VoltServiceProvider::class,
-
+        App\Providers\VoltServiceProvider::class
     ])->toArray(),
 
     /*
@@ -187,7 +186,7 @@ return [
         // 'Example' => App\Facades\Example::class,
         'PDF' => Tecnickcom\Tcpdf\Facades\TCPDF::class,
 
-        
+
 
     ])->toArray(),
 

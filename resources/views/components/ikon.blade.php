@@ -84,7 +84,7 @@
 
     @case("Sort")
         <x-carbon-chevron-sort class="{{ $size }}" />
-        @break        
+        @break
 
     @case("SortUp")
         <x-carbon-chevron-up-outline class="{{ $size }}" />
@@ -95,7 +95,9 @@
         @break
 
 
-
+    @case("View")
+        <x-carbon-view class="{{ $size }}" />
+        @break
 
 
     @default

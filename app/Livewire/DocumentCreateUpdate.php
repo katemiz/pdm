@@ -22,13 +22,12 @@ class DocumentCreateUpdate extends Component
     #[Validate(['files.*' => 'max:50000'])]
     public $files = [];
 
-    public function mount() {
+    public function mount($doc = null) {
 
         $this->form->setDocumentProps();
 
-        if (request('id')) {
-
-            $this->id = request('id');
+        if ($doc) {
+            $this->id = $doc;
             $this->form->setDocument($this->id);
         }
     }
@@ -38,7 +37,6 @@ class DocumentCreateUpdate extends Component
     {
         return view('documents.form');
     }
-
 
 
     public function save()
@@ -57,13 +55,6 @@ class DocumentCreateUpdate extends Component
     }
 
 
-
-
-
-
-
-
-
     public function update()
     {
         // FORM PARAMETERS UPDATE
@@ -79,11 +70,6 @@ class DocumentCreateUpdate extends Component
     }
 
 
-
-
-
-
-
     public function removeFile($fileToRemove) {
 
         foreach ($this->files as $key => $dosya) {
@@ -92,10 +78,5 @@ class DocumentCreateUpdate extends Component
             }
         }
     }
-
-
-
-
-
 
 }

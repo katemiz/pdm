@@ -1,60 +1,44 @@
 <?php
-
-
-
 /*
-
     modelTitle          : Variable to be used in javascript confirm dialogs. [Delete, Freeze, Release etc Confirm]
-
-
 */
 
 return [
 
-    'modelTitle' => 'Materials',
-
-    'redirects' => [
-        'index' => 'materials.show',
-        'show' => '/materials/form/',
-        'form' => '/materials'
-    ],
-
-    'views' => [
-
-        'index' => 'materials.index',
-        'show' => 'materials.show',
-        'form' => 'materials.form'
-    ],
-
+    'modelTitle' => 'Material',
 
     'index' => [
-        'title' => 'Documents',
-        'subtitle' => 'List of All Documents',
+        'title' => 'Materials',
+        'subtitle' => 'List of All Materials',
+        'route' => '/materials',
+        'addBtnTitle' => 'Add Material',
+        'noItemText' => 'No materials found in the database!',
     ],
 
-    'form_add' => [
-        'title' => 'Documents',
-        'subtitle' => 'Add New Document',
+    'form_create' => [
+        'title' => 'Materials',
+        'subtitle' => 'Add New Material',
+        'route' => '/materials/create'
     ],
 
     'form_edit' => [
-        'title' => 'Documents',
-        'subtitle' => 'Update Existing Document Parameters',
+        'title' => 'Materials',
+        'subtitle' => 'Update Existing Material Parameters',
+        'route' => '/materials/{id}/edit'
     ],
 
     'show' => [
-        'title' => 'Documents',
-        'subtitle' => 'Document Details and Properties',
+        'title' => 'Materials',
+        'subtitle' => 'Material Details and Properties',
+        'route' => '/materials/{id}'
     ],
 
-
-    'addBtn' => [
-        'title' => 'Add Document',
-        'redirect' => '/docs/form'
+    'store' => [
+        'route' => '/materials'
     ],
 
-    'viewBtn' => [
-        'redirect' => '/docs/'
+    'update' => [
+        'route' => '/materials/{id}'
     ],
 
 
@@ -76,33 +60,46 @@ return [
             'hasViewLink' => false,
         ],
 
-        'DocNo' => [
-            'label' => 'No',
+        'family' => [
+            'label' => 'Family',
+            'visibility' => false,
+            'sortable' => true,
+            'wrapText' => false,
+            'hasViewLink' => false,
+        ],
+
+
+        'familyName' => [
+            'label' => 'Material Family',
             'visibility' => true,
             'sortable' => true,
             'wrapText' => false,
-            'hasViewLink' => true,
-        ],
-
-        'company_id' => [
-            'label' => 'Company',
-            'visibility' => false,
-            'sortable' => false,
-            'wrapText' => true,
             'hasViewLink' => false,
         ],
 
-        'title' => [
-            'label' => 'Title',
+
+        'form' => [
+            'label' => 'Form',
+            'visibility' => false,
+            'sortable' => true,
+            'wrapText' => false,
+            'hasViewLink' => false,
+        ],
+
+
+
+
+        'description' => [
+            'label' => 'Material',
             'visibility' => true,
             'sortable' => true,
             'wrapText' => true,
-            'hasViewLink' => false,
+            'hasViewLink' => true,
         ],
 
 
-        'Author' => [
-            'label' => 'Author',
+        'specification' => [
+            'label' => 'Specification',
             'visibility' => true,
             'sortable' => true,
             'wrapText' => true,
@@ -127,24 +124,20 @@ return [
 
     ],
 
-    'noItemText' => 'No documents found in the database!',
+    "families" => [
 
-
-
-    'docTypes' => [
-        'GR' => 'General Document',
-        'TR' => 'Test Report',
-        'AR' => 'Analysis Report',
-        'MN' => 'User Manual',
-        'ME' => 'Memo',
-        'PR' => 'Presentation'
+        "100" => "Aluminum",
+        "200" => "Steel",
+        "300" => "Composite",
+        "400" => "Plastics",
+        "500" => "Other"
     ],
 
-    'languages' => [
-        'EN' => 'English',
-        'TR' => 'Türkçe'
+    "formTypes" => [
+
+        "100" => "Sheet/Plate",
+        "200" => "Rod/Bar",
+        "300" => "Tube/Profile",
     ]
-
-
 
 ];

@@ -1,35 +1,45 @@
 <?php
 
+/*
+    modelTitle          : Variable to be used in javascript confirm dialogs. [Delete, Freeze, Release etc Confirm]
+*/
+
 return [
+
+    'modelTitle' => 'Documents',
 
     'index' => [
         'title' => 'Documents',
         'subtitle' => 'List of All Documents',
+        'route' => '/docs',
+        'addBtnTitle' => 'Add Document',
+        'noItemText' => 'No documents found in the database!',
     ],
 
-    'form_add' => [
+    'form_create' => [
         'title' => 'Documents',
         'subtitle' => 'Add New Document',
+        'route' => '/docs/create'
     ],
 
     'form_edit' => [
         'title' => 'Documents',
         'subtitle' => 'Update Existing Document Parameters',
+        'route' => '/docs/{id}/edit'
     ],
 
     'show' => [
         'title' => 'Documents',
         'subtitle' => 'Document Details and Properties',
+        'route' => '/docs/{id}'
     ],
 
-
-    'addBtn' => [
-        'title' => 'Add Document',
-        'redirect' => '/docs/form'
+    'store' => [
+        'route' => '/docs'
     ],
 
-    'viewBtn' => [
-        'redirect' => '/docs/'
+    'update' => [
+        'route' => '/docs/{id}'
     ],
 
 
@@ -101,9 +111,6 @@ return [
         ],
 
     ],
-
-    'noItemText' => 'No documents found in the database!',
-
 
 
     'docTypes' => [

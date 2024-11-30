@@ -11,6 +11,9 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CkImgController;
 
 
+
+
+
 use App\Livewire\Welcome;
 
 
@@ -22,7 +25,7 @@ use App\Livewire\LwProject;
 use App\Livewire\LwUser;
 
 use App\Livewire\ChangePassword;
-use App\Livewire\Material;
+// use App\Livewire\Material;
 use App\Livewire\Process;
 use App\Livewire\LwItem;
 use App\Livewire\LwAssy;
@@ -92,12 +95,16 @@ Route::middleware(['auth'])->group(function () {
     // USERS
     // *****************************************************************************
     Route::get('/usrs', Users::class);
-    Route::get('/usrs/form/{id?}', UserCreateUpdate::class);
-    Route::get('/usrs/{id}', UserShow::class);
-
+    Route::get('/usrs/create', UserCreateUpdate::class);
     Route::post('/usrs', UserCreateUpdate::class);
+    Route::get('/usrs/{id}', UserShow::class);
+    Route::get('/usrs/{id}/edit', UserCreateUpdate::class);
     Route::patch('/usrs/{id}', UserCreateUpdate::class);
     Route::delete('/usrs/{id}', UserCreateUpdate::class);
+
+
+
+
 
                         // CHANGE PASSWORDS
                         Route::get('/admin-users/{action}/{id?}', LwUser::class);
@@ -108,23 +115,23 @@ Route::middleware(['auth'])->group(function () {
 
     // ROLES
     // *****************************************************************************
-    Route::get('/usrs', Roles::class);
-    Route::get('/usrs/form/{id?}', RoleCreateUpdate::class);
-    Route::get('/usrs/{id}', RoleShow::class);
-
-    Route::post('/usrs', RoleCreateUpdate::class);
-    Route::patch('/usrs/{id}', RoleCreateUpdate::class);
-    Route::delete('/usrs/{id}', RoleCreateUpdate::class);
+    Route::get('/roles', Roles::class);
+    Route::get('/roles/create', RoleCreateUpdate::class);
+    Route::post('/roles', RoleCreateUpdate::class);
+    Route::get('/roles/{id}', RoleShow::class);
+    Route::get('/roles/{id}/edit', RoleCreateUpdate::class);
+    Route::patch('/roles/{id}', RoleCreateUpdate::class);
+    Route::delete('/roles/{id}', RoleCreateUpdate::class);
 
 
 
     // MATERIALS
     // *****************************************************************************
     Route::get('/materials', Materials::class);
-    Route::get('/materials/form/{id?}', MaterialCreateUpdate::class);
-    Route::get('/materials/{id}', MaterialShow::class);
-
+    Route::get('/materials/create', MaterialCreateUpdate::class);
     Route::post('/materials', MaterialCreateUpdate::class);
+    Route::get('/materials/{id}', MaterialShow::class);
+    Route::get('/materials/{id}/edit', MaterialCreateUpdate::class);
     Route::patch('/materials/{id}', MaterialCreateUpdate::class);
     Route::delete('/materials/{id}', MaterialCreateUpdate::class);
 
@@ -189,12 +196,26 @@ Route::middleware(['auth'])->group(function () {
     // DOCUMENTS
     // *****************************************************************************
     Route::get('/docs', Documents::class);
-    Route::get('/docs/form/{id?}', DocumentCreateUpdate::class);
-    Route::get('/docs/{id}', DocumentShow::class)->name('docView');
-
+    Route::get('/docs/create', DocumentCreateUpdate::class);
     Route::post('/docs', DocumentCreateUpdate::class);
+    Route::get('/docs/{id}', DocumentShow::class);
+    Route::get('/docs/{id}/edit', DocumentCreateUpdate::class);
     Route::patch('/docs/{id}', DocumentCreateUpdate::class);
     Route::delete('/docs/{id}', DocumentCreateUpdate::class);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -207,7 +228,7 @@ Route::middleware(['auth'])->group(function () {
 
 
     // MATERIAL, PROCESS and NOTES
-    Route::get('/material/{action}/{id?}', Material::class);
+    //Route::get('/material/{action}/{id?}', Material::class);
     Route::get('/process/{action}/{id?}', Process::class);
     Route::get('/notes/{action}/{id?}', ProductNote::class);
 

@@ -6,7 +6,7 @@
 
 return [
 
-    'modelTitle' => 'Documents',
+    'modelTitle' => 'Document',
 
     'index' => [
         'title' => 'Documents',
@@ -16,13 +16,13 @@ return [
         'noItemText' => 'No documents found in the database!',
     ],
 
-    'form_create' => [
+    'formCreate' => [
         'title' => 'Documents',
         'subtitle' => 'Add New Document',
         'route' => '/docs/create'
     ],
 
-    'form_edit' => [
+    'formEdit' => [
         'title' => 'Documents',
         'subtitle' => 'Update Existing Document Parameters',
         'route' => '/docs/{id}/edit'

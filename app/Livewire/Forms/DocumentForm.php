@@ -75,6 +75,7 @@ class DocumentForm extends Form
         $this->synopsis = $this->document->remarks ? $this->document->remarks:'';
         $this->doc_type = $this->document->doc_type;
         $this->language = $this->document->language;
+        $this->company_id =  $this->document->company_id;
     }
 
 

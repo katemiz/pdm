@@ -18,3 +18,5 @@ alter table materials add column revision int not null default 1 after updated_u
 
 update materials set status='Active' where status='A';
 update materials set status='Inactive' where status='I';
+update materials set updated_uid=user_id where updated_uid is NULL;
+

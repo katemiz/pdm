@@ -1,9 +1,9 @@
 <section class="container mx-auto p-4">
 
-    <livewire:header 
-        type="Hero" 
-        title="{{ $this->form->uid ? config('conf_documents.form_edit.title') : config('conf_documents.form_add.title') }}" 
-        subtitle="{{ $this->form->uid ? config('conf_documents.form_edit.subtitle') : config('conf_documents.form_add.subtitle') }}"
+    <livewire:header
+        type="Hero"
+        title="{{ $this->form->uid ? config('conf_documents.formEdit.title') : config('conf_documents.formCreate.title') }}"
+        subtitle="{{ $this->form->uid ? config('conf_documents.formEdit.subtitle') : config('conf_documents.formCreate.subtitle') }}"
         />
 
     <form wire:submit="{{ $this->form->docNo ? 'update' : 'save' }}" action="post">

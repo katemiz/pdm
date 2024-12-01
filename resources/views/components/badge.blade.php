@@ -5,13 +5,13 @@
 
     @case("dark")
         @php
-        $bg = 'bg-gray-800 text-gray-600 '
+        $bg = 'bg-gray-700 text-white'
         @endphp
         @break
 
     @case("warning")
         @php
-        $bg = 'bg-yellow-500 text-gray-600 '
+        $bg = 'bg-orange-700 text-white'
         @endphp
         @break
 
@@ -28,6 +28,7 @@
 
 
 
-<span class="inline-flex items-center rounded-md {{ $bg }} px-2 py-1 my-2 text-xs font-medium ring-1 ring-inset ring-gray-500/10">
-{{$slot}}
+<span
+    {{ $attributes->merge(['class' => 'inline-flex rounded-md px-2 py-1 my-2 text-xs font-light '.$bg]) }}>
+    {{ $slot }}
 </span>

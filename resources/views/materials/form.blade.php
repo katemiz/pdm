@@ -1,21 +1,21 @@
 <section class="container mx-auto p-4">
 
-    <livewire:header 
-        type="Hero" 
-        title="{{ $this->form->uid ? config('conf_documents.form_edit.title') : config('conf_documents.form_add.title') }}" 
+    <livewire:header
+        type="Hero"
+        title="{{ $this->form->uid ? config('conf_documents.form_edit.title') : config('conf_documents.form_add.title') }}"
         subtitle="{{ $this->form->uid ? config('conf_documents.form_edit.subtitle') : config('conf_documents.form_add.subtitle') }}"
         />
 
-    <form wire:submit="{{ $this->form->docNo ? 'update' : 'save' }}" action="post">
+    <form wire:submit="{{ $this->form->uid ? 'update' : 'save' }}" action="post">
 
         @csrf
 
-        @if ($this->form->docNo)
+        @if ($this->form->uid)
         @method('patch')
         @endif
 
-        @if ($this->form->docNo)
-        <h1 class="text-5xl font-light my-6">{{ $this->form->docNo }}</h1>
+        @if ($this->form->uid)
+        <h1 class="text-5xl font-light my-6">{{ $this->form->uid }}</h1>
         @endif
 
         <x-radio label="Select Company" name="company_id" :options="$this->form->companies" :selected="$this->form->company_id"

@@ -2,20 +2,20 @@
 
 namespace App\Livewire;
 
-use App\Livewire\Forms\DocumentForm;
+use App\Livewire\Forms\MaterialForm;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
 use Livewire\Attributes\On;
 
-use App\Models\Document;
+use App\Models\Material;
 
 
 class MaterialCreateUpdate extends Component
 {
     use WithFileUploads;
 
-    public DocumentForm $form;
+    public MaterialForm $form;
 
     public $id = false;
 
@@ -24,19 +24,19 @@ class MaterialCreateUpdate extends Component
 
     public function mount() {
 
-        $this->form->setDocumentProps();
+        //$this->form->setDocumentProps();
 
         if (request('id')) {
 
             $this->id = request('id');
-            $this->form->setDocument($this->id);
+            $this->form->setMaterial($this->id);
         }
     }
 
 
     public function render()
     {
-        return view('documents.form');
+        return view('materials.form');
     }
 
 
@@ -53,7 +53,7 @@ class MaterialCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('Doc');
         }
 
-        return $this->redirect('/docs/'.$id);
+        return $this->redirect('/materials/'.$id);
     }
 
 
@@ -75,7 +75,7 @@ class MaterialCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('Doc');
         }
 
-        return $this->redirect('/docs/'.$this->id);
+        return $this->redirect('/materials/'.$this->id);
     }
 
 

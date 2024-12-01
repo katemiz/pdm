@@ -124,6 +124,18 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/roles/{id}', RoleCreateUpdate::class);
 
 
+    // DOCUMENTS
+    // *****************************************************************************
+    Route::get('/docs', Documents::class);
+    Route::get('/docs/create', DocumentCreateUpdate::class);
+    Route::post('/docs', DocumentCreateUpdate::class);
+    Route::get('/docs/{id}', DocumentShow::class);
+    Route::get('/docs/{id}/edit', DocumentCreateUpdate::class);
+    Route::patch('/docs/{id}', DocumentCreateUpdate::class);
+    Route::delete('/docs/{id}', DocumentCreateUpdate::class);
+
+
+
 
     // MATERIALS
     // *****************************************************************************
@@ -193,15 +205,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/buyables/{action}/{id?}', LwBuyable::class);   // Buyable Parts
 
 
-    // DOCUMENTS
-    // *****************************************************************************
-    Route::get('/docs', Documents::class);
-    Route::get('/docs/create', DocumentCreateUpdate::class);
-    Route::post('/docs', DocumentCreateUpdate::class);
-    Route::get('/docs/{id}', DocumentShow::class);
-    Route::get('/docs/{id}/edit', DocumentCreateUpdate::class);
-    Route::patch('/docs/{id}', DocumentCreateUpdate::class);
-    Route::delete('/docs/{id}', DocumentCreateUpdate::class);
 
 
 

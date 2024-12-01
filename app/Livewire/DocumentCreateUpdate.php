@@ -22,12 +22,12 @@ class DocumentCreateUpdate extends Component
     #[Validate(['files.*' => 'max:50000'])]
     public $files = [];
 
-    public function mount($doc = null) {
+    public function mount($id = null) {
 
         $this->form->setDocumentProps();
 
-        if ($doc) {
-            $this->id = $doc;
+        if ($id) {
+            $this->id = $id;
             $this->form->setDocument($this->id);
         }
     }

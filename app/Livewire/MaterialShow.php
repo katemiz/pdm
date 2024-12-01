@@ -8,24 +8,28 @@ use Livewire\Attributes\On;
 
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\Document;
+use App\Models\Material;
 use App\Models\User;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
+
 
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class MaterialShow extends Component
 {
     public $uid;
-    public $document;
+    public $material;
     public $moreMenu = [];
     public $permissions;
-    public $modelTitle = 'Document';
 
-    public $deneme = 'conf_materials';
+    public $conf;
+
 
     public function mount() {
+
+        $this->conf = config('conf_materials');
 
         if (request('id')) {
             $this->uid = request('id');
@@ -39,21 +43,22 @@ class MaterialShow extends Component
 
     public function render()
     {
-        $this->document = Document::findOrFail($this->uid );
+        $this->material = Material::findOrFail($this->uid );
         $this->setPermissions();
         $this->setMoreMenu();
 
-        return view(config($this->deneme.'.views.show'));
+        return view('materials.show');
     }
 
 
     public function edit() {
-        return $this->redirect('/materials/form/'.$this->uid);
+        $redirect = Str::replace('{id}',$this->uid,$this->conf['formEdit']['route']);
+        return $this->redirect($redirect);
     }
 
 
     public function add() {
-        return $this->redirect('/materials/form');
+        return $this->redirect($this->conf['formCreate']['route']);
     }
 
 
@@ -72,33 +77,33 @@ class MaterialShow extends Component
         $this->permissions->show = true;
 
         // EDIT
-        if ( in_array($this->document->status,['Verbatim']) ) {
+        if ( in_array($this->material->status,['Active','Inactive']) ) {
             $this->permissions->edit = true;
         }
 
         // DELETE
-        if ( in_array($this->document->status,['Verbatim']) ) {
+        if ( in_array($this->material->status,['Verbatim']) ) {
             $this->permissions->delete = true;
         }
 
         // FREEZE
-        if ( in_array($this->document->status,['Verbatim']) ) {
+        if ( in_array($this->material->status,['Verbatim']) ) {
             $this->permissions->freeze = true;
         }
 
         // RELEASE
-        if ( in_array($this->document->status,['Verbatim','Frozen']) ) {
+        if ( in_array($this->material->status,['Verbatim','Frozen']) ) {
             $this->permissions->release = true;
         }
 
         // REVISE
-        if ( in_array($this->document->status,['Released','Frozen']) ) {
+        if ( in_array($this->material->status,['Released','Frozen']) ) {
 
             // Do we have already revised version?
 
             $revised = Document::where([
-                ["document_no",'=',$this->document->document_no],
-                ["revision", '>', $this->document->revision]
+                ["material_no",'=',$this->material->document_no],
+                ["revision", '>', $this->material->revision]
             ])->first();
 
             if ($revised == null) {
@@ -112,11 +117,13 @@ class MaterialShow extends Component
 
     public function setMoreMenu() {
 
+        $mtitle = $this->conf['modelTitle'];
+
         // FREEZE DOCUMENT
         if ( $this->permissions->freeze ) {
             $this->moreMenu[] = [
                 'title' =>'Freeze Document',
-                'wireclick'=> "triggerModal('freeze','$this->modelTitle')",
+                'wireclick'=> "triggerModal('freeze','$mtitle')",
                 'icon' => 'Freeze'
             ];
         };
@@ -125,7 +132,7 @@ class MaterialShow extends Component
         if ( $this->permissions->release ) {
             $this->moreMenu[] = [
                 'title' =>'Release Document',
-                'wireclick'=> "triggerModal('release','$this->modelTitle')",
+                'wireclick'=> "triggerModal('release','$mtitle')",
                 'icon' => 'Release'
             ];
         };
@@ -134,7 +141,7 @@ class MaterialShow extends Component
         if ( $this->permissions->revise ) {
             $this->moreMenu[] = [
                 'title' =>'Revise Document',
-                'wireclick'=> "triggerModal('revise','$this->modelTitle')",
+                'wireclick'=> "triggerModal('revise','$mtitle')",
                 'icon' => 'Revise'
             ];
         };
@@ -144,7 +151,7 @@ class MaterialShow extends Component
         if ( $this->permissions->delete ) {
             $this->moreMenu[] = [
                 'title' =>'Delete Document',
-                'wireclick'=> "triggerModal('delete','$this->modelTitle')",
+                'wireclick'=> "triggerModal('delete','$mtitle')",
                 'icon' => 'Delete'
             ];
         };
@@ -168,7 +175,8 @@ class MaterialShow extends Component
             'text' => 'Document has been frozen successfully.'
         ]);
 
-        return redirect('/docs/'.$this->uid);
+        $redirect = Str::replace('{id}',$this->uid,$this->conf['show']['route']);
+        return redirect($redirect);
     }
 
 
@@ -189,7 +197,8 @@ class MaterialShow extends Component
         // Send EMails
         $this->sendMail($doc);
 
-        return redirect('/docs/'.$this->uid);
+        $redirect = Str::replace('{id}',$this->uid,$this->conf['show']['route']);
+        return redirect($redirect);
     }
 
 
@@ -217,9 +226,9 @@ class MaterialShow extends Component
 
             // COPY FILES TO NEW REVISION
             $orgMedia = $original_doc->getMedia('Doc');
-            
+
             $revised_doc = Document::find($this->uid);
-            
+
             foreach ($orgMedia as $mediaItem) {
 
                 $newMediaItem = new Media();
@@ -236,7 +245,8 @@ class MaterialShow extends Component
             'text' => $msgtext
         ]);
 
-        return redirect('/docs/'.$this->uid);
+        $redirect = Str::replace('{id}',$this->uid,$this->conf['show']['route']);
+        return redirect($redirect);
     }
 
 
@@ -249,7 +259,7 @@ class MaterialShow extends Component
         $doc = Document::find($this->uid);
 
         $allMedia = $doc->getMedia('Doc');
-            
+
         foreach ($allMedia as $media) {
             $media->delete();
         }
@@ -261,7 +271,7 @@ class MaterialShow extends Component
                 ['document_no','=',$doc->document_no],
                 ['revision','=',$doc->revision - 1]
             ])->first();
-    
+
             $prevDoc->update(['is_latest' => true]);
         }
 
@@ -274,10 +284,11 @@ class MaterialShow extends Component
         ]);
 
         if ( isset($prevDoc) ) {
-            return $this->redirect('/docs/'.$prevDoc->id);
+            $redirect = Str::replace('{id}',$prevDoc->id,$this->conf['show']['route']);
+            return $this->redirect($redirect);
         }
 
-        return $this->redirect('/docs');
+        return $this->redirect($this->conf['index']['route']);
     }
 
 
@@ -289,7 +300,7 @@ class MaterialShow extends Component
 
         $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
         $msgdata['subject'] = 'D'.$doc->document_no.' R'.$doc->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
-        $msgdata['url'] = url('/').'/document/view/'.$this->uid;
+        $msgdata['url'] = url('/').'/materials/'.$this->uid;
         $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
 
         $msgdata['document_no'] = $doc->document_no;

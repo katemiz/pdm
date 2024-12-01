@@ -16,17 +16,25 @@ use Illuminate\Support\Str;
 
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+use Mail;
+use App\Mail\AppMail;
+
+use App\Traits\MyFunctions;
+
 class DocumentShow extends Component
 {
+    use MyFunctions;
+
     public $uid;
     public $document;
     public $moreMenu = [];
     public $permissions;
-    public $modelTitle;
+
+    public $conf;
 
     public function mount() {
 
-        $this->modelTitle = config('conf_documents.modelTitle');
+        $this->conf = config('conf_documents');
 
         if (request('id')) {
             $this->uid = request('id');
@@ -50,14 +58,13 @@ class DocumentShow extends Component
 
 
     public function edit() {
-
-        $redirect = Str::replace('{id}',$this->uid,config('conf_documents.form_edit.route'));
+        $redirect = Str::replace('{id}',$this->uid,$this->conf['formEdit']['route']);
         return $this->redirect($redirect);
     }
 
 
     public function add() {
-        return $this->redirect(config('conf_documents.form_create.route'));
+        return $this->redirect($this->conf['formCreate']['route']);
     }
 
 
@@ -115,11 +122,13 @@ class DocumentShow extends Component
 
     public function setMoreMenu() {
 
+        $mtitle = $this->conf['modelTitle'];
+
         // FREEZE DOCUMENT
         if ( $this->permissions->freeze ) {
             $this->moreMenu[] = [
                 'title' =>'Freeze Document',
-                'wireclick'=> "triggerModal('freeze','$this->modelTitle')",
+                'wireclick'=> "triggerModal('freeze','$mtitle')",
                 'icon' => 'Freeze'
             ];
         };
@@ -128,7 +137,7 @@ class DocumentShow extends Component
         if ( $this->permissions->release ) {
             $this->moreMenu[] = [
                 'title' =>'Release Document',
-                'wireclick'=> "triggerModal('release','$this->modelTitle')",
+                'wireclick'=> "triggerModal('release','$mtitle')",
                 'icon' => 'Release'
             ];
         };
@@ -137,7 +146,7 @@ class DocumentShow extends Component
         if ( $this->permissions->revise ) {
             $this->moreMenu[] = [
                 'title' =>'Revise Document',
-                'wireclick'=> "triggerModal('revise','$this->modelTitle')",
+                'wireclick'=> "triggerModal('revise','$mtitle')",
                 'icon' => 'Revise'
             ];
         };
@@ -147,7 +156,7 @@ class DocumentShow extends Component
         if ( $this->permissions->delete ) {
             $this->moreMenu[] = [
                 'title' =>'Delete Document',
-                'wireclick'=> "triggerModal('delete','$this->modelTitle')",
+                'wireclick'=> "triggerModal('delete','$mtitle')",
                 'icon' => 'Delete'
             ];
         };
@@ -171,7 +180,7 @@ class DocumentShow extends Component
             'text' => 'Document has been frozen successfully.'
         ]);
 
-        $redirect = Str::replace('{id}',$this->uid,config('conf_documents.show.route'));
+        $redirect = Str::replace('{id}',$this->uid,$this->conf['show']['route']);
         return redirect($redirect);
     }
 
@@ -186,14 +195,14 @@ class DocumentShow extends Component
 
         $props['status'] = 'Released';
         $props['approver_id'] = Auth::id();
-        $props['app_revised_at'] = time();
+        $props['app_reviewed_at'] = Carbon::now()->toDateTimeString();
 
         $doc->update($props);
 
         // Send EMails
         $this->sendMail($doc);
 
-        $redirect = Str::replace('{id}',$this->uid,config('conf_documents.show.route'));
+        $redirect = Str::replace('{id}',$this->uid,$this->conf['show']['route']);
         return redirect($redirect);
     }
 
@@ -241,7 +250,7 @@ class DocumentShow extends Component
             'text' => $msgtext
         ]);
 
-        $redirect = Str::replace('{id}',$this->uid,config('conf_documents.show.route'));
+        $redirect = Str::replace('{id}',$this->uid,$this->conf['show']['route']);
         return redirect($redirect);
     }
 
@@ -280,11 +289,11 @@ class DocumentShow extends Component
         ]);
 
         if ( isset($prevDoc) ) {
-            $redirect = Str::replace('{id}',$prevDoc->id,config('conf_documents.show.route'));
+            $redirect = Str::replace('{id}',$prevDoc->id,$this->conf['show']['route']);
             return $this->redirect($redirect);
         }
 
-        return $this->redirect(config('conf_documents.index.route'));
+        return $this->redirect($this->conf['index']['route']);
 
     }
 
@@ -297,7 +306,7 @@ class DocumentShow extends Component
 
         $msgdata['blade'] = 'emails.document_released';  // Blade file to be used
         $msgdata['subject'] = 'D'.$doc->document_no.' R'.$doc->revision.' Belge Yayınlanma Bildirimi / Document Release Notification';
-        $msgdata['url'] = url('/').'/document/view/'.$this->uid;
+        $msgdata['url'] = url('/').'/docs/'.$this->uid;
         $msgdata['url_title'] = 'Belge Bağlantısı / Document Link';
 
         $msgdata['document_no'] = $doc->document_no;
@@ -307,13 +316,7 @@ class DocumentShow extends Component
 
         $allCompanyUsers = User::where('company_id',$doc->company_id)->get();
 
-        $toArr = [];
-
-        foreach ($allCompanyUsers as $usr) {
-            if ($usr->status == 'active') {
-                array_push($toArr, $usr->email);
-            }
-        }
+        $toArr = $this->getActiveUserEmails($doc->company_id);
 
         if (count($toArr) > 0) {
 
@@ -328,7 +331,7 @@ class DocumentShow extends Component
 
             session()->flash('msg',[
                 'type' => 'warning',
-                'text' => 'Document has been <b>released</b> but NO email been sent since no users found!'
+                'text' => 'Document has been released but NO email been sent since no users found!'
             ]);
         }
     }

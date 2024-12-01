@@ -15,13 +15,13 @@ return [
         'noItemText' => 'No materials found in the database!',
     ],
 
-    'form_create' => [
+    'formCreate' => [
         'title' => 'Materials',
         'subtitle' => 'Add New Material',
         'route' => '/materials/create'
     ],
 
-    'form_edit' => [
+    'formEdit' => [
         'title' => 'Materials',
         'subtitle' => 'Update Existing Material Parameters',
         'route' => '/materials/{id}/edit'

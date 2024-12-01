@@ -1,6 +1,6 @@
 <div class="container mx-auto p-4">
 
-  <livewire:header type="Hero" title="{{ config('conf_documents.show.title') }}" subtitle="{{ config('conf_documents.show.subtitle') }}"/>
+  <livewire:header type="Hero" title="{{ $conf['show']['title'] }}" subtitle="{{ $conf['show']['subtitle'] }}"/>
 
   @if(session('msg'))
       <livewire:flash-message :msg="session('msg')">
@@ -56,21 +56,20 @@
           <livewire:dropdown :menu="$moreMenu"/>
           @endif
 
-
         </div>
 
       </div>
 
-
-
       <div class="flex justify-between">
         <p class="text-xl">{{ $document->title }}</p>
-        <x-badge>{{ config('conf_documents.docTypes')[$document->doc_type] }}</x-badge>
+
+        <div class="">
+            <x-badge type="warning">{{ $conf['docTypes'][$document->doc_type] }}</x-badge>
+            <x-badge type="dark">{{ $document->company_name }}</x-badge>
+        </div>
       </div>
 
-
       <livewire:rev-history :model="$document" redirect="/docs/" :rev="$document->revision"/>
-
 
       @if ($document->remarks)
         <div class="text-xl font-bold">Remarks</div>

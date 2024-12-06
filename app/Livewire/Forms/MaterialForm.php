@@ -31,7 +31,7 @@ class MaterialForm extends Form
     public $uid;
 
     #[Validate('required', message: 'Please select material family')]
-    public String $family;
+    public $family;
 
     public String $form = '100';
 
@@ -44,11 +44,6 @@ class MaterialForm extends Form
 
     // FILES
     public $files = [];
-
-
-
-
-
 
 
     public function setMaterial(Int $id)

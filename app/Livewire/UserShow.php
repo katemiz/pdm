@@ -8,7 +8,6 @@ use Livewire\Attributes\On;
 
 use Illuminate\Support\Facades\Auth;
 
-use App\Models\Company;
 use App\Models\User;
 
 
@@ -24,13 +23,12 @@ class UserShow extends Component
     public $user;
     public $moreMenu = [];
     public $permissions;
-    public $modelTitle;
 
-    public $company;
+    public $conf;
 
     public function mount() {
 
-        $this->modelTitle = config('conf_users.modelTitle');
+        $this->conf = config('conf_users');
 
         if (request('id')) {
             $this->uid = request('id');
@@ -45,7 +43,6 @@ class UserShow extends Component
     public function render()
     {
         $this->user = User::findOrFail($this->uid );
-        $this->company =  Company::find($this->user->company_id)->name;
 
         $this->setPermissions();
 
@@ -54,13 +51,13 @@ class UserShow extends Component
 
 
     public function edit() {
-        $redirect = Str::replace('{id}',$this->uid,config('conf_users.form_edit.route'));
+        $redirect = Str::replace('{id}',$this->uid,$this->conf['formEdit']['route']);
         return $this->redirect($redirect);
     }
 
 
     public function add() {
-        return $this->redirect(config('conf_users.form_create.route'));
+        return $this->redirect($this->conf['formCreate']['route']);
     }
 
 

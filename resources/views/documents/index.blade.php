@@ -16,7 +16,7 @@
     @endif
 
 
-    <livewire:datatable-search :addBtnTitle="config('conf_documents.index.addBtnTitle')" :addBtnRoute="config('conf_documents.formCreate.route')"/>
+    <livewire:datatable-search :addBtnTitle="$conf['index']['addBtnTitle']" :addBtnRoute="$conf['formCreate']['route']"/>
 
 
     @if ($documents->count() > 0)
@@ -123,10 +123,7 @@
 
     @else
 
-        <livewire:tablenoitem
-            :addBtnTitle="config('conf_documents.index.addBtnTitle')"
-            :addBtnRoute="config('conf_documents.formCreate.route')"
-            :noItemText="config('conf_documents.index.noItemText')"/>
+        <livewire:flash-message :msg="['type' => 'warning', 'text' => $conf['index']['noItemText'] ]">
 
     @endif
 

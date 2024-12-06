@@ -17,14 +17,14 @@ return [
         'noItemText' => 'No users found in the database!'
     ],
 
-    'form_create' => [
+    'formCreate' => [
         'title' => 'Users',
         'subtitle' => 'Add New User',
         'route' => '/usrs/create'
     ],
 
 
-    'form_edit' => [
+    'formEdit' => [
         'title' => 'Users',
         'subtitle' => 'Modify User Attributes',
         'route' => '/usrs/{id}/edit'

@@ -17,6 +17,8 @@ class MaterialCreateUpdate extends Component
 
     public MaterialForm $form;
 
+    public $conf;
+
     public $id = false;
 
     #[Validate(['files.*' => 'max:50000'])]
@@ -24,10 +26,9 @@ class MaterialCreateUpdate extends Component
 
     public function mount() {
 
-        //$this->form->setDocumentProps();
+        $this->conf = config('conf_materials');
 
         if (request('id')) {
-
             $this->id = request('id');
             $this->form->setMaterial($this->id);
         }
@@ -53,7 +54,8 @@ class MaterialCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('Doc');
         }
 
-        return $this->redirect('/materials/'.$id);
+        $redirect = Str::replace('{id}',$id,$this->conf['show']['route']);
+        return redirect($redirect);
     }
 
 
@@ -75,7 +77,8 @@ class MaterialCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('Doc');
         }
 
-        return $this->redirect('/materials/'.$this->id);
+        $redirect = Str::replace('{id}',$this->id,$this->conf['show']['route']);
+        return redirect($redirect);
     }
 
 

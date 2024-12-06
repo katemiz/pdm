@@ -2,11 +2,8 @@
 
 use function Livewire\Volt\{state};
 
-state(['addBtn' => [
-        'title' => 'Add User',
-        'redirect' => '/usrs/form'
-]]);
-
+state(['addBtnTitle' => "Add Item"]);
+state(['addBtnRoute' => '/']);
 state(['noItemText' => "No items found in database!"]);
 
 $addItem = fn () => $this->dispatch('addTriggered') ;

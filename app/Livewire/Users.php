@@ -27,6 +27,8 @@ class Users extends Component
 {
     use WithPagination;
 
+    public $conf;
+
     public $hasActions = true;
 
     public $show_active_only = true; /// Show only latest revisions
@@ -59,6 +61,8 @@ class Users extends Component
 
     public function mount()
     {
+        $this->conf = config('conf_users');
+
         $this->setCompanyProps();
     }
 

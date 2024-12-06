@@ -3,7 +3,15 @@
 use function Livewire\Volt\{state};
 use function Livewire\Volt\{computed};
 
-state(['msg' => ["type" => "default","header" => false,"text"=> "successfully completed"]]);
+state(
+    ['msg' => 
+        [
+            "type" => "default",
+            "header" => false,
+            "text"=> "successfully completed"
+        ]
+    ]
+);
 
 $css = computed(function () {
 
@@ -14,7 +22,6 @@ $css = computed(function () {
             return [
                 'text-color' => 'text-blue-800',
                 'bg-color' => 'bg-blue-100',
-                'type-text' => 'Info!'
             ];
             break;
 
@@ -23,7 +30,6 @@ $css = computed(function () {
             return [
                 'text-color' => 'text-green-800',
                 'bg-color' => 'bg-green-100',
-                'type-text' => 'Success!'
             ];
             break;
 
@@ -31,8 +37,7 @@ $css = computed(function () {
 
             return [
                 'text-color' => 'text-amber-800',
-                'bg-color' => 'bg-amber-100',
-                'type-text' => 'Warning!'
+                'bg-color' => 'bg-yellow-50',
             ];
             break;
 
@@ -41,7 +46,6 @@ $css = computed(function () {
             return [
                 'text-color' => 'text-yellow-800',
                 'bg-color' => 'bg-yellow-50',
-                'type-text' => 'Error!'
             ];
             break;
 
@@ -50,7 +54,6 @@ $css = computed(function () {
             return [
                     'text-color' => 'text-gray-800',
                     'bg-color' => 'bg-gray-50',
-                    'type-text' => 'Alert!'
                 ];
             break;
     }
@@ -59,11 +62,15 @@ $css = computed(function () {
 
 ?>
 
-<div class="p-4 mb-4 text-sm {{ $this->css['text-color'] }} rounded-lg {{ $this->css['bg-color'] }}" role="alert">
+<div class="p-4 mb-4 text-sm rounded-lg {{ implode(' ',$this->css) }}" role="alert">
 
     @if ( isset($this->msg['header']) )
         <p class="font-medium pb-4">{{ $this->msg['header'] }}</p>
     @endif
 
-    {{ $this->msg['text'] }}.
+    <div class="flex flex-col md:flex-row justify-between">
+        <div>{{ $this->msg['text'] }} </div>
+        <div class="text-right text-gray-400">{{ now() }}</div>
+    </div>
+
 </div>

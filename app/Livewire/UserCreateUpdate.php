@@ -8,6 +8,8 @@ use Livewire\WithFileUploads;
 
 use Livewire\Attributes\On;
 
+use Illuminate\Support\Str;
+
 use App\Models\User;
 
 
@@ -17,12 +19,16 @@ class UserCreateUpdate extends Component
 
     public UserForm $form;
 
+    public $conf;
+
     public $id = false;
 
     #[Validate(['files.*' => 'max:50000'])]
     public $files = [];
 
     public function mount() {
+
+        $this->conf = config('conf_users');
 
         $this->form->setRelatedProps();
 
@@ -51,7 +57,8 @@ class UserCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('User');
         }
 
-        return $this->redirect('/usrs/'.$id);
+        $redirect = Str::replace('{id}',$id,$this->conf['show']['route']);
+        return redirect($redirect);
     }
 
 
@@ -66,7 +73,8 @@ class UserCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('User');
         }
 
-        return $this->redirect('/usrs/'.$this->id);
+        $redirect = Str::replace('{id}',$this->id,$this->conf['show']['route']);
+        return redirect($redirect);
     }
 
 

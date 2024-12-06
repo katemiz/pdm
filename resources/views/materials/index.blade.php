@@ -17,7 +17,7 @@
         <livewire:flash-message :msg="session('msg')">
     @endif
 
-    <livewire:datatable-search :addBtnTitle="config('conf_materials.index.addBtnTitle')" :addBtnRoute="config('conf_materials.form_create.route')"/>
+    <livewire:datatable-search :addBtnTitle="$conf['index']['addBtnTitle']" :addBtnRoute="$conf['formCreate']['route']"/>
 
     @if ($materials->count() > 0)
 
@@ -125,10 +125,7 @@
 
     @else
 
-    <livewire:tablenoitem
-        :addBtnTitle="config('conf_materials.index.addBtnTitle')"
-        :addBtnRoute="config('conf_materials.form_create.route')"
-        :noItemText="config('conf_materials.index.noItemText')"/>
+        <livewire:flash-message :msg="['type' => 'warning', 'text' => $conf['index']['noItemText'] ]">
 
     @endif
 

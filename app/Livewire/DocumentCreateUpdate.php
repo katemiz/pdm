@@ -6,6 +6,8 @@ use App\Livewire\Forms\DocumentForm;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
+use Illuminate\Support\Str;
+
 use Livewire\Attributes\On;
 
 use App\Models\Document;
@@ -17,12 +19,16 @@ class DocumentCreateUpdate extends Component
 
     public DocumentForm $form;
 
+    public $conf;
+
     public $id = false;
 
     #[Validate(['files.*' => 'max:50000'])]
     public $files = [];
 
     public function mount($id = null) {
+
+        $this->conf = config('conf_documents');
 
         $this->form->setDocumentProps();
 
@@ -51,7 +57,8 @@ class DocumentCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('Doc');
         }
 
-        return $this->redirect('/docs/'.$id);
+        $redirect = Str::replace('{id}',$id,$this->conf['show']['route']);
+        return redirect($redirect);
     }
 
 
@@ -66,7 +73,8 @@ class DocumentCreateUpdate extends Component
             $model->addMedia($file)->toMediaCollection('Doc');
         }
 
-        return $this->redirect('/docs/'.$this->id);
+        $redirect = Str::replace('{id}',$this->id,$this->conf['show']['route']);
+        return redirect($redirect);
     }
 
 

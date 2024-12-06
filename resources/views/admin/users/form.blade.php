@@ -2,8 +2,8 @@
 
     <livewire:header 
     type="Hero" 
-    title="{{ $this->form->uid ? config('conf_users.form_edit.title') : config('conf_users.form_add.title') }}" 
-    subtitle="{{ $this->form->uid ? config('conf_users.form_edit.subtitle') : config('conf_users.form_add.subtitle') }}"
+    title="{{ $this->form->uid ? $conf['formEdit']['title'] : $conf['formCreate']['title'] }}" 
+    subtitle="{{ $this->form->uid ? $conf['formEdit']['subtitle'] : $conf['formCreate']['subtitle'] }}"
     />
 
 
@@ -29,7 +29,7 @@
 
         <x-quill wire:model="form.notes" label="Notes" name="notes" :value="$this->form->notes" />
 
-        <x-radio label="Status" name="status" :options="config('conf_users.statusArr')" :selected="$this->form->status"
+        <x-radio label="Status" name="status" :options="$conf['statusArr']" :selected="$this->form->status"
             wire:model="form.status" />
 
         @if ($this->form->uid)

@@ -12,6 +12,7 @@ use App\Livewire\FileList;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 use App\Models\Attachment;
 use App\Models\Counter;
@@ -26,6 +27,8 @@ use App\Mail\AppMail;
 class Materials extends Component
 {
     use WithPagination;
+
+    public $conf;
 
     public $hasActions = true;
 
@@ -74,6 +77,7 @@ class Materials extends Component
 
     public function mount()
     {
+        $this->conf = config('conf_materials');
         $this->setCompanyProps();
     }
 

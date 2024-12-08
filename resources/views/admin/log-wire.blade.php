@@ -81,21 +81,24 @@
 
 
 
-            @if (session('status'))
+            {{-- @if (session('status'))
 
-            {{ session('status') }}
+                {{ session('status') }}
 
-            @endif
+            @endif --}}
 
-            @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+
+
+
+            {{-- @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>AAAA{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif --}}
 
 
 

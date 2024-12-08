@@ -8,7 +8,7 @@
         <meta name="description" content="Author: Kılıç Ali Temiz katemiz@gmail.com">
         <meta name="theme-color" content="#317EFB"/>
 
-        <title>{{ config('appconstants.app.name') }}</title>
+        <title>{{ config('appconstants.app.title') }}</title>
 
         <link rel="icon" type="image/x-icon" href="{{ asset('/images/favicon.ico') }}">
 
@@ -17,9 +17,13 @@
     </head>
 
 
-    <body style="background-image: url('{{ asset('/images/HeroPage1.png') }}');" class="bg-cover bg-center bg-no-repeat">
+    {{-- <body style="background-image: url('{{ asset('/images/HeroPage1.png') }}');" class="bg-cover bg-center bg-no-repeat"> --}}
+    <body class="bg-gray-200">
 
         @livewire('logware')
+
+
+
 
     </body>
 </html>

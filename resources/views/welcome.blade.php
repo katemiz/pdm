@@ -1,13 +1,13 @@
 <section class="mx-auto bg-white-100 ">
 
-    <div class="container flex flex-col md:flex-row mx-auto px-4">
+    <div class="container flex flex-col md:flex-row mx-auto p-4 justify-center">
 
-        <div class="flex flex-col md:w-1/3 m-4">
+        <div class="flex flex-col md:w-1/2 p-4">
 
-            <livewire:header type="Hero" title="Be Agile<br>Run Agile" subtitle="Product Data Management"/>
+            <livewire:header type="Hero" title="Be Agile<br>Run Agile" subtitle="{{ config('appconstants.app.name') }}"/>
 
             <div class="flex flex-col w-full mx-auto gap-4">
-                @foreach ($mottos as $motto)
+                @foreach (config('appconstants.welcomeCards') as $motto)
                     <div class="mx-auto rounded-xl shadow-lg overflow-hidden">
                         <div class="xl:flex">
                             <div class="md:shrink-0 bg-blue-50">
@@ -32,8 +32,10 @@
 
         @else
 
-            <div style="background-image: url('{{ asset('/images/HeroPage3.png') }}');" class="w-full md:w-2/3 p-4 items-center justify-center bg-cover bg-center bg-no-repeat">
-                <h2 class="text-white text-6xl font-extrabold text-center py-32">{{ config('appconstants.kapkara.motto') }}</h2>
+            {{-- <div style="background-image: url('{{ asset('/images/HeroPage3.png') }}');" class="w-full md:w-2/3 p-4 items-center justify-center bg-cover bg-center bg-no-repeat"> --}}
+            <div class="flex flex-col md:w-1/2 p-4 justify-center">
+
+                <img src="{{ asset('/images/HeroPage3.png') }}"  />
             </div>
 
         @endif

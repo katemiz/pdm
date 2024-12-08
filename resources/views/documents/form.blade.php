@@ -2,8 +2,8 @@
 
     <livewire:header
         type="Hero"
-        title="{{ $this->form->uid ? config('conf_documents.formEdit.title') : config('conf_documents.formCreate.title') }}"
-        subtitle="{{ $this->form->uid ? config('conf_documents.formEdit.subtitle') : config('conf_documents.formCreate.subtitle') }}"
+        title="{{ $this->form->uid ? $conf['formEdit']['title'] : $conf['formCreate']['title'] }}"
+        subtitle="{{ $this->form->uid ? $conf['formEdit']['subtitle'] : $conf['formCreate']['subtitle'] }}"
         />
 
     <form wire:submit="{{ $this->form->docNo ? 'update' : 'save' }}" action="post">

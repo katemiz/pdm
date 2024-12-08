@@ -33,7 +33,7 @@ class Logware extends Component
 
     public $lang= 'EN';
     public $action = 'login';
-    public $app_title = 'App Title';
+    public $title = 'App Title';
 
     public $email = '';
     public $name = '';
@@ -172,7 +172,7 @@ class Logware extends Component
         dd($status);
 
         dd(Password::RESET_LINK_SENT);
-     
+
         return $status === Password::RESET_LINK_SENT
                     ? back()->with(['status' => __($status)])
                     : back()->withErrors(['email' => __($status)]);

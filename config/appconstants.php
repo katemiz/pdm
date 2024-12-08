@@ -23,6 +23,30 @@ return [
     ],
 
 
+    'welcomeCards' => [
+
+        [
+            "img" => "dds.svg",
+            "title" => "Data-Driven Success",
+            "content" => "PDM empowers businesses by organizing, tracking, and optimizing product-related data. Success lies in harnessing this data effectively."
+        ],
+
+        [
+            "img" => "dms.svg",
+            "title" => "Data Make Sense",
+            "content" => "PDM bridges the gap between raw information and actionable insights, leading to successful product development."
+        ],
+        [
+            "img" => "oiydw.svg",
+            "title" => "Order in Your Data World",
+            "content" => "PDM brings structure and clarity, ensuring seamless collaboration across teams."
+        ],
+
+    ],
+
+
+
+
     'counters' => [
         'product_no' => 102729,
         'end_product_no' => 38542,

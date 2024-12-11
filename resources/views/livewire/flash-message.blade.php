@@ -62,15 +62,21 @@ $css = computed(function () {
 
 ?>
 
-<div class="p-4 mb-4 text-sm rounded-lg {{ implode(' ',$this->css) }}" role="alert">
+<div>
+    @if(session('msg'))
 
-    @if ( isset($this->msg['header']) )
-        <p class="font-medium pb-4">{{ $this->msg['header'] }}</p>
+        <div class="p-4 mb-4 text-sm rounded-lg {{ implode(' ',$this->css) }}" role="alert">
+
+            @if ( isset($this->msg['header']) )
+                <p class="font-medium pb-4">{{ $this->msg['header'] }}</p>
+            @endif
+
+            <div class="flex flex-col md:flex-row justify-between">
+                <div>{{ $this->msg['text'] }} </div>
+                <div class="text-right text-gray-400">{{ now() }}</div>
+            </div>
+
+        </div>
+
     @endif
-
-    <div class="flex flex-col md:flex-row justify-between">
-        <div>{{ $this->msg['text'] }} </div>
-        <div class="text-right text-gray-400">{{ now() }}</div>
-    </div>
-
 </div>

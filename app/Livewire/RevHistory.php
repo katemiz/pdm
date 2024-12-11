@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 
 use Livewire\Component;
 
+use Illuminate\Support\Str;
+
 
 class RevHistory extends Component
 {
@@ -34,6 +36,6 @@ class RevHistory extends Component
 
     public function showRevision($newRevisionItemId)
     {
-        redirect($this->redirect.$newRevisionItemId);
+        redirect(Str::replace('{id}',$newRevisionItemId,$this->redirect));
     }
 }

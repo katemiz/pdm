@@ -30,8 +30,6 @@ class Documents extends Component
 
     public $conf;
 
-    public $hasActions = true;
-
     public $show_latest = true; /// Show only latest revisions
 
     public $uid = false;
@@ -85,9 +83,13 @@ class Documents extends Component
     {
         $this->setProps();
 
+        // $records = $this->getDocumentsList();
+
         return view('documents.index',[
-            'documents' => $this->getDocumentsList()
+            'records' => $this->getDocumentsList()
         ]);
+
+        // return view('documents.index',compact('records'));
     }
 
 

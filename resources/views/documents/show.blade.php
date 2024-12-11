@@ -2,10 +2,7 @@
 
   <livewire:header type="Hero" title="{{ $conf['show']['title'] }}" subtitle="{{ $conf['show']['subtitle'] }}"/>
 
-  @if(session('msg'))
-      <livewire:flash-message :msg="session('msg')">
-  @endif
-
+  <livewire:flash-message :msg="session('msg')" />
 
   <div class="flex flex-col gap-4 p-4 bg-gray-100" >
 
@@ -43,7 +40,7 @@
 
           {{-- LIST ALL --}}
           <span class='has-tooltip'>
-            <a href="/docs" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+            <a href="{{ $conf['index']['route'] }}" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
               <x-ikon name="List" />
             </a>
 
@@ -69,7 +66,7 @@
         </div>
       </div>
 
-      <livewire:rev-history :model="$document" redirect="/docs/" :rev="$document->revision"/>
+      <livewire:rev-history :model="$document" redirect="{{ $conf['show']['route'] }}" :rev="$document->revision"/>
 
       @if ($document->remarks)
         <div class="text-xl font-bold">Remarks</div>

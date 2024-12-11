@@ -585,6 +585,11 @@ class LwAssy extends Component
 
         $d = Item::find($id);
 
+
+        if ($d->is_mirror_of != NULL && is_numeric($d->is_mirror_of)) {
+            return true;
+        }
+
         if ( $d->c_notice_id == NULL ) {
 
             $this->release_errors[$d->part_number][] = [

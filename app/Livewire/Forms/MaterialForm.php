@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 use App\Models\Material;
 use App\Models\Company;
-use App\Models\Counter;
 
 
 
@@ -33,7 +32,7 @@ class MaterialForm extends Form
     #[Validate('required', message: 'Please select material family')]
     public $family;
 
-    public String $form = '100';
+    public String $shape = '100';
 
 
     #[Validate('required', message: 'Please select status')]
@@ -52,7 +51,7 @@ class MaterialForm extends Form
         $this->material = Material::find($id);
         $this->description = $this->material->description;
         $this->specification = $this->material->specification;
-        $this->form = $this->material->form;
+        $this->shape = $this->material->shape;
         $this->family = $this->material->family;
         $this->status = $this->material->status;
         $this->remarks = $this->material->remarks;
@@ -70,12 +69,17 @@ class MaterialForm extends Form
 
         $props['description'] = $this->description;
         $props['specification'] = $this->specification;
-        $props['form'] = $this->form;
+        $props['shape'] = $this->shape;
         $props['family'] = $this->family;
         $props['status'] = $this->status;
         $props['remarks'] = $this->synopsis;
 
+        dd($props);
+
+
         $id = Material::create($props)->id;
+
+
 
         session()->flash('msg',[
             'type' => 'success',
@@ -99,13 +103,13 @@ class MaterialForm extends Form
 
         $props['toc'] = json_encode([]);
 
-        $document = Document::findOrFail($id);
+        $material = Material::findOrFail($id);
 
-        $document->update($props);
+        $material->update($props);
 
         session()->flash('msg',[
             'type' => 'success',
-            'text' => 'Document has been updated successfully.'
+            'text' => 'Material has been updated successfully.'
         ]);
 
         return true;
@@ -113,25 +117,6 @@ class MaterialForm extends Form
 
 
 
-    public function getDocumentNo() {
-
-        $parameter = 'document_no';
-        $initial_no = config('appconstants.counters.document_no');
-        $counter = Counter::find($parameter);
-
-        if ($counter == null) {
-            Counter::create([
-                'counter_type' => $parameter,
-                'counter_value' => $initial_no
-            ]);
-
-            return $initial_no;
-        }
-
-        $new_no = $counter->counter_value + 1;
-        $counter->update(['counter_value' => $new_no]);         // Update Counter
-        return $new_no;
-    }
 
 
 

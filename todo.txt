@@ -16,6 +16,7 @@ update users set status='Inactive' where status='inactive';
 alter table materials add column updated_uid int after user_id;
 alter table materials add column revision int not null default 1 after updated_uid;
 
+alter table materials rename column  form to shape;
 update materials set status='Active' where status='A';
 update materials set status='Inactive' where status='I';
 update materials set updated_uid=user_id where updated_uid is NULL;

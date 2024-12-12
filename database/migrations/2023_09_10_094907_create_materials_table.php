@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->integer('revision')->default(1);
 
-            $table->text('form');
+            $table->text('shape');
             $table->text('family');
             $table->text('description');
             $table->text('specification');

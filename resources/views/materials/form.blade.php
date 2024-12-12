@@ -20,7 +20,7 @@
 
         <div class="grid grid-cols-3 grid-rows-1 gap-4">
             <div >
-                <x-select
+                <livewire:select
                     label="Material Family"
                     name="family"
                     :options="$conf['families']"
@@ -71,6 +71,10 @@
                 {{ $this->form->uid ? 'Update Material' : 'Add Material' }}
             </button>
         </div>
+
+@if($errors->any())
+    {{ implode('', $errors->all('<div>:message</div>')) }}
+@endif
 
     </form>
 

@@ -44,14 +44,19 @@ class MaterialCreateUpdate extends Component
 
     public function save()
     {
+
+
         // FORM PARAMETERS SAVE
         $id = $this->form->store();
 
+        dd('here');
+
+
         // ATTACHMENTS
-        $model = Document::find($id);
+        $model = Material::find($id);
 
         foreach ($this->files as $file) {
-            $model->addMedia($file)->toMediaCollection('Doc');
+            $model->addMedia($file)->toMediaCollection('Material');
         }
 
         $redirect = Str::replace('{id}',$id,$this->conf['show']['route']);
@@ -71,10 +76,10 @@ class MaterialCreateUpdate extends Component
         // FORM PARAMETERS UPDATE
         $this->form->update($this->id);
 
-        $model = Document::findOrFail($this->id);
+        $model = Material::findOrFail($this->id);
 
         foreach ($this->files as $file) {
-            $model->addMedia($file)->toMediaCollection('Doc');
+            $model->addMedia($file)->toMediaCollection('Material');
         }
 
         $redirect = Str::replace('{id}',$this->id,$this->conf['show']['route']);

@@ -11,7 +11,7 @@
 
 
     <div class="text-red-600 my-1 font-bold">
-        @error('form.' . $name)
+        @error($name)
             <span class="error">{{ $message }}</span>
         @enderror
     </div>

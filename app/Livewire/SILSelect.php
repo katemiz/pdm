@@ -9,6 +9,7 @@ class Select extends Component
 
     public $name;
     public $label;
+    public $select_label;
     public $options;
     public $selected;
 

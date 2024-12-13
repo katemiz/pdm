@@ -15,23 +15,24 @@
         @endif
 
         @if ($this->form->uid)
-        <h1 class="text-5xl font-light my-6">{{ $this->form->uid }}</h1>
+        <h1 class="text-5xl font-light my-6">M-{{ $this->form->uid }}</h1>
         @endif
 
         <div class="grid grid-cols-3 grid-rows-1 gap-4">
             <div >
-                <livewire:select
+                <x-select
+                    wire:model="form.family"
                     label="Material Family"
+                    select_label="Select Material Family"
                     name="family"
                     :options="$conf['families']"
                     :selected="$this->form->family"
-                    wire:model="form.family"
                 />
             </div>
             <div >
                 <x-input-text
                     wire:model="form.description"
-                    name="title"
+                    name="description"
                     label="Material Description/Name"
                     placeholder="Enter material name/description ..."
                 />
@@ -39,7 +40,7 @@
             <div >
                 <x-input-text
                     wire:model="form.specification"
-                    name="title"
+                    name="specification"
                     label="Material Specification"
                     placeholder="Enter material specification ..."
                 />
@@ -55,7 +56,7 @@
         />
 
         @if ($this->form->uid)
-        <livewire:file-list :model="$this->form->document" collection="Material" label="Files" is_editable="true"/>
+        <livewire:file-list :model="$this->form->material" collection="Material" label="Files" is_editable="true"/>
         @endif
 
         <x-file-upload :files="$files" name="files" is_multiple="true" />
@@ -72,9 +73,16 @@
             </button>
         </div>
 
-@if($errors->any())
-    {{ implode('', $errors->all('<div>:message</div>')) }}
+@if ($errors->any())
+    <div class="alert alert-danger">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }} </li>
+            @endforeach
+        </ul>
+    </div>
 @endif
+
 
     </form>
 

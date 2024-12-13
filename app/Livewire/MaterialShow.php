@@ -26,7 +26,6 @@ class MaterialShow extends Component
 
     public $conf;
 
-
     public function mount() {
 
         $this->conf = config('conf_materials');

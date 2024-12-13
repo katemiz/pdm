@@ -43,7 +43,7 @@
 
           {{-- LIST ALL --}}
           <span class='has-tooltip'>
-            <a href="/docs" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
+            <a href="/materials" class="bg-blue-700 hover:bg-blue-800 text-white p-2 rounded inline-flex items-center">
               <x-ikon name="List" />
             </a>
 

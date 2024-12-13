@@ -72,14 +72,9 @@ class MaterialForm extends Form
         $props['shape'] = $this->shape;
         $props['family'] = $this->family;
         $props['status'] = $this->status;
-        $props['remarks'] = $this->synopsis;
-
-        dd($props);
-
+        $props['remarks'] = $this->remarks;
 
         $id = Material::create($props)->id;
-
-
 
         session()->flash('msg',[
             'type' => 'success',
@@ -95,13 +90,12 @@ class MaterialForm extends Form
         $this->validate();
 
         $props['updated_uid'] = Auth::id();
-        $props['doc_type'] = $this->doc_type;
-        $props['language'] = $this->language;
-        $props['company_id'] = $this->company_id;
-        $props['title'] = $this->title;
-        $props['remarks'] = $this->synopsis;
-
-        $props['toc'] = json_encode([]);
+        $props['description'] = $this->description;
+        $props['specification'] = $this->specification;
+        $props['shape'] = $this->shape;
+        $props['family'] = $this->family;
+        $props['status'] = $this->status;
+        $props['remarks'] = $this->remarks;
 
         $material = Material::findOrFail($id);
 

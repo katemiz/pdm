@@ -6,6 +6,9 @@ use App\Livewire\Forms\MaterialForm;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 
+use Illuminate\Support\Str;
+
+
 use Livewire\Attributes\On;
 
 use App\Models\Material;
@@ -44,13 +47,8 @@ class MaterialCreateUpdate extends Component
 
     public function save()
     {
-
-
         // FORM PARAMETERS SAVE
         $id = $this->form->store();
-
-        dd('here');
-
 
         // ATTACHMENTS
         $model = Material::find($id);

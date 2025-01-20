@@ -169,7 +169,7 @@ class LwBuyable extends Component
                 ->orWhere('part_number_mt','LIKE',"%".$this->query."%")
                 ->orWhere('part_number_wb','LIKE',"%".$this->query."%")
                 ->orWhere('material','LIKE',"%".$this->query."%")
-                ->orWhere('finish','LIKE',"%".$this->query."%")
+                ->orWhere('finish_text','LIKE',"%".$this->query."%")
                 ->orWhere('remarks','LIKE',"%".$this->query."%")
                 ->orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));
@@ -225,7 +225,7 @@ class LwBuyable extends Component
         $props['weight'] = $this->weight;
         $props['material_text'] = $this->material;
         $props['remarks'] = $this->remarks;
-        $props['finish'] = $this->finish;
+        $props['finish_text'] = $this->finish;
 
         if ( $this->uid ) {
             // update

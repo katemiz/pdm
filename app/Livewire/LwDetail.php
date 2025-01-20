@@ -541,11 +541,9 @@ class LwDetail extends Component
 
         try {
 
-            Item::find($this->uid)->update($props);
-
-            //dd([$props,$this->uid]);
-
             $aaa = Item::find($this->uid);
+
+            $aaa->update($props);
 
             // Update Notes to Product
             $aaa->pnotes()->detach();

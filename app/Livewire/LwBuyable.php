@@ -12,9 +12,14 @@ use App\Models\CNotice;
 use App\Models\Document;
 use App\Models\Item;
 use App\Models\User;
+use App\Models\Fnote;
+
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+
+
+use Carbon\Carbon;
 
 class LwBuyable extends Component
 {
@@ -80,7 +85,7 @@ class LwBuyable extends Component
 
 
     public $has_mirror = false;
-    public $is_mirror_of = false;   
+    public $is_mirror_of = false;
 
     public $mirror_part_number =  false;
     public $mirror_part_version =  false;
@@ -413,6 +418,91 @@ class LwBuyable extends Component
         // This refreshes new item attachments
         $this->dispatch('triggerAttachment',modelId: $this->uid);
     }
+
+
+
+
+
+    public function getProductNo() {
+
+        $parameter = 'product_no';
+        $initial_no = config('appconstants.counters.product_no');
+        $counter = Counter::find($parameter);
+
+        if ($counter == null) {
+            Counter::create([
+                'counter_type' => $parameter,
+                'counter_value' => $initial_no
+            ]);
+
+            return $initial_no;
+        }
+
+        $new_no = $counter->counter_value + 1;
+        $counter->update(['counter_value' => $new_no]);         // Update Counter
+        return $new_no;
+    }
+
+
+
+
+
+    public function replicateConfirm($uid) {
+        $this->uid = $uid;
+        $this->dispatch('ConfirmModal', type:'replicate');
+    }
+
+
+    #[On('onReplicateConfirmed')]
+    public function makeReplicate() {
+
+        $base_part = Item::find($this->uid);
+
+        $new_part = $base_part->replicate();
+
+        $new_part->part_number  = $this->getProductNo();
+        $new_part->user_id  = Auth::id();
+        $new_part->updated_uid  = Auth::id();
+        $new_part->created_at = Carbon::now();
+
+        $new_part->save();
+
+
+        // FLAG NOTES
+
+       $available_fnotes = [];
+
+        foreach (Fnote::where('item_id',$this->uid)->get() as $r) {
+            $available_fnotes[] = ['no' => $r->no,'text_tr' => $r->text_tr,'text_en' => $r->text_en];
+        }
+
+
+        foreach ($available_fnotes as $fnote) {
+
+            $props['item_id'] = $new_part->id;
+            $props['no'] = $fnote['no'];
+            $props['text_tr'] = $fnote['text_tr'];
+
+            Fnote::create($props);
+        }
+
+        // PART NOTES
+        $part_notes =[];
+
+        foreach ($base_part->pnotes as $note) {
+            array_push($part_notes,$note->id);
+        }
+
+        $new_part->pnotes()->attach(array_unique($part_notes));
+
+
+        session()->flash('message','A new part has been created successfully!');
+
+        redirect('/buyables/form/'.$new_part->id);
+    }
+
+
+
 
 
 

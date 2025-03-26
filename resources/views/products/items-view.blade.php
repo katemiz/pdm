@@ -55,7 +55,7 @@
 
 
 
-                    @if ($part_type == 'Detail')
+                    @if ($part_type == 'Detail' || $part_type == 'Buyable')
                     <a wire:click="replicateConfirm({{ $uid }})" class="button mx-2 ">
                         <span class="icon is-small"><x-carbon-replicate /></span>
                     </a>

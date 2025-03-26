@@ -971,6 +971,9 @@ class LwDetail extends Component
         $new_part->updated_uid  = Auth::id();
         $new_part->created_at = Carbon::now();
 
+        $new_part->has_mirror = null;
+
+
         $new_part->save();
 
 

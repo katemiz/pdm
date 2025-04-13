@@ -31,17 +31,17 @@
         <!-- Left side -->
         <div class="level-left">
 
-            @role(['EngineeringDept'])
+            @role(['EngineeringDept','QualityDept'])
             <div class="level-item has-text-centered">
                 <a href="/documents/form" class="button is-dark">
                     <span class="icon is-small"><x-carbon-add /></span>
                     <span>{{ $constants['list']['addButton']['text'] }}</span>
                 </a>
 
-                <a href="/documents-html/cover-form" class="button is-success ml-2">
+                {{-- <a href="/documents-html/cover-form" class="button is-success ml-2">
                     <span class="icon is-small"><x-carbon-add /></span>
                     <span>Write a Document</span>
-                </a>
+                </a> --}}
 
             </div>
             @endrole
@@ -161,6 +161,38 @@
                         @endif
 
                     @endrole
+
+
+                    @role(['QualityDept'])
+
+                        @if ( !in_array($record->status,['Frozen','Released']) && Auth::id() == $record->user_id )
+
+
+                            @if ($record->is_html)
+
+                                <a href="/documents-html/cover-form/{{ $record->id }}">
+                                    <span class="icon"><x-carbon-edit /></span>
+                                </a>
+
+                            @else
+
+                                <a href="/documents/form/{{ $record->id }}">
+                                    <span class="icon"><x-carbon-edit /></span>
+                                </a>
+
+                            @endif
+
+                        @endif
+
+                    @endrole
+
+
+
+
+
+
+
+
 
                 </td>
 

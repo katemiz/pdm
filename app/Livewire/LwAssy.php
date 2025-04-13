@@ -615,7 +615,7 @@ class LwAssy extends Component
 
 
         $has_step = false;
-        $has_dxf = false;
+        $has_dxf = true;
         $has_dwg = false;
 
         foreach ($attachments as $dosya) {
@@ -626,9 +626,9 @@ class LwAssy extends Component
                 $has_step = true;
             }
 
-            if ($dosya->tag == 'STEP' && in_array($ext, ['DXF','dxf'])) {
-                $has_dxf = true;
-            }
+            // if ($dosya->tag == 'STEP' && in_array($ext, ['DXF','dxf'])) {
+            //     $has_dxf = true;
+            // }
 
             if ($dosya->tag == 'DWG-BOM' && in_array($ext, ['pdf','PDF'])) {
                 $has_dwg = true;

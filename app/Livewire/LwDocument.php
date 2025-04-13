@@ -79,6 +79,16 @@ class LwDocument extends Component
         'PR' => 'Presentation'
     ];
 
+    public $depts = [
+        'EngineeringDept',
+        'OperationsDept',
+        'ProcurementDept',
+        'QualityDept',
+        'SalesDept'
+    ];
+
+    public $isUserInSameDept;
+
     #[Validate('required', message: 'Please select document type')]
     public $doc_type = 'GR';
 
@@ -139,9 +149,9 @@ class LwDocument extends Component
 
     public function setCompanyProps()
     {
-        $this->companies = Company::all();
-        $this->company_id =  Auth::user()->company_id;
-        $this->company =  Company::find($this->company_id);
+        $this->companies    = Company::all();
+        $this->company_id   = Auth::user()->company_id;
+        $this->company      = Company::find($this->company_id);
     }
 
     public function checkSessionVariables() {
@@ -275,12 +285,28 @@ class LwDocument extends Component
             $this->status = $c->status;
             $this->created_at = $c->created_at;
             $this->updated_at = $c->updated_at;
-            $this->created_by = User::find($c->user_id)->email;
-            $this->updated_by = User::find($c->updated_uid)->email;
 
-            // if ($c->is_html) {
-            //     $this->fileOrHtml = 'HTML';
-            // }
+            $this->yapan = User::find($c->user_id);
+            $this->degistiren = User::find($c->updated_uid);
+
+            $this->created_by = $this->yapan->email;
+            $this->updated_by = $this->degistiren->email;
+
+            foreach ($this->depts as $dept) {
+
+                if ($this->yapan->hasRole($dept) || $this->degistiren->hasRole($dept)) {
+                    $department = $dept;
+                }
+            }
+
+
+            if (Auth::user()->hasRole($department)) {
+                $this->isUserInSameDept = true;
+            } else {
+                $this->isUserInSameDept = false;
+            }
+
+
 
             // Revisions
             foreach (Document::where('document_no',$this->document_no)->get() as $doc) {

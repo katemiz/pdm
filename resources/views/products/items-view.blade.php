@@ -53,7 +53,7 @@
 
                     <x-add-button/>
 
-
+                    @role(['admin','EngineeringDept'])
 
                     @if ($part_type == 'Detail' || $part_type == 'Buyable')
                     <a wire:click="replicateConfirm({{ $uid }})" class="button mx-2 ">
@@ -61,13 +61,13 @@
                     </a>
                     @endif
 
-
-
                     @if ($part_type == 'Detail' && !$has_mirror && !$is_mirror_of  )
                     <a wire:click="mirrorConfirm({{ $uid }})" class="button mx-2 ">
                         <span class="icon is-small"><x-carbon-crossroads /></span>
                     </a>
                     @endif
+
+                    @endrole
 
 
                     @if ($part_type != 'Standard')

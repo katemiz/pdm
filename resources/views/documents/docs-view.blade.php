@@ -22,7 +22,7 @@
                     </a>
                 </p>
 
-                @role(['EngineeringDept'])
+                @role(['EngineeringDept','QualityDept'])
                 <p class="level-item">
                     <a href="/documents/file/form/">
                         <span class="icon is-small"><x-carbon-add /></span>
@@ -37,7 +37,6 @@
             <div class="level-right">
 
                 @role(['EngineeringDept'])
-
                 @if ( in_array($status,['Frozen','Released']) )
 
                     @if ($is_latest)
@@ -78,6 +77,66 @@
                     </p>
                 @endif
                 @endrole
+
+
+
+
+
+
+
+                @role(['QualityDept'])
+
+                @if ($isUserInSameDept)
+                    @if ( in_array($status,['Frozen','Released']) )
+
+                        @if ($is_latest)
+                        <p class="level-item">
+                            <a wire:click='reviseConfirm({{ $uid }})'>
+                                <span class="icon"><x-carbon-version /></span>
+                                <span>Revise</span>
+                            </a>
+                        </p>
+                        @endif
+
+                    @else
+
+                        <p class="level-item">
+                            <a href='/documents/form/{{ $uid }}'>
+                                <span class="icon"><x-carbon-edit id="233"/></span>
+                            </a>
+                        </p>
+
+                        @role(['Approver'])
+                        <p class="level-item">
+                            <a wire:click='freezeConfirm({{ $uid }})'>
+                                <span class="icon"><x-carbon-stamp /></span>
+                            </a>
+                        </p>
+
+                        <p class="level-item">
+                            <a wire:click='releaseConfirm({{ $uid }})'>
+                                <span class="icon"><x-carbon-send/></span>
+                            </a>
+                        </p>
+                        @endrole
+
+                        <p class="level-item">
+                            <a wire:click="triggerDelete('delete',{{ $uid }})">
+                                <span class="icon has-text-danger"><x-carbon-trash-can /></span>
+                            </a>
+                        </p>
+                    @endif
+                @endif
+
+                @endrole
+
+
+
+
+
+
+
+
 
             </div>
         </nav>

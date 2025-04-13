@@ -50,7 +50,16 @@ class Engineering extends Component
             case 'geometry-lshape':
                 $this->geometryLshape();
                 break;
-    
+
+
+            case 'mast-pneumatic':
+                //$this->geometryLshape();
+                break;
+
+
+
+
+
 
 
             default:

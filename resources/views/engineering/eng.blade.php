@@ -17,6 +17,23 @@
             @break
 
 
+
+
+
+
+
+
+        @case('geometry-rectangle')
+            @include('engineering.geometry.rectangle')
+            @break
+
+
+        @case('mast-pneumatic')
+            @include('engineering.mast.pneumatic')
+            @break
+
+
+
         @default
             @include('engineering.eng-menu')
             @break

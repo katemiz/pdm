@@ -52,16 +52,14 @@
 
         <div class="card">
 
-
-
-            <div class="card-image">
-                <figure class="image is-4by3">
-                  <img
-                    src="https://bulma.io/assets/images/placeholders/1280x960.png"
-                    alt="Placeholder image"
-                  />
+            <div class="card-image has-background-grey-lighter">
+                <figure class="image ">
+                  <img src="{{ asset('/images/MastBending.svg') }}" />
                 </figure>
-              </div>
+            </div>
+
+
+
 
 
 
@@ -82,11 +80,17 @@
 
         <div class="card">
 
+            <div class="card-image has-background-grey-lighter">
+                <figure class="image ">
+                  <img src="{{ asset('/images/MastHeights.svg') }}" />
+                </figure>
+            </div>
+
           <div class="card-content">
             <div class="media">
               <div class="media-content">
                 <p class="title is-4">
-                  <a href="./heights.html">Number of Sections/Extended/Nested Heights</a></p>
+                  <a href="/engineering/mast/heights">Number of Sections/Extended/Nested Heights</a></p>
               </div>
             </div>
 
@@ -158,9 +162,13 @@
 
       </div>
 
+      <div class="column is-1/3">
+      </div>
 
 
 
+      <div class="column is-1/3">
+      </div>
 
 
 

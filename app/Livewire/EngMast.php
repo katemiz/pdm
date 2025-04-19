@@ -49,6 +49,13 @@ class EngMast extends Component
     public $tubeData = [];
 
 
+    public $NoOfSections = 6;
+    public $LengthOfSections = 3000;
+    public $OverlapOfSections = 800;
+    public $HeadOfSections = 200;
+    public $extendedHeight;
+    public $nestedHeight;
+
 
     public function mount()
     {
@@ -76,7 +83,10 @@ class EngMast extends Component
                 break;
 
 
-
+            case 'heights':
+                $this->MastHeights();
+                return view('engineering.mast.heights');
+                break;
 
 
 
@@ -169,7 +179,26 @@ class EngMast extends Component
     }
 
 
+    function MastHeights() {
 
+
+
+
+
+        if ($this->NoOfSections == null || $this->LengthOfSections == null || $this->OverlapOfSections == null || $this->HeadOfSections == null) {
+
+            $this->extendedHeight = 0;
+            $this->nestedHeight   = 0;
+
+            return true;
+        }
+
+
+        $this->extendedHeight   = $this->NoOfSections*$this->LengthOfSections-($this->NoOfSections-1)*$this->OverlapOfSections;
+        $this->nestedHeight     = $this->LengthOfSections+($this->NoOfSections-1)*$this->HeadOfSections;
+
+
+    }
 
 
 

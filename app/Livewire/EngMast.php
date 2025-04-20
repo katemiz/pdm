@@ -18,6 +18,10 @@ class EngMast extends Component
     public $tubeThickness;
     public $tubeLength;
     public $tubePressureArea;
+    public $tubeArea;
+    public $tubeInertia;
+
+    public $singleTubeData = [];
 
 
     public $safetyFactor;
@@ -33,7 +37,7 @@ class EngMast extends Component
 
     public $factorOfSafety = 2.0; // Factor of Safety
     public $tubeBucklingLength = 3000; // mm
-    public $E = 210000; // MPa for Aluminum
+    public $E = 70000; // MPa for Aluminum
     public $yieldStrength = 170; // MPa
     public $ultimateStrength = 210; // MPa
     public $materialDensity = 2.7; // g/cm3
@@ -57,6 +61,9 @@ class EngMast extends Component
     public $nestedHeight;
 
 
+    public $showModal = false;
+
+
     public function mount()
     {
         if (request('action')) {
@@ -69,29 +76,25 @@ class EngMast extends Component
     {
         switch ($this->action) {
 
-
-
             case 'pneumatic':
                 $this->pneumaticLiftCapacity();
                 return view('engineering.mast.pneumatic');
                 break;
-
 
             case 'mttubes':
                 $this->MasttechProfiles();
                 return view('engineering.mast.mttubes');
                 break;
 
-
             case 'heights':
                 $this->MastHeights();
                 return view('engineering.mast.heights');
                 break;
 
-
-
-
-
+            case 'deflection':
+                $this->MastDeflections();
+                return view('engineering.mast.deflection');
+                break;
 
             default:
                 # code...
@@ -137,18 +140,6 @@ class EngMast extends Component
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     function MasttechProfiles() {
 
         $id = $this->smallestTubeId;
@@ -168,6 +159,9 @@ class EngMast extends Component
                 "thk" => $t,
                 "mass" => $mass,
                 "moment" => $moment,
+                "area" => $this->CalculateArea($od,$id),
+                "inertia" => $this->HollowTubeInertia($od,$id),
+                "EI" => $this->EI($od,$id),
                 "pressureLoad" => $pressureLoad,
                 "criticalLoad" => $criticalLoad,
             ];
@@ -181,9 +175,20 @@ class EngMast extends Component
 
     function MastHeights() {
 
+        if ($this->NoOfSections == null || $this->LengthOfSections == null || $this->OverlapOfSections == null || $this->HeadOfSections == null) {
+
+            $this->extendedHeight = 0;
+            $this->nestedHeight   = 0;
+
+            return true;
+        }
+
+        $this->extendedHeight   = $this->NoOfSections*$this->LengthOfSections-($this->NoOfSections-1)*$this->OverlapOfSections;
+        $this->nestedHeight     = $this->LengthOfSections+($this->NoOfSections-1)*$this->HeadOfSections;
+    }
 
 
-
+    function MastDeflections() {
 
         if ($this->NoOfSections == null || $this->LengthOfSections == null || $this->OverlapOfSections == null || $this->HeadOfSections == null) {
 
@@ -193,11 +198,28 @@ class EngMast extends Component
             return true;
         }
 
-
         $this->extendedHeight   = $this->NoOfSections*$this->LengthOfSections-($this->NoOfSections-1)*$this->OverlapOfSections;
         $this->nestedHeight     = $this->LengthOfSections+($this->NoOfSections-1)*$this->HeadOfSections;
+    }
 
 
+    function GetMore($tubeNo) {
+
+        $this->showModal = true;
+
+        //dd($this->tubeData);
+
+        $this->singleTubeData = $this->tubeData[$tubeNo];
+
+        //dd($this->singleTubeData);
+
+    }
+
+
+    function toggleModal() {
+
+
+        $this->showModal = !$this->showModal;
     }
 
 
@@ -211,9 +233,19 @@ class EngMast extends Component
 
     function CalculateMass($od,$id) {
 
-        return $this->materialDensity *(pow($od,2)- pow($id,2))*pi()/4000; // kg/m
+        return $this->materialDensity *$this->CalculateArea($od,$id)/1000; // kg/m
         // 1000 = 1m
     }
+
+
+
+
+    function CalculateArea($od,$id) {
+
+        return (pow($od,2)- pow($id,2))*pi()/4; // mm2
+    }
+
+
 
 
 
@@ -253,5 +285,18 @@ class EngMast extends Component
         return pi()/64*(pow($od,4)-pow($id,4));
     }
 
+
+
+
+
+
+    function EI($od,$id) {
+        // EI = E*I
+
+        // E = Young's Modulus
+        // I = Moment of Inertia
+
+        return $this->E*$this->HollowTubeInertia($od,$id);
+    }
 
 }

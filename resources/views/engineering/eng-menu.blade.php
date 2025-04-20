@@ -67,7 +67,7 @@
             <div class="media">
               <div class="media-content">
                 <p class="title is-4">
-                  <a href="./index.html">Bending Moment and Deflection Calculation for Variable Section Mast Structures</a></p>
+                  <a href="/engineering/mast/deflection">Bending Moment and Deflection Calculation for Variable Section Mast Structures</a></p>
               </div>
             </div>
 

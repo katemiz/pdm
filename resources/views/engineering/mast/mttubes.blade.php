@@ -135,11 +135,11 @@
 
 
                 <tr>
-                    <th>MT-{{ sprintf("%02d",$i) }}</th>
+                    <th><a wire:click="GetMore({{ $i }})" >MT-{{ sprintf("%02d",$i) }}</a></th>
                     <td class="has-text-right">{{ sprintf("%.2f",round($tube["od"],2)) }} mm</td>
                     <td class="has-text-right">{{ sprintf("%.2f",round($tube["id"],2)) }} mm</td>
                     <td class="has-text-right">{{ sprintf("%.2f",round($tube["thk"],2)) }} mm</td>
-                    <td class="has-text-right">{{ round($tube["mass"],1) }} kg</td>
+                    <td class="has-text-right">{{ round($tube["mass"],1) }} kg/m</td>
                     <td class="has-text-right">{{ round($tube["moment"],0) }} Nm</td>
                     <td class="has-text-right">{{ round($tube["pressureLoad"],0) }} N</td>
                     <td class="has-text-right">{{ round($tube["pressureLoad"] / 9.81, 0) }} kg</td>
@@ -164,8 +164,60 @@
 
 
 
+    <div class="modal {{ $showModal ? 'is-active' :'' }}" id="modal">
+        <div class="modal-background" wire:click="toggleModal"></div>
+        <div class="modal-content box">
+            <h1 class="title">Tube 1 Details</h1>
+            <table class="table is-fullwidth">
 
 
+
+                <tr>
+                    <th>Outside Diameter</th>
+                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["od"],locale:'de',precision:2) : '' }} mm</td>
+                </tr>
+
+
+                <tr>
+                    <th>Inside Diameter</th>
+                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["id"],locale:'de',precision:2) : '' }} mm</td>
+                </tr>
+
+
+                <tr>
+                    <th>Thickness</th>
+                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["thk"],locale:'de',precision:2) : '' }} mm</td>
+                </tr>
+
+
+                <tr>
+                    <th>Area</th>
+                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["area"],locale:'de',precision:0) : '' }} mm<sup>2</sup></td>
+                </tr>
+                <tr>
+                    <th>Inertia</th>
+                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["inertia"],locale:'de',precision:0) : '' }} mm<sup>4</sup></td>
+                </tr>
+                <tr>
+                    <th>Pneumatic Load Capacity</th>
+                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["pressureLoad"],locale:'de',precision:0) : '' }} N</td>
+                </tr>
+
+
+                <tr>
+                    <th>Critical Load (Compression)</th>
+                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["criticalLoad"],locale:'de',precision:0) : '' }} N</td>
+                </tr>
+
+                <tr>
+                    <th>EI</th>
+                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["EI"],locale:'de',precision:0) : '' }} Nmm<sup>2</sup></td>
+                </tr>
+
+            </table>
+        </div>
+        <button class="modal-close is-large" aria-label="close" wire:click="toggleModal"></button>
+    </div>
 
 
 

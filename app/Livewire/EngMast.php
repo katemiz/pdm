@@ -60,6 +60,11 @@ class EngMast extends Component
     public $extendedHeight;
     public $nestedHeight;
 
+    public $noOfMTTubes = 16;
+    public $lengthMTTubes = 2000; // mm
+    public $overlapMTTubes = 500; // mm
+    public $headMTTubes = 70; // mm
+
 
     public $showModal = false;
 
@@ -146,14 +151,14 @@ class EngMast extends Component
         $t  = $this->smallestTubeThickness;
         $od = $this->smallestTubeId + 2*$this->smallestTubeThickness;
 
-        for ($i = 0; $i < 16; $i++) {
+        for ($i = 0; $i < $this->noOfMTTubes; $i++) {
 
             $moment         = $this->CalculateMomentCapability($od,$id);
             $mass           = $this->CalculateMass($od,$id);
             $pressureLoad   = $this->CalculateLiftCapacity($od);
             $criticalLoad   = $this->ProfileCriticalLoad($od,$id);
 
-            $this->tubeData[] = [
+            $this->tubeData[$i] = [
                 "od" => $od,
                 "id" => $id,
                 "thk" => $t,
@@ -190,16 +195,30 @@ class EngMast extends Component
 
     function MastDeflections() {
 
-        if ($this->NoOfSections == null || $this->LengthOfSections == null || $this->OverlapOfSections == null || $this->HeadOfSections == null) {
+        $this->MasttechProfiles();
 
-            $this->extendedHeight = 0;
-            $this->nestedHeight   = 0;
+        $this->extendedHeight   = $this->noOfMTTubes*$this->lengthMTTubes-($this->noOfMTTubes-1)*$this->overlapMTTubes;
+        $this->nestedHeight     = $this->lengthMTTubes+($this->noOfMTTubes-1)*$this->headMTTubes;
 
-            return true;
+        for ($i = 0; $i < $this->noOfMTTubes; $i++) {
+
+            $eth = $this->extendedHeight+$i*$this->OverlapOfSections-($i+1)*$this->LengthOfSections;
+            $ebh = $eth-$this->LengthOfSections;
+
+            $nth = $this->nestedHeight-($i+1)*$this->HeadOfSections;;
+            $nbh = $nth-$this->LengthOfSections;
+
+            $this->tubeData[$i]['heights'] = [
+                'eth' => $eth,
+                'ebh' => $ebh,
+                'nth' => $nth,
+                'nbh' => $nbh,
+            ];
+
         }
 
-        $this->extendedHeight   = $this->NoOfSections*$this->LengthOfSections-($this->NoOfSections-1)*$this->OverlapOfSections;
-        $this->nestedHeight     = $this->LengthOfSections+($this->NoOfSections-1)*$this->HeadOfSections;
+        dd($this->tubeData);
+
     }
 
 

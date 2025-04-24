@@ -60,7 +60,7 @@ class EngMast extends Component
     public $extendedHeight;
     public $nestedHeight;
 
-    public $noOfMTTubes = 16;
+    public $noOfMTTubes = 15;
     public $lengthMTTubes = 2000; // mm
     public $overlapMTTubes = 500; // mm
     public $headMTTubes = 70; // mm
@@ -169,6 +169,7 @@ class EngMast extends Component
                 "EI" => $this->EI($od,$id),
                 "pressureLoad" => $pressureLoad,
                 "criticalLoad" => $criticalLoad,
+                "length" =>$this->LengthOfSections
             ];
 
             $id = $od+2*$this->gapBetweenTubes;
@@ -200,13 +201,26 @@ class EngMast extends Component
         $this->extendedHeight   = $this->noOfMTTubes*$this->lengthMTTubes-($this->noOfMTTubes-1)*$this->overlapMTTubes;
         $this->nestedHeight     = $this->lengthMTTubes+($this->noOfMTTubes-1)*$this->headMTTubes;
 
+        $n = $this->noOfMTTubes;
+
         for ($i = 0; $i < $this->noOfMTTubes; $i++) {
 
-            $eth = $this->extendedHeight+$i*$this->OverlapOfSections-($i+1)*$this->LengthOfSections;
-            $ebh = $eth-$this->LengthOfSections;
+            if ($n > 1) {
 
-            $nth = $this->nestedHeight-($i+1)*$this->HeadOfSections;;
-            $nbh = $nth-$this->LengthOfSections;
+                $eth    = $n*$this->lengthMTTubes-($n-1)*$this->overlapMTTubes;
+                $ebh    = $eth-$this->lengthMTTubes;
+
+                $nth    = $this->lengthMTTubes+($n-1)*$this->headMTTubes;
+                $nbh    = $nth-$this->lengthMTTubes;
+
+            } else {
+
+                $eth    = $this->lengthMTTubes;
+                $ebh    = $eth-$this->lengthMTTubes;
+
+                $nth    = $this->lengthMTTubes;
+                $nbh    = $nth-$this->lengthMTTubes;
+            }
 
             $this->tubeData[$i]['heights'] = [
                 'eth' => $eth,
@@ -215,9 +229,13 @@ class EngMast extends Component
                 'nbh' => $nbh,
             ];
 
+            $n--;
         }
 
-        dd($this->tubeData);
+        // dd([$this->tubeData,$this->extendedHeight,$this->nestedHeight]);
+
+        // dd([$this->extendedHeight,$this->nestedHeight,$this->lengthMTTubes,$this->noOfMTTubes,$this->overlapMTTubes,$this->headMTTubes]);
+
 
     }
 

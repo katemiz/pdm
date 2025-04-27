@@ -56,7 +56,7 @@
                   <div class="media">
 
                     <div class="media-content">
-                      <p class="title is-4">Pneumatic Lift Capacity</p>
+                      <p class="title is-4">(1) Pneumatic Lift Capacity</p>
                     </div>
                   </div>
 
@@ -82,7 +82,7 @@
                   <div class="media">
 
                     <div class="media-content">
-                      <p class="title is-4">Critical Load</p>
+                      <p class="title is-4">(2) Critical Load</p>
                     </div>
                   </div>
 
@@ -121,8 +121,33 @@
             <th class="has-text-right">THK</th>
             <th class="has-text-right">Mass</th>
             <th class="has-text-right">Moment<br>Capacity</th>
-            <th class="has-text-right" colspan="2">Pneumatic<br>Load Capacity</th>
-            <th class="has-text-right">P<sub>cr</sub></th>
+            <th class="has-text-centered has-background-white-ter" colspan="2">Pneumatic<br>Load Capacity<sup>(1)</sup>
+                <br><br>
+
+                <a class="" wire:click='decreasePressure'>
+                    <i class="icon "><x-carbon-chevron-down /></i>
+                </a>
+
+                <span class="tag is-info">{{ $pressure }} Bars</span>
+                <a class="" wire:click='increasePressure'>
+                    <i class="icon "><x-carbon-chevron-up /></i>
+                </a>
+
+            </th>
+            <th class="has-text-centered">P<sub>cr</sub><sup>(2)</sup>
+
+                <br><br>
+
+                <a class="" wire:click='decreaseBucklingLength'>
+                    <i class="icon "><x-carbon-chevron-down /></i>
+                </a>
+
+                <span class="tag is-info">{{ $tubeBucklingLength }} mm</span>
+                <a class="" wire:click='increaseBucklingLength'>
+                    <i class="icon "><x-carbon-chevron-up /></i>
+                </a>
+
+            </th>
 
 
 
@@ -141,8 +166,8 @@
                     <td class="has-text-right">{{ sprintf("%.2f",round($tube["thk"],2)) }} mm</td>
                     <td class="has-text-right">{{ round($tube["mass"],1) }} kg/m</td>
                     <td class="has-text-right">{{ round($tube["moment"],0) }} Nm</td>
-                    <td class="has-text-right">{{ round($tube["pressureLoad"],0) }} N</td>
-                    <td class="has-text-right">{{ round($tube["pressureLoad"] / 9.81, 0) }} kg</td>
+                    <td class="has-text-right has-background-white-ter">{{ round($tube["pressureLoad"],0) }} N</td>
+                    <td class="has-text-right has-background-white-ter">{{ round($tube["pressureLoad"] / 9.81, 0) }} kg</td>
                     <td class="has-text-right">{{ round($tube["criticalLoad"],0) }} N</td>
                 </tr>
 
@@ -200,7 +225,8 @@
                 </tr>
                 <tr>
                     <th>Pneumatic Load Capacity</th>
-                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["pressureLoad"],locale:'de',precision:0) : '' }} N</td>
+                    <td class="has-text-right">{{ !empty($singleTubeData) ? Number::format($singleTubeData["pressureLoad"],locale:'de',precision:0) : '' }} N
+                    </td>
                 </tr>
 
 

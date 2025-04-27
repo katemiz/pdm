@@ -112,7 +112,27 @@ class EngMast extends Component
 
 
 
+    public function increasePressure()
+    {
+        $this->pressure += 0.1;
+        $this->pneumaticLiftCapacity();
+    }
 
+    public function decreasePressure()
+    {
+        $this->pressure -= 0.1;
+        $this->pneumaticLiftCapacity();
+    }
+
+    public function increaseBucklingLength() {
+        $this->tubeBucklingLength += 100;
+        $this->MasttechProfiles();
+    }
+
+    public function decreaseBucklingLength() {
+        $this->tubeBucklingLength -= 100;
+        $this->MasttechProfiles();
+    }
 
 
 

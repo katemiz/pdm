@@ -137,32 +137,48 @@
 
         <div class="card">
 
-
-
-        <div class="card-image has-background-grey-lighter">
-            <figure class="image ">
-                <img src="{{ asset('/images/MtTubes.svg') }}" />
-            </figure>
-        </div>
-
+          <div class="card-image has-background-grey-lighter">
+              <figure class="image ">
+                  <img src="{{ asset('/images/MtTubes.svg') }}" />
+              </figure>
+          </div>
 
           <div class="card-content">
             <div class="media">
               <div class="media-content">
                 <p class="title is-4">
                   <a href="/engineering/mast/mttubes">Masttech Standard Profiles</a>
-
                 </p>
-
               </div>
             </div>
-
           </div>
+
         </div>
 
       </div>
 
       <div class="column is-1/3">
+
+        <div class="card">
+
+          <div class="card-image has-background-grey-lighter">
+              <figure class="image ">
+                  <img src="{{ asset('/images/WindLoad.svg') }}" />
+              </figure>
+          </div>
+
+          <div class="card-content">
+            <div class="media">
+              <div class="media-content">
+                <p class="title is-4">
+                  <a href="/engineering/mast/wloads">Wind Forces on Payloads</a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
       </div>
 
 

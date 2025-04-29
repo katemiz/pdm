@@ -66,6 +66,15 @@ class EngMast extends Component
     public $headMTTubes = 70; // mm
 
 
+    public $cd = 1.5;
+    public $sailarea = 1.50;
+    public $windspeed = 120;
+    public $airdensity = 1.293; // kg/m3
+    public $windload ;
+
+
+
+
     public $showModal = false;
 
 
@@ -100,6 +109,14 @@ class EngMast extends Component
                 $this->MastDeflections();
                 return view('engineering.mast.deflection');
                 break;
+
+
+            case 'wloads':
+                $this->WindLoads();
+                return view('engineering.mast.wloads');
+                break;
+
+
 
             default:
                 # code...
@@ -258,6 +275,22 @@ class EngMast extends Component
 
 
     }
+
+
+
+
+
+
+    function WindLoads() {
+
+
+
+
+        
+        $this->windload = 0.5*$this->airdensity*$this->cd*$this->sailarea*pow($this->windspeed,2);
+
+    }
+
 
 
     function GetMore($tubeNo) {

@@ -14,9 +14,23 @@
 
 
 
-    <figure class="image mb-4">
-        <img src="{{ asset('/images/fpayload.png') }}" />
-      </figure>
+    <div class="columns">
+
+        <div class="column is-3"></div>
+
+        <div class="column is-half">
+            <figure class="image mb-4 p-8">
+                <img src="{{ asset('/images/fpayload.png') }}" />
+            </figure>
+        </div>
+
+        <div class="column is-3"></div>
+
+
+      </div>
+
+
+
 
 
     <div class="card p-6">

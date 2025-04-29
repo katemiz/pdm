@@ -13,6 +13,12 @@
     </header>
 
 
+
+    <figure class="image mb-4">
+        <img src="{{ asset('/images/fpayload.png') }}" />
+      </figure>
+
+
     <div class="card p-6">
 
         <div class="columns">

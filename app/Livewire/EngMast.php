@@ -102,12 +102,12 @@ class EngMast extends Component
 
             case 'heights':
                 $this->MastHeights();
-                return view('engineering.mast.heights');
+                return view('engineering.mast.mttubes');
                 break;
 
             case 'deflection':
                 $this->MastDeflections();
-                return view('engineering.mast.deflection');
+                return view('engineering.mast.mttubes');
                 break;
 
 
@@ -272,6 +272,18 @@ class EngMast extends Component
         // dd([$this->tubeData,$this->extendedHeight,$this->nestedHeight]);
 
         // dd([$this->extendedHeight,$this->nestedHeight,$this->lengthMTTubes,$this->noOfMTTubes,$this->overlapMTTubes,$this->headMTTubes]);
+
+
+       $data["extendedHeight"] = $this->extendedHeight;
+       $data["nestedHeight"] = $this->nestedHeight;
+       $data["tubes"] = $this->tubeData;
+
+
+
+
+
+        $this->dispatch('DrawMastTubes',data : $data);
+
 
 
     }

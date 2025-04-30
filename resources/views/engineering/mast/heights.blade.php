@@ -1,6 +1,6 @@
-<section class="section container">
+{{-- <section class="section container"> --}}
 
-    <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
+    {{-- <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
         <ul>
           <li><a href='/engineering/home'>Engineering</a></li>
           <li class="is-active"><a href="#" aria-current="page">Mast Nested/Extended Heights</a></li>
@@ -10,8 +10,9 @@
     <header class="mb-6">
         <h1 class="title has-text-weight-light is-size-1">No of Sections - Extended Height - Nested Height</h1>
         <h2 class="subtitle has-text-weight-light">Relationship between three parameters</h2>
-    </header>
+    </header> --}}
 
+    <div>
 
     <div class="card p-6">
 
@@ -20,7 +21,7 @@
             <div class="column field is-half">
                 <label class="label">Number of Sections</label>
                 <div class="control">
-                <input class="input" type="number" placeholder="Number of Sections" wire:model.live="NoOfSections" min="2"  max="15">
+                <input class="input" type="number" placeholder="Number of Sections" wire:model.live="NoOfSections" min="2"  max="14" step="1">
                 </div>
             </div>
 
@@ -28,7 +29,7 @@
             <div class="column field">
                 <label class="label">Length of Sections (mm)</label>
                 <div class="control">
-                <input class="input" type="text" placeholder="Tube Lengths" wire:model.live="LengthOfSections" >
+                <input class="input" type="number" placeholder="Tube Lengths" wire:model.live="LengthOfSections" min="500"  max="90000" step="50">
                 </div>
             </div>
 
@@ -41,7 +42,7 @@
             <div class="column field is-half">
                 <label class="label">Overlap Length (mm)</label>
                 <div class="control">
-                <input class="input" type="text" placeholder="Overlap Length" wire:model.live="OverlapOfSections" >
+                <input class="input" type="number" placeholder="Overlap Length" wire:model.live="OverlapOfSections" min="50"  max="3000" step="10">
                 </div>
             </div>
 
@@ -49,7 +50,7 @@
             <div class="column field">
                 <label class="label">Head Distance (mm)</label>
                 <div class="control">
-                <input class="input" type="text" placeholder="Head Distance" wire:model.live="HeadOfSections" >
+                <input class="input" type="number" placeholder="Head Distance" wire:model.live="HeadOfSections" min="0"  max="600" step="1">
                 </div>
             </div>
 
@@ -83,4 +84,7 @@
 
     </div>
 
-</section>
+
+  </div>
+
+{{-- </section> --}}

@@ -1,16 +1,5 @@
-<section class="section container">
+<div>
 
-    <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
-        <ul>
-          <li><a href='/engineering/home'>Engineering</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Wind Forces on Payloads</a></li>
-        </ul>
-    </nav>
-
-    <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">Wind Forces on Payloads</h1>
-        <h2 class="subtitle has-text-weight-light">Wind Speed/Sail Area</h2>
-    </header>
 
 
 
@@ -92,4 +81,4 @@
 
     </div>
 
-</section>
+</div>

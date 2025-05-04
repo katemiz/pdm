@@ -13,20 +13,59 @@
 
               <div class="content">
 
-                <ol>
-                    <li>Material: Aluminium</li>
-                    <li>Yield Strength: {{ $yieldStrength }} MPa</li>
-                    <li>Tensile Strength: {{ $ultimateStrength }} MPa</li>
-                    <li>Modulus of Elasticity: {{ $E }} MPa</li>
-                    <li>Density: {{ $materialDensity }} g/cm<sup>3</sup></li>
-                </ol>
+                <table class="table is-fullwidth">
+
+                    <tbody>
+
+                        <tr>
+                            <th class="has-text-left font-bold">Material</th>
+                            <td class="has-text-right">Aluminum</td>
+                        </tr>
+
+                        <tr>
+                            <th class="has-text-left font-bold">Yield Strength</th>
+                            <td class="has-text-right">{{ $yieldStrength }} MPa</td>
+                        </tr>
+
+                        <tr>
+                            <th class="has-text-left font-bold">Tensile Strength</th>
+                            <td class="has-text-right">{{ $ultimateStrength }} MPa</td>
+                        </tr>
+
+                        <tr>
+                            <th class="has-text-left font-bold">Modulus of Elasticity</th>
+                            <td class="has-text-right">{{ $E }} MPa</td>
+                        </tr>
+
+                        <tr>
+                            <th class="has-text-left font-bold">Density</th>
+                            <td class="has-text-right">{{ $materialDensity }} g/cm<sup>3</sup></td>
+                        </tr>
+
+                    </tbody>
+                  </table>
 
               </div>
             </div>
           </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </div>
 
-    
+
 
     <div class="column is-1/3">
         <div class="card">

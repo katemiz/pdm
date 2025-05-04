@@ -1,5 +1,5 @@
 class DrawMastTubesClass {
-   
+
     constructor(data) {
 
         // Data
@@ -19,7 +19,7 @@ class DrawMastTubesClass {
         let c = document.getElementById(this.CANVAS_ID);
 
         this.g = c.getContext("2d");
-        
+
         // WIDTH AND HEIGHT
         c.width     = 0.95*document.getElementById(this.CANVAS_DIV).offsetWidth;
         c.height    = 0.3*c.width;
@@ -37,13 +37,27 @@ class DrawMastTubesClass {
 
         // x,y Scales
         // this.xScale = c.width/(this.sys.extendedHeight+this.sys.zOffset+2*this.MARGIN_X+this.PAYLOAD_DIA*5);
-        // this.yScale = c.height/(this.tubes[0].od+2*this.MARGIN_Y);   
+        // this.yScale = c.height/(this.tubes[0].od+2*this.MARGIN_Y);
 
 
 
 
         this.auxiliaryCurves()
 
+        console.log(this.tubes.length)
+
+        for (let index = this.tubes.length; index < 0; index = index -1) {
+
+            console.log(index-1)
+
+
+            //this.drawTubes(this.tubes[index])
+
+
+        }
+
+
+
 
 
     }
@@ -53,18 +67,15 @@ class DrawMastTubesClass {
 
 
 
-    run() {
+    // run() {
 
-        this.drawTubes();
-    }
-  
+    //     this.drawTubes();
+    // }
+
 
 
 
     auxiliaryCurves() {
-
-
-
 
         // TUBES CENTERLINE
         this.g.beginPath();
@@ -81,16 +92,18 @@ class DrawMastTubesClass {
         this.g.arc(this.w-this.MX, this.h/2, this.R, 0, 2 * Math.PI);
         this.g.fill();
         this.g.stroke();
-
-
-
-    } 
+    }
 
 
 
 
 
-    drawTubes() {
+    drawTubes(tube) {
+
+
+        console.log(tube)
+
+        return true;
 
         // TUBES DIA-LENGTH
         this.tubes.forEach((tube) => {
@@ -104,11 +117,11 @@ class DrawMastTubesClass {
             this.g.stroke();
             this.g.fill();
             this.g.closePath();
-        
+
             this.g.setTransform(1, 0, 0, 1, 0, 0);
-        
+
             this.g.fillStyle = "Red";
-        
+
             this.g.fillText(tube.zA,(this.MARGIN_X+tube.zA)*this.xScale,this.h-10);
             this.g.fillText(tube.zF,(this.MARGIN_X+tube.zF)*this.xScale,this.h-10);
         });
@@ -116,11 +129,11 @@ class DrawMastTubesClass {
         // TUBES Z-OFFSET
         this.g.beginPath();
         this.g.lineWidth = 6;
-    
+
         this.g.moveTo(this.xScale*(this.MARGIN_X+this.sys.extendedHeight),this.h/2);
         this.g.lineTo(this.xScale*(this.MARGIN_X+this.sys.totalHeight),this.h/2);
         this.g.stroke();
-    
+
         this.g.setTransform(1, 0, 0, 1, 0, 0);
 
         // TUBES CENTERLINE
@@ -129,7 +142,7 @@ class DrawMastTubesClass {
         this.g.moveTo(this.MARGIN_X*this.xScale,this.h/2);
         this.g.lineTo((this.w-this.MARGIN_X*this.xScale),this.h/2);
         this.g.stroke();
-    
+
         // TUBES COORDINATE AXIS CIRCLE
         this.g.beginPath();
         this.g.fillStyle = "Red";
@@ -142,17 +155,21 @@ class DrawMastTubesClass {
     }
 
 
+
+
+
+
     drawPayloadArrow(ctx, fromx, fromy, tox, toy, arrowWidth, color){
         //variables to be used when creating the arrow
         var headlen = 10;
         var angle = Math.atan2(toy-fromy,tox-fromx);
-    
+
         ctx.fillText(this.sys.horLoad+'N',fromx-10,fromy-10);
         ctx.fillText(this.sys.totalHeight,(this.MARGIN_X+this.sys.totalHeight)*this.xScale,this.h-10);
-    
+
         ctx.save();
         ctx.strokeStyle = color;
-     
+
         //starting path of the arrow from the start square to the end square
         //and drawing the stroke
         ctx.beginPath();
@@ -160,23 +177,23 @@ class DrawMastTubesClass {
         ctx.lineTo(tox, toy);
         ctx.lineWidth = arrowWidth;
         ctx.stroke();
-     
+
         //starting a new path from the head of the arrow to one of the sides of the point
         ctx.beginPath();
         ctx.moveTo(tox, toy);
         ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
                    toy-headlen*Math.sin(angle-Math.PI/7));
-     
+
         //path from the side point of the arrow, to the other side point
         ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),
                    toy-headlen*Math.sin(angle+Math.PI/7));
-     
+
         //path from the side point back to the tip of the arrow, and then
         //again to the opposite side point
         ctx.lineTo(tox, toy);
         ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
                    toy-headlen*Math.sin(angle-Math.PI/7));
-     
+
         //draws the paths created above
         ctx.stroke();
         ctx.restore();

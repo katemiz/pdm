@@ -13,26 +13,27 @@
                 <br><br>
 
                 <a class="" wire:click='decreasePressure'>
-                    <i class="icon "><x-carbon-chevron-down /></i>
+                    <i class="icon "><x-carbon-arrow-down /></i>
                 </a>
 
                 <span class="tag is-info">{{ $pressure }} Bars</span>
                 <a class="" wire:click='increasePressure'>
-                    <i class="icon "><x-carbon-chevron-up /></i>
+                    <i class="icon "><x-carbon-arrow-up /></i>
                 </a>
             </th>
 
             <th class="has-text-centered">P<sub>cr</sub><sup>(2)</sup>
 
                 <br><br>
+                <br>
 
                 <a class="" wire:click='decreaseBucklingLength'>
-                    <i class="icon "><x-carbon-chevron-down /></i>
+                    <i class="icon "><x-carbon-arrow-down /></i>
                 </a>
 
                 <span class="tag is-info">{{ $tubeBucklingLength }} mm</span>
                 <a class="" wire:click='increaseBucklingLength'>
-                    <i class="icon "><x-carbon-chevron-up /></i>
+                    <i class="icon "><x-carbon-arrow-up /></i>
                 </a>
             </th>
 

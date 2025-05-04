@@ -33,7 +33,7 @@
                 <h1 class="title has-text-weight-light is-size-1">Masttech Tube Profiles</h1>
                 <h2 class="subtitle has-text-weight-light">All Rights Reserved &copy; 2025</h2>
             </header>
-                
+
             @break
 
 
@@ -48,12 +48,12 @@
                   <li class="is-active"><a href="#" aria-current="page">Mast Nested/Extended Heights</a></li>
                 </ul>
             </nav>
-        
+
             <header class="mb-6">
                 <h1 class="title has-text-weight-light is-size-1">No of Sections - Extended Height - Nested Height</h1>
                 <h2 class="subtitle has-text-weight-light">Relationship between three parameters</h2>
             </header>
-           @break 
+           @break
 
 
 
@@ -77,7 +77,24 @@
                 <h1 class="title has-text-weight-light is-size-1">Mast Deflections</h1>
                 <h2 class="subtitle has-text-weight-light">Bending Moment and Deflection Calculation for Variable Section Mast Structures</h2>
             </header>
-        
+
+            @break
+
+
+        @case("wloads")
+
+            <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
+                <ul>
+                <li><a href='/engineering/home'>Engineering</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Wind Forces on Payloads</a></li>
+                </ul>
+            </nav>
+
+            <header class="mb-6">
+                <h1 class="title has-text-weight-light is-size-1">Wind Forces on Payloads</h1>
+                <h2 class="subtitle has-text-weight-light">Wind Speed/Sail Area</h2>
+            </header>
+
             @break
 
 
@@ -85,8 +102,36 @@
 
 
 
-           
-    @endswitch 
+        @case("pneumatic")
+
+            <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
+                <ul>
+                <li><a href='/engineering/home'>Engineering</a></li>
+                <li class="is-active"><a href="#" aria-current="page">Pneumatic Capacity Calculation</a></li>
+                </ul>
+            </nav>
+
+            <header class="mb-6">
+                <h1 class="title has-text-weight-light is-size-1">Pressure Loads</h1>
+                <h2 class="subtitle has-text-weight-light">Pneumatic Capacity Calculation for Pressure Activated Masts</h2>
+            </header>
+
+            @break
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    @endswitch
 
 
 
@@ -97,9 +142,9 @@
 
     @if ($action == 'deflection' || $action == 'heights')
 
-        @include('engineering.mast.heights') 
+        @include('engineering.mast.heights')
 
-    @endif 
+    @endif
 
 
 
@@ -110,25 +155,33 @@
         <div class="card my-4 has-text-centered" id="figDiv">
             <canvas id="figCanvas"></canvas>
         </div>
-    
 
-    @endif 
+
+    @endif
 
 
 
     @if ($action == 'deflection' || $action == 'mttubes')
 
-        @include('engineering.mast.info') 
-        @include('engineering.mast.tubestable') 
+        @include('engineering.mast.info')
+        @include('engineering.mast.tubestable')
 
-    @endif 
-
-
+    @endif
 
 
+    @if ($action == 'wloads')
+
+        @include('engineering.mast.wloads')
+
+    @endif
 
 
 
+    @if ($action == 'pneumatic')
+
+        @include('engineering.mast.pneumatic')
+
+    @endif
 
 
 
@@ -195,7 +248,7 @@
             <button class="modal-close is-large" aria-label="close" wire:click="toggleModal"></button>
         </div>
 
-    @endif 
+    @endif
 
 
 

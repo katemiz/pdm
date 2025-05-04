@@ -1,16 +1,5 @@
-<section class="section container">
+<div>
 
-    <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
-        <ul>
-          <li><a href='/engineering/home'>Engineering</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Pneumatic Capacity Calculation</a></li>
-        </ul>
-    </nav>
-
-    <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">Mast Design Parameters</h1>
-        <h2 class="subtitle has-text-weight-light">Pneumatic Capacity Calculation for Pressure Activated Masts</h2>
-    </header>
 
 
 
@@ -31,7 +20,7 @@
             <div class="field">
                 <label class="label">d, Diameter of Tube End (mm)</label>
                 <div class="control">
-                  <input class="input" type="text" placeholder="Outer Diameter of Tube" id="dia" wire:model.live="tubeOd" >
+                  <input class="input" type="number" placeholder="Outer Diameter of Tube" id="dia" wire:model.live="tubeOd" min="1"  max="1000" step="1">
                 </div>
             </div>
 
@@ -39,7 +28,7 @@
             <div class="field">
                 <label class="label">p<sub>i</sub>, Internal Pressure, (bar)</label>
                 <div class="control">
-                  <input class="input" type="text" placeholder="Inner Pressure in Bar" id="pi" wire:model.live="pressure">
+                  <input class="input" type="number" placeholder="Inner Pressure in Bar" id="pi" wire:model.live="pressure" min="1"  max="5" step="0.1">
                 </div>
 
 
@@ -99,4 +88,4 @@
 
 
 
-</section>
+</div>

@@ -92,38 +92,29 @@ class EngMast extends Component
 
             case 'pneumatic':
                 $this->pneumaticLiftCapacity();
-                return view('engineering.mast.pneumatic');
                 break;
 
+            default:
             case 'mttubes':
                 $this->MasttechProfiles();
-                return view('engineering.mast.mttubes');
                 break;
 
             case 'heights':
                 $this->MastHeights();
-                return view('engineering.mast.mttubes');
                 break;
 
             case 'deflection':
                 $this->MastDeflections();
-                return view('engineering.mast.mttubes');
                 break;
-
 
             case 'wloads':
                 $this->WindLoads();
-                return view('engineering.mast.wloads');
                 break;
 
-
-
-            default:
-                # code...
-                break;
         }
 
-        return view('engineering.eng');
+        return view('engineering.mast.mast');
+
     }
 
 
@@ -156,10 +147,7 @@ class EngMast extends Component
 
     public function pneumaticLiftCapacity() {
 
-
         if ($this->pressure == null || $this->tubeOd == null ) {
-
-
 
             $this->tubePressureArea = 0;
             $this->pressureMPa = 0;
@@ -169,7 +157,6 @@ class EngMast extends Component
             $this->pressureLoadInKg = 0;
 
             return true;
-
         }
 
         $this->tubePressureArea = pi()*pow($this->tubeOd,2)/4;
@@ -295,11 +282,7 @@ class EngMast extends Component
 
     function WindLoads() {
 
-
-
-
-        
-        $this->windload = 0.5*$this->airdensity*$this->cd*$this->sailarea*pow($this->windspeed,2);
+        $this->windload = 0.5*$this->airdensity*$this->cd*$this->sailarea*pow($this->windspeed/3.6,2);
 
     }
 

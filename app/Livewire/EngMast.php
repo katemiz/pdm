@@ -70,7 +70,9 @@ class EngMast extends Component
     public $sailarea = 1.50;
     public $windspeed = 120;
     public $airdensity = 1.293; // kg/m3
-    public $windload ;
+    public $windload;
+
+    public $zOffset = 0; 
 
 
 
@@ -227,6 +229,8 @@ class EngMast extends Component
 
         $n = $this->noOfMTTubes;
 
+       $maxDia = 0; 
+
         for ($i = 0; $i < $this->noOfMTTubes; $i++) {
 
             if ($n > 1) {
@@ -254,6 +258,11 @@ class EngMast extends Component
             ];
 
             $n--;
+
+
+            $maxDia = max($maxDia,$this->tubeData[$i]['od']); 
+
+
         }
 
         // dd([$this->tubeData,$this->extendedHeight,$this->nestedHeight]);
@@ -261,8 +270,11 @@ class EngMast extends Component
         // dd([$this->extendedHeight,$this->nestedHeight,$this->lengthMTTubes,$this->noOfMTTubes,$this->overlapMTTubes,$this->headMTTubes]);
 
 
+       $data["zOffset"] = $this->zOffset;
        $data["extendedHeight"] = $this->extendedHeight;
        $data["nestedHeight"] = $this->nestedHeight;
+       $data["maxDia"] = $maxDia;
+
        $data["tubes"] = $this->tubeData;
 
 

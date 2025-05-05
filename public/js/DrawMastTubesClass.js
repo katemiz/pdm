@@ -8,8 +8,8 @@ class DrawMastTubesClass {
         // this.overlaps = data.overlaps;
 
         // Constants
-        this.MX = 60;       // Margin in X Direction
-        this.MY = 40;       // Margin in X Direction
+        this.MX = 300;       // Margin in X Direction
+        this.MY = 300;       // Margin in X Direction
 
         this.R = 6;        // DIA OF REFERENCE CIRCLES
 
@@ -27,11 +27,20 @@ class DrawMastTubesClass {
         this.w = c.width;
         this.h = c.height;
 
-        let totalW = data.extendedHeight+data.zoffset+2*this.R+2*this.MX
+        console.log("w",this.w)
+        console.log("h",this.h)
+
+        let totalW = data.extendedHeight+data.zOffset+2*this.R+2*this.MX
         let totalH = data.maxDia+2*this.MY
+
+        console.log("totalW",totalW)
+        console.log("totalH",totalH)
 
         this.sx = this.w/totalW
         this.sy = this.h/totalH
+
+        console.log("sx",this.sx)
+        console.log("sy",this.sy)
 
         this.tubes = data.tubes
 
@@ -42,21 +51,25 @@ class DrawMastTubesClass {
 
 
 
-        this.auxiliaryCurves()
 
         console.log(this.tubes.length)
 
-        for (let index = this.tubes.length; index < 0; index = index -1) {
-
-            console.log(index-1)
 
 
-            //this.drawTubes(this.tubes[index])
+        for (let index = this.tubes.length; index > 0; index--) {
+            const element = this.tubes[index-1];
+            // console.log(element)
+
+
+            this.drawTubes(this.tubes[index-1])
+
+            // return true;
 
 
         }
 
 
+        this.auxiliaryCurves()
 
 
 
@@ -80,16 +93,16 @@ class DrawMastTubesClass {
         // TUBES CENTERLINE
         this.g.beginPath();
         this.g.lineWidth = 0.2;
-        this.g.moveTo(5,this.h/2);
-        this.g.lineTo((this.w-5),this.h/2);
+        this.g.moveTo(this.MX*this.sx,this.h/2);
+        this.g.lineTo((this.w-this.MX*this.sx),this.h/2);
         this.g.stroke();
 
 
         // TUBES COORDINATE AXIS CIRCLE
         this.g.beginPath();
         this.g.fillStyle = "Red";
-        this.g.arc(this.MX, this.h/2, this.R, 0, 2 * Math.PI);
-        this.g.arc(this.w-this.MX, this.h/2, this.R, 0, 2 * Math.PI);
+        this.g.arc(this.MX*this.sx, this.h/2, this.R, 0, 2 * Math.PI);
+        this.g.arc(this.w-this.MX*this.sx, this.h/2, this.R, 0, 2 * Math.PI);
         this.g.fill();
         this.g.stroke();
     }
@@ -101,30 +114,45 @@ class DrawMastTubesClass {
     drawTubes(tube) {
 
 
-        console.log(tube)
+        console.log("F tube",tube)
+
+        let x0 = (this.MX+tube.heights.ebh)*this.sx
+        let y0 = this.h/2-tube.od/2*this.sy
+        let rw = (tube.length)*this.sx
+        let rh = tube.od*this.sy
+
+        console.log("X0",x0)
+        console.log("Y0",y0)
+        console.log("rw",rw)
+        console.log("rh",rh)
+
+        console.log("sx",this.sx)
+        console.log("sy",this.sy)
+
+
+
+
+        this.g.beginPath();
+        this.g.fillStyle = "LightGray";
+        this.g.strokeStyle = "Black";
+        // this.g.translate((this.MARGIN_X+tube.zA)*this.xScale,this.yScale*(this.MARGIN_Y+(this.tubes[0].od-tube.od)/2));
+        // this.g.scale(this.xScale,this.yScale)
+        this.g.rect(x0,y0,rw,rh);
+        this.g.stroke();
+        this.g.fill();
+        this.g.closePath();
+
+        // this.g.setTransform(1, 0, 0, 1, 0, 0);
+
+        // this.g.fillStyle = "Red";
+
+        // this.g.fillText(tube.zA,(this.MARGIN_X+tube.zA)*this.xScale,this.h-10);
+        // this.g.fillText(tube.zF,(this.MARGIN_X+tube.zF)*this.xScale,this.h-10);
+
+
 
         return true;
 
-        // TUBES DIA-LENGTH
-        this.tubes.forEach((tube) => {
-
-            this.g.beginPath();
-            this.g.fillStyle = "LightGray";
-            this.g.strokeStyle = "Black";
-            this.g.translate((this.MARGIN_X+tube.zA)*this.xScale,this.yScale*(this.MARGIN_Y+(this.tubes[0].od-tube.od)/2));
-            this.g.scale(this.xScale,this.yScale)
-            this.g.rect(0,0,tube.length,tube.od);
-            this.g.stroke();
-            this.g.fill();
-            this.g.closePath();
-
-            this.g.setTransform(1, 0, 0, 1, 0, 0);
-
-            this.g.fillStyle = "Red";
-
-            this.g.fillText(tube.zA,(this.MARGIN_X+tube.zA)*this.xScale,this.h-10);
-            this.g.fillText(tube.zF,(this.MARGIN_X+tube.zF)*this.xScale,this.h-10);
-        });
 
         // TUBES Z-OFFSET
         this.g.beginPath();

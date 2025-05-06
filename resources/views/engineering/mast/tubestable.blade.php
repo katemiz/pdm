@@ -47,7 +47,7 @@
 
             <tr>
                 <th>
-                    <a wire:click="GetMore({{ $i }})" >MT-{{ sprintf("%02d",$i) }}</a>
+                    <a wire:click="GetMore({{ $i }})" >MT-{{ sprintf("%02d",$i+1) }}</a>
                 </th>
                 <td class="has-text-right">{{ sprintf("%.2f",round($tube["od"],2)) }} mm</td>
                 <td class="has-text-right">{{ sprintf("%.2f",round($tube["id"],2)) }} mm</td>

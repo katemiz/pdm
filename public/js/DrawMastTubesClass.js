@@ -18,6 +18,8 @@ class DrawMastTubesClass {
 
         let c = document.getElementById(this.CANVAS_ID);
 
+        c.innerHTML = '';
+
         this.g = c.getContext("2d");
 
         // WIDTH AND HEIGHT
@@ -30,7 +32,7 @@ class DrawMastTubesClass {
         console.log("w",this.w)
         console.log("h",this.h)
 
-        let totalW = data.extendedHeight+data.zOffset+2*this.R+2*this.MX
+        let totalW = 2*this.MX+2*this.R+data.extendedHeight+data.zOffset
         let totalH = data.maxDia+2*this.MY
 
         console.log("totalW",totalW)
@@ -116,7 +118,7 @@ class DrawMastTubesClass {
 
         console.log("F tube",tube)
 
-        let x0 = (this.MX+tube.heights.ebh)*this.sx
+        let x0 = (this.MX+this.R+tube.heights.ebh)*this.sx
         let y0 = this.h/2-tube.od/2*this.sy
         let rw = (tube.length)*this.sx
         let rh = tube.od*this.sy

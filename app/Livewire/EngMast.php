@@ -53,10 +53,10 @@ class EngMast extends Component
     public $tubeData = [];
 
 
-    public $NoOfSections = 6;
-    public $LengthOfSections = 3000;
-    public $OverlapOfSections = 800;
-    public $HeadOfSections = 200;
+    //public $NoOfSections = 6;
+    // public $LengthOfSections = 3000;
+    // public $OverlapOfSections = 800;
+    // public $HeadOfSections = 200;
     public $extendedHeight;
     public $nestedHeight;
 
@@ -72,7 +72,12 @@ class EngMast extends Component
     public $airdensity = 1.293; // kg/m3
     public $windload;
 
+    public $xOffset = 0; 
     public $zOffset = 0; 
+    public $startTubeNo = 1;  
+    public $endTubeNo = 15;  
+
+
 
 
 
@@ -195,7 +200,7 @@ class EngMast extends Component
                 "EI" => $this->EI($od,$id),
                 "pressureLoad" => $pressureLoad,
                 "criticalLoad" => $criticalLoad,
-                "length" =>$this->LengthOfSections
+                "length" =>$this->lengthMTTubes
             ];
 
             $id = $od+2*$this->gapBetweenTubes;
@@ -207,7 +212,7 @@ class EngMast extends Component
 
     function MastHeights() {
 
-        if ($this->NoOfSections == null || $this->LengthOfSections == null || $this->OverlapOfSections == null || $this->HeadOfSections == null) {
+        if ($this->noOfMTTubes == null || $this->lengthMTTubes == null || $this->overlapMTTubes == null || $this->headMTTubes == null) {
 
             $this->extendedHeight = 0;
             $this->nestedHeight   = 0;
@@ -215,8 +220,8 @@ class EngMast extends Component
             return true;
         }
 
-        $this->extendedHeight   = $this->NoOfSections*$this->LengthOfSections-($this->NoOfSections-1)*$this->OverlapOfSections;
-        $this->nestedHeight     = $this->LengthOfSections+($this->NoOfSections-1)*$this->HeadOfSections;
+        $this->extendedHeight   = $this->noOfMTTubes*$this->lengthMTTubes-($this->noOfMTTubes-1)*$this->overlapMTTubes;
+        $this->nestedHeight     = $this->lengthMTTubes+($this->noOfMTTubes-1)*$this->headMTTubes;
     }
 
 

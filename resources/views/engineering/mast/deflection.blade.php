@@ -24,8 +24,7 @@
 
     <!-- TABLE: TUBE GEOMETRY AND PARAMS -->
     <div class="card my-4 has-text-centered" id="propsTable">
-        <!-- propsTable.js -->
-        <!-- Content Populated by propsTable() -->aaa
+        <!-- tubestable.blade.php -->
     </div>
 
 

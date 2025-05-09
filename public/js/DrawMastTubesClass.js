@@ -18,7 +18,6 @@ class DrawMastTubesClass {
 
         let c = document.getElementById(this.CANVAS_ID);
 
-        c.innerHTML = '';
 
         this.g = c.getContext("2d");
 
@@ -54,8 +53,6 @@ class DrawMastTubesClass {
 
 
 
-        console.log(this.tubes.length)
-
 
 
         for (let index = this.tubes.length; index > 0; index--) {
@@ -75,6 +72,13 @@ class DrawMastTubesClass {
 
 
 
+
+    }
+
+
+    clearCanvas() {
+        this.g.clearRect ( 0 , 0 , this.w , this.h );
+        this.auxiliaryCurves();
     }
 
 

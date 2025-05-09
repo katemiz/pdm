@@ -271,16 +271,20 @@ class EngMast extends Component
         }
 
         // dd([$this->tubeData,$this->extendedHeight,$this->nestedHeight]);
-
         // dd([$this->extendedHeight,$this->nestedHeight,$this->lengthMTTubes,$this->noOfMTTubes,$this->overlapMTTubes,$this->headMTTubes]);
 
 
-       $data["zOffset"] = $this->zOffset;
-       $data["extendedHeight"] = $this->extendedHeight;
-       $data["nestedHeight"] = $this->nestedHeight;
-       $data["maxDia"] = $maxDia;
+        $data["zOffset"] = $this->zOffset;
+        $data["extendedHeight"] = $this->extendedHeight;
+        $data["nestedHeight"] = $this->nestedHeight;
+        $data["maxDia"] = $maxDia;
 
-       $data["tubes"] = $this->tubeData;
+        $data["tubeLength"] = $this->lengthMTTubes;
+        $data["noOfTubes"] = $this->noOfMTTubes;
+        $data["overlapLength"] = $this->overlapMTTubes;
+        $data["headLength"] = $this->headMTTubes;
+
+        $data["tubes"] = $this->tubeData;
 
 
 
@@ -299,8 +303,15 @@ class EngMast extends Component
 
     function WindLoads() {
 
-        $this->windload = 0.5*$this->airdensity*$this->cd*$this->sailarea*pow($this->windspeed/3.6,2);
 
+        if ($this->sailarea == null || $this->windspeed == null|| $this->cd == null) {
+
+            $this->windload = 0;
+
+            return true;
+        }
+
+        $this->windload = 0.5*$this->airdensity*$this->cd*$this->sailarea*pow($this->windspeed/3.6,2);
     }
 
 

@@ -3,9 +3,7 @@ class DrawMastTubesClass {
     constructor(data) {
 
         // Data
-        // this.tubes = data.tubes;
-        // this.sys = data.sys;
-        // this.overlaps = data.overlaps;
+        this.data = data
 
         // Constants
         this.MX = 300;       // Margin in X Direction
@@ -16,55 +14,51 @@ class DrawMastTubesClass {
         this.CANVAS_ID = 'figCanvas'
         this.CANVAS_DIV = 'figDiv'
 
-        let c = document.getElementById(this.CANVAS_ID);
+        this.c = document.getElementById(this.CANVAS_ID);
+        this.g = this.c.getContext("2d");
 
 
-        this.g = c.getContext("2d");
+        this.setCanvasValues()
+    }
+
+
+    setCanvasValues() {
 
         // WIDTH AND HEIGHT
-        c.width     = 0.95*document.getElementById(this.CANVAS_DIV).offsetWidth;
-        c.height    = 0.3*c.width;
+        this.c.width     = 0.95*document.getElementById(this.CANVAS_DIV).offsetWidth;
+        this.c.height    = 0.3*this.c.width;
 
-        this.w = c.width;
-        this.h = c.height;
+        this.w = this.c.width;
+        this.h = this.c.height;
 
-        console.log("w",this.w)
-        console.log("h",this.h)
+        // console.log("w",this.w)
+        // console.log("h",this.h)
 
-        let totalW = 2*this.MX+2*this.R+data.extendedHeight+data.zOffset
-        let totalH = data.maxDia+2*this.MY
+        let totalW = 2*this.MX+2*this.R+this.data.extendedHeight+this.data.zOffset
+        let totalH = this.data.maxDia+2*this.MY
 
-        console.log("totalW",totalW)
-        console.log("totalH",totalH)
+        // console.log("totalW",totalW)
+        // console.log("totalH",totalH)
 
         this.sx = this.w/totalW
         this.sy = this.h/totalH
 
-        console.log("sx",this.sx)
-        console.log("sy",this.sy)
+        // console.log("sx",this.sx)
+        // console.log("sy",this.sy)
 
-        this.tubes = data.tubes
+        this.tubes = this.data.tubes
 
         // x,y Scales
         // this.xScale = c.width/(this.sys.extendedHeight+this.sys.zOffset+2*this.MARGIN_X+this.PAYLOAD_DIA*5);
         // this.yScale = c.height/(this.tubes[0].od+2*this.MARGIN_Y);
 
-
-
-
-
-
-
         for (let index = this.tubes.length; index > 0; index--) {
             const element = this.tubes[index-1];
             // console.log(element)
 
-
             this.drawTubes(this.tubes[index-1])
 
             // return true;
-
-
         }
 
 
@@ -73,12 +67,22 @@ class DrawMastTubesClass {
 
 
 
+
+
+
+
+
     }
 
 
-    clearCanvas() {
+    refreshCanvas(data) {
+
+        this.data = data
         this.g.clearRect ( 0 , 0 , this.w , this.h );
         this.auxiliaryCurves();
+        this.setCanvasValues();
+
+        console.log("refreshCanvas",this.data)
     }
 
 
@@ -120,20 +124,20 @@ class DrawMastTubesClass {
     drawTubes(tube) {
 
 
-        console.log("F tube",tube)
+        // console.log("F tube",tube)
 
         let x0 = (this.MX+this.R+tube.heights.ebh)*this.sx
         let y0 = this.h/2-tube.od/2*this.sy
         let rw = (tube.length)*this.sx
         let rh = tube.od*this.sy
 
-        console.log("X0",x0)
-        console.log("Y0",y0)
-        console.log("rw",rw)
-        console.log("rh",rh)
+        // console.log("X0",x0)
+        // console.log("Y0",y0)
+        // console.log("rw",rw)
+        // console.log("rh",rh)
 
-        console.log("sx",this.sx)
-        console.log("sy",this.sy)
+        // console.log("sx",this.sx)
+        // console.log("sy",this.sy)
 
 
 

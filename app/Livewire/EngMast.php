@@ -9,9 +9,8 @@ use Livewire\Attributes\Rule;
 
 class EngMast extends Component
 {
-
     public $action;
-
+    public $refresh = false;
 
     public $tubeOd = 100;
     public $tubeId;
@@ -23,7 +22,6 @@ class EngMast extends Component
 
     public $singleTubeData = [];
 
-
     public $safetyFactor;
 
     public $pressurePsi;
@@ -32,8 +30,6 @@ class EngMast extends Component
 
     public $pressureLoadInN;
     public $pressureLoadInKg;
-
-
 
     public $factorOfSafety = 2.0; // Factor of Safety
     public $tubeBucklingLength = 3000; // mm
@@ -52,11 +48,6 @@ class EngMast extends Component
 
     public $tubeData = [];
 
-
-    //public $NoOfSections = 6;
-    // public $LengthOfSections = 3000;
-    // public $OverlapOfSections = 800;
-    // public $HeadOfSections = 200;
     public $extendedHeight;
     public $nestedHeight;
 
@@ -72,15 +63,10 @@ class EngMast extends Component
     public $airdensity = 1.293; // kg/m3
     public $windload;
 
-    public $xOffset = 0; 
-    public $zOffset = 0; 
-    public $startTubeNo = 1;  
-    public $endTubeNo = 15;  
-
-
-
-
-
+    public $xOffset = 0;
+    public $zOffset = 0;
+    public $startTubeNo = 1;
+    public $endTubeNo = 15;
 
     public $showModal = false;
 
@@ -117,11 +103,9 @@ class EngMast extends Component
             case 'wloads':
                 $this->WindLoads();
                 break;
-
         }
 
         return view('engineering.mast.mast');
-
     }
 
 
@@ -234,7 +218,7 @@ class EngMast extends Component
 
         $n = $this->noOfMTTubes;
 
-       $maxDia = 0; 
+       $maxDia = 0;
 
         for ($i = 0; $i < $this->noOfMTTubes; $i++) {
 
@@ -264,15 +248,8 @@ class EngMast extends Component
 
             $n--;
 
-
-            $maxDia = max($maxDia,$this->tubeData[$i]['od']); 
-
-
+            $maxDia = max($maxDia,$this->tubeData[$i]['od']);
         }
-
-        // dd([$this->tubeData,$this->extendedHeight,$this->nestedHeight]);
-        // dd([$this->extendedHeight,$this->nestedHeight,$this->lengthMTTubes,$this->noOfMTTubes,$this->overlapMTTubes,$this->headMTTubes]);
-
 
         $data["zOffset"] = $this->zOffset;
         $data["extendedHeight"] = $this->extendedHeight;
@@ -286,14 +263,16 @@ class EngMast extends Component
 
         $data["tubes"] = $this->tubeData;
 
+        if ($this->refresh) {
+            $this->dispatch('RefreshMastTubes',data : $data);
 
+        } else {
+            $this->dispatch('DrawMastTubes',data : $data);
+        }
 
+        $this->refresh = true;
 
-
-        $this->dispatch('DrawMastTubes',data : $data);
-
-
-
+        return true;
     }
 
 
@@ -303,11 +282,9 @@ class EngMast extends Component
 
     function WindLoads() {
 
-
         if ($this->sailarea == null || $this->windspeed == null|| $this->cd == null) {
 
             $this->windload = 0;
-
             return true;
         }
 
@@ -319,18 +296,11 @@ class EngMast extends Component
     function GetMore($tubeNo) {
 
         $this->showModal = true;
-
-        //dd($this->tubeData);
-
         $this->singleTubeData = $this->tubeData[$tubeNo];
-
-        //dd($this->singleTubeData);
-
     }
 
 
     function toggleModal() {
-
 
         $this->showModal = !$this->showModal;
     }

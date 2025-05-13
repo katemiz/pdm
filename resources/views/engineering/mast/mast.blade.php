@@ -5,11 +5,21 @@
 
     <script>
 
+        let canvas;
+
+
         window.addEventListener("DrawMastTubes",function(e) {
 
-            console.log(e.detail.data)
+            // console.log(e.detail.data)
 
-            let canvas = new DrawMastTubesClass(e.detail.data)
+            canvas = new DrawMastTubesClass(e.detail.data)
+
+        })
+
+
+        window.addEventListener("RefreshMastTubes",function(e) {
+
+            canvas.refreshCanvas(e.detail.data)
         })
 
     </script>

@@ -117,7 +117,10 @@
                             <span class="icon"><x-carbon-stamp /></span>
                         </a>
                     </p>
+                    @endrole
 
+                    
+                    @role(['Approver'])
                     @if ($part_type != 'Standard')
                     <p class="level-item">
                         <a wire:click='releaseConfirm({{ $uid }})'>
@@ -126,6 +129,21 @@
                     </p>
                     @endif
                     @endrole
+
+
+
+                    @role(['EngineeringDept'])
+                    @if ($part_type != 'Standard')
+                    <p class="level-item">
+                        <a wire:click='checkIntegrity({{ $uid }})'>
+                            <span class="icon"><x-carbon-data-check /></span>
+                        </a>
+                    </p>
+                    @endif
+                    @endrole
+
+
+
 
                     @if ($part_type != 'Standard')
                     <p class="level-item">
@@ -269,7 +287,7 @@
 
             <article class="message is-danger">
                 <div class="message-header">
-                <p>Release Not Performed : Missing Actions!</p>
+                <p>Dataset Integrity Check for Release</p>
                 </div>
 
                 <div class="message-body">
@@ -295,6 +313,50 @@
             </article>
 
         @endif
+
+
+
+
+
+
+
+
+
+
+
+        @if ($release_integrity_ok)
+
+            <article class="message is-success">
+                <div class="message-header">
+                <p>Data Integrity Check for Release</p>
+                </div>
+
+                <div class="message-body">
+
+                    <p class="my-4">Product dataset is complete for release</p>
+                    <p class="my-4">You can proceed to release dataset.</p>
+
+
+                </div>
+            </article>
+
+        @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

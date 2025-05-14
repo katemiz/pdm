@@ -139,6 +139,9 @@ class LwDetail extends Component
     public $release_errors = false;
     public $parts_list = false;
 
+    public $release_integrity_ok = false;
+
+
     public $approved_by;
 
     public $check_reviewed_at;
@@ -626,6 +629,8 @@ class LwDetail extends Component
 
     public function releaseStart() {
 
+        dd('Release Start');
+
         if ($this->integrityCheck()) {
             $this->js("console.log('m10true')");
             $this->dispatch('show-select-approvers',
@@ -666,6 +671,10 @@ class LwDetail extends Component
             // Send EMails
             $this->sendReleaseMail();
         }
+    }
+
+    public function checkIntegrity($id) {
+       $this->checkDetailIntegrity($id);
     }
 
 
@@ -743,6 +752,12 @@ class LwDetail extends Component
                 'error' => 'Drawing file (pdf) not attached'
             ];
         }
+
+        if (!$this->release_errors) {
+            $this->release_integrity_ok = true;
+        }
+
+
     }
 
 

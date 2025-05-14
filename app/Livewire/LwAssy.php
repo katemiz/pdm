@@ -107,6 +107,8 @@ class LwAssy extends Component
     public $release_errors = false;
     public $parts_list = false;
 
+    public $release_integrity_ok = false;
+
     public $parents = [];
 
 
@@ -516,6 +518,16 @@ class LwAssy extends Component
     }
 
 
+
+
+
+
+
+
+
+
+
+
     #[On('onReleaseConfirmed')]
     public function doRelease() {
 
@@ -543,11 +555,44 @@ class LwAssy extends Component
 
 
 
+    public function checkIntegrity($id) {
+        $this->checkAssyIntegrity($id);
+     }
+
+
+
 
 
     public function checkAssyIntegrity($idItem) {
 
         $item = Item::find($idItem);
+
+        $attachments = Attachment::where('model_name','Product')
+            ->where('model_item_id',$idItem)->get();
+
+
+        $has_step = false;
+        $has_dwg = false;
+
+        foreach ($attachments as $dosya) {
+
+            $ext = substr(strrchr($dosya->original_file_name, '.'), 1);
+
+            if ($dosya->tag == 'DWG-BOM' && in_array($ext, ['pdf','PDF'])) {
+                $has_dwg = true;
+            }
+        }
+
+
+        if ( !$has_dwg ) {
+
+            $this->release_errors[$item->part_number][] = [
+                'id' => $item->id,
+                'part_number' => $item->part_number,
+                'error' => 'Drawing file (pdf) not attached'
+            ];
+        }
+
 
         if ( strlen($item->bom) < 1 ) {
 
@@ -576,8 +621,13 @@ class LwAssy extends Component
                         break;
                 }
             }
-
         }
+
+
+        if (!$this->release_errors) {
+            $this->release_integrity_ok = true;
+        }
+
     }
 
 

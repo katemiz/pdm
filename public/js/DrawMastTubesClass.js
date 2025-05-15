@@ -1,6 +1,6 @@
-class DrawMastTubesClass {
+class CanvasClass {
 
-    constructor(data) {
+    constructor(data,canvas) {
 
         // Data
         this.data = data
@@ -11,11 +11,15 @@ class DrawMastTubesClass {
 
         this.R = 6;        // DIA OF REFERENCE CIRCLES
 
-        this.CANVAS_ID = 'figCanvas'
-        this.CANVAS_DIV = 'figDiv'
+        // this.CANVAS_ID = 'figCanvas'
+        this.CANVAS_DIV = 'canvasDiv'
 
-        this.c = document.getElementById(this.CANVAS_ID);
+        // this.c = document.getElementById(this.CANVAS_ID);
+
+        this.c = canvas
         this.g = this.c.getContext("2d");
+
+
 
 
         this.setCanvasValues()
@@ -25,11 +29,15 @@ class DrawMastTubesClass {
     setCanvasValues() {
 
         // WIDTH AND HEIGHT
-        this.c.width     = 0.95*document.getElementById(this.CANVAS_DIV).offsetWidth;
-        this.c.height    = 0.3*this.c.width;
+        // this.c.width     = 0.95*document.getElementById(this.CANVAS_DIV).offsetWidth;
+        // this.c.height    = 0.3*this.c.width;
 
         this.w = this.c.width;
         this.h = this.c.height;
+
+
+        this.g.fillStyle = 'lightblue';
+        this.g.fillRect(0, 0, this.w, this.h);
 
         // console.log("w",this.w)
         // console.log("h",this.h)
@@ -75,15 +83,16 @@ class DrawMastTubesClass {
     }
 
 
-    refreshCanvas(data) {
+    // refreshCanvas(data) {
 
-        this.data = data
-        this.g.clearRect ( 0 , 0 , this.w , this.h );
-        this.auxiliaryCurves();
-        this.setCanvasValues();
+    //     this.data = data
+    //     this.g.clearRect ( 0 , 0 , this.w , this.h );
+    //     this.auxiliaryCurves();
+    //     this.setCanvasValues();
 
-        console.log("refreshCanvas",this.data)
-    }
+
+    //     console.log("refreshCanvas",this.data)
+    // }
 
 
 
@@ -237,3 +246,68 @@ class DrawMastTubesClass {
         ctx.restore();
     }
 }
+
+
+
+
+
+
+
+function drawCanvas(data) {
+
+    let canvasParent = document.getElementById("canvasDiv");
+
+    console.log("drawing canvas function called")
+
+    let canvas = document.createElement("canvas");
+    canvas.id = "figCanvas";
+
+
+
+    // WIDTH AND HEIGHT
+    canvas.width     = 0.95*canvasParent.offsetWidth;
+    canvas.height    = 0.3*canvas.width;
+
+
+
+    canvasParent.appendChild(canvas);
+
+
+
+    if(document.getElementById("figCanvas")){
+        console.log("Element exists");
+        console.log(canvas)
+
+        console.log(canvas.parentElement)
+    } else {
+        console.log("Element does not exist");
+    }
+
+
+    let mastTubes = new CanvasClass(data,canvas);
+    mastTubes.setCanvasValues();
+
+}
+
+
+
+function redrawCanvas(data) {
+
+    document.getElementById("figCanvas").remove();
+
+
+
+    if(document.getElementById("figCanvas")){
+        console.log("canvas not removed");
+    } else {
+        console.log("canvas removed");
+    }
+
+
+
+
+    drawCanvas(data);
+
+}
+
+

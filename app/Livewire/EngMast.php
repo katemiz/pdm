@@ -41,7 +41,7 @@ class EngMast extends Component
 
 
     public $smallestTubeId = 44; // mm
-    public $smallestTubeThickness = 2.0; // mm
+    public $smallestTubeThickness = 2.5; // mm
     public $noOfTubes = 16; // mm
     public $gapBetweenTubes = 7; // mm
     public $thicknessIncrement = 0.2; // mm
@@ -264,10 +264,10 @@ class EngMast extends Component
         $data["tubes"] = $this->tubeData;
 
         if ($this->refresh) {
-            $this->dispatch('RefreshMastTubes',data : $data);
+            $this->dispatch('triggerCanvasRefresh',data : $data);
 
         } else {
-            $this->dispatch('DrawMastTubes',data : $data);
+            $this->dispatch('triggerCanvasDraw',data : $data);
         }
 
         $this->refresh = true;

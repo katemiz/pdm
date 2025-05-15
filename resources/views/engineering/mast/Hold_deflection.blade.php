@@ -6,29 +6,6 @@
 
 
 
-
-    <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
-        <ul>
-          <li><a href='/engineering/home'>Engineering</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Mast Nested/Extended Heights</a></li>
-        </ul>
-    </nav>
-
-    <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">Telescopic Mast Structure : Deflections</h1>
-        <h2 class="subtitle has-text-weight-light">Bending Moment and Deflection Calculation for Variable Section Mast Structures</h2>
-    </header>
-
-
-    {{-- SVG PICTURE FOR MAST TUBES --}}
-
-    <div class="card my-4 has-text-centered" id="figDiv">
-        <canvas id="figCanvas"></canvas>
-    </div>
-
-
-
-
     <!-- TABLE: TUBE GEOMETRY AND PARAMS -->
     <div class="card my-4 has-text-centered" id="propsTable">
         <!-- tubestable.blade.php -->

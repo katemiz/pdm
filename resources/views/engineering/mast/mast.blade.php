@@ -5,21 +5,13 @@
 
     <script>
 
-        let canvas;
-
-
-        window.addEventListener("DrawMastTubes",function(e) {
-
-            // console.log(e.detail.data)
-
-            canvas = new DrawMastTubesClass(e.detail.data)
-
+        window.addEventListener("triggerCanvasDraw",function(e) {
+            drawCanvas(e.detail.data)
         })
 
 
-        window.addEventListener("RefreshMastTubes",function(e) {
-
-            canvas.refreshCanvas(e.detail.data)
+        window.addEventListener("triggerCanvasRefresh",function(e) {
+            redrawCanvas(e.detail.data)
         })
 
     </script>
@@ -160,11 +152,9 @@
 
     @if ($action == 'deflection')
 
-        {{-- SVG PICTURE FOR MAST TUBES --}}
+        {{-- CANVAS FOR MAST TUBES --}}
 
-        <div class="card my-4 has-text-centered" id="figDiv">
-            <canvas id="figCanvas"></canvas>
-        </div>
+        <div class="card my-4 has-text-centered" id="canvasDiv"></div>
 
 
     @endif

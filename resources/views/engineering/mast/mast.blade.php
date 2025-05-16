@@ -3,6 +3,8 @@
 
     <script src="{{ asset('/js/DrawMastTubesClass.js') }}"> </script>
 
+
+
     <script>
 
         window.addEventListener("triggerCanvasDraw",function(e) {
@@ -10,9 +12,9 @@
         })
 
 
-        window.addEventListener("triggerCanvasRefresh",function(e) {
-            redrawCanvas(e.detail.data)
-        })
+        // window.addEventListener("triggerCanvasRefresh",function(e) {
+        //     redrawCanvas(e.detail.data)
+        // })
 
     </script>
 
@@ -146,6 +148,8 @@
 
         @include('engineering.mast.heights')
 
+
+
     @endif
 
 
@@ -154,7 +158,7 @@
 
         {{-- CANVAS FOR MAST TUBES --}}
 
-        <div class="card my-4 has-text-centered" id="canvasDiv"></div>
+        <div class="card my-4 has-text-centered" id="canvasDiv" wire:ignore></div>
 
 
     @endif
@@ -165,6 +169,17 @@
 
         @include('engineering.mast.info')
         @include('engineering.mast.tubestable')
+
+        {{-- @script
+        <script>
+            Livewire.on('triggerCanvasDraw', () => {
+                drawCanvas({!! json_encode($data) !!})
+
+                // console.log({!! json_encode($data) !!})
+            });
+        </script>
+        @endscript --}}
+
 
     @endif
 

@@ -17,7 +17,7 @@
         <link rel="icon" type="image/x-icon" href="{{ asset('/images/favicon.ico') }}">
 
         <script src="{{ asset('/js/js.js') }}"></script>
-        <script type="module" src="{{ asset('/js/model-viewer.min.js') }}"></script>
+        {{-- <script type="module" src="{{ asset('/js/model-viewer.min.js') }}"></script> --}}
         
     </head>
     <body class='has-background-lighter'>

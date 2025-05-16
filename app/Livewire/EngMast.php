@@ -10,7 +10,7 @@ use Livewire\Attributes\Rule;
 class EngMast extends Component
 {
     public $action;
-    public $refresh = false;
+
 
     public $tubeOd = 100;
     public $tubeId;
@@ -70,6 +70,8 @@ class EngMast extends Component
 
     public $showModal = false;
 
+    public $data; 
+
 
     public function mount()
     {
@@ -98,6 +100,8 @@ class EngMast extends Component
 
             case 'deflection':
                 $this->MastDeflections();
+                $this->data["deneed"] = time();
+
                 break;
 
             case 'wloads':
@@ -218,7 +222,7 @@ class EngMast extends Component
 
         $n = $this->noOfMTTubes;
 
-       $maxDia = 0;
+        $maxDia = 0;
 
         for ($i = 0; $i < $this->noOfMTTubes; $i++) {
 
@@ -251,26 +255,24 @@ class EngMast extends Component
             $maxDia = max($maxDia,$this->tubeData[$i]['od']);
         }
 
-        $data["zOffset"] = $this->zOffset;
-        $data["extendedHeight"] = $this->extendedHeight;
-        $data["nestedHeight"] = $this->nestedHeight;
-        $data["maxDia"] = $maxDia;
+        $this->data["xOffset"] =$this->xOffset;
+        $this->data["zOffset"] = $this->zOffset;
+        $this->data["extendedHeight"] = $this->extendedHeight;
+        $this->data["nestedHeight"] = $this->nestedHeight;
+        $this->data["maxDia"] = $maxDia;
 
-        $data["tubeLength"] = $this->lengthMTTubes;
-        $data["noOfTubes"] = $this->noOfMTTubes;
-        $data["overlapLength"] = $this->overlapMTTubes;
-        $data["headLength"] = $this->headMTTubes;
+        $this->data["tubeLength"] = $this->lengthMTTubes;
+        $this->data["noOfTubes"] = $this->noOfMTTubes;
+        $this->data["overlapLength"] = $this->overlapMTTubes;
+        $this->data["headLength"] = $this->headMTTubes;
 
-        $data["tubes"] = $this->tubeData;
+        $this->data["startTubeNo"] =$this->startTubeNo;
+        $this->data["endTubeNo"] =$this->endTubeNo;
 
-        if ($this->refresh) {
-            $this->dispatch('triggerCanvasRefresh',data : $data);
+        $this->data["tubes"] = $this->tubeData;
 
-        } else {
-            $this->dispatch('triggerCanvasDraw',data : $data);
-        }
 
-        $this->refresh = true;
+        $this->dispatch('triggerCanvasDraw',data : $this->data);
 
         return true;
     }

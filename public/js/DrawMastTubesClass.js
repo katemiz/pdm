@@ -11,16 +11,10 @@ class CanvasClass {
 
         this.R = 6;        // DIA OF REFERENCE CIRCLES
 
-        // this.CANVAS_ID = 'figCanvas'
         this.CANVAS_DIV = 'canvasDiv'
-
-        // this.c = document.getElementById(this.CANVAS_ID);
 
         this.c = canvas
         this.g = this.c.getContext("2d");
-
-
-
 
         this.setCanvasValues()
     }
@@ -29,80 +23,33 @@ class CanvasClass {
     setCanvasValues() {
 
         // WIDTH AND HEIGHT
-        // this.c.width     = 0.95*document.getElementById(this.CANVAS_DIV).offsetWidth;
-        // this.c.height    = 0.3*this.c.width;
+        this.c.width     = 0.95*document.getElementById(this.CANVAS_DIV).offsetWidth;
+        this.c.height    = 0.3*this.c.width;
 
         this.w = this.c.width;
         this.h = this.c.height;
 
-
         this.g.fillStyle = 'lightblue';
         this.g.fillRect(0, 0, this.w, this.h);
-
-        // console.log("w",this.w)
-        // console.log("h",this.h)
 
         let totalW = 2*this.MX+2*this.R+this.data.extendedHeight+this.data.zOffset
         let totalH = this.data.maxDia+2*this.MY
 
-        // console.log("totalW",totalW)
-        // console.log("totalH",totalH)
-
+        // x,y Scales
         this.sx = this.w/totalW
         this.sy = this.h/totalH
 
-        // console.log("sx",this.sx)
-        // console.log("sy",this.sy)
-
         this.tubes = this.data.tubes
-
-        // x,y Scales
-        // this.xScale = c.width/(this.sys.extendedHeight+this.sys.zOffset+2*this.MARGIN_X+this.PAYLOAD_DIA*5);
-        // this.yScale = c.height/(this.tubes[0].od+2*this.MARGIN_Y);
 
         for (let index = this.tubes.length; index > 0; index--) {
             const element = this.tubes[index-1];
-            // console.log(element)
-
             this.drawTubes(this.tubes[index-1])
-
-            // return true;
         }
 
-
         this.auxiliaryCurves()
-
-
-
-
-
-
-
-
-
     }
 
 
-    // refreshCanvas(data) {
-
-    //     this.data = data
-    //     this.g.clearRect ( 0 , 0 , this.w , this.h );
-    //     this.auxiliaryCurves();
-    //     this.setCanvasValues();
-
-
-    //     console.log("refreshCanvas",this.data)
-    // }
-
-
-
-
-
-
-    // run() {
-
-    //     this.drawTubes();
-    // }
 
 
 
@@ -115,7 +62,6 @@ class CanvasClass {
         this.g.moveTo(this.MX*this.sx,this.h/2);
         this.g.lineTo((this.w-this.MX*this.sx),this.h/2);
         this.g.stroke();
-
 
         // TUBES COORDINATE AXIS CIRCLE
         this.g.beginPath();
@@ -255,59 +201,27 @@ class CanvasClass {
 
 function drawCanvas(data) {
 
+    console.log(data)
+
+
     let canvasParent = document.getElementById("canvasDiv");
 
-    console.log("drawing canvas function called")
+    if(document.getElementById("figCanvas")){
+        document.getElementById("figCanvas").remove();
+    } 
 
     let canvas = document.createElement("canvas");
     canvas.id = "figCanvas";
 
-
-
-    // WIDTH AND HEIGHT
-    canvas.width     = 0.95*canvasParent.offsetWidth;
-    canvas.height    = 0.3*canvas.width;
-
-
-
     canvasParent.appendChild(canvas);
 
+    let myMast = new CanvasClass(data,canvas);
+    myMast.setCanvasValues();
 
-
-    if(document.getElementById("figCanvas")){
-        console.log("Element exists");
-        console.log(canvas)
-
-        console.log(canvas.parentElement)
-    } else {
-        console.log("Element does not exist");
-    }
-
-
-    let mastTubes = new CanvasClass(data,canvas);
-    mastTubes.setCanvasValues();
+    console.log(new Date())
 
 }
 
 
-
-function redrawCanvas(data) {
-
-    document.getElementById("figCanvas").remove();
-
-
-
-    if(document.getElementById("figCanvas")){
-        console.log("canvas not removed");
-    } else {
-        console.log("canvas removed");
-    }
-
-
-
-
-    drawCanvas(data);
-
-}
 
 

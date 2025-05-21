@@ -95,9 +95,6 @@ class LwBuyable extends Component
     public $is_mirror_of_part_version =  false;
     public $is_mirror_of_part_description =  false;
 
-
-
-
     public $created_by;
     public $created_at;
     public $updated_by;
@@ -111,6 +108,9 @@ class LwBuyable extends Component
     public $manual_doc_number_exists;
 
     public $parents = [];
+
+    public $release_integrity_ok = false;
+
 
 
 
@@ -501,6 +501,56 @@ class LwBuyable extends Component
         redirect('/buyables/form/'.$new_part->id);
     }
 
+
+
+    public function checkIntegrity($id) {
+
+        $d = Item::find($id);
+
+        if ( $d->c_notice_id == NULL ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'No ECN defined'
+            ];
+        }
+
+        if ( $d->weight == NULL || $d->weight < 0 ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'Weight not defined'
+            ];
+        }
+
+
+
+        if ( $d->vendor_part_no == NULL ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'Vendor part number not defined'
+            ];
+        }
+
+
+        if ( $d->vendor == NULL ) {
+
+            $this->release_errors[$d->part_number][] = [
+                'id' => $d->id,
+                'part_number' => $d->part_number,
+                'error' => 'Vendor not defined'
+            ];
+        }
+
+        if (!$this->release_errors) {
+            $this->release_integrity_ok = true;
+        }
+
+    }
 
 
 

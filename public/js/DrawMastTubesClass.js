@@ -41,8 +41,9 @@ class CanvasClass {
 
         this.tubes = this.data.tubes
 
+
         for (let index = this.tubes.length; index > 0; index--) {
-            const element = this.tubes[index-1];
+            // const element = this.tubes[index-1];
             this.drawTubes(this.tubes[index-1])
         }
 
@@ -56,6 +57,9 @@ class CanvasClass {
 
     auxiliaryCurves() {
 
+        this.drawPayloadArrow(this.w-this.MX*this.sx, this.h/2-(this.data.xOffset+200)*this.sy, this.w-this.MX*this.sx, this.h/2-this.data.xOffset*this.sy)
+
+
         // TUBES CENTERLINE
         this.g.beginPath();
         this.g.lineWidth = 0.2;
@@ -67,9 +71,12 @@ class CanvasClass {
         this.g.beginPath();
         this.g.fillStyle = "Red";
         this.g.arc(this.MX*this.sx, this.h/2, this.R, 0, 2 * Math.PI);
-        this.g.arc(this.w-this.MX*this.sx, this.h/2, this.R, 0, 2 * Math.PI);
+        this.g.arc(this.w-this.MX*this.sx, this.h/2-this.data.xOffset*this.sy, this.R, 0, 2 * Math.PI);
         this.g.fill();
-        this.g.stroke();
+        // this.g.stroke();
+        this.g.closePath();
+
+
     }
 
 
@@ -119,32 +126,6 @@ class CanvasClass {
         return true;
 
 
-        // TUBES Z-OFFSET
-        this.g.beginPath();
-        this.g.lineWidth = 6;
-
-        this.g.moveTo(this.xScale*(this.MARGIN_X+this.sys.extendedHeight),this.h/2);
-        this.g.lineTo(this.xScale*(this.MARGIN_X+this.sys.totalHeight),this.h/2);
-        this.g.stroke();
-
-        this.g.setTransform(1, 0, 0, 1, 0, 0);
-
-        // TUBES CENTERLINE
-        this.g.beginPath();
-        this.g.lineWidth = 0.2;
-        this.g.moveTo(this.MARGIN_X*this.xScale,this.h/2);
-        this.g.lineTo((this.w-this.MARGIN_X*this.xScale),this.h/2);
-        this.g.stroke();
-
-        // TUBES COORDINATE AXIS CIRCLE
-        this.g.beginPath();
-        this.g.fillStyle = "Red";
-        this.g.arc(this.MARGIN_X*this.xScale, (this.MARGIN_Y+this.tubes[0].od/2)*this.yScale, 5, 0, 2 * Math.PI);
-        this.g.fill();
-        this.g.stroke();
-
-        // DRAW PAYLOAD LOAD ARROW
-        this.drawPayloadArrow(this.g, (this.MARGIN_X+this.sys.totalHeight)*this.xScale, 40, (this.MARGIN_X+this.sys.totalHeight)*this.xScale, this.h/2-15, 10, 'blue');
     }
 
 
@@ -152,44 +133,48 @@ class CanvasClass {
 
 
 
-    drawPayloadArrow(ctx, fromx, fromy, tox, toy, arrowWidth, color){
+    drawPayloadArrow(fromx, fromy, tox, toy, arrowWidth=this.R, color="blue"){
         //variables to be used when creating the arrow
         var headlen = 10;
         var angle = Math.atan2(toy-fromy,tox-fromx);
 
-        ctx.fillText(this.sys.horLoad+'N',fromx-10,fromy-10);
-        ctx.fillText(this.sys.totalHeight,(this.MARGIN_X+this.sys.totalHeight)*this.xScale,this.h-10);
 
-        ctx.save();
-        ctx.strokeStyle = color;
+
+        // let totalHeight = this.data.extendedHeight+this.data.zOffset
+
+        // this.g.fillText(this.data.windLoad+'N',fromx-10,fromy-10);
+        // this.g.fillText(this.sys.totalHeight,(this.MARGIN_X+this.sys.totalHeight)*this.xScale,this.h-10);
+
+        this.g.save();
+        this.g.strokeStyle = color;
 
         //starting path of the arrow from the start square to the end square
         //and drawing the stroke
-        ctx.beginPath();
-        ctx.moveTo(fromx, fromy);
-        ctx.lineTo(tox, toy);
-        ctx.lineWidth = arrowWidth;
-        ctx.stroke();
+        this.g.beginPath();
+        this.g.moveTo(fromx, fromy);
+        this.g.lineTo(tox, toy);
+        this.g.lineWidth = arrowWidth;
+        this.g.stroke();
 
         //starting a new path from the head of the arrow to one of the sides of the point
-        ctx.beginPath();
-        ctx.moveTo(tox, toy);
-        ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
+        this.g.beginPath();
+        this.g.moveTo(tox, toy);
+        this.g.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
                    toy-headlen*Math.sin(angle-Math.PI/7));
 
         //path from the side point of the arrow, to the other side point
-        ctx.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),
+        this.g.lineTo(tox-headlen*Math.cos(angle+Math.PI/7),
                    toy-headlen*Math.sin(angle+Math.PI/7));
 
         //path from the side point back to the tip of the arrow, and then
         //again to the opposite side point
-        ctx.lineTo(tox, toy);
-        ctx.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
+        this.g.lineTo(tox, toy);
+        this.g.lineTo(tox-headlen*Math.cos(angle-Math.PI/7),
                    toy-headlen*Math.sin(angle-Math.PI/7));
 
         //draws the paths created above
-        ctx.stroke();
-        ctx.restore();
+        this.g.stroke();
+        this.g.restore();
     }
 }
 
@@ -208,7 +193,7 @@ function drawCanvas(data) {
 
     if(document.getElementById("figCanvas")){
         document.getElementById("figCanvas").remove();
-    } 
+    }
 
     let canvas = document.createElement("canvas");
     canvas.id = "figCanvas";

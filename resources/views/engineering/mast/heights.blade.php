@@ -18,15 +18,77 @@
 
         <div class="columns">
 
-            <div class="column field is-half">
+            {{-- <div class="column field is-half">
                 <label class="label">Number of Sections</label>
                 <div class="control">
                 <input class="input" type="number" placeholder="Number of Sections" wire:model.live="noOfMTTubes" min="2"  max="15" step="1">
                 </div>
+            </div> --}}
+
+
+
+            <div class="column field is-3">
+
+                <label class="label">Top Tube Dia</label>
+                {{-- <div class="control">
+                    <input class="input" type="number" placeholder="Start Tube Number" wire:model.live="startTubeNo" min="1"  max="14" step="1">
+                </div> --}}
+
+                <div class="control">
+
+                    <div class="select is-fullwidth" style="direction: rtl;">
+                        <select wire:model="startTubeNo" >
+
+                            @foreach ($tubeData as $tube)
+
+                            <option value="{{ $tube["no"] }}">
+                                {{ sprintf("%.2f",round($tube["od"],2)) }}
+                            </option>
+
+                            @endforeach
+
+                        </select>
+                    </div>
+
+                </div>
+
             </div>
 
 
-            <div class="column field">
+            <div class="column field is-3">
+                <label class="label">Bottom Tube OD, mm</label>
+                {{-- <div class="control">
+                    <input class="input" type="number" placeholder="End Tube Number" wire:model.live="endTubeNo" min="2"  max="15" step="1">
+                </div> --}}
+
+
+                <div class="control">
+
+                    <div class="select is-fullwidth" style="direction: rtl;">
+                        <select wire:model="endTubeNo" >
+
+                            @foreach ($tubeData as $tube)
+
+                            <option value="{{ $tube["no"] }}">
+                                {{ sprintf("%.2f",round($tube["od"],2)) }}
+                            </option>
+
+                            @endforeach
+
+                        </select>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+
+            <div class="column field is-6">
                 <label class="label">Length of Sections (mm)</label>
                 <div class="control">
                 <input class="input" type="number" placeholder="Tube Lengths" wire:model.live="lengthMTTubes" min="500"  max="10000" step="50">
@@ -58,7 +120,7 @@
 
 
 
-       @if ($action == 'deflection') 
+       @if ($action == 'deflection')
 
 
         <div class="columns">
@@ -67,21 +129,21 @@
           <div class="column field is-3">
               <label class="label">X-Offset (mm) <a>?</a></label>
               <div class="control">
-              <input class="input" type="number" placeholder="Payload X-Offset Distance" wire:model.live="xOffset" min="50"  max="3000" step="10">
+                <input class="input" type="number" placeholder="Payload X-Offset Distance" wire:model.live="xOffset" min="50"  max="3000" step="10">
               </div>
           </div>
 
           <div class="column field is-3">
               <label class="label">Z-Offset (mm)</label>
               <div class="control">
-              <input class="input" type="number" placeholder="Payload Z-Offset Distance" wire:model.live="zOffset" min="0"  max="600" step="1">
+                <input class="input" type="number" placeholder="Payload Z-Offset Distance" wire:model.live="zOffset" min="0"  max="600" step="1">
               </div>
           </div>
 
           <div class="column field is-3">
             <label class="label">Start Tube Number</label>
             <div class="control">
-            <input class="input" type="number" placeholder="Start Tube Number" wire:model.live="startTubeNo" min="1"  max="14" step="1">
+                <input class="input" type="number" placeholder="Start Tube Number" wire:model.live="startTubeNo" min="1"  max="14" step="1">
           </div>
 
           </div>
@@ -90,15 +152,14 @@
           <div class="column field is-3">
             <label class="label">End Tube Number</label>
             <div class="control">
-            <input class="input" type="number" placeholder="End Tube Number" wire:model.live="endTubeNo" min="2"  max="15" step="1">
-          </div>
-
+                <input class="input" type="number" placeholder="End Tube Number" wire:model.live="endTubeNo" min="2"  max="15" step="1">
+            </div>
           </div>
 
 
         </div>
 
-      @endif 
+      @endif
 
       </div>
 

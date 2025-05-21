@@ -51,7 +51,6 @@ class EngMast extends Component
     public $extendedHeight;
     public $nestedHeight;
 
-    public $noOfMTTubes = 15;
     public $lengthMTTubes = 2000; // mm
     public $overlapMTTubes = 500; // mm
     public $headMTTubes = 70; // mm
@@ -63,14 +62,17 @@ class EngMast extends Component
     public $airdensity = 1.293; // kg/m3
     public $windload;
 
-    public $xOffset = 0;
-    public $zOffset = 0;
+    public $xOffset = 100;
+    public $zOffset = 500;
     public $startTubeNo = 1;
     public $endTubeNo = 15;
 
+    public $noOfMTTubes;
+
+
     public $showModal = false;
 
-    public $data; 
+    public $data;
 
 
     public function mount()
@@ -166,11 +168,15 @@ class EngMast extends Component
 
     function MasttechProfiles() {
 
+        $this->noOfMTTubes = $this->endTubeNo - $this->startTubeNo + 1;
+
+
+
         $id = $this->smallestTubeId;
         $t  = $this->smallestTubeThickness;
         $od = $this->smallestTubeId + 2*$this->smallestTubeThickness;
 
-        for ($i = 0; $i < $this->noOfMTTubes; $i++) {
+        for ($i = 0; $i < 15; $i++) {
 
             $moment         = $this->CalculateMomentCapability($od,$id);
             $mass           = $this->CalculateMass($od,$id);
@@ -178,6 +184,7 @@ class EngMast extends Component
             $criticalLoad   = $this->ProfileCriticalLoad($od,$id);
 
             $this->tubeData[$i] = [
+                "no" => $i+1,
                 "od" => $od,
                 "id" => $id,
                 "thk" => $t,
@@ -195,10 +202,13 @@ class EngMast extends Component
             $t = $t+$this->thicknessIncrement;
             $od = $id+2*$t;
         }
+
     }
 
 
     function MastHeights() {
+
+        $this->MasttechProfiles();
 
         if ($this->noOfMTTubes == null || $this->lengthMTTubes == null || $this->overlapMTTubes == null || $this->headMTTubes == null) {
 
@@ -268,6 +278,9 @@ class EngMast extends Component
 
         $this->data["startTubeNo"] =$this->startTubeNo;
         $this->data["endTubeNo"] =$this->endTubeNo;
+
+        $this->data["windLoad"] = 1000;
+
 
         $this->data["tubes"] = $this->tubeData;
 

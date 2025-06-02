@@ -41,8 +41,8 @@ class EngMast extends Component
 
 
     public $smallestTubeId = 44; // mm
-    public $smallestTubeThickness = 2.5; // mm
-    public $noOfTubes = 16; // mm
+    public $smallestTubeThickness = 2; // mm
+    public $noOfTubes = 16; // quantity
     public $gapBetweenTubes = 7; // mm
     public $thicknessIncrement = 0.2; // mm
 
@@ -176,7 +176,7 @@ class EngMast extends Component
         $t  = $this->smallestTubeThickness;
         $od = $this->smallestTubeId + 2*$this->smallestTubeThickness;
 
-        for ($i = 0; $i < 15; $i++) {
+        for ($i = 0; $i < $this->noOfTubes; $i++) {
 
             $moment         = $this->CalculateMomentCapability($od,$id);
             $mass           = $this->CalculateMass($od,$id);

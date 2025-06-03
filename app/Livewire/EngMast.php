@@ -42,7 +42,7 @@ class EngMast extends Component
 
     public $smallestTubeId = 44; // mm
     public $smallestTubeThickness = 2; // mm
-    public $noOfTubes = 16; // quantity
+    public $noOfActiveTubes = 16; // quantity
     public $gapBetweenTubes = 7; // mm
     public $thicknessIncrement = 0.2; // mm
 
@@ -65,14 +65,24 @@ class EngMast extends Component
     public $xOffset = 100;
     public $zOffset = 500;
     public $startTubeNo = 1;
-    public $endTubeNo = 15;
+    public $endTubeNo = 16;
 
-    public $noOfMTTubes;
+    public $noOfMTTubes = 16; // quantity
 
 
     public $showModal = false;
 
     public $data;
+
+
+    public $realTubeData = [
+       [
+           "no" => 1,
+           "realArea" => 2,
+           "realInertia" => 1000,
+       ],
+
+    ];   
 
 
     public function mount()
@@ -110,6 +120,15 @@ class EngMast extends Component
                 $this->WindLoads();
                 break;
         }
+
+
+
+
+
+       $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1; 
+
+
+
 
         return view('engineering.mast.mast');
     }
@@ -168,7 +187,7 @@ class EngMast extends Component
 
     function MasttechProfiles() {
 
-        $this->noOfMTTubes = $this->endTubeNo - $this->startTubeNo + 1;
+        //$this->noOfMTTubes = $this->endTubeNo - $this->startTubeNo + 1;
 
 
 
@@ -176,7 +195,7 @@ class EngMast extends Component
         $t  = $this->smallestTubeThickness;
         $od = $this->smallestTubeId + 2*$this->smallestTubeThickness;
 
-        for ($i = 0; $i < $this->noOfTubes; $i++) {
+        for ($i = 0; $i < $this->noOfMTTubes; $i++) {
 
             $moment         = $this->CalculateMomentCapability($od,$id);
             $mass           = $this->CalculateMass($od,$id);
@@ -210,7 +229,10 @@ class EngMast extends Component
 
         $this->MasttechProfiles();
 
-        if ($this->noOfMTTubes == null || $this->lengthMTTubes == null || $this->overlapMTTubes == null || $this->headMTTubes == null) {
+               $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1; 
+
+
+        if ($this->noOfActiveTubes == null || $this->lengthMTTubes == null || $this->overlapMTTubes == null || $this->headMTTubes == null) {
 
             $this->extendedHeight = 0;
             $this->nestedHeight   = 0;
@@ -218,8 +240,8 @@ class EngMast extends Component
             return true;
         }
 
-        $this->extendedHeight   = $this->noOfMTTubes*$this->lengthMTTubes-($this->noOfMTTubes-1)*$this->overlapMTTubes;
-        $this->nestedHeight     = $this->lengthMTTubes+($this->noOfMTTubes-1)*$this->headMTTubes;
+        $this->extendedHeight   = $this->noOfActiveTubes*$this->lengthMTTubes-($this->noOfActiveTubes-1)*$this->overlapMTTubes;
+        $this->nestedHeight     = $this->lengthMTTubes+($this->noOfActiveTubes-1)*$this->headMTTubes;
     }
 
 

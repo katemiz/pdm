@@ -16,6 +16,9 @@
 
     <div class="card p-6">
 
+
+       <h1 class="title">{{$noOfActiveTubes}}-Tube Mast Configuration</h1>
+
         <div class="columns">
 
             {{-- <div class="column field is-half">
@@ -36,13 +39,14 @@
 
                 <div class="control">
 
-                    <div class="select is-fullwidth" style="direction: rtl;">
-                        <select wire:model="startTubeNo" >
+                    <div class="select is-fullwidth" style="direction: justify;">
+                        <select wire:model.live="startTubeNo" >
 
                             @foreach ($tubeData as $tube)
 
                             <option value="{{ $tube["no"] }}">
-                                {{ sprintf("%.2f",round($tube["od"],2)) }}
+                                MT-{{ sprintf("%02d",$tube["no"]) }}
+                                &#8960; {{ sprintf("%.2f",round($tube["od"],2)) }}
                             </option>
 
                             @endforeach
@@ -65,12 +69,13 @@
                 <div class="control">
 
                     <div class="select is-fullwidth" style="direction: rtl;">
-                        <select wire:model="endTubeNo" >
+                        <select wire:model.live="endTubeNo" >
 
                             @foreach ($tubeData as $tube)
 
                             <option value="{{ $tube["no"] }}">
-                                {{ sprintf("%.2f",round($tube["od"],2)) }}
+                                MT-{{ sprintf("%02d",$tube["no"]) }}
+                                  &nbsp;  &nbsp;&nbsp;&nbsp;  &#8960; {{ sprintf("%6.2f",round($tube["od"],2)) }}
                             </option>
 
                             @endforeach

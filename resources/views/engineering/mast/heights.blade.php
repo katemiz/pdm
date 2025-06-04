@@ -1,41 +1,28 @@
-{{-- <section class="section container"> --}}
-
-    {{-- <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
-        <ul>
-          <li><a href='/engineering/home'>Engineering</a></li>
-          <li class="is-active"><a href="#" aria-current="page">Mast Nested/Extended Heights</a></li>
-        </ul>
-    </nav>
-
-    <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">No of Sections - Extended Height - Nested Height</h1>
-        <h2 class="subtitle has-text-weight-light">Relationship between three parameters</h2>
-    </header> --}}
-
-    <div>
+<div>
 
     <div class="card p-6">
 
 
-       <h1 class="title">{{$noOfActiveTubes}}-Tube Mast Configuration</h1>
+
+
+
+     @if ($error)
+         <div class="notification is-danger">
+             {{ $error }}
+         </div>
+
+        @else 
+
+               <h1 class="title">{{$noOfActiveTubes}}-Tube Mast Configuration</h1>
+
+     @endif
+
 
         <div class="columns">
-
-            {{-- <div class="column field is-half">
-                <label class="label">Number of Sections</label>
-                <div class="control">
-                <input class="input" type="number" placeholder="Number of Sections" wire:model.live="noOfMTTubes" min="2"  max="15" step="1">
-                </div>
-            </div> --}}
-
-
 
             <div class="column field is-3">
 
                 <label class="label">Top Tube Dia</label>
-                {{-- <div class="control">
-                    <input class="input" type="number" placeholder="Start Tube Number" wire:model.live="startTubeNo" min="1"  max="14" step="1">
-                </div> --}}
 
                 <div class="control">
 
@@ -45,8 +32,9 @@
                             @foreach ($tubeData as $tube)
 
                             <option value="{{ $tube["no"] }}">
-                                MT-{{ sprintf("%02d",$tube["no"]) }}
-                                &#8960; {{ sprintf("%.2f",round($tube["od"],2)) }}
+                              MT-{{ sprintf("%02d",$tube["no"]) }}
+                              &nbsp; &nbsp;&nbsp;&nbsp; &#8960;
+                              {{ sprintf("%6.2f",round($tube["od"],2)) }}
                             </option>
 
                             @endforeach
@@ -61,21 +49,19 @@
 
             <div class="column field is-3">
                 <label class="label">Bottom Tube OD, mm</label>
-                {{-- <div class="control">
-                    <input class="input" type="number" placeholder="End Tube Number" wire:model.live="endTubeNo" min="2"  max="15" step="1">
-                </div> --}}
 
 
                 <div class="control">
 
-                    <div class="select is-fullwidth" style="direction: rtl;">
+                    <div class="select is-fullwidth" >
                         <select wire:model.live="endTubeNo" >
 
                             @foreach ($tubeData as $tube)
 
                             <option value="{{ $tube["no"] }}">
-                                MT-{{ sprintf("%02d",$tube["no"]) }}
-                                  &nbsp;  &nbsp;&nbsp;&nbsp;  &#8960; {{ sprintf("%6.2f",round($tube["od"],2)) }}
+                              MT-{{ sprintf("%02d",$tube["no"]) }}
+                              &nbsp; &nbsp;&nbsp;&nbsp; &#8960;
+                              {{ sprintf("%6.2f",round($tube["od"],2)) }}
                             </option>
 
                             @endforeach
@@ -86,11 +72,6 @@
                 </div>
 
             </div>
-
-
-
-
-
 
 
             <div class="column field is-6">
@@ -104,7 +85,6 @@
 
 
         <div class="columns">
-
 
             <div class="column field is-half">
                 <label class="label">Overlap Length (mm)</label>
@@ -127,9 +107,7 @@
 
        @if ($action == 'deflection')
 
-
         <div class="columns">
-
 
           <div class="column field is-3">
               <label class="label">X-Offset (mm) <a>?</a></label>
@@ -200,6 +178,5 @@
     </div>
 
 
-  </div>
+</div>
 
-{{-- </section> --}}

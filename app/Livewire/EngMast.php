@@ -74,6 +74,8 @@ class EngMast extends Component
 
     public $data;
 
+    public $error;
+
 
     public $realTubeData = [
        [
@@ -95,6 +97,25 @@ class EngMast extends Component
 
     public function render()
     {
+
+
+       $this->error = null; 
+
+        if ($this->endTubeNo <= $this->startTubeNo) {
+
+            $this->noOfActiveTubes = null;
+            $this->error = "End Tube Diameter must be greater than Start Tube Diameter"; 
+        } else {
+
+            $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1; 
+        }
+
+
+
+
+
+
+
         switch ($this->action) {
 
             case 'pneumatic':
@@ -121,11 +142,6 @@ class EngMast extends Component
                 break;
         }
 
-
-
-
-
-       $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1; 
 
 
 
@@ -228,8 +244,6 @@ class EngMast extends Component
     function MastHeights() {
 
         $this->MasttechProfiles();
-
-               $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1; 
 
 
         if ($this->noOfActiveTubes == null || $this->lengthMTTubes == null || $this->overlapMTTubes == null || $this->headMTTubes == null) {

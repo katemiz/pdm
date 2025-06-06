@@ -41,10 +41,29 @@ class CanvasClass {
 
         this.tubes = this.data.tubes
 
+        this.startTubeNo = this.data.startTubeNo
+        this.endTubeNo = this.data.endTubeNo
 
-        for (let index = this.tubes.length; index > 0; index--) {
-            // const element = this.tubes[index-1];
+        // this.activeTubeNo = this.endTubeNo - this.startTubeNo + 1
+
+        console.log("startTubeNo",this.startTubeNo)
+        console.log("endTubeNo",this.endTubeNo)
+
+
+        // for (let index = this.tubes.length; index > 0; index--) {
+        //     // const element = this.tubes[index-1];
+        //     this.drawTubes(this.tubes[index-1])
+        // }
+
+
+
+        for (let index = this.endTubeNo; index > this.startTubeNo; index--) {
+
             this.drawTubes(this.tubes[index-1])
+
+            console.log("Drawing tube",index-1,this.tubes[index-1])
+
+            
         }
 
         this.auxiliaryCurves()
@@ -201,9 +220,9 @@ function drawCanvas(data) {
     canvasParent.appendChild(canvas);
 
     let myMast = new CanvasClass(data,canvas);
-    myMast.setCanvasValues();
+    // myMast.setCanvasValues();
 
-    console.log(new Date())
+    // console.log(new Date())
 
 }
 

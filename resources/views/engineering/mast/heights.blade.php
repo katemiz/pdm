@@ -26,7 +26,7 @@
 
                 <div class="control">
 
-                    <div class="select is-fullwidth" style="direction: justify;">
+                    <div class="select is-fullwidth">
                         <select wire:model.live="startTubeNo" >
 
                             @foreach ($tubeData as $tube)
@@ -109,21 +109,21 @@
 
         <div class="columns">
 
-          <div class="column field is-3">
-              <label class="label">X-Offset (mm) <a>?</a></label>
+          <div class="column field is-half">
+              <label class="label">X-Offset (mm) <a wire:click="toggleHelpModal">?</a></label>
               <div class="control">
                 <input class="input" type="number" placeholder="Payload X-Offset Distance" wire:model.live="xOffset" min="50"  max="3000" step="10">
               </div>
           </div>
 
-          <div class="column field is-3">
-              <label class="label">Z-Offset (mm)</label>
+          <div class="column field is-half">
+              <label class="label">Z-Offset (mm) <a wire:click="toggleHelpModal">?</a></label>
               <div class="control">
                 <input class="input" type="number" placeholder="Payload Z-Offset Distance" wire:model.live="zOffset" min="0"  max="600" step="1">
               </div>
           </div>
 
-          <div class="column field is-3">
+          {{-- <div class="column field is-3">
             <label class="label">Start Tube Number</label>
             <div class="control">
                 <input class="input" type="number" placeholder="Start Tube Number" wire:model.live="startTubeNo" min="1"  max="14" step="1">
@@ -137,7 +137,7 @@
             <div class="control">
                 <input class="input" type="number" placeholder="End Tube Number" wire:model.live="endTubeNo" min="2"  max="15" step="1">
             </div>
-          </div>
+          </div> --}}
 
 
         </div>

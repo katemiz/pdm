@@ -267,10 +267,26 @@
 
 
 
+    @if ($action == 'deflection' )
 
+        <div class="modal {{ $showHelpModal ? 'is-active' :'' }}" id="modalHelp">
+            <div class="modal-background" wire:click="toggleHelpModal"></div>
+            <div class="modal-content box">
+                <h1 class="title">Mast Parameters</h1>
+                <p class="image is-4by3">
+                    <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="">
+                </p>
+            </div>
+            <button class="modal-close is-large" aria-label="close" wire:click="toggleHelpModal"></button>
+        </div>
+
+    @endif
 
 
 
 
 
 </section>
+
+
+

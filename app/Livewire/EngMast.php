@@ -71,6 +71,8 @@ class EngMast extends Component
 
 
     public $showModal = false;
+    public $showHelpModal = false;
+
 
     public $data;
 
@@ -203,10 +205,6 @@ class EngMast extends Component
 
     function MasttechProfiles() {
 
-        //$this->noOfMTTubes = $this->endTubeNo - $this->startTubeNo + 1;
-
-
-
         $id = $this->smallestTubeId;
         $t  = $this->smallestTubeThickness;
         $od = $this->smallestTubeId + 2*$this->smallestTubeThickness;
@@ -245,7 +243,6 @@ class EngMast extends Component
 
         $this->MasttechProfiles();
 
-
         if ($this->noOfActiveTubes == null || $this->lengthMTTubes == null || $this->overlapMTTubes == null || $this->headMTTubes == null) {
 
             $this->extendedHeight = 0;
@@ -261,12 +258,15 @@ class EngMast extends Component
 
     function MastDeflections() {
 
-        $this->MasttechProfiles();
+        $this->MastHeights();
 
-        $this->extendedHeight   = $this->noOfMTTubes*$this->lengthMTTubes-($this->noOfMTTubes-1)*$this->overlapMTTubes;
-        $this->nestedHeight     = $this->lengthMTTubes+($this->noOfMTTubes-1)*$this->headMTTubes;
+
+        // $this->extendedHeight   = $this->noOfMTTubes*$this->lengthMTTubes-($this->noOfMTTubes-1)*$this->overlapMTTubes;
+        // $this->nestedHeight     = $this->lengthMTTubes+($this->noOfMTTubes-1)*$this->headMTTubes;
 
         $n = $this->noOfMTTubes;
+        // $n = $this->noOfActiveTubes;
+
 
         $maxDia = 0;
 
@@ -354,6 +354,12 @@ class EngMast extends Component
     function toggleModal() {
 
         $this->showModal = !$this->showModal;
+    }
+
+
+    function toggleHelpModal() {
+
+        $this->showHelpModal = !$this->showHelpModal;
     }
 
 

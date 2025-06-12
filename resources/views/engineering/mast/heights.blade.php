@@ -123,24 +123,60 @@
               </div>
           </div>
 
-          {{-- <div class="column field is-3">
-            <label class="label">Start Tube Number</label>
-            <div class="control">
-                <input class="input" type="number" placeholder="Start Tube Number" wire:model.live="startTubeNo" min="1"  max="14" step="1">
+
+        </div>
+
+
+
+        <div class="columns">
+
+
+          <div class="column field is-half">
+              <label class="label">Wind Speed (km/h) </label>
+              <div class="control">
+                <input class="input" type="number" placeholder="Wind Speed" wire:model.live="windspeed" min="40"  max="200" step="1">
+              </div>
           </div>
 
+
+          <div class="column field is-half">
+              <label class="label">Sail Area (m<sup>2</sup>)</label>
+              <div class="control">
+              <input class="input" type="number" placeholder="Sail Area" wire:model.live="sailarea" min="0.1"  max="15" step="0.1">
+              </div>
           </div>
-
-
-          <div class="column field is-3">
-            <label class="label">End Tube Number</label>
-            <div class="control">
-                <input class="input" type="number" placeholder="End Tube Number" wire:model.live="endTubeNo" min="2"  max="15" step="1">
-            </div>
-          </div> --}}
 
 
         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       @endif
 

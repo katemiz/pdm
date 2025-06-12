@@ -59,7 +59,10 @@ class EngMast extends Component
     public $cd = 1.5;
     public $sailarea = 1.50;
     public $windspeed = 120;
-    public $airdensity = 1.293; // kg/m3
+    public $airdensity = 1.293; // kg/m3 see NASA https://www.earthdata.nasa.gov/topics/atmosphere/air-mass-density
+    public $hellman_coefficient = 0.25;       // Hellmann exponent; taken as 0.25 for all tubes
+
+
     public $windload;
 
     public $xOffset = 100;
@@ -135,8 +138,8 @@ class EngMast extends Component
 
             case 'deflection':
                 $this->MastDeflections();
-                $this->data["deneed"] = time();
-
+                $this->calculateMeanSpeeds();
+                $this->calculateTubeWindLoads();
                 break;
 
             case 'wloads':
@@ -438,5 +441,70 @@ class EngMast extends Component
 
         return $this->E*$this->HollowTubeInertia($od,$id);
     }
+    
+
+
+
+
+
+
+
+
+
+    function calculateTubeWindLoads() {
+
+
+        foreach ($this->tubeData as $key => $tube) {
+
+
+           $xarea = pi() * pow($tube["od"] / 2, 2) * $tube["length"] * 1e-6; // Cross-sectional area of the tube ; m2
+
+            // Calculate the wind load on the tube
+            $this->tubeData[$key]["windForce"] = 0.5 * $this->airdensity * $this->cd * pow($tube["windMeanSpeed"]/3.6, 2) * $xarea;
+
+        }
+
+        return true;
+    }
+
+
+
+
+
+    function calculateMeanSpeeds() {
+
+
+        foreach ($this->tubeData as $key => $tube) {
+
+            // Calculate the mean wind speed at the height of the tube
+            $h = $tube["heights"]["eth"];  // Extended top height
+
+            // Mean wind speed formula: V(z) = V(z0) * (z/z0)^a
+            // where z0 is the reference height (usually 10m), a is the Hellmann exponent
+            $z0 = 10;  // Reference height in meters
+
+            if ($h <= 10) {
+
+                $this->tubeData[$key]["windMeanSpeed"] = $this->windspeed / 3.6; // Convert to m/s
+
+            } else {
+
+                $this->tubeData[$key]["windMeanSpeed"] = $this->windspeed * pow(($h / $z0), $this->hellman_coefficient) / 3.6; // Convert to m/s
+
+            }
+
+        }
+
+
+    }
+
+
+
+
+
+
+
+
+
 
 }

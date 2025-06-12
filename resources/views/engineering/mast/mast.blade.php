@@ -170,17 +170,6 @@
         @include('engineering.mast.info')
         @include('engineering.mast.tubestable')
 
-        {{-- @script
-        <script>
-            Livewire.on('triggerCanvasDraw', () => {
-                drawCanvas({!! json_encode($data) !!})
-
-                // console.log({!! json_encode($data) !!})
-            });
-        </script>
-        @endscript --}}
-
-
     @endif
 
 

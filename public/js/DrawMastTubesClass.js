@@ -44,9 +44,12 @@ class CanvasClass {
         this.startTubeNo = this.data.startTubeNo
         this.endTubeNo = this.data.endTubeNo
 
+
+        this.zeroizeHeight = this.tubes[this.endTubeNo-1].heights.ebh
+
         // this.activeTubeNo = this.endTubeNo - this.startTubeNo + 1
 
-        // console.log("startTubeNo",this.startTubeNo)
+        console.log("zeroizeHeight",this.zeroizeHeight)
         // console.log("endTubeNo",this.endTubeNo)
 
 
@@ -76,27 +79,21 @@ class CanvasClass {
 
     auxiliaryCurves() {
 
-        // this.drawPayloadArrow(this.w-this.MX*this.sx, this.h/2-(this.data.xOffset+200)*this.sy, this.w-this.MX*this.sx, this.h/2-this.data.xOffset*this.sy)
         this.g.fillStyle = "black";
         this.g.font = "16px Arial";
-
 
         // Windload on Payload Arrow
         this.drawPayloadArrow(this.w-this.MX*this.sx, this.h/2+this.data.xOffset*this.sy, this.w-this.MX*this.sx, this.h/2+this.data.xOffset*this.sy+100,4,"green")
         this.g.fillText("Wind Load",this.w-this.MX*this.sx-90,this.h-15);
-
 
         // Payload Arrow
         this.drawPayloadArrow(this.w-this.MX*this.sx, this.h/2+this.data.xOffset*this.sy, this.w-this.MX*this.sx-100, this.h/2+this.data.xOffset*this.sy,6,"orange")
         this.g.fillText("Payload Weight",this.w-this.MX*this.sx-150,this.h/2+(this.data.xOffset+75)*this.sy);
 
 
-
         // Mast Weight Arrow
         this.drawPayloadArrow(this.w/2, this.h/2, this.w/2-100, this.h/2,6,"orange");
-
         this.g.fillText("Mast Weight",this.w/2+10,this.h/2+5);
-
 
         // TUBES CENTERLINE
         this.g.beginPath();
@@ -111,10 +108,8 @@ class CanvasClass {
         this.g.arc(this.MX*this.sx, this.h/2, this.R, 0, 2 * Math.PI);
         this.g.arc(this.w-this.MX*this.sx, this.h/2+this.data.xOffset*this.sy, this.R, 0, 2 * Math.PI);
         this.g.fill();
-        // this.g.stroke();
+
         this.g.closePath();
-
-
     }
 
 
@@ -123,54 +118,26 @@ class CanvasClass {
 
     drawTubes(tube) {
 
-
-        // console.log("F tube",tube)
-
-        let x0 = (this.MX+this.R+tube.heights.ebh)*this.sx
+        let x0 = (this.MX+this.R+tube.heights.ebh-this.zeroizeHeight)*this.sx
         let y0 = this.h/2-tube.od/2*this.sy
         let rw = (tube.length)*this.sx
         let rh = tube.od*this.sy
 
-        // console.log("X0",x0)
-        // console.log("Y0",y0)
-        // console.log("rw",rw)
-        // console.log("rh",rh)
-
-        // console.log("sx",this.sx)
-        // console.log("sy",this.sy)
-
-
-
-
         this.g.beginPath();
         this.g.fillStyle = "LightGray";
         this.g.strokeStyle = "Black";
-        // this.g.translate((this.MARGIN_X+tube.zA)*this.xScale,this.yScale*(this.MARGIN_Y+(this.tubes[0].od-tube.od)/2));
-        // this.g.scale(this.xScale,this.yScale)
+
         this.g.rect(x0,y0,rw,rh);
         this.g.stroke();
         this.g.fill();
         this.g.closePath();
-
 
         this.g.fillStyle = "Green";
         this.g.fillText('F'+tube.no,x0+rw/2-5,y0-60);
 
         this.drawPayloadArrow(x0+rw/2, y0-50, x0+rw/2, y0,4,"green");
 
-
-        // this.g.setTransform(1, 0, 0, 1, 0, 0);
-
-        // this.g.fillStyle = "Red";
-
-        // this.g.fillText(tube.zA,(this.MARGIN_X+tube.zA)*this.xScale,this.h-10);
-        // this.g.fillText(tube.zF,(this.MARGIN_X+tube.zF)*this.xScale,this.h-10);
-
-
-
         return true;
-
-
     }
 
 
@@ -250,7 +217,15 @@ function drawCanvas(data) {
 
     // console.log(new Date())
 
+
+
 }
+
+
+
+
+
+
 
 
 

@@ -29,8 +29,8 @@ class CanvasClass {
         this.w = this.c.width;
         this.h = this.c.height;
 
-        this.g.fillStyle = 'lightblue';
-        this.g.fillRect(0, 0, this.w, this.h);
+        // this.g.fillStyle = 'lightblue';
+        // this.g.fillRect(0, 0, this.w, this.h);
 
         let totalW = 2*this.MX+2*this.R+this.data.extendedHeight+this.data.zOffset
         let totalH = this.data.maxDia+2*this.MY
@@ -46,8 +46,8 @@ class CanvasClass {
 
         // this.activeTubeNo = this.endTubeNo - this.startTubeNo + 1
 
-        console.log("startTubeNo",this.startTubeNo)
-        console.log("endTubeNo",this.endTubeNo)
+        // console.log("startTubeNo",this.startTubeNo)
+        // console.log("endTubeNo",this.endTubeNo)
 
 
         // for (let index = this.tubes.length; index > 0; index--) {
@@ -57,11 +57,11 @@ class CanvasClass {
 
 
 
-        for (let index = this.endTubeNo; index > this.startTubeNo; index--) {
+        for (let index = this.endTubeNo; index >= this.startTubeNo; index--) {
 
             this.drawTubes(this.tubes[index-1])
 
-            console.log("Drawing tube",index-1,this.tubes[index-1])
+            // console.log("Drawing tube",index-1,this.tubes[index-1])
 
             
         }
@@ -76,7 +76,26 @@ class CanvasClass {
 
     auxiliaryCurves() {
 
-        this.drawPayloadArrow(this.w-this.MX*this.sx, this.h/2-(this.data.xOffset+200)*this.sy, this.w-this.MX*this.sx, this.h/2-this.data.xOffset*this.sy)
+        // this.drawPayloadArrow(this.w-this.MX*this.sx, this.h/2-(this.data.xOffset+200)*this.sy, this.w-this.MX*this.sx, this.h/2-this.data.xOffset*this.sy)
+        this.g.fillStyle = "black";
+        this.g.font = "16px Arial";
+
+
+        // Windload on Payload Arrow
+        this.drawPayloadArrow(this.w-this.MX*this.sx, this.h/2+this.data.xOffset*this.sy, this.w-this.MX*this.sx, this.h/2+this.data.xOffset*this.sy+100,4,"green")
+        this.g.fillText("Wind Load",this.w-this.MX*this.sx-90,this.h-15);
+
+
+        // Payload Arrow
+        this.drawPayloadArrow(this.w-this.MX*this.sx, this.h/2+this.data.xOffset*this.sy, this.w-this.MX*this.sx-100, this.h/2+this.data.xOffset*this.sy,6,"orange")
+        this.g.fillText("Payload Weight",this.w-this.MX*this.sx-150,this.h/2+(this.data.xOffset+75)*this.sy);
+
+
+
+        // Mast Weight Arrow
+        this.drawPayloadArrow(this.w/2, this.h/2, this.w/2-100, this.h/2,6,"orange");
+
+        this.g.fillText("Mast Weight",this.w/2+10,this.h/2+5);
 
 
         // TUBES CENTERLINE
@@ -88,9 +107,9 @@ class CanvasClass {
 
         // TUBES COORDINATE AXIS CIRCLE
         this.g.beginPath();
-        this.g.fillStyle = "Red";
+        this.g.fillStyle = "Green";
         this.g.arc(this.MX*this.sx, this.h/2, this.R, 0, 2 * Math.PI);
-        this.g.arc(this.w-this.MX*this.sx, this.h/2-this.data.xOffset*this.sy, this.R, 0, 2 * Math.PI);
+        this.g.arc(this.w-this.MX*this.sx, this.h/2+this.data.xOffset*this.sy, this.R, 0, 2 * Math.PI);
         this.g.fill();
         // this.g.stroke();
         this.g.closePath();
@@ -132,6 +151,13 @@ class CanvasClass {
         this.g.stroke();
         this.g.fill();
         this.g.closePath();
+
+
+        this.g.fillStyle = "Green";
+        this.g.fillText('F'+tube.no,x0+rw/2-5,y0-60);
+
+        this.drawPayloadArrow(x0+rw/2, y0-50, x0+rw/2, y0,4,"green");
+
 
         // this.g.setTransform(1, 0, 0, 1, 0, 0);
 

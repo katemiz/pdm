@@ -301,8 +301,8 @@ class EngMast extends Component
             $maxDia = max($maxDia,$this->tubeData[$i]['od']);
         }
 
-        $this->data["xOffset"] =$this->xOffset;
-        $this->data["zOffset"] = $this->zOffset;
+        $this->data["xOffset"] = floatval($this->xOffset);
+        $this->data["zOffset"] = floatval($this->zOffset);
         $this->data["extendedHeight"] = $this->extendedHeight;
         $this->data["nestedHeight"] = $this->nestedHeight;
         $this->data["maxDia"] = $maxDia;
@@ -312,8 +312,8 @@ class EngMast extends Component
         $this->data["overlapLength"] = $this->overlapMTTubes;
         $this->data["headLength"] = $this->headMTTubes;
 
-        $this->data["startTubeNo"] =$this->startTubeNo;
-        $this->data["endTubeNo"] =$this->endTubeNo;
+        $this->data["startTubeNo"] = intval($this->startTubeNo);
+        $this->data["endTubeNo"] = intval($this->endTubeNo);
 
         $this->data["windLoad"] = 1000;
 

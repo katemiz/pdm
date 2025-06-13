@@ -92,6 +92,59 @@ class EngMast extends Component
     ];   
 
 
+
+
+    public $terrainCategory =[
+
+       [ 
+        "id" => 1,
+        "no" => "0",
+        "description" => "Sea or coastal area exposed to the open sea",
+        "z0" => 0.003, // Roughness length in meters
+        "zmin" => 1, // Minimum height in meters
+       ],
+       [ 
+        "id" => 2,
+        "no" => "I",
+        "description" => "Lakes or flat and horizontal area with negligible vegetation and without obstacles",
+        "z0" => 0.01, // Roughness length in meters
+        "zmin" => 1, // Minimum height in meters    
+       ],
+       [ 
+        "id" => 3,
+        "no" => "II",
+        "description" => "Area with low vegetation such as grass and isolated obstacles (trees, buildings) with separations of at least 20 obstacle heights",
+        "z0" => 0.05, // Roughness length in meters
+        "zmin" => 2, // Minimum height in meters
+       ],
+       [ 
+        "id" => 4,
+        "no" => "III",
+        "description" => "Area with regular cover of vegetation or buildings or with isolated obstacles with separations of maximum 20 obstacle heights (such as as villages, suburban terrain, permanent forest)",
+        "z0" => 0.3, // Roughness length in meters
+        "zmin" => 5, // Minimum height in meters
+       ],
+
+        [ 
+        "id" => 5,
+        "no" => "IV",
+        "description" => "Area in which at least 15 % of the surface is covered with buildings and their average height exceeds 15 m",
+        "z0" => 1, // Roughness length in meters
+        "zmin" => 10, // Minimum height in meters
+       ],
+    ];
+
+    public $activeTerrainCategory = 3; // Default to category III 
+
+
+
+
+
+
+
+
+
+
     public function mount()
     {
         if (request('action')) {
@@ -453,8 +506,105 @@ class EngMast extends Component
 
     function calculateTubeWindLoads() {
 
+        /*
+        1. Calculate Reference Area
+        2. Calculate Reference Height
+        3. Calculate Terrain Factor kr
+        4. Calculate The roughness factor cr(ze) at the reference height
+        5. Cacculate Mean Velocity
+        6. Calculate Turbulence Intensity
+        7. Calculate Basic Velocity Pressure
+        8. Calculate Peak Velocity Pressure
+        9. Calculate Wind velocity corresponding to peak velocity pressure
+        10. Calculate Reynolds Number
+        11. Surface Roughness taken as 0.1 for Aluminum coated
+        12. Calculate Structural Factor
+        13. Calculate Effective Slenderness
+        14. Calculate End Effect factor for structural solidity of 1.0
+        15. Calculate Force Coefficient without End Effect
+
+        */
+
 
         foreach ($this->tubeData as $key => $tube) {
+
+            // Reference Area
+            $refArea = pi() * pow($tube["od"] / 2, 2); // m2
+
+            // Reference Height
+            $Ze = $tube["heights"]["eth"]; // Extended top height in meters
+
+            // Terrain Factor kr
+            $Z0 = $this->terrainCategory[$this->activeTerrainCategory]["z0"]; // Roughness length in meters 
+            $kr = 0.19 * pow($Z0/0.05, 0.07);
+
+            // Roughness factor cr(ze) at the reference height
+            $maxHeight = max([$Ze ,$this->terrainCategory[$this->activeTerrainCategory]["zmin"]] );
+            $Cr = $kr * ln($maxHeight / $Z0); // Roughness factor at the reference height
+
+            // Calculate the mean wind speed at the height of the tube
+            $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s  
+
+            // Turbulence Intensity
+            $TI = 1.0 / ( 1.0 * ln($maxHeight / $Z0) );
+
+            // Basic Velocity Pressure
+            // Basic Velocity Pressure Formula: q = 0.5 * ρ * V^2
+
+            $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2 
+
+            // Peak Velocity Pressure
+            // Peak Velocity Pressure Formula: qp =[ 1+ 7* TI ] * 0.5 *  ρ *  Vm^2
+            $qp = (1 + 7 * $TI) * 0.5 * $this->airdensity * pow($Vm, 2); // Peak velocity pressure in N/m2
+
+            // Wind velocity corresponding to peak velocity pressure
+            // Wind Velocity Formula: Vp = sqrt(2 * qp / ρ)
+            $Vp = sqrt(2 * $qp / $this->airdensity); // Wind velocity in m/s corresponding to peak velocity pressure
+
+
+            // Reynolds Number
+            // Reynolds Number Formula: Re = ρ * Vp * D / μ
+            // where:
+            // Re = Reynolds number (dimensionless)
+            // ρ = air density (kg/m3)
+            // Vp = wind velocity (m/s) corresponding to peak velocity pressure
+            // D = characteristic length (m) (outer diameter of the tube)
+            // μ = dynamic viscosity of air (kg/(m·s)) (assumed to be 1.81e-5 kg/(m·s) at 20°C)
+            $mu = 15e-6; // Dynamic viscosity of air in kg/(m·s) at 20°C
+            $Re = ($this->airdensity * $Vp * $tube["od"]) / $mu; // Reynolds number (dimensionless)
+
+            // Structural Factor
+            // Structural Factor is taken as 1.0 for this calculation
+
+            // Surface Roughness
+            // Surface Roughness is taken as 0.1 for Aluminum coated tubes
+            $surfaceRoughness = 0.1; 
+
+            // Effective Slenderness
+            if ($tube["length"] <= 15) {
+
+                $l_b = $tube["length"] / $tube["od"]; // Convert length to meters
+                $effective_slenderness  = min([$l_b, 70]); // Limit to a maximum of 70
+
+            } else {
+                $l_b = $tube["length"] / $tube["od"]; // Convert length to meters
+                $effective_slenderness  = min([0.7 * $l_b, 70]); // Limit to a maximum of 70
+            }
+
+
+
+            // End Effect Factor
+
+            if ($effective_slenderness <= 10 ) {
+
+                $end_effect_factor = 0.01 * $effective_slenderness + 0.59; // For slenderness less than or equal to 10
+
+            } else {
+
+                $end_effect_factor = 0.00358 * $effective_slenderness + 0.6914; // For slenderness greater than 10
+            } 
+
+
 
 
            $xarea = pi() * pow($tube["od"] / 2, 2) * $tube["length"] * 1e-6; // Cross-sectional area of the tube ; m2

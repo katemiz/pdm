@@ -49,7 +49,6 @@ class CanvasClass {
 
         // this.activeTubeNo = this.endTubeNo - this.startTubeNo + 1
 
-        console.log("zeroizeHeight",this.zeroizeHeight)
         // console.log("endTubeNo",this.endTubeNo)
 
 

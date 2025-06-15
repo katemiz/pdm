@@ -11,7 +11,6 @@ class EngMast extends Component
 {
     public $action;
 
-
     public $tubeOd = 100;
     public $tubeId;
     public $tubeThickness;
@@ -39,7 +38,6 @@ class EngMast extends Component
     public $materialDensity = 2.7; // g/cm3
     public $pressure = 2; // Bars
 
-
     public $smallestTubeId = 44; // mm
     public $smallestTubeThickness = 2; // mm
     public $noOfActiveTubes = 16; // quantity
@@ -55,13 +53,11 @@ class EngMast extends Component
     public $overlapMTTubes = 500; // mm
     public $headMTTubes = 70; // mm
 
-
     public $cd = 1.5;
     public $sailarea = 1.50;
     public $windspeed = 120;
     public $airdensity = 1.25; // kg/m3 see NASA https://www.earthdata.nasa.gov/topics/atmosphere/air-mass-density
     public $hellman_coefficient = 0.25;       // Hellmann exponent; taken as 0.25 for all tubes
-
 
     public $windload;
     public $payloadMass = 50;
@@ -73,13 +69,11 @@ class EngMast extends Component
 
     public $noOfMTTubes = 16; // quantity
 
-
     public $showModal = false;
     public $showHelpModal = false;
 
 
     public $data;
-
     public $error;
 
 
@@ -89,7 +83,6 @@ class EngMast extends Component
            "realArea" => 2,
            "realInertia" => 1000,
        ],
-
     ];   
 
 
@@ -133,14 +126,6 @@ class EngMast extends Component
     public $activeTerrainCategory = 2; // Default to category II 
 
 
-
-
-
-
-
-
-
-
     public function mount()
     {
         if (request('action')) {
@@ -151,8 +136,6 @@ class EngMast extends Component
 
     public function render()
     {
-
-
        $this->error = null; 
 
         if ($this->endTubeNo <= $this->startTubeNo) {
@@ -163,12 +146,6 @@ class EngMast extends Component
 
             $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1; 
         }
-
-
-
-
-
-
 
         switch ($this->action) {
 
@@ -187,7 +164,6 @@ class EngMast extends Component
 
             case 'deflection':
                 $this->MastDeflections();
-                $this->calculateMeanSpeeds();
                 $this->calculateTubeWindLoads();
                 break;
 
@@ -195,10 +171,6 @@ class EngMast extends Component
                 $this->WindLoads();
                 break;
         }
-
-
-
-
 
         return view('engineering.mast.mast');
     }
@@ -212,23 +184,24 @@ class EngMast extends Component
         $this->pneumaticLiftCapacity();
     }
 
+
     public function decreasePressure()
     {
         $this->pressure -= 0.1;
         $this->pneumaticLiftCapacity();
     }
 
+
     public function increaseBucklingLength() {
         $this->tubeBucklingLength += 100;
         $this->MasttechProfiles();
     }
 
+
     public function decreaseBucklingLength() {
         $this->tubeBucklingLength -= 100;
         $this->MasttechProfiles();
     }
-
-
 
 
     public function pneumaticLiftCapacity() {
@@ -287,7 +260,6 @@ class EngMast extends Component
             $t = $t+$this->thicknessIncrement;
             $od = $id+2*$t;
         }
-
     }
 
 
@@ -312,17 +284,10 @@ class EngMast extends Component
 
         $this->MastHeights();
 
-
-        // $this->extendedHeight   = $this->noOfMTTubes*$this->lengthMTTubes-($this->noOfMTTubes-1)*$this->overlapMTTubes;
-        // $this->nestedHeight     = $this->lengthMTTubes+($this->noOfMTTubes-1)*$this->headMTTubes;
-
-        $n = $this->noOfMTTubes;
-        // $n = $this->noOfActiveTubes;
-
-
         $maxDia = 0;
+        $i = 0;
 
-        for ($i = 0; $i < $this->noOfMTTubes; $i++) {
+        for ($n = $this->noOfMTTubes; $n > 0; $n--) {
 
             if ($n > 1) {
 
@@ -345,12 +310,25 @@ class EngMast extends Component
                 'eth' => $eth,
                 'ebh' => $ebh,
                 'nth' => $nth,
-                'nbh' => $nbh,
+                'nbh' => $nbh
             ];
 
-            $n--;
-
             $maxDia = max($maxDia,$this->tubeData[$i]['od']);
+
+            $i++;
+        }
+
+        // Add kink height data to array [top kink point]
+        foreach ($this->tubeData as $i => $tube) {
+
+            if ($i < $this->noOfMTTubes -1) {
+                $this->tubeData[$i]['heights']['kinkh'] = $this->tubeData[$i+1]['heights']['eth'];
+            } else {
+                $this->tubeData[$i]['heights']['kinkh'] = 0;
+            }
+
+            // Wind Force Application Height
+            $this->tubeData[$i]['heights']['wforceh'] = ($this->tubeData[$i]['heights']['eth'] + $this->tubeData[$i]['heights']['kinkh']) / 2;
         }
 
         $this->data["xOffset"] = floatval($this->xOffset);
@@ -369,18 +347,12 @@ class EngMast extends Component
 
         $this->data["windLoad"] = 1000;
 
-
         $this->data["tubes"] = $this->tubeData;
-
 
         $this->dispatch('triggerCanvasDraw',data : $this->data);
 
         return true;
     }
-
-
-
-
 
 
     function WindLoads() {
@@ -393,7 +365,6 @@ class EngMast extends Component
 
         $this->windload = 0.5*$this->airdensity*$this->cd*$this->sailarea*pow($this->windspeed/3.6,2);
     }
-
 
 
     function GetMore($tubeNo) {
@@ -415,12 +386,10 @@ class EngMast extends Component
     }
 
 
-
     function CalculateMomentCapability($od,$id) {
 
         return $this->yieldStrength*pi()*(pow($od,4)-pow($id,4))/(32*$od*1000);
     }
-
 
 
     function CalculateMass($od,$id) {
@@ -430,15 +399,9 @@ class EngMast extends Component
     }
 
 
-
-
     function CalculateArea($od,$id) {
-
         return (pow($od,2)- pow($id,2))*pi()/4; // mm2
     }
-
-
-
 
 
     function CalculateLiftCapacity($od) {
@@ -530,7 +493,7 @@ class EngMast extends Component
             $paramsArray = [];
 
             // Reference Area
-            $refArea = $tube["length"] * $tube["od"] / 1000000; // m2
+            $refArea = ($tube["heights"]["eth"] - $tube["heights"]["kinkh"]) * $tube["od"] / 1000000; // m2
             $paramsArray["referenceArea"] = $refArea;
 
             // Reference Height
@@ -542,14 +505,12 @@ class EngMast extends Component
             $kr = 0.19 * pow($Z0/0.05, 0.07);
             $paramsArray["kr"] = $kr;
             
-
             // Roughness factor cr(ze) at the reference height
-            $maxHeight = max([$Ze ,$this->terrainCategory[$this->activeTerrainCategory]["zmin"]] );
+            $maxHeight = max($Ze ,$this->terrainCategory[$this->activeTerrainCategory]["zmin"]);
             $Cr = $kr * log($maxHeight / $Z0); // Roughness factor at the reference height
 
             $paramsArray["Cr"] = $Cr;
             $paramsArray["maxHeight"] = $maxHeight;
-
 
             // Calculate the mean wind speed at the height of the tube
             $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s  
@@ -574,7 +535,6 @@ class EngMast extends Component
             // Wind Velocity Formula: Vp = sqrt(2 * qp / ρ)
             $Vp = sqrt(2 * $qp / $this->airdensity); // Wind velocity in m/s corresponding to peak velocity pressure
             $paramsArray["WindVelocityForPeakVelocityPressure"] = $Vp; // Wind velocity in m/s corresponding to peak velocity pressure
-
 
             // Reynolds Number
             // Reynolds Number Formula: Re = ρ * Vp * D / μ
@@ -604,10 +564,10 @@ class EngMast extends Component
 
             if ($tube["length"]/1000 <= 15) {
 
-                $effective_slenderness  = min([$l_b, 70]); // Limit to a maximum of 70
+                $effective_slenderness  = min($l_b, 70); // Limit to a maximum of 70
 
             } else {
-                $effective_slenderness  = min([0.7 * $l_b, 70]); // Limit to a maximum of 70
+                $effective_slenderness  = min(0.7 * $l_b, 70); // Limit to a maximum of 70
             }
 
             $paramsArray["EffectiveSlenderness"] = $effective_slenderness; // Effective Slenderness (dimensionless)
@@ -641,16 +601,11 @@ class EngMast extends Component
 
             $this->tubeData[$key]["windLoadParameters"] = $paramsArray;
 
-
             // Total Wind Force
             // Total Wind Force Formula: Fw = Structural Factor * Force Coefficient * Peak Velocity Pressure * Reference Area
-
-
             $this->tubeData[$key]["windForce"] = $structuralFactor * $forceCoefficient * $qp * $refArea;
 
         }
-
-        // dd($this->tubeData);
 
         return true;
     }
@@ -662,7 +617,6 @@ class EngMast extends Component
 
         $coefficent = 1.2 + (0.18 * log10(10 * $k_b)) / (1 + 0.4 * log10($Re/1e6));
 
-
         if ($Re < 1.8e5) {
 
             // For Reynolds number less than 1.8e5, use a different formula
@@ -670,7 +624,7 @@ class EngMast extends Component
 
         } elseif ($Re >= 1.85e5 && $Re < 4e5) {
 
-            $tempcoefficient = 43546870 * pow($Re,-1.436031);
+            $tempcoefficient = 0.11 / pow($Re / 1e6,1.4);
 
             if ( $coefficent > $tempcoefficient) {
                 return $coefficent;
@@ -687,33 +641,6 @@ class EngMast extends Component
     }
 
 
-
-    function calculateMeanSpeeds() {
-
-
-        foreach ($this->tubeData as $key => $tube) {
-
-            // Calculate the mean wind speed at the height of the tube
-            $h = $tube["heights"]["eth"];  // Extended top height
-
-            // Mean wind speed formula: V(z) = V(z0) * (z/z0)^a
-            // where z0 is the reference height (usually 10m), a is the Hellmann exponent
-            $z0 = 10;  // Reference height in meters
-
-            if ($h <= 10) {
-
-                $this->tubeData[$key]["windMeanSpeed"] = $this->windspeed / 3.6; // Convert to m/s
-
-            } else {
-
-                $this->tubeData[$key]["windMeanSpeed"] = $this->windspeed * pow(($h / $z0), $this->hellman_coefficient) / 3.6; // Convert to m/s
-
-            }
-
-        }
-
-
-    }
 
 
 

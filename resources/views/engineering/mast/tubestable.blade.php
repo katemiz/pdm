@@ -10,7 +10,9 @@
             <th class="has-text-right">Mass</th>
             <th class="has-text-right">Moment<br>Capacity</th>
 
+            @if ($action == 'deflection')
             <th class="has-text-right">Wind<br>Load</th>
+            @endif
 
 
             <th class="has-text-centered has-background-white-ter" colspan="2">Pneumatic<br>Load Capacity<sup>(1)</sup>
@@ -59,7 +61,9 @@
                 <td class="has-text-right">{{ round($tube["mass"],1) }} kg/m</td>
                 <td class="has-text-right">{{ round($tube["moment"],0) }} Nm</td>
 
-                <td class="has-text-right">{{ sprintf("%.2f",round($tube["windForce"],0)) }} N</td>
+                @if ($action == 'deflection')
+                <td class="has-text-right">{{ round($tube["windForce"],0) }} N</td>
+                @endif
 
                 <td class="has-text-right has-background-white-ter">{{ round($tube["pressureLoad"],0) }} N</td>
                 <td class="has-text-right has-background-white-ter">{{ round($tube["pressureLoad"] / 9.81, 0) }} kg</td>

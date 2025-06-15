@@ -131,7 +131,7 @@
         <div class="columns">
 
 
-          <div class="column field is-half">
+          <div class="column field is-4">
               <label class="label">Wind Speed (km/h) </label>
               <div class="control">
                 <input class="input" type="number" placeholder="Wind Speed" wire:model.live="windspeed" min="40"  max="200" step="1">
@@ -139,10 +139,18 @@
           </div>
 
 
-          <div class="column field is-half">
+          <div class="column field is-4">
               <label class="label">Sail Area (m<sup>2</sup>)</label>
               <div class="control">
               <input class="input" type="number" placeholder="Sail Area" wire:model.live="sailarea" min="0.1"  max="15" step="0.1">
+              </div>
+          </div>
+
+
+          <div class="column field is-4">
+              <label class="label">Payload Mass (kg)</label>
+              <div class="control">
+              <input class="input" type="number" placeholder="Payload Mass" wire:model.live="payloadMass" min="0"  max="1000" step="1">
               </div>
           </div>
 

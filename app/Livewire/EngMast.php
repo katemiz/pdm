@@ -59,11 +59,12 @@ class EngMast extends Component
     public $cd = 1.5;
     public $sailarea = 1.50;
     public $windspeed = 120;
-    public $airdensity = 1.293; // kg/m3 see NASA https://www.earthdata.nasa.gov/topics/atmosphere/air-mass-density
+    public $airdensity = 1.25; // kg/m3 see NASA https://www.earthdata.nasa.gov/topics/atmosphere/air-mass-density
     public $hellman_coefficient = 0.25;       // Hellmann exponent; taken as 0.25 for all tubes
 
 
     public $windload;
+    public $payloadMass = 50;
 
     public $xOffset = 100;
     public $zOffset = 500;
@@ -96,45 +97,40 @@ class EngMast extends Component
 
     public $terrainCategory =[
 
-       [ 
-        "id" => 1,
-        "no" => "0",
-        "description" => "Sea or coastal area exposed to the open sea",
-        "z0" => 0.003, // Roughness length in meters
-        "zmin" => 1, // Minimum height in meters
-       ],
-       [ 
-        "id" => 2,
-        "no" => "I",
-        "description" => "Lakes or flat and horizontal area with negligible vegetation and without obstacles",
-        "z0" => 0.01, // Roughness length in meters
-        "zmin" => 1, // Minimum height in meters    
-       ],
-       [ 
-        "id" => 3,
-        "no" => "II",
-        "description" => "Area with low vegetation such as grass and isolated obstacles (trees, buildings) with separations of at least 20 obstacle heights",
-        "z0" => 0.05, // Roughness length in meters
-        "zmin" => 2, // Minimum height in meters
-       ],
-       [ 
-        "id" => 4,
-        "no" => "III",
-        "description" => "Area with regular cover of vegetation or buildings or with isolated obstacles with separations of maximum 20 obstacle heights (such as as villages, suburban terrain, permanent forest)",
-        "z0" => 0.3, // Roughness length in meters
-        "zmin" => 5, // Minimum height in meters
+       "0" => [ 
+            "no" => "0",
+            "description" => "Sea or coastal area exposed to the open sea",
+            "z0" => 0.003, // Roughness length in meters
+            "zmin" => 1, // Minimum height in meters
+        ],
+       "1" => [ 
+            "no" => "I",
+            "description" => "Lakes or flat and horizontal area with negligible vegetation and without obstacles",
+            "z0" => 0.01, // Roughness length in meters
+            "zmin" => 1, // Minimum height in meters
+        ],
+       "2" => [
+            "no" => "II",
+            "description" => "Area with low vegetation such as grass and isolated obstacles (trees, buildings) with separations of at least 20 obstacle heights",
+            "z0" => 0.05, // Roughness length in meters
+            "zmin" => 2, // Minimum height in meters
+        ],
+       "3" => [
+            "no" => "III",
+            "description" => "Area with regular cover of vegetation or buildings or with isolated obstacles with separations of maximum 20 obstacle heights (such as as villages, suburban terrain, permanent forest)",
+            "z0" => 0.3, // Roughness length in meters
+            "zmin" => 5, // Minimum height in meters
        ],
 
-        [ 
-        "id" => 5,
-        "no" => "IV",
-        "description" => "Area in which at least 15 % of the surface is covered with buildings and their average height exceeds 15 m",
-        "z0" => 1, // Roughness length in meters
-        "zmin" => 10, // Minimum height in meters
+        "4" => [
+            "no" => "IV",
+            "description" => "Area in which at least 15 % of the surface is covered with buildings and their average height exceeds 15 m",
+            "z0" => 1, // Roughness length in meters
+            "zmin" => 10, // Minimum height in meters
        ],
     ];
 
-    public $activeTerrainCategory = 3; // Default to category III 
+    public $activeTerrainCategory = 2; // Default to category II 
 
 
 
@@ -522,44 +518,62 @@ class EngMast extends Component
         13. Calculate Effective Slenderness
         14. Calculate End Effect factor for structural solidity of 1.0
         15. Calculate Force Coefficient without End Effect
+        16. Calculate Force Coefficient
+        17. Calculate Total Wind Force
 
         */
 
 
         foreach ($this->tubeData as $key => $tube) {
 
+            // WindLoadParameters
+            $paramsArray = [];
+
             // Reference Area
-            $refArea = pi() * pow($tube["od"] / 2, 2); // m2
+            $refArea = $tube["length"] * $tube["od"] / 1000000; // m2
+            $paramsArray["referenceArea"] = $refArea;
 
             // Reference Height
-            $Ze = $tube["heights"]["eth"]; // Extended top height in meters
+            $Ze = $tube["heights"]["eth"] / 1000; // Extended top height in meters
+            $paramsArray["Ze"] = $Ze;
 
             // Terrain Factor kr
             $Z0 = $this->terrainCategory[$this->activeTerrainCategory]["z0"]; // Roughness length in meters 
             $kr = 0.19 * pow($Z0/0.05, 0.07);
+            $paramsArray["kr"] = $kr;
+            
 
             // Roughness factor cr(ze) at the reference height
             $maxHeight = max([$Ze ,$this->terrainCategory[$this->activeTerrainCategory]["zmin"]] );
-            $Cr = $kr * ln($maxHeight / $Z0); // Roughness factor at the reference height
+            $Cr = $kr * log($maxHeight / $Z0); // Roughness factor at the reference height
+
+            $paramsArray["Cr"] = $Cr;
+            $paramsArray["maxHeight"] = $maxHeight;
+
 
             // Calculate the mean wind speed at the height of the tube
             $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s  
+            $paramsArray["Vm"] = $Vm;
 
             // Turbulence Intensity
-            $TI = 1.0 / ( 1.0 * ln($maxHeight / $Z0) );
+            $TI = 1.0 / ( 1.0 * log($maxHeight / $Z0) );
+            $paramsArray["TurbulenceIntensity"] = $TI; // Turbulence Intensity
 
             // Basic Velocity Pressure
             // Basic Velocity Pressure Formula: q = 0.5 * ρ * V^2
 
             $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2 
+            $paramsArray["BasicVelocityPressure"] = $q; // Basic velocity pressure in N/m2
 
             // Peak Velocity Pressure
             // Peak Velocity Pressure Formula: qp =[ 1+ 7* TI ] * 0.5 *  ρ *  Vm^2
             $qp = (1 + 7 * $TI) * 0.5 * $this->airdensity * pow($Vm, 2); // Peak velocity pressure in N/m2
+            $paramsArray["PeakVelocityPressure"] = $qp; // Peak velocity pressure in N/m2
 
             // Wind velocity corresponding to peak velocity pressure
             // Wind Velocity Formula: Vp = sqrt(2 * qp / ρ)
             $Vp = sqrt(2 * $qp / $this->airdensity); // Wind velocity in m/s corresponding to peak velocity pressure
+            $paramsArray["WindVelocityForPeakVelocityPressure"] = $Vp; // Wind velocity in m/s corresponding to peak velocity pressure
 
 
             // Reynolds Number
@@ -571,53 +585,106 @@ class EngMast extends Component
             // D = characteristic length (m) (outer diameter of the tube)
             // μ = dynamic viscosity of air (kg/(m·s)) (assumed to be 1.81e-5 kg/(m·s) at 20°C)
             $mu = 15e-6; // Dynamic viscosity of air in kg/(m·s) at 20°C
-            $Re = ($this->airdensity * $Vp * $tube["od"]) / $mu; // Reynolds number (dimensionless)
+            $Re = ( $Vp * $tube["od"] / 1000) / $mu; // Reynolds number (dimensionless)
+            $paramsArray["ReynoldsNumber"] = $Re; // Reynolds number (dimensionless)
 
             // Structural Factor
             // Structural Factor is taken as 1.0 for this calculation
+            $structuralFactor = 1.0; // Structural Factor (dimensionless)
 
             // Surface Roughness
             // Surface Roughness is taken as 0.1 for Aluminum coated tubes
-            $surfaceRoughness = 0.1; 
+            $surfaceRoughness = 0.2; 
+            $paramsArray["SurfaceRoughness"] = $surfaceRoughness; // Surface Roughness in mm
 
             // Effective Slenderness
-            if ($tube["length"] <= 15) {
 
-                $l_b = $tube["length"] / $tube["od"]; // Convert length to meters
+            $l_b = $tube["length"] / $tube["od"]; // Convert length to meters
+            $paramsArray["l_b"] = $l_b; // Slenderness ratio (dimensionless)
+
+            if ($tube["length"]/1000 <= 15) {
+
                 $effective_slenderness  = min([$l_b, 70]); // Limit to a maximum of 70
 
             } else {
-                $l_b = $tube["length"] / $tube["od"]; // Convert length to meters
                 $effective_slenderness  = min([0.7 * $l_b, 70]); // Limit to a maximum of 70
             }
 
-
+            $paramsArray["EffectiveSlenderness"] = $effective_slenderness; // Effective Slenderness (dimensionless)
 
             // End Effect Factor
-
             if ($effective_slenderness <= 10 ) {
-
-                $end_effect_factor = 0.01 * $effective_slenderness + 0.59; // For slenderness less than or equal to 10
+                // $end_effect_factor = 0.01 * $effective_slenderness + 0.59; // For slenderness less than or equal to 10
+                $end_effect_factor = 0.6023079 * pow($effective_slenderness,0.0657553); // For slenderness less than or equal to 10
 
             } else {
-
-                $end_effect_factor = 0.00358 * $effective_slenderness + 0.6914; // For slenderness greater than 10
+                $end_effect_factor = 0.698573 + 0.001977401 * $effective_slenderness + 0.00008741341 * pow($effective_slenderness, 2) - 0.00000103591 * pow($effective_slenderness, 3); // For slenderness greater than 10
             } 
 
+            $paramsArray["EndEffectFactor"] = $end_effect_factor; // End Effect Factor (dimensionless)
+
+            // Force Coefficient without End Effect
+            $k_b = $surfaceRoughness / $tube["od"]; // Equivalent Roughness
+            $paramsArray["k_b"] = $k_b; // Equivalent Roughness (dimensionless)
+
+            $paramsArray["forceCoefficientWoEndEffect"] = $this->calculateForceCoefficientWOEndEffect($Re, $k_b);
+
+            // Force Coefficient
+            // EndEffect Facor * Force Coefficient without End Effect
+            // Force Coefficient Formula: Cf = Cfw * EndEffectFactor
+            // where:
+            // Cf = Force Coefficient (dimensionless)
+            // Cfw = Force Coefficient without End Effect (dimensionless)
+            // EndEffectFactor = End Effect Factor (dimensionless)
+            $forceCoefficient = $paramsArray["forceCoefficientWoEndEffect"] * $end_effect_factor; // Force Coefficient (dimensionless)
+            $paramsArray["forceCoefficient"] = $forceCoefficient; // Force Coefficient (dimensionless)
+
+            $this->tubeData[$key]["windLoadParameters"] = $paramsArray;
 
 
+            // Total Wind Force
+            // Total Wind Force Formula: Fw = Structural Factor * Force Coefficient * Peak Velocity Pressure * Reference Area
 
-           $xarea = pi() * pow($tube["od"] / 2, 2) * $tube["length"] * 1e-6; // Cross-sectional area of the tube ; m2
 
-            // Calculate the wind load on the tube
-            $this->tubeData[$key]["windForce"] = 0.5 * $this->airdensity * $this->cd * pow($tube["windMeanSpeed"]/3.6, 2) * $xarea;
+            $this->tubeData[$key]["windForce"] = $structuralFactor * $forceCoefficient * $qp * $refArea;
 
         }
+
+        // dd($this->tubeData);
 
         return true;
     }
 
 
+
+
+    function calculateForceCoefficientWOEndEffect($Re,$k_b) {
+
+        $coefficent = 1.2 + (0.18 * log10(10 * $k_b)) / (1 + 0.4 * log10($Re/1e6));
+
+
+        if ($Re < 1.8e5) {
+
+            // For Reynolds number less than 1.8e5, use a different formula
+            return 1.2;
+
+        } elseif ($Re >= 1.85e5 && $Re < 4e5) {
+
+            $tempcoefficient = 43546870 * pow($Re,-1.436031);
+
+            if ( $coefficent > $tempcoefficient) {
+                return $coefficent;
+            } else {
+                return $tempcoefficient;
+            }
+        }
+
+        if ( $coefficent <= 0.4) {
+            return 0.4;
+        }
+
+        return $coefficent;
+    }
 
 
 

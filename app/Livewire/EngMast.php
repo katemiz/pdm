@@ -75,6 +75,7 @@ class EngMast extends Component
 
     public $data;
     public $error;
+    public $modalType; 
 
 
     public $realTubeData = [
@@ -380,8 +381,9 @@ class EngMast extends Component
     }
 
 
-    function toggleHelpModal() {
+    function toggleHelpModal($modalType) {
 
+        $this->modalType = $modalType; 
         $this->showHelpModal = !$this->showHelpModal;
     }
 

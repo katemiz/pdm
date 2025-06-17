@@ -13,7 +13,7 @@
 
         @else 
 
-               <h1 class="title">{{$noOfActiveTubes}}-Tube Mast Configuration</h1>
+               <h1 class="title">Mast and Operational Parameters - [ {{$noOfActiveTubes}} Sections ]</h1>
 
      @endif
 
@@ -109,19 +109,42 @@
 
         <div class="columns">
 
-          <div class="column field is-half">
-              <label class="label">X-Offset (mm) <a wire:click="toggleHelpModal">?</a></label>
+          <div class="column field is-4">
+              <label class="label">X-Offset (mm) <a wire:click="toggleHelpModal('mparams')">?</a></label>
               <div class="control">
                 <input class="input" type="number" placeholder="Payload X-Offset Distance" wire:model.live="xOffset" min="50"  max="3000" step="10">
               </div>
           </div>
 
-          <div class="column field is-half">
-              <label class="label">Z-Offset (mm) <a wire:click="toggleHelpModal">?</a></label>
+          <div class="column field is-4">
+              <label class="label">Z-Offset (mm) <a wire:click="toggleHelpModal('mparams')">?</a></label>
               <div class="control">
                 <input class="input" type="number" placeholder="Payload Z-Offset Distance" wire:model.live="zOffset" min="0"  max="600" step="1">
               </div>
           </div>
+
+          <div class="column field is-4">
+              <label class="label">Terrain Category <a wire:click="toggleHelpModal('terrain')">?</a></label>
+
+                <div class="control">
+
+                    <div class="select is-fullwidth">
+                        <select wire:model.live="activeTerrainCategory" >
+
+                            @foreach ($terrainCategory as $key => $terrain)
+
+                            <option value="{{ $key }}">{{ $terrain["no"] }}</option>
+
+                            @endforeach
+
+                        </select>
+                    </div>
+
+                </div>
+
+          </div>
+
+
 
 
         </div>
@@ -186,6 +209,8 @@
 
 
 
+
+
       @endif
 
       </div>
@@ -217,9 +242,11 @@
             </div>
 
           </nav>
-
-
     </div>
+
+
+
+
 
 
 </div>

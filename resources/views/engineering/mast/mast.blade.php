@@ -259,14 +259,57 @@
     @if ($action == 'deflection' )
 
         <div class="modal {{ $showHelpModal ? 'is-active' :'' }}" id="modalHelp">
-            <div class="modal-background" wire:click="toggleHelpModal"></div>
+            <div class="modal-background" wire:click="toggleHelpModal('mparams')"></div>
             <div class="modal-content box">
-                <h1 class="title">Mast Parameters</h1>
-                <p class="image is-4by3">
-                    <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="">
-                </p>
+
+
+
+               @switch($modalType)
+                @case("mparams")
+                    <h1 class="title">Mast Parameters</h1>
+                    <p class="image is-4by3">
+                        <img src="https://bulma.io/assets/images/placeholders/1280x960.png" alt="">
+                    </p>
+                    
+                    @break
+
+
+                @case("terrain")
+
+                    <h1 class="title">Terrain Categories</h1>
+
+                    <table class="table is-fullwidth">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach($terrainCategory as $terrain)
+
+                                <tr>
+                                    <th class="is-4">{{ $terrain["no"] }}</th>
+                                    <td>{{ $terrain["description"] }}</td>
+                                </tr>
+
+                            @endforeach
+                        </tbody>
+                    </table>
+                    @break
+
+                @default
+                    
+               @endswitch 
+
+
+
+
+
+
             </div>
-            <button class="modal-close is-large" aria-label="close" wire:click="toggleHelpModal"></button>
+            <button class="modal-close is-large" aria-label="close" wire:click="toggleHelpModal('{{ $modalType }}')"></button>
         </div>
 
     @endif

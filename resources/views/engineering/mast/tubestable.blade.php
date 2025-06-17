@@ -51,6 +51,8 @@
 
         @foreach ($tubeData as $i => $tube)
 
+           @if ( $tube["no"] >= $startTubeNo && $tube["no"]  <= $endTubeNo)
+
             <tr>
                 <th>
                     <a wire:click="GetMore({{ $i }})" >MT-{{ sprintf("%02d",$i+1) }}</a>
@@ -69,6 +71,8 @@
                 <td class="has-text-right has-background-white-ter">{{ round($tube["pressureLoad"] / 9.81, 0) }} kg</td>
                 <td class="has-text-right">{{ round($tube["criticalLoad"],0) }} N</td>
             </tr>
+
+            @endif
 
         @endforeach
 

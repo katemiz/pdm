@@ -29,12 +29,12 @@ return [
                 "direction" => "asc"
             ],
 
-            "is_html"=> [
+/*             "is_html"=> [
                 "title" => "HTML",
                 "sortable" => true,
                 "align" => "left",
                 "direction" => "asc"
-            ],
+            ], */
 
 
             "title"=> [

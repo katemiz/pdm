@@ -36,6 +36,8 @@ use App\Livewire\Engineering;
 use App\Livewire\EngMast;
 use App\Livewire\Geometry;
 
+use App\Livewire\MatFamilyManager;
+
 
 use App\Livewire\LwCompany;
 
@@ -139,6 +141,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/material/{action}/{id?}', Material::class);
     Route::get('/process/{action}/{id?}', Process::class);
     Route::get('/notes/{action}/{id?}', ProductNote::class);
+
+
+    Route::get('/material2/{action}/{id?}', MatFamilyManager::class);
 
 
     // PDF GENERATION

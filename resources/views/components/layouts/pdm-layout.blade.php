@@ -18,6 +18,9 @@
 
         <script src="{{ asset('/js/js.js') }}"></script>
         {{-- <script type="module" src="{{ asset('/js/model-viewer.min.js') }}"></script> --}}
+
+    @livewireStyles
+
         
     </head>
     <body class='has-background-lighter'>
@@ -26,5 +29,12 @@
         {{ $slot }}
 
         @include('components.layouts.pdm-footer')
+
     </body>
+
+
+
 </html>
+
+
+

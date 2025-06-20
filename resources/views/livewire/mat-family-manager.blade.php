@@ -1,7 +1,8 @@
 
 <div class="section container">
 
-
+        @stack('styles')
+        @stack('scripts')
 
     <script src="{{ asset('/js/confirm_modal.js') }}"></script>
 

@@ -152,12 +152,12 @@
 
 
 
-                        <a href="/material2/list" class="navbar-item">
+                        {{-- <a href="/material2/list" class="navbar-item">
                             <span class="icon has-text-link">
                                 <x-carbon-cube />
                             </span>
                             <span class="ml-2">Materials2</span>
-                        </a>
+                        </a> --}}
 
 
 

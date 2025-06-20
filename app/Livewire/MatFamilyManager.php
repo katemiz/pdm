@@ -5,6 +5,8 @@ namespace App\Livewire;
 use App\Models\MatFamily;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Livewire\Attributes\On;
+
 
 class MatFamilyManager extends Component
 {
@@ -14,10 +16,13 @@ class MatFamilyManager extends Component
     public $name = '';
     public $code = '';
     public $description = '';
+        public $content = '';
+
     public $is_active = true;
 
     // Component state
     public $editingId = null;
+    public $deletingId = null; // For delete confirmation
     public $showForm = false;
     public $search = '';
     public $sortField = 'name';
@@ -120,10 +125,23 @@ class MatFamilyManager extends Component
         }
     }
 
-    public function delete($id)
+
+
+
+
+    public function deleteConfirm($id) {
+        $this->deletingId = $id;
+        $this->dispatch('ConfirmModal', type:'delete');
+    }
+
+
+
+
+    #[On('onDeleteConfirmed')]
+    public function delete()
     {
         try {
-            $family = MatFamily::findOrFail($id);
+            $family = MatFamily::findOrFail($this->deletingId);
 
             // Check if family has associated materials
             if ($family->materials()->count() > 0) {
@@ -139,6 +157,8 @@ class MatFamilyManager extends Component
         }
     }
 
+
+
     public function toggleStatus($id)
     {
         try {
@@ -153,11 +173,18 @@ class MatFamilyManager extends Component
         }
     }
 
+
+
     public function cancel()
     {
         $this->resetForm();
         $this->showForm = false;
     }
+
+
+
+
+
 
     public function sortBy($field)
     {
@@ -170,6 +197,8 @@ class MatFamilyManager extends Component
         $this->sortField = $field;
         $this->resetPage();
     }
+
+
 
     // Helper methods
     private function resetForm()

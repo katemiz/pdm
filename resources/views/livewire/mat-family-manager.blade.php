@@ -1,6 +1,13 @@
-{{-- File: resources/views/livewire/mat-family-manager.blade.php --}}
 
 <div class="section container">
+
+
+
+    <script src="{{ asset('/js/confirm_modal.js') }}"></script>
+
+
+
+
     {{-- Header --}}
     <div class="mb-6">
         <h1 class="title has-text-weight-light is-size-1">Material Families</h1>
@@ -161,6 +168,42 @@
                         </div>
 
 
+
+
+
+
+
+
+                        <!-- Content WYSIWYG -->
+                        <div class="column field">
+                            <label for="content" class="label">
+                                Content
+                            </label>
+                            <div wire:ignore>
+                                <div 
+                                    id="quill-editor"
+                                    class="@error('content') border-red-500 @enderror"
+                                    style="height: 300px;"
+                                ></div>
+                                <input type="hidden" id="content" wire:model="content">
+                            </div>
+                            @error('content') 
+                                <span class="text-red-500 text-sm mt-1">{{ $message }}</span> 
+                            @enderror
+                        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
                         <div class="columns">
 
                             {{-- Active Status --}}
@@ -281,7 +324,7 @@
 
                             <td>
                                 <a class="icon" wire:click="edit({{ $family->id }})" title="Edit"><x-carbon-pen /></a>
-                                <a class="icon has-text-danger" wire:click="delete({{ $family->id }})" title="Delete" wire:confirm="Are you sure you want to delete this user?"><x-carbon-trash-can /></a>
+                                <a class="icon has-text-danger" wire:click="deleteConfirm({{ $family->id }})" title="Delete"><x-carbon-trash-can /></a>
                             </td>
 
                         </tr>
@@ -309,3 +352,85 @@
         @endif
     </div>
 </div>
+
+
+
+
+
+@push('styles')
+{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.snow.min.css" rel="stylesheet"> --}}
+
+<link href="{{asset("/css/quill.snow.css")}}" rel="stylesheet">
+@endpush
+
+@push('scripts')
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/quill/1.3.7/quill.min.js"></script> --}}
+    <script src="{{asset("/js/quill.js")}}"></script>
+
+<script>
+    let quill;
+
+    document.addEventListener('DOMContentLoaded', function() {
+        initQuill();
+    });
+
+    document.addEventListener('livewire:load', function() {
+        initQuill();
+    });
+
+    function initQuill() {
+        if (document.getElementById('quill-editor') && typeof Quill !== 'undefined') {
+            // Remove existing instance if it exists
+            const existingEditor = document.querySelector('#quill-editor .ql-container');
+            if (existingEditor) {
+                document.getElementById('quill-editor').innerHTML = '';
+            }
+
+            quill = new Quill('#quill-editor', {
+                theme: 'snow',
+                placeholder: 'Write your content here...',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['link', 'blockquote', 'code-block'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Set initial content if exists
+            const initialContent = @this.get('content');
+            if (initialContent) {
+                quill.root.innerHTML = initialContent;
+            }
+
+            // Listen for text changes
+            quill.on('text-change', function() {
+                const content = quill.root.innerHTML;
+                @this.set('content', content);
+                document.getElementById('content').value = content;
+            });
+        }
+    }
+
+    // Reinitialize Quill after Livewire updates
+    document.addEventListener('livewire:update', function() {
+        setTimeout(function() {
+            initQuill();
+        }, 100);
+    });
+
+    // Clear editor content when form is reset
+    window.addEventListener('livewire:load', function() {
+        Livewire.on('formReset', function() {
+            if (quill) {
+                quill.setContents([]);
+            }
+        });
+    });
+</script>
+@endpush

@@ -7,7 +7,7 @@
             <th class="has-text-right">OD</th>
             <th class="has-text-right">ID</th>
             <th class="has-text-right">THK</th>
-            <th class="has-text-right">Mass</th>
+            <th class="has-text-right">Mass <br>(per m)</th>
             <th class="has-text-right">Moment<br>Capacity</th>
 
             @if ($action == 'deflection')
@@ -60,7 +60,7 @@
                 <td class="has-text-right">{{ sprintf("%.2f",round($tube["od"],2)) }} mm</td>
                 <td class="has-text-right">{{ sprintf("%.2f",round($tube["id"],2)) }} mm</td>
                 <td class="has-text-right">{{ sprintf("%.2f",round($tube["thk"],2)) }} mm</td>
-                <td class="has-text-right">{{ round($tube["mass"],1) }} kg/m</td>
+                <td class="has-text-right">{{ sprintf("%.2f",round($tube["mass"],2)) }} kg/m</td>
                 <td class="has-text-right">{{ round($tube["moment"],0) }} Nm</td>
 
                 @if ($action == 'deflection')

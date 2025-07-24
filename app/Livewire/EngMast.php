@@ -35,7 +35,7 @@ class EngMast extends Component
     public $E = 70000; // MPa for Aluminum
     public $yieldStrength = 170; // MPa
     public $ultimateStrength = 210; // MPa
-    public $materialDensity = 2.7; // g/cm3
+    public $materialDensity = 2.704; // g/cm3
     public $pressure = 2; // Bars
 
     public $smallestTubeId = 44; // mm
@@ -79,11 +79,89 @@ class EngMast extends Component
 
 
     public $realTubeData = [
-       [
-           "no" => 1,
-           "realArea" => 2,
-           "realInertia" => 1000,
-       ],
+        [
+            "no" => 1,
+            "area" => 531.42,
+            "inertia" => 144359.94,
+        ],
+
+        [
+            "no" => 2,
+            "area" => 657.93,
+            "inertia" => 351727.54,
+        ],
+        [
+            "no" => 3,
+            "area" => 852.28,
+            "inertia" => 733496.51,
+        ],
+        [
+            "no" => 4,
+            "area" => 1057.42,
+            "inertia" => 1372498.49,
+        ],
+        [
+            "no" => 5,
+            "area" => 1290.94,
+            "inertia" => 2372673.47,
+        ],
+        [
+            "no" => 6,
+            "area" => 1553.09,
+            "inertia" => 3861481.58,
+        ],
+
+        [
+            "no" => 7,
+            "area" => 1844.42,
+            "inertia" => 5992457.14,
+        ],
+        [
+            "no" => 8,
+            "area" => 2165.56,
+            "inertia" => 8947902.11,
+        ],
+        [
+            "no" => 9,
+            "area" => 2517.21,
+            "inertia" => 12941721.43,
+        ],
+        [
+            "no" => 10,
+            "area" => 2900.08,
+            "inertia" => 18222403.31,
+        ],
+        [
+            "no" => 11,
+            "area" => 3538.49,
+            "inertia" => 26761768.83,
+        ],
+        [
+            "no" => 12,
+            "area" => 3986.05,
+            "inertia" => 35883568.00,
+        ],
+        [
+            "no" => 13,
+            "area" => 4467.07,
+            "inertia" => 47211434.31,
+        ],
+        [
+            "no" => 14,
+            "area" => 4982.29,
+            "inertia" => 61316545.00,
+        ],
+        [
+            "no" => 15,
+            "area" => 5532.44,
+            "inertia" => 78621879.48,
+        ],
+        [
+            "no" => 16,
+            "area" => 6118.30,
+            "inertia" => 99656139.01,
+        ],
+
     ];   
 
 
@@ -237,25 +315,39 @@ class EngMast extends Component
 
         for ($i = 0; $i < $this->noOfMTTubes; $i++) {
 
-            $moment         = $this->CalculateMomentCapability($od,$id);
-            $mass           = $this->CalculateMass($od,$id);
-            $pressureLoad   = $this->CalculateLiftCapacity($od);
-            $criticalLoad   = $this->ProfileCriticalLoad($od,$id);
+            // $moment         = $this->CalculateMomentCapability($od,$id, $i);
+            // $mass           = $this->CalculateMass($od,$id, $i);
+            // $pressureLoad   = $this->CalculateLiftCapacity($od);
+            // $criticalLoad   = $this->ProfileCriticalLoad($od,$id, $i);
 
             $this->tubeData[$i] = [
                 "no" => $i+1,
                 "od" => $od,
                 "id" => $id,
                 "thk" => $t,
-                "mass" => $mass,
-                "moment" => $moment,
-                "area" => $this->CalculateArea($od,$id),
-                "inertia" => $this->HollowTubeInertia($od,$id),
-                "EI" => $this->EI($od,$id),
-                "pressureLoad" => $pressureLoad,
-                "criticalLoad" => $criticalLoad,
+                // "massBasic" => $mass,
+                // "moment" => $moment,
+                // "areaBasic" => $this->CalculateArea($od,$id),
+                // "area" => $this->realTubeData[$i]['area'],
+                // "inertiaBasic" => $this->HollowTubeInertia($od,$id),
+                // "inertia" => $this->realTubeData[$i]['inertia'],
+                // "EI" => $this->EI($od,$id),
+                "pressureLoad" => $this->CalculateLiftCapacity($od),
+                // "criticalLoad" => $criticalLoad,
                 "length" =>$this->lengthMTTubes
             ];
+
+            // $this->tubeData[$i]['mass'] = $this->tubeData[$i]['area'] * $this->materialDensity;
+
+            $this->CalculateArea($od,$id,$i);
+            $this->CalculateMass($od,$id, $i);
+            $this->CalculateInertia($od,$id, $i);
+            $this->CalculateMomentCapability($od,$id, $i);
+
+            $this->ProfileCriticalLoad($od,$id, $i);
+
+            $this->EI($od,$id,$i);
+
 
             $id = $od+2*$this->gapBetweenTubes;
             $t = $t+$this->thicknessIncrement;
@@ -388,21 +480,31 @@ class EngMast extends Component
     }
 
 
-    function CalculateMomentCapability($od,$id) {
+    function CalculateMomentCapability($od,$id,$i) {
 
-        return $this->yieldStrength*pi()*(pow($od,4)-pow($id,4))/(32*$od*1000);
+        // Moment Capability
+        // M = σ * I / y
+
+        $this->tubeData[$i]['momentBasic'] = $this->yieldStrength*pi()*(pow($od,4)-pow($id,4))/(32*$od*1000); // Nm
+        $this->tubeData[$i]['moment'] = $this->yieldStrength*$this->realTubeData[$i]['inertia']/(0.5*$od*1000); // Nm
+
+        return true;
     }
 
 
-    function CalculateMass($od,$id) {
+    function CalculateMass($od,$id,$i) {
 
-        return $this->materialDensity *$this->CalculateArea($od,$id)/1000; // kg/m
-        // 1000 = 1m
+        $this->tubeData[$i]['mass'] = $this->materialDensity * $this->realTubeData[$i]['area']/1000; // kg/m
+        return true;
     }
 
 
-    function CalculateArea($od,$id) {
-        return (pow($od,2)- pow($id,2))*pi()/4; // mm2
+    function CalculateArea($od,$id,$i) {
+
+        $this->tubeData[$i]['areaBasic'] = (pow($od,2)- pow($id,2))*pi()/4; // mm2
+        $this->tubeData[$i]['area'] = $this->realTubeData[$i]['area'];
+
+        return true;
     }
 
 
@@ -417,7 +519,7 @@ class EngMast extends Component
 
 
 
-    function ProfileCriticalLoad($od,$id) {
+    function ProfileCriticalLoad($od,$id,$i) {
 
         // Euler Column Critical Load Formula is used
 
@@ -427,19 +529,27 @@ class EngMast extends Component
         // L = Length of the column
         // Pcr = Critical Load
 
-        return pi()*$this->E*$this->HollowTubeInertia($od,$id)/(pow($this->tubeBucklingLength,2)*$this->factorOfSafety);
+
+       $this->tubeData[$i]['criticalLoad'] = pi()*$this->E*$this->realTubeData[$i]['inertia']/(pow($this->tubeBucklingLength,2)*$this->factorOfSafety);
+
+       return true;
+
+        // return pi()*$this->E*$this->HollowTubeInertia($od,$id)/(pow($this->tubeBucklingLength,2)*$this->factorOfSafety);
     }
 
 
 
-    function HollowTubeInertia($od,$id) {
+    function CalculateInertia($od,$id,$i) {
 
         // Moment of Inertia for a hollow tube
         // I = π/64*(od^4-id^4)
         // od = outer diameter
         // id = inner diameter
 
-        return pi()/64*(pow($od,4)-pow($id,4));
+        $this->tubeData[$i]['inertiaBasic'] = pi()/64*(pow($od,4)-pow($id,4)); // mm4
+        $this->tubeData[$i]['inertia'] = $this->realTubeData[$i]['inertia'];
+
+        return true;
     }
 
 
@@ -447,13 +557,15 @@ class EngMast extends Component
 
 
 
-    function EI($od,$id) {
+    function EI($od,$id,$i) {
         // EI = E*I
 
         // E = Young's Modulus
         // I = Moment of Inertia
 
-        return $this->E*$this->HollowTubeInertia($od,$id);
+       $this->tubeData[$i]['EI'] = $this->E*$this->realTubeData[$i]['inertia']; // Nmm2 
+
+        //return $this->E*$this->HollowTubeInertia($od,$id);
     }
     
 

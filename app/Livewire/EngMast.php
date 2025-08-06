@@ -59,7 +59,7 @@ class EngMast extends Component
     public $airdensity = 1.25; // kg/m3 see NASA https://www.earthdata.nasa.gov/topics/atmosphere/air-mass-density
     public $hellman_coefficient = 0.25;       // Hellmann exponent; taken as 0.25 for all tubes
 
-    public $windload;
+    public $windLoadOnPayload;
     public $payloadMass = 50;
 
     public $xOffset = 100;
@@ -247,7 +247,7 @@ class EngMast extends Component
                 break;
 
             case 'wloads':
-                $this->WindLoads();
+                $this->WindLoadOnPayload();
                 break;
         }
 
@@ -438,25 +438,27 @@ class EngMast extends Component
         $this->data["startTubeNo"] = intval($this->startTubeNo);
         $this->data["endTubeNo"] = intval($this->endTubeNo);
 
-        $this->data["windLoad"] = 1000;
+        $this->data["windLoadOnPayload"] = 1000;
 
         $this->data["tubes"] = $this->tubeData;
 
         $this->dispatch('triggerCanvasDraw',data : $this->data);
 
+        $this->WindLoadOnPayload();
+
         return true;
     }
 
 
-    function WindLoads() {
+    function WindLoadOnPayload() {
 
         if ($this->sailarea == null || $this->windspeed == null|| $this->cd == null) {
 
-            $this->windload = 0;
+            $this->windLoadOnPayload = 0;
             return true;
         }
 
-        $this->windload = 0.5*$this->airdensity*$this->cd*$this->sailarea*pow($this->windspeed/3.6,2);
+        $this->windLoadOnPayload = 0.5*$this->airdensity*$this->cd*$this->sailarea*pow($this->windspeed/3.6,2);
     }
 
 

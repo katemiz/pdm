@@ -73,7 +73,7 @@
             <div class="level-item has-text-centered">
               <div>
                 <p class="heading">Wind Force on Payload</p>
-                <p class="title" >{{ round($windload,0) }} N</p>
+                <p class="title" >{{ round($windLoadOnPayload,0) }} N</p>
                 {{-- <p class="heading">N</p> --}}
               </div>
             </div>

@@ -224,22 +224,35 @@
     <div class="card has-background-white py-3 my-2">
 
         <nav class="level">
+
             <div class="level-item has-text-centered">
               <div>
                 <p class="heading">Extended Height</p>
                 <p class="title" >{{ $extendedHeight }}</p>
                 <p class="heading">mm</p>
-
               </div>
             </div>
+
             <div class="level-item has-text-centered">
               <div>
                 <p class="heading">Nested Height</p>
                 <p class="title" >{{ $nestedHeight }}</p>
                 <p class="heading">mm</p>
-
               </div>
             </div>
+
+
+            @if ($action == 'deflection')
+
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Wind Load on Payload</p>
+                <p class="title" >{{ round($windLoadOnPayload,0) }}</p>
+                <p class="heading">N</p>
+              </div>
+            </div>
+
+            @endif
 
           </nav>
     </div>

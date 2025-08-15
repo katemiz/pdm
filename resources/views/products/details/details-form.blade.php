@@ -15,6 +15,20 @@
 
                 @break
 
+
+
+
+            @case('MultipleConfigured')
+                <h1 class="title has-text-weight-light is-size-1">Multiple Configured Parts</h1>
+                <h2 class="subtitle has-text-weight-light">
+                    Multiple Parts Defined in Single CAD Model and Drawing<br>
+                    {{ $uid ? 'Update Multiple Configured Part' : 'New Multiple Configured Part' }}
+                </h2>
+
+                @break
+
+
+
             @case('Standard')
                 <h1 class="title has-text-weight-light is-size-1">Standard Parts</h1>
                 <h2 class="subtitle has-text-weight-light">{{ $uid ? 'Update Standard Part' : 'New Standard Part' }}</h2>
@@ -164,81 +178,176 @@
 
         @endif
 
-        @if ($part_type == 'Detail')
 
-        <div class="field ">
 
-            <label class="label">Material</label>
 
-            <div class="field-body">
 
-                <div class="field">
+        {{-- // Multiple Configured Parts --}}
+        @if ($part_type == 'MultipleConfigured')
 
-                    <label class="label has-text-weight-normal" for="topic">Material Family</label>
-                    <div class="control">
-                        <div class="select">
-                            <select wire:model='mat_family' wire:change="getMaterialList">
-                            <option>Select Family</option>
+            <div class="fixed-grid">
+            <div class="grid">
+                <div class="cell">
+                    <label class="label">Configuration Numbers and Configuration Descriptions</label>
+                </div>
+                <div class="cell has-text-right">
+                    <a wire:click='increaseConfigurationNumber' class="button is-small is-link">
+                        <span class="icon"><x-carbon-add /></span>
+                    </a>
+                </div>
+            </div>
+            </div>
 
-                            @foreach (config('material.family') as $key => $value)
-                                <option value="{{$key}}" @selected( $uid && $family == $key )>{{$value}}</option>
-                            @endforeach
-                            </select>
-                        </div>
+
+            <div class="field ">
+
+
+               @for ($i = 0; $i < $numberOfConfigurations; $i++)
+
+
+                <div class="columns">
+                    
+                    <div class="column is-narrow">
+                        <span class="tag is-light is-large is-fullwidth">{{ 100+$i*10 }}</span>
                     </div>
 
-                    @error('family')
-                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="field">
-
-                    <label class="label has-text-weight-normal" for="topic">Material Form</label>
-                    <div class="control">
-                        <div class="select">
-                            <select wire:model='mat_form' wire:change="getMaterialList">
-                            <option>Select Form</option>
-                                @foreach (config('material.form') as $key => $value)
-                                    <option value="{{$key}}" @selected( $uid && $form == $key )>{{$value}}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                    <div class="column">
+                        <input class="input" type="text" placeholder="Configuration Identifier (eg Dia {{ 100+$i*10 }} )" wire:model="noOfConfig.{{ $i }}">
                     </div>
 
-                    @error('form')
-                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+                        <div class="column is-narrow">
+                        
+                            <p class="buttons">
+                                <button class="is-static button">
+                                    <span class="icon is-small has-text-link" >
+                                    <x-carbon-pen />
+                                    </span>
+                                </button>
+                                <button class="button">
+                                    <span class="icon is-small has-text-danger">
+                                    <x-carbon-trash-can />
+                                    </span>
+                                </button>
+                            </p>
+                    </div>
+                </div> 
 
-                <div class="field">
-
-                    <label class="label has-text-weight-normal" for="topic">Material Description</label>
-
-                    @if (count($materials) > 0)
-
-                        <div class="control">
-                            <div class="select">
-                                <select wire:model='malzeme_id'>
-                                <option>Select Material</option>
-
-                                @foreach ($materials as $material)
-                                    <option value="{{$material->id}}">{{$material->description}}</option>
-                                @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    @else
-                        <p>No materials</p>
-                    @endif
-
-                    @error('malzeme_id')
-                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
-                    @enderror
-                </div>
+               @endfor
 
             </div>
-        </div>
+
+        @endif
+
+
+
+            
+
+
+
+        @if (in_array($part_type, ['Detail','MultipleConfigured'])  )
+
+
+
+
+            <div class="fixed-grid">
+            <div class="grid">
+
+                <div class="cell">
+                    <label class="label">Material</label>
+                </div>
+
+                <div class="cell has-text-right">
+
+                    @if ($part_type == 'MultipleConfigured')
+                        <input type="checkbox" wire:model="multiplePartsHaveSameMaterial" wire:click="$toggle('multiplePartsHaveSameMaterial')"> All Configured Parts Have Same Material
+                    @else
+                        &nbsp; 
+                    @endif
+                </div>
+            </div>
+            </div>
+
+
+
+
+
+            @if ($part_type == 'Detail'|| $multiplePartsHaveSameMaterial)
+
+                <div class="field ">
+
+                    <div class="field-body">
+
+                        <div class="field">
+
+                            <label class="label has-text-weight-normal" for="topic">Material Family</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select wire:model='mat_family' wire:change="getMaterialList">
+                                    <option>Select Family</option>
+
+                                    @foreach (config('material.family') as $key => $value)
+                                        <option value="{{$key}}" @selected( $uid && $family == $key )>{{$value}}</option>
+                                    @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            @error('family')
+                            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="field">
+
+                            <label class="label has-text-weight-normal" for="topic">Material Form</label>
+                            <div class="control">
+                                <div class="select">
+                                    <select wire:model='mat_form' wire:change="getMaterialList">
+                                    <option>Select Form</option>
+                                        @foreach (config('material.form') as $key => $value)
+                                            <option value="{{$key}}" @selected( $uid && $form == $key )>{{$value}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            @error('form')
+                            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="field">
+
+                            <label class="label has-text-weight-normal" for="topic">Material Description</label>
+
+                            @if (count($materials) > 0)
+
+                                <div class="control">
+                                    <div class="select">
+                                        <select wire:model='malzeme_id'>
+                                        <option>Select Material</option>
+
+                                        @foreach ($materials as $material)
+                                            <option value="{{$material->id}}">{{$material->description}}</option>
+                                        @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            @else
+                                <p>No materials</p>
+                            @endif
+
+                            @error('malzeme_id')
+                            <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                    </div>
+                </div>
+
+            @else 
+                <p>Parts shall have different materials for each configuration.</p>
+            @endif 
 
         @endif
 
@@ -255,10 +364,6 @@
                 </div>
 
             </div>
-
-
-
-
 
             <div class="column card has-background-white-ter mb-5">
 
@@ -449,6 +554,10 @@
         @endif
 
 
+
+
+        @if ($part_type != 'MultipleConfigured')
+
         <div class="field">
 
             <label class="label" for="topic">Part Weight [kg]</label>
@@ -467,6 +576,8 @@
             <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
             @enderror
         </div>
+
+       @endif 
 
 
         <livewire:ck-editor
@@ -611,6 +722,26 @@
                         <button wire:click.prevent="storeItem()" class="button is-dark">New Standard Part</button>
                     @endif
                     @break
+
+
+
+
+                @case('MultipleConfigured')
+                    @if ($uid)
+                        <button wire:click.prevent="updateItem()" class="button is-dark">Update Multiple Configured Part</button>
+                    @else
+                        <button wire:click.prevent="storeItem()" class="button is-dark">New Multiple Configured Part</button>
+                    @endif
+                    @break
+
+
+
+
+
+
+
+
+
 
             @endswitch
 

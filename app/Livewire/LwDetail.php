@@ -149,6 +149,10 @@ class LwDetail extends Component
 
     public $parents = [];
 
+    public $numberOfConfigurations = 3;
+
+    public $multiplePartsHaveSameMaterial = true; 
+
 
     public function mount()
     {
@@ -287,6 +291,9 @@ class LwDetail extends Component
                 $item_view_url = '/products-assy/view';
                 break;
 
+            case 'MultipleConfigured':
+                $item_view_url = '/details/MultipleConfigured/view';
+                break;
         }
 
         if ($item->status == 'WIP') {
@@ -460,7 +467,62 @@ class LwDetail extends Component
                 $props['description'] = $this->standard_family->description;
 
                 break;
+
+
+
+
+
+            case 'MultipleConfigured':
+
+
+                $props = $this->validate([
+                    'c_notice_id' => 'required',
+                    'description' => 'required|min:6'
+                ]);
+
+
+                if ($this->multiplePartsHaveSameMaterial) {
+
+                    $props = $this->validate([
+                        'malzeme_id' => 'required'
+                    ]);
+
+                } else {
+                    $props = $this->validate([
+                        'c_notice_id' => 'required',
+                        'description' => 'required|min:6',
+                        'malzeme_id' => 'required'
+                    ]);
+                }
+
+
+
+                $props['part_type']  = $this->part_type;
+                $props['user_id']  = Auth::id();
+                $props['updated_uid']  = Auth::id();
+                //$props['weight']  = $this->weight;
+                $props['remarks']  = $this->remarks;
+
+                $props['part_number']  = $this->getProductNo();
+                $props['makefrom_part_id']  = $this->makefrom_part_id;
+                $props['c_notice_id']  = $this->c_notice_id;
+                $props['unit']  = $this->unit;
+
+
+                break;
+
+
+
+
+
+
+
+
+
         }
+
+                dd($props);
+
 
         try {
 
@@ -501,7 +563,6 @@ class LwDetail extends Component
         }
 
         $this->standard_family = Sfamily::find($this->standard_family_id);
-
 
         switch ($this->part_type) {
 
@@ -572,11 +633,11 @@ class LwDetail extends Component
 
             $this->getProps();
 
-
-
         } catch (\Exception $ex) {
             session()->flash('success','Something goes wrong!!');
         }
+
+
     }
 
 
@@ -621,6 +682,17 @@ class LwDetail extends Component
     public function addSNote() {
         $this->fnotes[] = [];
     }
+
+
+
+
+    public function increaseConfigurationNumber() {
+        $this->numberOfConfigurations++;
+    }
+
+
+
+
 
     public function deleteSNote($key) {
         unset($this->fnotes[$key]);

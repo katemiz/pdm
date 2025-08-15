@@ -33,6 +33,15 @@
                     <span>Make-From Part</span>
                 </a>
 
+
+
+                <a href="/details/MultipleConfigured/form" class="dropdown-item">
+                    <span class="icon has-text-info"><x-carbon-fish-multiple /></span>
+                    <span>Multiple Configured Parts</span>
+                </a>
+
+
+
                 <a href="/details/Standard/form" class="dropdown-item">
                     <span class="icon has-text-info"><x-carbon-chip /></span>
                     <span>Standard Parts</span>

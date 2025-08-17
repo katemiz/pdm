@@ -203,6 +203,10 @@
                             <x-carbon-chemistry />
                             @break
 
+                        @case('MultipleConfigured')
+                            <x-carbon-fish-multiple />
+                            @break
+
                     @endswitch
 
                 </figure>
@@ -218,7 +222,7 @@
                         <p class="title has-text-weight-light is-size-2">{{$standard_number}} {{$std_params}}</p>
                         <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
                     @else
-                        <p class="title has-text-weight-light is-size-2">{{$part_number}}<span class="has-text-grey-lighter">-{{$version}}</span></p>
+                        <p class="title has-text-weight-light is-size-2">{{$part_number}}{{ $config_number ? '-'.$config_number:'' }}<span class="has-text-grey-lighter">-{{$version}}</span></p>
                         <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
                     @endif
 

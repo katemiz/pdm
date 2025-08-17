@@ -27,7 +27,6 @@ use Mail;
 use App\Mail\AppMail;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 
 
@@ -61,6 +60,8 @@ class LwDetail extends Component
     public $canUserDelete = true;
 
     public $part_number;
+    public $config_number;
+
     public $makefrom_part_id;
     public $makefrom_part_item;
 
@@ -298,10 +299,6 @@ class LwDetail extends Component
             case 'Assy':
                 $item_view_url = '/products-assy/view';
                 break;
-
-            // case 'MultipleConfigured':
-            //     $item_view_url = '/details/MultipleConfigured/view';
-            //     break;
         }
 
         if ($item->status == 'WIP') {
@@ -310,6 +307,7 @@ class LwDetail extends Component
         }
 
         $this->part_number = $item->part_number;
+        $this->config_number = $item->config_number > 0 ? $item->config_number:false;
         $this->version = $item->version;
         $this->weight = $item->weight;
         $this->unit = $item->unit;
@@ -565,7 +563,7 @@ class LwDetail extends Component
                         $configNo = 100+10*$key;
 
                         $configuredProps['description'] = $props['description'].'; '. $value;
-                        $configuredProps['part_number'] = $props['part_number'].'-'. $configNo;
+                        $configuredProps['config_number'] = $configNo;
                         $configuredProps['hasConfigurations'] = false; 
                         $configuredProps['basePartId'] = $item->id; 
                         $configuredProps['part_type'] = 'Detail'; 
@@ -895,10 +893,10 @@ class LwDetail extends Component
         $msgdata['parts_list'] = $this->parts_list;
 
 
-        $this->company_id =  Auth::user()->company_id;
+        //$this->company_id =  Auth::user()->company_id;
 
 
-        $allCompanyUsers = User::where('company_id',$this->company_id)->get();
+        $allCompanyUsers = User::where('company_id',Auth::user()->company_id)->get();
 
         $toArr = [];
 

@@ -38,13 +38,15 @@ return new class extends Migration
             $table->json('bom')->nullable();
             $table->integer('makefrom_part_id')->nullable();
             $table->integer('version')->default(0);
-            $table->boolean('is_latest')->default(true);
+            $table->boolean(column: 'is_latest')->default(true);
             $table->text('vendor')->nullable();
             $table->text('vendor_part_no')->nullable();
             $table->text('url')->nullable();
             $table->float('weight',8,3)->nullable();
             $table->text('material_text')->nullable();
             $table->text('finish_text')->nullable();
+            $table->boolean(column: 'hasConfigurations')->default(false);
+            $table->integer('basePartId')->default(0);
             $table->text('remarks')->nullable();
             $table->string('status')->default('WIP');
             $table->foreignId('checker_id')->nullable();

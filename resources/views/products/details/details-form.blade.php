@@ -12,11 +12,7 @@
             @case('MakeFrom')
                 <h1 class="title has-text-weight-light is-size-1">Make From Parts</h1>
                 <h2 class="subtitle has-text-weight-light">{{ $uid ? 'Update Make From Part' : 'New Make From Part' }}</h2>
-
                 @break
-
-
-
 
             @case('MultipleConfigured')
                 <h1 class="title has-text-weight-light is-size-1">Multiple Configured Parts</h1>
@@ -24,10 +20,7 @@
                     Multiple Parts Defined in Single CAD Model and Drawing<br>
                     {{ $uid ? 'Update Multiple Configured Part' : 'New Multiple Configured Part' }}
                 </h2>
-
                 @break
-
-
 
             @case('Standard')
                 <h1 class="title has-text-weight-light is-size-1">Standard Parts</h1>
@@ -62,7 +55,6 @@
     <form method="POST" enctype="multipart/form-data">
     @csrf
 
-
         @if ($part_type != 'Standard')
 
         <div class="field">
@@ -87,7 +79,6 @@
 
         @if ($part_type == 'Standard')
 
-
             <div class="field">
 
                 <label class="label has-text-weight-normal" for="topic">Select Standard Family</label>
@@ -95,7 +86,6 @@
                     <div class="select">
                         <select wire:model='standard_family_id'>
                         <option>Select Family</option>
-
                         @foreach ( $sfamilies as $sfamily)
                             <option value="{{ $sfamily->id }}" @selected( $standard_family_id == $sfamily->id )>{{$sfamily->standard_number}} {{$sfamily->description}}</option>
                         @endforeach
@@ -191,7 +181,7 @@
                     <label class="label">Configuration Numbers and Configuration Descriptions</label>
                 </div>
                 <div class="cell has-text-right">
-                    <a wire:click='increaseConfigurationNumber' class="button is-small is-link">
+                    <a wire:click='addConfiguration' class="button is-small is-link">
                         <span class="icon"><x-carbon-add /></span>
                     </a>
                 </div>
@@ -201,38 +191,40 @@
 
             <div class="field ">
 
-
-               @for ($i = 0; $i < $numberOfConfigurations; $i++)
-
+               @foreach ($configurations as $key => $value)
 
                 <div class="columns">
                     
                     <div class="column is-narrow">
-                        <span class="tag is-light is-large is-fullwidth">{{ 100+$i*10 }}</span>
+                        <span class="tag is-light is-large is-fullwidth">{{ 100+$key*10 }}</span>
                     </div>
 
                     <div class="column">
-                        <input class="input" type="text" placeholder="Configuration Identifier (eg Dia {{ 100+$i*10 }} )" wire:model="noOfConfig.{{ $i }}">
+                        <input class="input" type="text" placeholder="Configuration Identifier (eg Dia {{ 100+$key*10 }} )" wire:model="configurations.{{ $key }}">
                     </div>
 
-                        <div class="column is-narrow">
-                        
-                            <p class="buttons">
-                                <button class="is-static button">
-                                    <span class="icon is-small has-text-link" >
-                                    <x-carbon-pen />
-                                    </span>
-                                </button>
-                                <button class="button">
-                                    <span class="icon is-small has-text-danger">
-                                    <x-carbon-trash-can />
-                                    </span>
-                                </button>
-                            </p>
+                    <div class="column is-narrow">
+                    
+                        <p class="buttons">
+                            <button class="is-static button">
+                                <span class="icon is-small has-text-link" >
+                                <x-carbon-pen />
+                                </span>
+                            </button>
+                            <button class="button" wire:click="removeConfiguration({{ $key }})">
+                                <span class="icon is-small has-text-danger">
+                                <x-carbon-trash-can />
+                                </span>
+                            </button>
+
+
+                            
+                        </p>
                     </div>
+
                 </div> 
 
-               @endfor
+               @endforeach
 
             </div>
 
@@ -245,9 +237,6 @@
 
 
         @if (in_array($part_type, ['Detail','MultipleConfigured'])  )
-
-
-
 
             <div class="fixed-grid">
             <div class="grid">

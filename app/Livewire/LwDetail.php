@@ -4,7 +4,6 @@ namespace App\Livewire;
 
 use App\Models\Attachment;
 use Livewire\Component;
-use Livewire\WithPagination;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -28,6 +27,7 @@ use Mail;
 use App\Mail\AppMail;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 
 
@@ -149,9 +149,16 @@ class LwDetail extends Component
 
     public $parents = [];
 
-    public $numberOfConfigurations = 3;
+    public $configurationsCount = 3;
+    public $configurations = [
+        0 => '',
+        1 => '',
+        2 => '',
+    ];
+
 
     public $multiplePartsHaveSameMaterial = true; 
+
 
 
     public function mount()
@@ -284,6 +291,7 @@ class LwDetail extends Component
                 break;
 
             case 'Detail':
+            case 'MultipleConfigured':
                 $item_view_url = '/details/Detail/view';
                 break;
 
@@ -291,9 +299,9 @@ class LwDetail extends Component
                 $item_view_url = '/products-assy/view';
                 break;
 
-            case 'MultipleConfigured':
-                $item_view_url = '/details/MultipleConfigured/view';
-                break;
+            // case 'MultipleConfigured':
+            //     $item_view_url = '/details/MultipleConfigured/view';
+            //     break;
         }
 
         if ($item->status == 'WIP') {
@@ -468,22 +476,18 @@ class LwDetail extends Component
 
                 break;
 
-
-
-
-
             case 'MultipleConfigured':
-
 
                 $props = $this->validate([
                     'c_notice_id' => 'required',
                     'description' => 'required|min:6'
                 ]);
 
-
                 if ($this->multiplePartsHaveSameMaterial) {
 
                     $props = $this->validate([
+                        'c_notice_id' => 'required',
+                        'description' => 'required|min:6',
                         'malzeme_id' => 'required'
                     ]);
 
@@ -495,12 +499,9 @@ class LwDetail extends Component
                     ]);
                 }
 
-
-
                 $props['part_type']  = $this->part_type;
                 $props['user_id']  = Auth::id();
                 $props['updated_uid']  = Auth::id();
-                //$props['weight']  = $this->weight;
                 $props['remarks']  = $this->remarks;
 
                 $props['part_number']  = $this->getProductNo();
@@ -508,23 +509,25 @@ class LwDetail extends Component
                 $props['c_notice_id']  = $this->c_notice_id;
                 $props['unit']  = $this->unit;
 
+                $configurationsArray = [];
+
+                foreach ($this->configurations as $key => $value) { 
+
+                    if (!empty($value)) {
+                        $configurationsArray[ $key ] = $value;
+                    }
+                }
 
                 break;
-
-
-
-
-
-
-
-
-
         }
 
-                dd($props);
-
-
         try {
+
+            if ($this->part_type == 'MultipleConfigured') {
+
+                $props['hasConfigurations'] = true; 
+                $props['basePartId'] = false; 
+            }
 
             $item = Item::create($props);
             $this->uid = $item->id;
@@ -547,6 +550,37 @@ class LwDetail extends Component
             $this->dispatch('triggerAttachment', modelId: $this->uid);
             $this->action = 'VIEW';
 
+
+            // When Part is MultipleConfigured
+            // *****************************************
+
+            if ($this->part_type == 'MultipleConfigured') {
+
+                if (count($configurationsArray) > 0) {
+
+                    foreach ($configurationsArray as $key => $value) {
+
+                        $configuredProps = $props;
+
+                        $configNo = 100+10*$key;
+
+                        $configuredProps['description'] = $props['description'].'; '. $value;
+                        $configuredProps['part_number'] = $props['part_number'].'-'. $configNo;
+                        $configuredProps['hasConfigurations'] = false; 
+                        $configuredProps['basePartId'] = $item->id; 
+                        $configuredProps['part_type'] = 'Detail'; 
+
+                        try {
+                            $sonuc = Item::create($configuredProps);
+
+                        } catch (\Exception $e) {
+                            dd($e->getMessage());
+                        }
+                    }
+                }
+            }
+
+            // **************************
             $this->getProps();
 
         } catch (\Exception $ex) {
@@ -686,9 +720,7 @@ class LwDetail extends Component
 
 
 
-    public function increaseConfigurationNumber() {
-        $this->numberOfConfigurations++;
-    }
+
 
 
 
@@ -1099,7 +1131,18 @@ class LwDetail extends Component
 
 
 
+    public function addConfiguration()
+    {
+        $this->configurations[$this->configurationsCount] = '';
+        $this->configurationsCount++;
+    }
 
+
+
+    public function removeConfiguration($key)
+    {
+        unset($this->configurations[$key]);
+    }
 
 
 

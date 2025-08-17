@@ -23,6 +23,14 @@
             <h2 class="subtitle has-text-weight-light">Standard Part Properties</h2>
             @break
 
+
+        @case('MultipleConfigured')
+            <h1 class="title has-text-weight-light is-size-1">Detail Parts [has multiple configurations]</h1>
+            <h2 class="subtitle has-text-weight-light">Multiple Configured Part Properties</h2>
+            @break
+
+
+
     @endswitch
 </header>
 

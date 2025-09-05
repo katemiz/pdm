@@ -222,8 +222,26 @@
                         <p class="title has-text-weight-light is-size-2">{{$standard_number}} {{$std_params}}</p>
                         <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
                     @else
-                        <p class="title has-text-weight-light is-size-2">{{$part_number}}{{ $config_number ? '-'.$config_number:'' }}<span class="has-text-grey-lighter">-{{$version}}</span></p>
+                        <p class="title has-text-weight-light is-size-2">
+                            {{$part_number}}{{ $config_number ? '-'.$config_number:'' }}
+                            <span class="has-text-grey-lighter">-{{$version}}</span>
+                        </p>
                         <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
+
+
+
+                        @if ($base_part)
+                        <p>
+                            <span class="tag is-dark">Base Part</span>
+
+                            <a href="/details/{{ $part_type }}/view/{{ $base_part->id }}">
+                                <span class="tag is-link">{{ $part_number }}-{{ $version }}</span>
+                            </a>
+
+                        </p>
+                        @endif 
+
+
                     @endif
 
                     @if (count($all_revs) > 1)
@@ -259,8 +277,6 @@
             </div>
 
 
-
-
             <div class="column has-text-right is-4">
 
                 @if ($part_type != 'Standard')
@@ -289,6 +305,12 @@
 
         </div>
         </div>
+
+
+
+
+
+
 
 
 
@@ -410,6 +432,69 @@
 
         </div>
         @endif
+
+        {{-- MULTIPLE CONFIGURED --}}
+        @if ($part_type == 'MultipleConfigured')
+        <div class="column">
+            <label class="label">Has Multiple Configurations</label>
+
+            <table class="table is-fullwidth is-striped is-hoverable is-bordered mb-4">
+                <thead>
+                    <tr>
+                        <th>Part Number</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                @foreach ($configurations as $config)
+                    <tr>
+                        <td><a href="/details/{{ $config->part_type }}/view/{{ $config->id }}">{{ $config->part_number }}-{{ $config->config_number }}</a></td>
+                        <td>{{ $config->description }}</td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table>
+
+
+
+        </div>
+        @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

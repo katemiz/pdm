@@ -158,9 +158,8 @@ class LwDetail extends Component
     ];
 
 
-    public $multiplePartsHaveSameMaterial = true; 
-
-
+    public $multiplePartsHaveSameMaterial = true;
+    public $base_part = false;
 
     public function mount()
     {
@@ -333,6 +332,16 @@ class LwDetail extends Component
 
             $this->mat_family = $malzeme->family;
             $this->mat_form = $malzeme->form;
+        }
+
+
+        if ($item->hasConfigurations) {
+
+            $this->configurations = Item::where('basePartId', $this->uid)->get();
+        }
+
+        if ($item->basePartId) {
+            $this->base_part = Item::find($item->basePartId);
         }
 
         $this->getMaterialList();

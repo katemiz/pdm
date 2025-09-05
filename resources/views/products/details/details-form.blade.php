@@ -33,7 +33,9 @@
     @if ($uid)
     <div class="control">
         <div class="tags has-addons">
-            <span class="tag is-dark is-large mb-6">{{ $part_number }}-{{ $version }}</span>
+            <span class="tag is-dark is-large mb-6">{{ $part_number }}{{ $config_number ? '-'.$config_number:'' }}-{{ $version }}</span>
+            <span class="tag is-warning is-large mb-6">Base Part {{ $part_number }}-{{ $version }}</span>
+
         </div>
     </div>
     @endif

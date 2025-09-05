@@ -60,7 +60,13 @@ class Item extends Model
             return $sf->standard_number.' '.$this->std_params;
         }
 
-        return $this->part_number.'-'.$this->version;
+        if ($this->config_number > 0) {
+            return $this->part_number.'-'.$this->config_number.'-'.$this->version;
+
+        } else {
+            return $this->part_number.'-'.$this->version;
+        }
+
     }
 
 

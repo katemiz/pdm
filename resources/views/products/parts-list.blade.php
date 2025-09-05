@@ -139,6 +139,7 @@
                         @case('Detail')
                         @case('MakeFrom')
                         @case('Standard')
+                        @case('MultipleConfigured')
 
                             <a href="/details/{{ $record->part_type }}/view/{{ $record->id}}">
                                 <span class="icon"><x-carbon-view/></span>
@@ -170,6 +171,7 @@
                             @case('Detail')
                             @case('MakeFrom')
                             @case('Standard')
+                            @case('MultipleConfigured')
 
                                 <a href="/details/{{ $record->part_type }}/form/{{ $record->id}}">
                                     <span class="icon"><x-carbon-edit /></span>

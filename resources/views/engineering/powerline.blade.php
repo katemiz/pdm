@@ -324,21 +324,33 @@
 
 
           <tr>
-            <td>Drum Wire Force<br>[Wound 1] </td>
-            <td class="has-text-right">{{ round($drum_wire_force_wound1, 0) }} N</td>
+            <td>Pull Force<br>Pull Velocity<br>[Wound 1]</td>
+            <td class="has-text-right">
+              {{ round($drum_pull_force_wound1, 0) }}
+              N<br>{{ round($drum_pull_velocity_wound1, 3) }} m/s
+            </td>
           </tr>
 
           <tr>
-            <td>Drum Wire Force<br>[Wound 2] </td>
-            <td class="has-text-right">{{ round($drum_wire_force_wound2, 0) }} N</td>
+            <td>Pull Force<br>Pull Velocity<br>[Wound 2]</td>
+            <td class="has-text-right">
+              {{ round($drum_pull_force_wound2, 0) }} N<br>
+              {{ round($drum_pull_velocity_wound2, 3) }} m/s
+            </td>
           </tr>
           <tr>
-            <td>Drum Wire Force<br>[Wound 3] </td>
-            <td class="has-text-right">{{ round($drum_wire_force_wound3, 0) }} N</td>
+            <td>Pull Force<br>Pull Velocity<br>[Wound 3]</td>
+            <td class="has-text-right">
+              {{ round($drum_pull_force_wound3, 0) }} N<br>
+              {{ round($drum_pull_velocity_wound3, 3) }} m/s
+            </td>
           </tr>
           <tr>
-            <td>Drum Wire Force<br>[Wound 4] </td>
-            <td class="has-text-right">{{ round($drum_wire_force_wound4, 0) }} N</td>
+            <td>Pull Force<br>Pull Velocity<br>[Wound 4]</td>
+            <td class="has-text-right">
+              {{ round($drum_pull_force_wound4, 0) }} N<br>
+              {{ round($drum_pull_velocity_wound4, 3) }} m/s
+            </td>
           </tr>
 
         </table>
@@ -346,7 +358,49 @@
 
 
       </div>
-      <div class="cell">bir</div>
+      <div class="cell">
+
+        <table class="table is-fullwidth">
+
+          <tr>
+            <td>Lift Force 1<br>Velocity 1</td>
+            <td class="has-text-right">
+              {{ round($lift_force_1, 0) }} N<br>
+              {{ round($lift_velocity_1, precision: 3) }} m/s
+            </td>
+          </tr>
+
+          <tr>
+            <td>Lift Force 2<br>Velocity 2</td>
+            <td class="has-text-right">
+              {{ round($lift_force_2, 0) }} N<br>
+              {{ round($lift_velocity_2, 3) }} m/s
+            </td>
+          </tr>
+
+          <tr>
+            <td>Lift Force 3<br>Velocity 3</td>
+            <td class="has-text-right">
+              {{ round($lift_force_3, 0) }} N<br>
+              {{ round($lift_velocity_3, 3) }} m/s
+            </td>
+          </tr>
+
+
+          <tr>
+            <td>Lift Force 4<br>Velocity 4</td>
+            <td class="has-text-right">
+              {{ round($lift_force_4, 0) }} N<br>
+              {{ round($lift_velocity_4, 3) }} m/s
+            </td>
+          </tr>
+
+
+
+        </table>
+
+
+      </div>
     </div>
 
 

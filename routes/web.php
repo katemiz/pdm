@@ -34,6 +34,7 @@ use App\Livewire\LwProduct2;
 use App\Livewire\ProductNote;
 use App\Livewire\Engineering;
 use App\Livewire\EngMast;
+use App\Livewire\Powerline;
 use App\Livewire\Geometry;
 
 use App\Livewire\MatFamilyManager;
@@ -152,11 +153,12 @@ Route::middleware(['auth'])->group(function () {
 
 
     // ENGINEERING
-    Route::get('/engineering/{action}', Engineering::class);
-    Route::get('/engineering/geometry/{shape}', Geometry::class);
-
-
+    // Route::get('/engineering/geometry/{shape}', Geometry::class);
+    Route::get('/engineering/powerline', Powerline::class);
     Route::get('/engineering/mast/{action}', EngMast::class);
+    Route::get('/engineering/{action}', Engineering::class);
+
+
 
 
     // DENEME AMACLI

@@ -1,6 +1,4 @@
-
 <div>
-
 
     @switch($action)
 
@@ -16,21 +14,17 @@
             @include('engineering.geometry.rectangle')
             @break
 
-
-
-
-
-
-
-
         @case('geometry-rectangle')
             @include('engineering.geometry.rectangle')
             @break
 
-
         @case('mast-pneumatic')
             @include('engineering.mast.pneumatic')
             @break
+
+        {{-- @case('powerline')
+            @include('engineering.powerline')
+            @break --}}
 
 
 
@@ -38,12 +32,6 @@
             @include('engineering.eng-menu')
             @break
 
-
-
     @endswitch
 
-
-
-
 </div>
-

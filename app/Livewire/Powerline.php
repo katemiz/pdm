@@ -47,6 +47,9 @@ class Powerline extends Component
         ],
     ];
 
+    public $g = 9.81; // m/s2
+    public $pulleyType = 1; 
+
     public $current_motor_id = 1;
 
     public $gearbox_reduction_ratio = 10;
@@ -89,7 +92,9 @@ class Powerline extends Component
 
 
     public $load = 120; // kg
-    public $load_divider = 1;
+    public $lift_speed_target = 0.1; // m/s
+    public $power_required; // W
+    public $force_required; // N
 
     public $lift_force_1;
     public $lift_force_2;
@@ -97,23 +102,30 @@ class Powerline extends Component
     public $lift_force_4;
 
 
+
     public $lift_velocity_1;
     public $lift_velocity_2;
     public $lift_velocity_3;
-    public $lift_velocity_4;
+    public $lift_velocity_4;        
 
 
-    public $safety_factor = 2;
+    public $safety_factor = 1.5;
 
     public $k_coefficient;
 
+    public $load_liftable_by_force_1 = false;
+    public $load_liftable_by_force_2 = false;
+    public $load_liftable_by_force_3 = false;
+    public $load_liftable_by_force_4 = false;
 
-
+    public $load_liftable_by_velocity_1 = false;
+    public $load_liftable_by_velocity_2 = false;
+    public $load_liftable_by_velocity_3 = false;
+    public $load_liftable_by_velocity_4 = false;
 
     public function mount()
     {
 
-        $this->k_coefficient = $this->safety_factor/$this->gearbox_efficiency;
 
     }
 
@@ -121,17 +133,23 @@ class Powerline extends Component
     public function render()
     {
 
+
+
         $this->MotorCalculations();
         $this->GearBoxCalculations();
         $this->DrumCalculations();
         $this->LiftCalculations();
-
-
-
+        $this->isLoadLiftable();
 
         return view('engineering.powerline');
     }
 
+
+    public function setPulleyType($typeNo){
+
+        $this->pulleyType = $typeNo;
+
+    } 
 
 
     public function MotorCalculations() {
@@ -139,9 +157,8 @@ class Powerline extends Component
         // P = T*n*2PI/60
 
         $this->motor_max_torque = 60*$this->motor_power/(2*pi()*$this->motor_rpm);
-
-
         $this->motor_angular_velocity = 2*pi()*$this->motor_rpm/60; // rad/sec
+
         return true;
     }
 
@@ -213,7 +230,9 @@ class Powerline extends Component
 
     public function LiftCalculations() {
 
-        switch ($this->load_divider) {
+        switch ($this->pulleyType) {
+
+            // Direct Lifting
             case 1:
                 $this->lift_force_1 = $this->drum_pull_force_wound1/$this->safety_factor;
                 $this->lift_force_2 = $this->drum_pull_force_wound2/$this->safety_factor;
@@ -224,15 +243,82 @@ class Powerline extends Component
                 $this->lift_velocity_2 = $this->drum_pull_velocity_wound2;
                 $this->lift_velocity_3 = $this->drum_pull_velocity_wound3;
                 $this->lift_velocity_4 = $this->drum_pull_velocity_wound4;
+
+
+
+                $this->power_required = $this->load*$this->g*$this->lift_speed_target*$this->safety_factor; 
+
+                $this->force_required = $this->load*$this->g*$this->safety_factor; 
+
+
                 break;
-            
-            default:
-                # code...
+
+            // Load is Divided Lifting
+            case 2:
+                $this->lift_force_1 = $this->drum_pull_force_wound1/($this->safety_factor);
+                $this->lift_force_2 = $this->drum_pull_force_wound2/($this->safety_factor);
+                $this->lift_force_3 = $this->drum_pull_force_wound3/($this->safety_factor);
+                $this->lift_force_4 = $this->drum_pull_force_wound4/($this->safety_factor);
+
+                $this->lift_velocity_1 = $this->drum_pull_velocity_wound1;
+                $this->lift_velocity_2 = $this->drum_pull_velocity_wound2;
+                $this->lift_velocity_3 = $this->drum_pull_velocity_wound3;
+                $this->lift_velocity_4 = $this->drum_pull_velocity_wound4;
+
+
+                $this->power_required = $this->load*$this->g*$this->lift_speed_target*$this->safety_factor; 
+
+                $this->force_required = $this->load*$this->g*$this->safety_factor/2;
+
                 break;
         }
 
-
+        return true;
     }
+
+
+    public function isLoadLiftable() {
+
+        // FORCE CHECK
+
+        if ($this->lift_force_1 > $this->load*$this->g) {
+           $this->load_liftable_by_force_1 = true; 
+        }
+
+        if ($this->lift_force_2 > $this->load*$this->g) {
+           $this->load_liftable_by_force_2 = true; 
+        }
+
+        if ($this->lift_force_3 > $this->load*$this->g) {
+           $this->load_liftable_by_force_3 = true; 
+        }
+
+        if ($this->lift_force_4 > $this->load*$this->g) {
+           $this->load_liftable_by_force_4 = true; 
+        }
+
+
+        // VELOCITY CHECK
+
+        if ($this->lift_velocity_1 > $this->lift_speed_target) {
+           $this->load_liftable_by_velocity_1 = true; 
+        }
+
+        if ($this->lift_velocity_2 > $this->lift_speed_target) {
+           $this->load_liftable_by_velocity_2 = true; 
+        }
+
+        if ($this->lift_velocity_3 > $this->lift_speed_target) {
+           $this->load_liftable_by_velocity_3 = true; 
+        }
+
+        if ($this->lift_velocity_4 > $this->lift_speed_target) {
+           $this->load_liftable_by_velocity_4 = true; 
+        }
+
+        return true;
+
+    } 
 
 
 

@@ -193,7 +193,7 @@
 
         <div class="card-image has-background-grey-lighter">
           <figure class="image ">
-            <img src="{{ asset('/images/WindLoad.svg') }}" />
+            <img src="{{ asset('/images/PowerlineCalculations.svg') }}" />
           </figure>
         </div>
 

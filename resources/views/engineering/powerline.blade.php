@@ -13,11 +13,48 @@
   </header>
 
 
-  <figure class="image">
-    <img src="https://picsum.photos/id/1/400/100" />
+
+
+
+
+
+
+
+
+
+<div class="tabs is-centered">
+  <ul>
+    <li class="is-active">
+      <a wire:click="setPulleyType(1)">
+        <span>Direct Lifting</span>
+      </a>
+    </li>
+    <li>
+      <a wire:click="setPulleyType(2)">
+        <span>Load Divided By 2</span>
+      </a>
+    </li>
+  </ul>
+
+
+</div>
+
+
+    <figure class="image {{ $pulleyType === 1 ? '' : ' is-hidden' }}">
+    <img src="{{ asset('images/Powerline1.png') }}" />
   </figure>
 
-  <div>
+
+    <figure class="image {{ $pulleyType === 2 ? '' : ' is-hidden' }}">
+    <img src="{{ asset('images/Powerline2.png') }}" />
+  </figure>
+
+
+
+
+
+
+
 
     <div class="card p-6">
 
@@ -26,7 +63,7 @@
 
 
 
-      <h1 class="title">Powerline Components Parameters</h1>
+      <h1 class="title">Powerline Parameters</h1>
 
 
 
@@ -179,16 +216,21 @@
           <div class="field">
             <label class="label">Lift Speed [m/s]</label>
             <div class="control">
-              <input class="input" type="number" placeholder="Lift Speed" wire:model.live="lift_speed">
+              <input class="input" type="number" placeholder="Lift Speed" wire:model.live="lift_speed_target" min="0"
+                step="0.1">
             </div>
           </div>
 
           <div class="field">
             <label class="label">Overall Safety Factor</label>
             <div class="control">
-              <input class="input" type="number" placeholder="Safety Factor" wire:model.live="safety_factor">
+              <input class="input" type="number" placeholder="Safety Factor" wire:model.live="safety_factor" min="1"
+                step="0.1">
             </div>
           </div>
+
+
+
 
         </div>
 
@@ -212,12 +254,11 @@
 
 
 
-  </div>
 
 
   <div class="fixed-grid has-4-cols card has-background-white py-3 my-2">
 
-    <div class="grid">
+    <div class="grid p-4">
 
       <div class="cell">
 
@@ -243,12 +284,10 @@
             <td class="has-text-right">{{ round($motor_power, 1) }} W</td>
           </tr>
 
-
-
-
         </table>
 
       </div>
+
       <div class="cell">
 
 
@@ -294,14 +333,14 @@
 
 
       </div>
-      <div class="cell">
 
+      <div class="cell">
         <table class="table is-fullwidth">
 
           <tr>
             <td>Drum Output Torque</td>
             <td
-              class="has-text-right {{ $drum_output_torque > $gearbox_allowable_max_torque ? 'has-text-danger' : '' }}">
+              class="has-text-right {{ $drum_has_gearbox && $drum_output_torque > $drum_gearbox_allowable_max_torque ? 'has-text-danger' : '' }}">
               {{ round($drum_output_torque, 1) }} Nm
             </td>
           </tr>
@@ -353,58 +392,137 @@
             </td>
           </tr>
 
+
+          @if ($drum_has_gearbox && $drum_output_torque > $drum_gearbox_allowable_max_torque)
+
+            <tr>
+              <td class="has-text-danger" colspan="2">
+                <div class="notification is-danger">
+                  Output torque is <strong>greater</strong> than maximum <strong>allowable</strong>
+                  torque of drum gearbox
+                </div>
+              </td>
+            </tr>
+
+          @endif
+
         </table>
-
-
-
       </div>
       <div class="cell">
 
-        <table class="table is-fullwidth">
-
-          <tr>
-            <td>Lift Force 1<br>Velocity 1</td>
-            <td class="has-text-right">
-              {{ round($lift_force_1, 0) }} N<br>
-              {{ round($lift_velocity_1, precision: 3) }} m/s
-            </td>
-          </tr>
-
-          <tr>
-            <td>Lift Force 2<br>Velocity 2</td>
-            <td class="has-text-right">
-              {{ round($lift_force_2, 0) }} N<br>
-              {{ round($lift_velocity_2, 3) }} m/s
-            </td>
-          </tr>
-
-          <tr>
-            <td>Lift Force 3<br>Velocity 3</td>
-            <td class="has-text-right">
-              {{ round($lift_force_3, 0) }} N<br>
-              {{ round($lift_velocity_3, 3) }} m/s
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>Lift Force 4<br>Velocity 4</td>
-            <td class="has-text-right">
-              {{ round($lift_force_4, 0) }} N<br>
-              {{ round($lift_velocity_4, 3) }} m/s
-            </td>
-          </tr>
+        {{-- <div class="message is-info">
+          <div class="message-body">
+          Power Required to Lift Load at Desired Speed: <strong>{{ round($power_required, 1) }} W</strong> Available Power: <strong>{{ round($drum_output_power, 1) }} W</strong>
+          </div>
+        </div> --}}
 
 
 
-        </table>
 
 
+          <table class="table is-fullwidth">
+
+            <tr>
+              <td class="heading has-text-grey-light">Power Required</td>
+              <td class="heading has-text-grey-light has-text-right">Power Available</td>
+            </tr>
+
+            <tr>
+              <td class="">
+                  {{ round($power_required, 0) }} W
+              </td>
+              <td class="is-pulled-right">
+                  <div class="cell tags has-addons">
+                    <span class="tag">{{ round($drum_output_power, 0) }} W</span>
+                    <span class="tag {{ $drum_output_power > $power_required ? 'is-success' : 'is-danger' }}">{{ $drum_output_power > $power_required ? 'OK' : 'X' }}</span>
+                  </div>
+              </td>
+            </tr>
+
+          </table>
+
+          <table class="table is-fullwidth">
+
+
+            <tr>
+              <td class="heading has-text-grey-light">Force Required</td>
+              <td class="heading has-text-grey-light has-text-right">Force Available</td>
+            </tr>
+
+
+
+            <tr>
+              <td class="">
+                  {{ round($force_required, 0) }} N
+              </td>
+              <td class="is-pulled-right">
+                  <div class="cell tags has-addons">
+                    <span class="tag">{{ round($lift_force_1, 0) }} N</span>
+                    <span class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_1 > $force_required ? 'OK' : 'X' }}</span>
+                  </div>
+
+                  <div class="cell tags has-addons">
+                    <span class="tag">{{ round($lift_force_2, 0) }} N</span>
+                    <span class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_2 > $force_required ? 'OK' : 'X' }}</span>
+                  </div>
+
+                  <div class="cell tags has-addons">
+                    <span class="tag">{{ round($lift_force_3, 0) }} N</span>
+                    <span class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_3 > $force_required ? 'OK' : 'X' }}</span>
+                  </div>
+
+                  <div class="cell tags has-addons">
+                    <span class="tag">{{ round($lift_force_4, 0) }} N</span>
+                    <span class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_4 > $force_required ? 'OK' : 'X' }}</span>
+                  </div>
+
+              </td>
+            </tr>
+
+          </table>
       </div>
-    </div>
+
+
+
+
+
 
 
   </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      </div>
+
+    </div>
+
+  </div>
+
+
 
 
 

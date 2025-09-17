@@ -47,6 +47,21 @@ class Powerline extends Component
         ],
     ];
 
+    public $ropeLoadCapacity = [];
+
+    public $ropeGrades =["1180","1570","1770","1960","2160"]; // N/mm2"
+    public $ropeDiameters = [3,4,5,6,7,8,9,10,12,14,16]; // mm
+
+    public $fillFactor =[
+        "min"=> 0.6226,
+        "max"=> 0.755
+    ];
+    public $spinningLoadFactor = [
+        "min"=> 0.81,
+        "max"=> 0.85
+    ];
+
+
     public $g = 9.81; // m/s2
     public $pulleyType = 1; 
 
@@ -125,8 +140,7 @@ class Powerline extends Component
 
     public function mount()
     {
-
-
+       $this->ropeCalculations(); 
     }
 
 
@@ -324,6 +338,27 @@ class Powerline extends Component
 
 
 
+    public function ropeCalculations() {
+
+
+
+
+
+        foreach ($this->ropeDiameters as $diameter) {
+            $this->rope_area = pi() * pow($diameter / 2, 2);
+
+            foreach ($this->ropeGrades as $grade) {
+                $this->rope_strength_min = $grade * $this->rope_area* $this->fillFactor["min"] * $this->spinningLoadFactor["min"];
+                $this->rope_strength_max = $grade * $this->rope_area* $this->fillFactor["max"] * $this->spinningLoadFactor["max"];
+
+              $this->ropeLoadCapacity[$diameter][$grade] = round($this->rope_strength_min, 0). ' - '.round($this->rope_strength_max, 0);
+            }
+
+        }
+
+        return true;
+
+    }
 
 
 

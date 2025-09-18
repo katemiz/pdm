@@ -111,6 +111,11 @@ class LwAssy extends Component
 
     public $parents = [];
 
+    public $config_number;
+    public $base_part = false;
+
+
+
 
 
     public function mount()

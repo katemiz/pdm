@@ -112,6 +112,9 @@ class LwBuyable extends Component
     public $release_integrity_ok = false;
 
 
+    public $config_number;
+    public $base_part = false;
+
 
 
     public function mount()

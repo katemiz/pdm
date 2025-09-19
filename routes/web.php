@@ -155,6 +155,7 @@ Route::middleware(['auth'])->group(function () {
     // ENGINEERING
     // Route::get('/engineering/geometry/{shape}', Geometry::class);
     Route::get('/engineering/powerline', Powerline::class);
+    Route::get('/engineering/powerline/{rope?}', Powerline::class);
     Route::get('/engineering/mast/{action}', EngMast::class);
     Route::get('/engineering/{action}', Engineering::class);
 

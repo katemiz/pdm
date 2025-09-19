@@ -146,16 +146,17 @@ class Powerline extends Component
 
     public function render()
     {
-
-
-
         $this->MotorCalculations();
         $this->GearBoxCalculations();
         $this->DrumCalculations();
         $this->LiftCalculations();
         $this->isLoadLiftable();
 
-        return view('engineering.powerline');
+        if (request('rope')) {
+            return view('engineering.wire_ropes');
+        } else {
+            return view('engineering.powerline');
+        }
     }
 
 

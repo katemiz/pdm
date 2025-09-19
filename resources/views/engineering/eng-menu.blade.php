@@ -220,7 +220,53 @@
 
 
 
+  <div class="columns">
 
+    <div class="column is-1/3">
+
+      <div class="card">
+
+        <div class="card-image has-background-grey-lighter">
+          <figure class="image ">
+            <img src="{{ asset('/images/SteelWireRope.jpg') }}" />
+          </figure>
+        </div>
+
+        <div class="card-content">
+          <div class="media">
+            <div class="media-content">
+              <p class="title is-4">
+                <a href="/engineering/powerline/rope">Steel Wire Rope Capacity Chart</a>
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="column is-1/3">
+
+
+
+    </div>
+
+
+
+    <div class="column is-1/3">
+
+
+
+
+
+
+    </div>
+
+
+
+
+  </div>
 
 
 

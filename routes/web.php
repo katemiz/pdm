@@ -35,6 +35,7 @@ use App\Livewire\ProductNote;
 use App\Livewire\Engineering;
 use App\Livewire\EngMast;
 use App\Livewire\Powerline;
+use App\Livewire\Configurator;
 use App\Livewire\Geometry;
 
 use App\Livewire\MatFamilyManager;
@@ -55,6 +56,11 @@ use App\Livewire\LwCompany;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+
+Route::get('/svg', function () {
+    return view('svg');
 });
 
 
@@ -154,6 +160,7 @@ Route::middleware(['auth'])->group(function () {
 
     // ENGINEERING
     // Route::get('/engineering/geometry/{shape}', Geometry::class);
+    Route::get('/engineering/configurator', Configurator::class);
     Route::get('/engineering/powerline', Powerline::class);
     Route::get('/engineering/powerline/{rope?}', Powerline::class);
     Route::get('/engineering/mast/{action}', EngMast::class);

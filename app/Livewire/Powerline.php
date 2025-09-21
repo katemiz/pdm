@@ -346,13 +346,13 @@ class Powerline extends Component
 
 
         foreach ($this->ropeDiameters as $diameter) {
-            $this->rope_area = pi() * pow($diameter / 2, 2);
+            $rope_area = pi() * pow($diameter / 2, 2);
 
             foreach ($this->ropeGrades as $grade) {
-                $this->rope_strength_min = $grade * $this->rope_area* $this->fillFactor["min"] * $this->spinningLoadFactor["min"];
-                $this->rope_strength_max = $grade * $this->rope_area* $this->fillFactor["max"] * $this->spinningLoadFactor["max"];
+                $rope_strength_min = $grade * $rope_area* $this->fillFactor["min"] * $this->spinningLoadFactor["min"];
+                $rope_strength_max = $grade * $rope_area* $this->fillFactor["max"] * $this->spinningLoadFactor["max"];
 
-              $this->ropeLoadCapacity[$diameter][$grade] = round($this->rope_strength_min, 0). ' - '.round($this->rope_strength_max, 0);
+              $this->ropeLoadCapacity[$diameter][$grade] = round($rope_strength_min, 0). ' - '.round($rope_strength_max, 0);
             }
 
         }

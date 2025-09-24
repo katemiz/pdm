@@ -1,5 +1,37 @@
 <section class="section container">
 
+
+    {{-- <style>
+        #svg {
+    display: block;  /* This removes the inline spacing */
+    vertical-align: top; 
+}
+    </style> --}}
+
+
+    <script src="{{ asset(path: '/js/svgClass.js') }}"></script>
+
+    <script>
+
+
+        document.addEventListener('drawSvg', event => {
+
+            const solutionSet = event.detail[0].solutionSet;
+            const solutionTubeData = event.detail[0].solutionTubeData;
+            const currentSolution = event.detail[0].currentSolution;
+
+            const svg = document.getElementById('svg');
+
+            // Clear previous content
+            while (svg.firstChild) {
+                svg.removeChild(svg.firstChild);
+            }
+
+            let newImage = new svgClass(solutionSet,solutionTubeData,currentSolution);
+        });
+
+    </script>
+
     <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
         <ul>
             <li><a href='/engineering/home'>Engineering</a></li>
@@ -137,7 +169,70 @@
                 </div>
 
             </div>
+
+
+            <div class="grid">
+
+                <div class="cell field ">
+
+                    <label class="label">Top Tube Dia</label>
+
+                    <div class="control">
+
+                        <div class="select is-fullwidth">
+                            <select wire:model.live="startTubeNo" >
+
+                                @foreach ($mtProfiles as $tube)
+
+                                <option value="{{ $tube["no"] }}">
+                                    MT-{{ sprintf("%02d",$tube["no"]) }}
+                                    &nbsp; &nbsp;&nbsp;&nbsp; &#8960;
+                                    {{ sprintf("%6.2f",round($tube["od"],2)) }}
+                                </option>
+
+                                @endforeach
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="cell field ">
+                    <label class="label">Bottom Tube OD, mm</label>
+
+                    <div class="control">
+
+                        <div class="select is-fullwidth" >
+                            <select wire:model.live="endTubeNo" >
+
+                                @foreach ($mtProfiles as $tube)
+
+                                <option value="{{ $tube["no"] }}">
+                                    MT-{{ sprintf("%02d",$tube["no"]) }}
+                                    &nbsp; &nbsp;&nbsp;&nbsp; &#8960;
+                                    {{ sprintf("%6.2f",round($tube["od"],2)) }}
+                                </option>
+
+                                @endforeach
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {{ $startTubeNo }} - {{ $endTubeNo }}
+
+            </div>
+
         </div>
+
+
+
 
     </div>
 
@@ -157,11 +252,41 @@
 
         @foreach ($solutionSet as $solution)
 
-            <p>{{ $solution }}</p>
+            <p>{{ $solution["noOfSections"]  }}</p>
 
         @endforeach
 
 
     </div>
+
+
+
+
+
+    <div class="p-0" id="myDiv" >
+
+        <svg  id="svg">
+        </svg>
+
+    </div>
+
+
+
+
+
+{{-- <svg width="400" height="400" viewBox="0 0 100 100" style="border: 1px solid black;">
+  <line x1="0" y1="0" x2="100" y2="100" stroke="red" stroke-width="2" />
+</svg>
+
+<svg width="200" height="200" viewBox="0 0 100 100" preserveAspectRatio="none" style="border: 1px solid black;">
+  <line x1="0" y1="0" x2="100" y2="100" stroke="blue" stroke-width="2" />
+</svg> --}}
+
+
+
+
+
+
+
 
 </section>

@@ -4,6 +4,9 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
+use App\Livewire\EngMast;
+
+
 
 class Configurator extends Component
 {
@@ -33,12 +36,16 @@ class Configurator extends Component
     public $tube_length_increment = 10;
 
     public $solutionSet;
+    public $currentSolution = 0;
+    public $solutionTubeData;
 
 
     public $payloadAdapterThickness = 12;
     public $baseSupportThickness = 20;
 
-
+    public $mtProfiles;
+    public $startTubeNo = 1;
+    public $endTubeNo;
 
 
 
@@ -49,11 +56,13 @@ class Configurator extends Component
 
     public function mount()
     {
-        // $this->targetExtendedHeightMin = $this->targetExtendedHeight-0.4;
-        // $this->targetExtendedHeightMax = $this->targetExtendedHeight+0.4;
 
-        // $this->targetNestedHeightMin = $this->targetNestedHeight-0.2;
-        // $this->targetNestedHeightMax = $this->targetNestedHeight+0.2;
+        $mtProfiles = new EngMast();
+        $mtProfiles->MasttechProfiles();
+        $this->mtProfiles =  $mtProfiles->tubeData;
+
+        $this->endTubeNo = count($this->mtProfiles);
+
     }
 
 
@@ -74,7 +83,6 @@ class Configurator extends Component
 
     public function getExtendedHeight(){
 
-
         $this->extendedHeight = $this->n*$this->x-($this->n - 1)*$this->overlapDimension + $this->payloadAdapterThickness + $this->baseSupportThickness;
         return true;
     } 
@@ -89,8 +97,6 @@ class Configurator extends Component
 
     public function Optimizer() {
 
-
-        
         for ($this->n = $this->n_min; $this->n <= $this->n_max ; $this->n++) { 
     
             for ($this->x = $this->tube_length_min; $this->x <= $this->tube_length_max ; $this->x += $this->tube_length_increment) { 
@@ -98,9 +104,7 @@ class Configurator extends Component
                 $this->getExtendedHeight();
                 $this->getNestedHeight();
 
-
                 // dd($this->extendedHeight,$this->nestedHeight);
-
 
                 if (
                     $this->extendedHeight >= $this->targetExtendedHeightMin &&
@@ -112,24 +116,138 @@ class Configurator extends Component
 
                     $sonuc = $this->n.' Sections, Extended Height: '.$this->extendedHeight.', Nested Height: '.$this->nestedHeight.' and Tube Length of '.$this->x;
 
-                    // $this->solutionSet[$this->n][] = $this->x;
-                    $this->solutionSet[] = $sonuc;
+                    $sonuc2["noOfSections"]  = $this->n;
+                    $sonuc2["extendedHeight"]  = $this->extendedHeight;
+                    $sonuc2["nestedHeight"]  = $this->nestedHeight;
+                    $sonuc2["tubeLength"]  = $this->x;
 
+                    // $this->solutionSet[$this->n][] = $this->x;
+                    $this->solutionSet[] = $sonuc2;
                 }
             }
-
         }
 
-        // dd($this->solutionSet);
+        // dd($this->solutionSet,$this->mtProfiles);
+        // dd($this->mtProfiles);
 
-
-
+        $this->calculateTubePointCoordinates();
+        $this->dispatch('drawSvg',['solutionSet' => $this->solutionSet,'solutionTubeData' => $this->solutionTubeData, 'currentSolution' => $this->currentSolution]);
         return true;
     }
 
 
 
 
+    function calculateTubePointCoordinates() {
+
+        // A,B,C,D points of the tube rectangle
+        // D(dx,dy)----------------C(cx,cy)
+        // |                           |
+        // |                           |
+        // A(ax,ay)----------------B(bx,by)
+
+        // return true;
+
+        $sol =  $this->solutionSet[$this->currentSolution];
+
+        // $this->startTubeNo = 16;
+        // $this->endTubeNo = 16 - $sol['noOfSections'];
+        // $this->mtProfiles = array_slice($this->mtProfiles, $this->endTubeNo-1, $sol['noOfSections']);
+
+
+        foreach ($this->mtProfiles as $singleTubeData) {
+
+            if ($singleTubeData['no'] >= $this->startTubeNo && $singleTubeData['no'] <= $this->endTubeNo ) {
+
+               $reducedTubeData[]  = $singleTubeData;
+            } 
+        }
+
+
+        // dd($this->endTubeNo);
+
+        $this->solutionTubeData = array_reverse($reducedTubeData);
+
+                // $this->solutionTubeData = $reducedTubeData;
+
+
+                // dd($reversed);
+
+
+        // dd($this->mtProfiles);
+
+
+        foreach ($this->solutionTubeData as $i => $profile) {
+
+            $profile = (object) $profile;
+
+            // dy in extended position
+            // dy = (n-l)*length - (n-1)*overlap
+
+            $n = $i + 1;
+
+            $dy = ($n - 1) * $profile->length - ($n - 1) * $this->overlapDimension;
+            $cy = $dy;
+
+            $by = $dy - $profile->length;
+            $ay = $by;
+
+            $ax = -$profile->od / 2;  // Centered at x=0
+            $bx = $ax + $profile->od;
+
+            $cx = $bx;
+            $dx = $ax; 
+
+            // Store the coordinates
+            $tubeCoordinates = [
+                'A' => ['x' => $ax, 'y' => $ay],
+                'B' => ['x' => $bx, 'y' => $by],
+                'C' => ['x' => $cx, 'y' => $cy],
+                'D' => ['x' => $dx, 'y' => $dy],
+            ];
+
+            $this->solutionTubeData[$i]['extended'] = $tubeCoordinates;
+
+
+            // dy in nested position
+            // dy = length - i*headDimension
+
+            $dy = $profile->length - $i * $this->headDimension;
+            $cy = $dy;
+
+            $by = $dy - $profile->length;
+            $ay = $by;
+
+            $ax = -$profile->od/2;  // Centered at x=0
+            $bx = $ax + $profile->od;
+
+            $cx = $bx;
+            $dx = $ax; 
+
+
+            // Store the coordinates
+            $tubeCoordinates = [
+                'A' => ['x' => $ax, 'y' => $ay],
+                'B' => ['x' => $bx, 'y' => $by],
+                'C' => ['x' => $cx, 'y' => $cy],
+                'D' => ['x' => $dx, 'y' => $dy],
+            ];
+
+           $this->solutionTubeData[$i]['nested'] = $tubeCoordinates;
+
+
+
+
+
+        }
+
+                //    dd($this->mtProfiles);
+
+
+
+
+
+    } 
 
 
 

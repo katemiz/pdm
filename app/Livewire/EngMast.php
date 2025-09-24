@@ -352,7 +352,10 @@ class EngMast extends Component
             $id = $od+2*$this->gapBetweenTubes;
             $t = $t+$this->thicknessIncrement;
             $od = $id+2*$t;
+
         }
+
+
     }
 
 
@@ -556,9 +559,6 @@ class EngMast extends Component
 
 
 
-
-
-
     function EI($od,$id,$i) {
         // EI = E*I
 
@@ -570,13 +570,6 @@ class EngMast extends Component
         //return $this->E*$this->HollowTubeInertia($od,$id);
     }
     
-
-
-
-
-
-
-
 
 
     function calculateTubeWindLoads() {
@@ -728,7 +721,6 @@ class EngMast extends Component
 
 
 
-
     function calculateForceCoefficientWOEndEffect($Re,$k_b) {
 
         $coefficent = 1.2 + (0.18 * log10(10 * $k_b)) / (1 + 0.4 * log10($Re/1e6));
@@ -755,16 +747,6 @@ class EngMast extends Component
 
         return $coefficent;
     }
-
-
-
-
-
-
-
-
-
-
 
 
 }

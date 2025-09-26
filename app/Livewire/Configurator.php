@@ -130,6 +130,9 @@ class Configurator extends Component
         // dd($this->solutionSet,$this->mtProfiles);
         // dd($this->mtProfiles);
 
+                    // dd($this->extendedHeight,$this->nestedHeight,$this->solutionSet);
+
+
         $this->calculateTubePointCoordinates();
         $this->dispatch('drawSvg',['solutionSet' => $this->solutionSet,'solutionTubeData' => $this->solutionTubeData, 'currentSolution' => $this->currentSolution]);
         return true;
@@ -150,53 +153,56 @@ class Configurator extends Component
 
         $sol =  $this->solutionSet[$this->currentSolution];
 
+        $curExtendedHeight = $sol["extendedHeight"];
+
+        $noOfSections = $sol['noOfSections'];
+
+
+        // dd($curExtendedHeight);
+
         // $this->startTubeNo = 16;
         // $this->endTubeNo = 16 - $sol['noOfSections'];
         // $this->mtProfiles = array_slice($this->mtProfiles, $this->endTubeNo-1, $sol['noOfSections']);
 
 
-        foreach ($this->mtProfiles as $singleTubeData) {
+        foreach ($this->mtProfiles as $k => $singleTubeData) {
 
-            if ($singleTubeData['no'] >= $this->startTubeNo && $singleTubeData['no'] <= $this->endTubeNo ) {
-
-               $reducedTubeData[]  = $singleTubeData;
+            if ($singleTubeData['no'] >= $this->startTubeNo && $singleTubeData['no'] <= $this->endTubeNo && $k <= $noOfSections - 1) {
+               $this->solutionTubeData[]  = $singleTubeData;
             } 
         }
 
-
-        // dd($this->endTubeNo);
-
-        $this->solutionTubeData = array_reverse($reducedTubeData);
-
-                // $this->solutionTubeData = $reducedTubeData;
-
-
-                // dd($reversed);
-
-
-        // dd($this->mtProfiles);
 
 
         foreach ($this->solutionTubeData as $i => $profile) {
 
             $profile = (object) $profile;
 
+            // EXTENDED state coordinates
             // dy in extended position
             // dy = (n-l)*length - (n-1)*overlap
 
-            $n = $i + 1;
+            $n = count($this->solutionTubeData) - $i;
 
-            $dy = ($n - 1) * $profile->length - ($n - 1) * $this->overlapDimension;
+
+            // POINT D
+            $dx = -$profile->od / 2;  // Centered at x=0
+            $dy = $n * $profile->length - ($n - 1) * $this->overlapDimension;
+
+            // dd($dx,$dy,$n,$profile->length,$this->overlapDimension);
+
+            // POINT B
+            $bx = $profile->od/ 2;  // Centered at x=0
+            $by = $dy - $profile->length;
+
+            // POINT C
+            $cx = $bx;
             $cy = $dy;
 
-            $by = $dy - $profile->length;
+            // POINT A
+            $ax = $dx;
             $ay = $by;
 
-            $ax = -$profile->od / 2;  // Centered at x=0
-            $bx = $ax + $profile->od;
-
-            $cx = $bx;
-            $dx = $ax; 
 
             // Store the coordinates
             $tubeCoordinates = [
@@ -208,21 +214,27 @@ class Configurator extends Component
 
             $this->solutionTubeData[$i]['extended'] = $tubeCoordinates;
 
-
+            // NESTED state coordinates
             // dy in nested position
             // dy = length - i*headDimension
 
-            $dy = $profile->length - $i * $this->headDimension;
+            // POINT D
+            $dx = -$profile->od / 2;  // Centered at x=0
+            $dy = $profile->length + ($n - 1) * $this->headDimension;
+
+            // POINT B
+            $bx =$dx + $profile->od/ 2;  // Centered at x=0
+            $by = $dy - $profile->length;
+
+            // POINT C
+            $cx = $bx;
             $cy = $dy;
 
-            $by = $dy - $profile->length;
+            // POINT A
+            $ax = $dx;
             $ay = $by;
 
-            $ax = -$profile->od/2;  // Centered at x=0
-            $bx = $ax + $profile->od;
 
-            $cx = $bx;
-            $dx = $ax; 
 
 
             // Store the coordinates
@@ -241,7 +253,7 @@ class Configurator extends Component
 
         }
 
-                //    dd($this->mtProfiles);
+        // dd($this->solutionTubeData);
 
 
 

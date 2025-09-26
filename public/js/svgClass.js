@@ -28,16 +28,23 @@ class svgClass {
 
     setValues() {
 
-        this.container = document.getElementById('myDiv')
-        this.svg = document.getElementById('svg')
+        this.container = document.getElementById('extendedPosition')
+        this.svgE = document.getElementById('svgE')
+        this.svgN = document.getElementById('svgN')
+
 
         this.svgWidth = this.container.clientWidth - window.getComputedStyle(this.container).paddingLeft.replace('px', '') - window.getComputedStyle(this.container).paddingRight.replace('px', '')
         this.svgHeight = this.svgWidth
 
-        this.svg.setAttribute('width', this.svgWidth)
-        this.svg.setAttribute('height', this.svgWidth)
+        this.svgE.setAttribute('width', this.svgWidth)
+        this.svgE.setAttribute('height', this.svgWidth)
 
-        this.svg.setAttribute('viewBox', '0 0 '+this.svgWidth+' '+this.svgWidth);
+
+        this.svgN.setAttribute('width', this.svgWidth)
+        this.svgN.setAttribute('height', this.svgWidth)
+
+        this.svgE.setAttribute('viewBox', '0 0 '+this.svgWidth+' '+this.svgWidth);
+        this.svgN.setAttribute('viewBox', '0 0 '+this.svgWidth+' '+this.svgWidth);  
 
         this.x0 = this.svgWidth / 2
         this.y0 = this.svgHeight / 2
@@ -45,9 +52,7 @@ class svgClass {
         this.extendedHeight = this.solutionSet[this.currentSolution].extendedHeight
         this.nestedHeight = this.solutionSet[this.currentSolution].nestedHeight
         this.scaleN = (this.svgHeight - 2 * this.my) / (this.nestedHeight );
-
-
-        console.log("nested height", this.nestedHeight, this.extendedHeight, this.svgHeight, this.scaleN)
+        this.scaleE = (this.svgHeight - 2 * this.my) / (this.extendedHeight );
 
         let bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
 
@@ -57,7 +62,8 @@ class svgClass {
 
         bg.setAttribute('style', 'fill-opacity: .25;')
 
-        this.svg.appendChild(bg)
+        this.svgE.appendChild(bg)
+        this.svgN.appendChild(bg.cloneNode())
 
 
         this.gE = document.createElementNS('http://www.w3.org/2000/svg', 'g')
@@ -85,9 +91,9 @@ class svgClass {
 // scale('+this.scaleN+')
 
 
-        this.svg.appendChild(this.gE)
-        this.svg.appendChild(this.gN)
-        this.svg.appendChild(this.gT)
+        this.svgN.appendChild(this.gE)
+        this.svgN.appendChild(this.gN)
+        this.svgN.appendChild(this.gT)
 
 
 
@@ -98,10 +104,6 @@ class svgClass {
 
 
     draw() {
-
-        // this.drawRectangle(1300, 1300, 300, 300)
-        // this.drawRectangle(300, 300, 300, 300, this.gE)
-
 
         let txe = this.extendedHeight * 0.25
         let tye = this.extendedHeight * 0.9
@@ -117,21 +119,16 @@ class svgClass {
 
         for (const [key, profile] of Object.entries(this.solutionTubeData)) {
 
-            // console.log(`${key}: ${profile}`);
-            // console.log("key", key, profile)
-
             console.log("profile extended", profile.extended)
             console.log("profile nested", profile.nested)
 
             // this.drawPath(profile.extended.A.x, profile.extended.A.y, profile.extended.B.x, profile.extended.B.y, profile.extended.C.x, profile.extended.C.y, profile.extended.D.x, profile.extended.D.y, txe, tye,'extended');
             // this.drawPath(profile.nested.A.x, profile.nested.A.y, profile.nested.B.x, profile.nested.B.y, profile.nested.C.x, profile.nested.C.y, profile.nested.D.x, profile.nested.D.y, this.gN);
 
-
             this.drawRectangle(profile.od, profile.length, profile.nested.A.x, profile.nested.A.y, this.gN);
             this.drawText(0, profile.nested.A.y , profile.nested.A.y);
 
             this.drawText(0, profile.nested.D.y , profile.nested.D.y);
-
 
 
             // this.drawRectangle(this.solutionTubeData[0].extended.od , this.solutionTubeData[0].extended.length,0,0 ,this.gE)
@@ -146,7 +143,6 @@ class svgClass {
 
     drawNestedLegend(){
 
-
         let header = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
         header.setAttribute('x', this.svgWidth * 0.7)
@@ -155,7 +151,7 @@ class svgClass {
         header.setAttribute('fill', 'black')
         header.innerHTML = 'Nested Position'
 
-        this.svg.appendChild(header)
+        this.svgN.appendChild(header)
 
         let k = 1
 
@@ -168,7 +164,7 @@ class svgClass {
             t.setAttribute('fill', 'black')
             t.innerHTML = 'Section ' + k + ' - ' + profile.od.toFixed(2) + ' mm '
 
-            this.svg.appendChild(t)
+            this.svgN.appendChild(t)
             k++
         }
 
@@ -178,7 +174,6 @@ class svgClass {
     drawText(x, y, text) {
 
         y = this.svgHeight - (y*this.scaleN + this.my)
-
 
         let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
@@ -190,9 +185,6 @@ class svgClass {
         l.setAttribute('stroke-width', '1')
 
         this.gT.appendChild(l)
-
-
-
 
         let t = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
@@ -228,13 +220,6 @@ class svgClass {
 
     drawLine(x1, y1, x2, y2) {
 
-        // x1 = this.scaleParameter(x1)
-        // y1 = this.scaleParameter(y1)
-        // x2 = this.scaleParameter(x2)
-        // y2 = this.scaleParameter(y2)
-
-        console.log("Drawing line",x1, y1, x2, y2)
-
         let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
         l.setAttribute('x1', x1)
@@ -244,25 +229,13 @@ class svgClass {
         l.setAttribute('stroke', 'rgb(100, 0, 0)')
         l.setAttribute('stroke-width', '10')
 
-
         this.gN.appendChild(l)
     }
 
 
     drawPath(x1, y1, x2, y2, x3, y3, x4, y4,parent) {
 
-        // x1,y1 = this.translatePoint(x1,y1).x, this.translatePoint(x1,y1).y
-        // x2,y2 = this.translatePoint(x2,y2).x, this.translatePoint(x2,y2).y
-        // x3,y3 = this.translatePoint(x3,y3).x, this.translatePoint(x3,y3).y
-        // x4,y4 = this.translatePoint(x4,y4).x, this.translatePoint(x4,y4).y
-
-
-
-
         console.log(" AA x1 y1 x2 y2 x3 y3 x4 y4",x1, y1, x2, y2, x3, y3, x4, y4)
-
-
-
 
         let p = document.createElementNS('http://www.w3.org/2000/svg', 'path')
 
@@ -271,28 +244,12 @@ class svgClass {
         p.setAttribute('stroke', 'rgb(0, 0, 0)')
         p.setAttribute('stroke-width', '2')
 
-
         parent.appendChild(p)
-
     }
 
 
 
 
-    translatePoint(x, y) {
-
-        console.log("Translating point",x,y)
-
-
-        let result = {
-            x: x + this.extendedHeight * 0.75 + x,
-            y: this.extendedHeight - (y + this.extendedHeight * 0.9)
-        }
-
-
-        console.log("Translated point",result.x,result.y)
-        return result;
-    }
 
 }
 

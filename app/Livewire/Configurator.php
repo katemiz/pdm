@@ -50,6 +50,7 @@ class Configurator extends Component
 
 
     public $showOtherParams = false;
+    public $activeTab = 'extended'; // 'extended' or 'nested'
 
   
 
@@ -139,6 +140,12 @@ class Configurator extends Component
     }
 
 
+    function setCurrentSolution($index) {
+        $this->currentSolution = $index;
+        $this->calculateTubePointCoordinates();
+        $this->dispatch('drawSvg',['solutionSet' => $this->solutionSet,'solutionTubeData' => $this->solutionTubeData, 'currentSolution' => $this->currentSolution]);
+        return true;
+    }
 
 
     function calculateTubePointCoordinates() {

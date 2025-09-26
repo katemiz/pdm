@@ -20,7 +20,7 @@
             const solutionTubeData = event.detail[0].solutionTubeData;
             const currentSolution = event.detail[0].currentSolution;
 
-            const svg = document.getElementById('svg');
+            const svg = document.getElementById('svgN');
 
             // Clear previous content
             while (svg.firstChild) {
@@ -79,7 +79,7 @@
                     <label class="label">Maximum [m]</label>
                     <div class="control">
                         <input class="input" type="number" placeholder="Maximum Nested Height"
-                            wire:model.live="targetNestedHeightMax" step="1">
+                            wire:model.live="targetNestedHeightMax" step="10">
                     </div>
                 </div>
 
@@ -87,7 +87,7 @@
                     <label class="label">Minimum [m]</label>
                     <div class="control">
                         <input class="input" type="number" placeholder="Minimum Nested Height"
-                            wire:model.live="targetNestedHeightMin" step="1">
+                            wire:model.live="targetNestedHeightMin" step="10">
                     </div>
                 </div>
 
@@ -249,23 +249,59 @@
 
     <div class="card p-6">
 
+        <header class="mb-6">
+            <h2 class="subtitle has-text-weight-light">Possible Solutions</h2>
+        </header>
 
-        @foreach ($solutionSet as $solution)
+        <div class="fixed-grid has-8-cols">
+        <div class="grid">
+            @foreach ($solutionSet as $k => $solution)
 
-            <p>{{ $solution["noOfSections"]  }}</p>
+                <div class="cell {{ $currentSolution === $k ? ' has-background-success-light' : 'has-background-warning-light' }}  p-4 m-2" wire:click="setCurrentSolution({{ $k }})" style="cursor: pointer;">
 
-        @endforeach
+                    {{ $solution["noOfSections"]  }} Sections<br>
+                    {{ $solution["extendedHeight"]  }} mm<br>
+                    {{ $solution["nestedHeight"]  }} mm<br>
+                    {{ $solution["tubeLength"]  }} mm<br>
 
+                </div>
+
+            @endforeach
+        </div>
+        </div>
 
     </div>
 
 
+    <div class="tabs">
+    <ul>
+        <li class="{{$activeTab === 'extended' ? ' is-active' : ''}}"><a wire:click="$set('activeTab', 'extended')">Extended Position</a></li>
+        <li class="{{$activeTab === 'nested' ? ' is-active' : ''}}"><a wire:click="$set('activeTab', 'nested')">Nested Position</a></li>
+    </ul>
+    </div>
 
 
+    <div class="p-0 {{$activeTab === 'nested' ? ' is-hidden' : ''}}" id="extendedPosition" >
 
-    <div class="p-0" id="myDiv" >
 
-        <svg  id="svg">
+        <header class="mb-6">
+            <h1 class="title has-text-weight-light is-size-1">Extended Position</h1>
+        </header>
+
+        <svg  id="svgE">
+        </svg>
+
+    </div>
+
+
+    <div class="p-0 {{ $activeTab === 'extended' ? ' is-hidden' : ''}}" id="nestedPosition" >
+
+        <header class="mb-6">
+                <h1 class="title has-text-weight-light is-size-1">Nested Position</h1>
+        </header>
+
+
+        <svg  id="svgN">
         </svg>
 
     </div>

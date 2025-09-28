@@ -1,33 +1,24 @@
 <section class="section container">
 
-
-    {{-- <style>
-        #svg {
-    display: block;  /* This removes the inline spacing */
-    vertical-align: top; 
-}
-    </style> --}}
-
-
     <script src="{{ asset(path: '/js/svgClass.js') }}"></script>
 
     <script>
-
 
         document.addEventListener('drawSvg', event => {
 
             const solutionSet = event.detail[0].solutionSet;
             const solutionTubeData = event.detail[0].solutionTubeData;
             const currentSolution = event.detail[0].currentSolution;
+            const svgType = event.detail[0].svgType;
+            const adapters = event.detail[0].adapters
 
-            const svg = document.getElementById('svgN');
-
-            // Clear previous content
-            while (svg.firstChild) {
-                svg.removeChild(svg.firstChild);
+            if (document.getElementById('svg')) {
+                document.getElementById('svg').remove()
             }
 
-            let newImage = new svgClass(solutionSet,solutionTubeData,currentSolution);
+            let p = new svgClass(solutionSet, solutionTubeData, currentSolution, svgType, adapters);
+
+            p.run()
         });
 
     </script>
@@ -57,7 +48,7 @@
                     <label class="label">Maximum [m]</label>
                     <div class="control">
                         <input class="input" type="number" placeholder="Target Extended Height"
-                            wire:model.live="targetExtendedHeightMax" step="10">
+                            wire:model.live="targetExtendedHeightMax" step="0.1">
                     </div>
                 </div>
 
@@ -65,7 +56,7 @@
                     <label class="label">Minimum [m]</label>
                     <div class="control">
                         <input class="input" type="number" placeholder="Target Nested Height"
-                            wire:model.live="targetExtendedHeightMin" step="10">
+                            wire:model.live="targetExtendedHeightMin" step="0.1">
                     </div>
                 </div>
 
@@ -79,7 +70,7 @@
                     <label class="label">Maximum [m]</label>
                     <div class="control">
                         <input class="input" type="number" placeholder="Maximum Nested Height"
-                            wire:model.live="targetNestedHeightMax" step="10">
+                            wire:model.live="targetNestedHeightMax" step="0.01">
                     </div>
                 </div>
 
@@ -87,7 +78,7 @@
                     <label class="label">Minimum [m]</label>
                     <div class="control">
                         <input class="input" type="number" placeholder="Minimum Nested Height"
-                            wire:model.live="targetNestedHeightMin" step="10">
+                            wire:model.live="targetNestedHeightMin" step="0.01">
                     </div>
                 </div>
 
@@ -150,7 +141,7 @@
                         <label class="label">Payload Adapter Thickness [mm]</label>
                         <div class="control">
                             <input class="input" type="number" placeholder="Head Dimension"
-                                wire:model.live="payloadAdapterThickness" step="1">
+                                wire:model.live="topAdapterThk" step="1">
                         </div>
                     </div>
                 </div>
@@ -163,7 +154,7 @@
                         <label class="label">Base Support Thickness [mm]</label>
                         <div class="control">
                             <input class="input" type="number" placeholder="Head Dimension"
-                                wire:model.live="baseSupportThickness" step="1">
+                                wire:model.live="baseAdapterThk" step="1">
                         </div>
                     </div>
                 </div>
@@ -180,15 +171,15 @@
                     <div class="control">
 
                         <div class="select is-fullwidth">
-                            <select wire:model.live="startTubeNo" >
+                            <select wire:model.live="startTubeNo">
 
                                 @foreach ($mtProfiles as $tube)
 
-                                <option value="{{ $tube["no"] }}">
-                                    MT-{{ sprintf("%02d",$tube["no"]) }}
-                                    &nbsp; &nbsp;&nbsp;&nbsp; &#8960;
-                                    {{ sprintf("%6.2f",round($tube["od"],2)) }}
-                                </option>
+                                    <option value="{{ $tube["no"] }}">
+                                        MT-{{ sprintf("%02d", $tube["no"]) }}
+                                        &nbsp; &nbsp;&nbsp;&nbsp; &#8960;
+                                        {{ sprintf("%6.2f", round($tube["od"], 2)) }}
+                                    </option>
 
                                 @endforeach
 
@@ -205,16 +196,16 @@
 
                     <div class="control">
 
-                        <div class="select is-fullwidth" >
-                            <select wire:model.live="endTubeNo" >
+                        <div class="select is-fullwidth">
+                            <select wire:model.live="endTubeNo">
 
                                 @foreach ($mtProfiles as $tube)
 
-                                <option value="{{ $tube["no"] }}">
-                                    MT-{{ sprintf("%02d",$tube["no"]) }}
-                                    &nbsp; &nbsp;&nbsp;&nbsp; &#8960;
-                                    {{ sprintf("%6.2f",round($tube["od"],2)) }}
-                                </option>
+                                    <option value="{{ $tube["no"] }}">
+                                        MT-{{ sprintf("%02d", $tube["no"]) }}
+                                        &nbsp; &nbsp;&nbsp;&nbsp; &#8960;
+                                        {{ sprintf("%6.2f", round($tube["od"], 2)) }}
+                                    </option>
 
                                 @endforeach
 
@@ -253,56 +244,76 @@
             <h2 class="subtitle has-text-weight-light">Possible Solutions</h2>
         </header>
 
-        <div class="fixed-grid has-8-cols">
-        <div class="grid">
-            @foreach ($solutionSet as $k => $solution)
+        <div class="fixed-grid has-5-cols">
+            <div class="grid">
+                @foreach ($solutionSet as $k => $solution)
 
-                <div class="cell {{ $currentSolution === $k ? ' has-background-success-light' : 'has-background-warning-light' }}  p-4 m-2" wire:click="setCurrentSolution({{ $k }})" style="cursor: pointer;">
 
-                    {{ $solution["noOfSections"]  }} Sections<br>
-                    {{ $solution["extendedHeight"]  }} mm<br>
-                    {{ $solution["nestedHeight"]  }} mm<br>
-                    {{ $solution["tubeLength"]  }} mm<br>
 
-                </div>
 
-            @endforeach
-        </div>
+                    <div class="cell card field is-grouped is-grouped-multiline {{ $currentSolution === $k ? ' has-background-success-light' : 'has-background-warning-light' }}"
+                        wire:click="setCurrentSolution({{ $k }})" style="cursor: pointer;">
+                        <div class="control">
+                            <div class="tags has-addons">
+                                <span class="tag is-dark">Sections</span>
+                                <span class="tag is-info">{{ $solution["noOfSections"]  }}</span>
+                            </div>
+                        </div>
+
+                        <div class="control">
+                            <div class="tags has-addons">
+                                <span class="tag is-dark">Extended</span>
+                                <span class="tag is-success">{{ $solution["extendedHeight"]  }}</span>
+                            </div>
+                        </div>
+
+                        <div class="control">
+                            <div class="tags has-addons">
+                                <span class="tag is-dark">Nested</span>
+                                <span class="tag is-primary">{{ $solution["nestedHeight"]  }}</span>
+                            </div>
+                        </div>
+
+                        <div class="tags has-addons">
+                            <span class="tag">Tube</span>
+                            <span class="tag is-primary">{{ $solution["tubeLength"]  }}</span>
+                        </div>
+                    </div>
+
+
+
+
+                @endforeach
+            </div>
         </div>
 
     </div>
 
 
     <div class="tabs">
-    <ul>
-        <li class="{{$activeTab === 'extended' ? ' is-active' : ''}}"><a wire:click="$set('activeTab', 'extended')">Extended Position</a></li>
-        <li class="{{$activeTab === 'nested' ? ' is-active' : ''}}"><a wire:click="$set('activeTab', 'nested')">Nested Position</a></li>
-    </ul>
+        <ul>
+            <li class="{{$svgType === 'Extended' ? ' is-active' : ''}}">
+                <a wire:click="toggleMastPosition('Extended')">Extended Position</a>
+            </li>
+            <li class="{{$svgType === 'Nested' ? ' is-active' : ''}}">
+                <a wire:click="toggleMastPosition('Nested')">Nested Position</a>
+            </li>
+        </ul>
     </div>
 
 
-    <div class="p-0 {{$activeTab === 'nested' ? ' is-hidden' : ''}}" id="extendedPosition" >
 
+
+
+
+
+    <div class="p-0" id="svgDiv" wire:ignore>
 
         <header class="mb-6">
-            <h1 class="title has-text-weight-light is-size-1">Extended Position</h1>
+            <h1 class="title has-text-weight-light is-size-1">{{ $svgType }} Position</h1>
         </header>
 
-        <svg  id="svgE">
-        </svg>
-
-    </div>
-
-
-    <div class="p-0 {{ $activeTab === 'extended' ? ' is-hidden' : ''}}" id="nestedPosition" >
-
-        <header class="mb-6">
-                <h1 class="title has-text-weight-light is-size-1">Nested Position</h1>
-        </header>
-
-
-        <svg  id="svgN">
-        </svg>
+        {{-- svg to be added dynamically here --}}
 
     </div>
 
@@ -310,13 +321,6 @@
 
 
 
-{{-- <svg width="400" height="400" viewBox="0 0 100 100" style="border: 1px solid black;">
-  <line x1="0" y1="0" x2="100" y2="100" stroke="red" stroke-width="2" />
-</svg>
-
-<svg width="200" height="200" viewBox="0 0 100 100" preserveAspectRatio="none" style="border: 1px solid black;">
-  <line x1="0" y1="0" x2="100" y2="100" stroke="blue" stroke-width="2" />
-</svg> --}}
 
 
 

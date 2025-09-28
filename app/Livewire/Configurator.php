@@ -21,13 +21,13 @@ class Configurator extends Component
 
 
     public $extendedHeight;
-    public $targetExtendedHeightMax=15400;
-    public $targetExtendedHeightMin=14800;
+    public $targetExtendedHeightMax=15.2; // m
+    public $targetExtendedHeightMin=14.8; // m
 
 
     public $nestedHeight;
-    public $targetNestedHeightMax=2600;
-    public $targetNestedHeightMin=2400;
+    public $targetNestedHeightMax=2.60; // m
+    public $targetNestedHeightMin=2.40; // m
 
 
     public $tube_length_min = 400;
@@ -40,8 +40,12 @@ class Configurator extends Component
     public $solutionTubeData;
 
 
-    public $payloadAdapterThickness = 12;
-    public $baseSupportThickness = 20;
+    public $topAdapterThk = 12;
+    public $baseAdapterThk = 20;
+
+    public $adapters = [];
+
+    public $points = [];
 
     public $mtProfiles;
     public $startTubeNo = 1;
@@ -50,32 +54,24 @@ class Configurator extends Component
 
 
     public $showOtherParams = false;
-    public $activeTab = 'extended'; // 'extended' or 'nested'
+    public $svgType = 'Nested'; // 'Extended' or 'Nested'
 
   
 
 
     public function mount()
     {
-
         $mtProfiles = new EngMast();
         $mtProfiles->MasttechProfiles();
         $this->mtProfiles =  $mtProfiles->tubeData;
 
         $this->endTubeNo = count($this->mtProfiles);
-
     }
 
 
     public function render()
     {
         $this->solutionSet = [];
-
-        // $this->payloadAdapterThickness /= 1000;
-        // $this->baseSupportThickness /= 1000;
-        // $this->overlapDimension /= 1000;
-        // $this->headDimension /= 1000;
-
         $this->Optimizer();
 
         return view('engineering.configurator');
@@ -83,20 +79,23 @@ class Configurator extends Component
 
 
     public function getExtendedHeight(){
-
-        $this->extendedHeight = $this->n*$this->x-($this->n - 1)*$this->overlapDimension + $this->payloadAdapterThickness + $this->baseSupportThickness;
+        $this->extendedHeight = $this->n*$this->x-($this->n - 1)*$this->overlapDimension;
         return true;
     } 
 
 
     public function getNestedHeight(){
-
-        $this->nestedHeight = $this->x+($this->n - 1)*$this->headDimension + $this->payloadAdapterThickness + $this->baseSupportThickness;
+        $this->nestedHeight = $this->x+($this->n - 1)*$this->headDimension;
         return true;
     } 
 
 
     public function Optimizer() {
+
+        $tempTargetExtendedHeightMax = $this->targetExtendedHeightMax * 1000 - $this->topAdapterThk - $this->baseAdapterThk;
+        $tempTargetExtendedHeightMin = $this->targetExtendedHeightMin * 1000 - $this->topAdapterThk - $this->baseAdapterThk;
+        $tempTargetNestedHeightMax = $this->targetNestedHeightMax * 1000 - $this->topAdapterThk - $this->baseAdapterThk;
+        $tempTargetNestedHeightMin = $this->targetNestedHeightMin * 1000 - $this->topAdapterThk - $this->baseAdapterThk;
 
         for ($this->n = $this->n_min; $this->n <= $this->n_max ; $this->n++) { 
     
@@ -105,37 +104,35 @@ class Configurator extends Component
                 $this->getExtendedHeight();
                 $this->getNestedHeight();
 
-                // dd($this->extendedHeight,$this->nestedHeight);
-
                 if (
-                    $this->extendedHeight >= $this->targetExtendedHeightMin &&
-                    $this->extendedHeight <= $this->targetExtendedHeightMax &&
+                    $this->extendedHeight >= $tempTargetExtendedHeightMin &&
+                    $this->extendedHeight <= $tempTargetExtendedHeightMax &&
 
-                    $this->nestedHeight >= $this->targetNestedHeightMin &&
-                    $this->nestedHeight <= $this->targetNestedHeightMax
+                    $this->nestedHeight >= $tempTargetNestedHeightMin &&
+                    $this->nestedHeight <= $tempTargetNestedHeightMax
                 ) {
-
-                    $sonuc = $this->n.' Sections, Extended Height: '.$this->extendedHeight.', Nested Height: '.$this->nestedHeight.' and Tube Length of '.$this->x;
 
                     $sonuc2["noOfSections"]  = $this->n;
                     $sonuc2["extendedHeight"]  = $this->extendedHeight;
                     $sonuc2["nestedHeight"]  = $this->nestedHeight;
                     $sonuc2["tubeLength"]  = $this->x;
 
-                    // $this->solutionSet[$this->n][] = $this->x;
                     $this->solutionSet[] = $sonuc2;
                 }
             }
         }
 
-        // dd($this->solutionSet,$this->mtProfiles);
-        // dd($this->mtProfiles);
-
-                    // dd($this->extendedHeight,$this->nestedHeight,$this->solutionSet);
-
-
         $this->calculateTubePointCoordinates();
-        $this->dispatch('drawSvg',['solutionSet' => $this->solutionSet,'solutionTubeData' => $this->solutionTubeData, 'currentSolution' => $this->currentSolution]);
+
+        $this->dispatch('drawSvg',
+            [
+                'solutionSet' => $this->solutionSet,
+                'solutionTubeData' => $this->solutionTubeData, 
+                'currentSolution' => $this->currentSolution,
+                'svgType' => $this->svgType,
+                'adapters' => $this->adapters
+            ]);
+
         return true;
     }
 
@@ -148,7 +145,17 @@ class Configurator extends Component
     }
 
 
+    function toggleMastPosition($position) {
+        $this->svgType = $position;
+    }
+
+
     function calculateTubePointCoordinates() {
+
+        $this->solutionTubeData = [];
+
+        $this->adapters['base']['thickness'] = $this->baseAdapterThk;
+        $this->adapters['top']['thickness'] = $this->topAdapterThk;
 
         // A,B,C,D points of the tube rectangle
         // D(dx,dy)----------------C(cx,cy)
@@ -160,17 +167,7 @@ class Configurator extends Component
 
         $sol =  $this->solutionSet[$this->currentSolution];
 
-        $curExtendedHeight = $sol["extendedHeight"];
-
         $noOfSections = $sol['noOfSections'];
-
-
-        // dd($curExtendedHeight);
-
-        // $this->startTubeNo = 16;
-        // $this->endTubeNo = 16 - $sol['noOfSections'];
-        // $this->mtProfiles = array_slice($this->mtProfiles, $this->endTubeNo-1, $sol['noOfSections']);
-
 
         foreach ($this->mtProfiles as $k => $singleTubeData) {
 
@@ -179,11 +176,15 @@ class Configurator extends Component
             } 
         }
 
-
-
         foreach ($this->solutionTubeData as $i => $profile) {
 
             $profile = (object) $profile;
+
+            /**
+            * 
+            * EXTENDED
+            * 
+            */
 
             // EXTENDED state coordinates
             // dy in extended position
@@ -191,10 +192,9 @@ class Configurator extends Component
 
             $n = count($this->solutionTubeData) - $i;
 
-
             // POINT D
             $dx = -$profile->od / 2;  // Centered at x=0
-            $dy = $n * $profile->length - ($n - 1) * $this->overlapDimension;
+            $dy = $n * $profile->length - ($n - 1) * $this->overlapDimension + $this->baseAdapterThk;
 
             // dd($dx,$dy,$n,$profile->length,$this->overlapDimension);
 
@@ -210,7 +210,6 @@ class Configurator extends Component
             $ax = $dx;
             $ay = $by;
 
-
             // Store the coordinates
             $tubeCoordinates = [
                 'A' => ['x' => $ax, 'y' => $ay],
@@ -221,13 +220,40 @@ class Configurator extends Component
 
             $this->solutionTubeData[$i]['extended'] = $tubeCoordinates;
 
+
+            // TOP TUBE
+            if ($i == 0) {
+                $this->adapters['top']['points']['Extended'] = [
+                    'A' => ['x' => -2.5*$profile->od/2, 'y' => $dy],
+                    'B' => ['x' => 2.5*$profile->od/2, 'y' => $dy],
+                    'C' => ['x' => 2.5*$profile->od/2, 'y' => $dy + $this->topAdapterThk],
+                    'D' => ['x' => -2.5*$profile->od/2, 'y' => $dy + $this->topAdapterThk],
+                ];
+            }
+
+            // BOTTOM TUBE
+            if ($i == $noOfSections - 1) {
+                $this->adapters['base']['points']['Extended'] = [
+                    'A' => ['x' => -1.5*$profile->od/2, 'y' => -$this->baseAdapterThk],
+                    'B' => ['x' => 1.5*$profile->od/2, 'y' => -$this->baseAdapterThk],
+                    'C' => ['x' => 1.5*$profile->od/2, 'y' => 0],
+                    'D' => ['x' => -1.5*$profile->od/2, 'y' => 0],
+                ];
+            }
+
+           /**
+            * 
+            * NESTED
+            * 
+            */
+
             // NESTED state coordinates
             // dy in nested position
             // dy = length - i*headDimension
 
             // POINT D
             $dx = -$profile->od / 2;  // Centered at x=0
-            $dy = $profile->length + ($n - 1) * $this->headDimension;
+            $dy = $profile->length + ($n - 1) * $this->headDimension + $this->baseAdapterThk;
 
             // POINT B
             $bx =$dx + $profile->od/ 2;  // Centered at x=0
@@ -241,9 +267,6 @@ class Configurator extends Component
             $ax = $dx;
             $ay = $by;
 
-
-
-
             // Store the coordinates
             $tubeCoordinates = [
                 'A' => ['x' => $ax, 'y' => $ay],
@@ -252,20 +275,34 @@ class Configurator extends Component
                 'D' => ['x' => $dx, 'y' => $dy],
             ];
 
+
+            // TOP TUBE
+            if ($i == 0) {
+                $this->adapters['top']['points']['Nested'] = [
+                    'A' => ['x' => -2.5*$profile->od/2, 'y' => $dy],
+                    'B' => ['x' => 2.5*$profile->od/2, 'y' => $dy],
+                    'C' => ['x' => 2.5*$profile->od/2, 'y' => $dy + $this->topAdapterThk],
+                    'D' => ['x' => -2.5*$profile->od/2, 'y' => $dy + $this->topAdapterThk],
+                ];
+            }
+
+            // BOTTOM TUBE
+            if ($i == $noOfSections - 1) {
+                $this->adapters['base']['points']['Nested'] = [
+                    'A' => ['x' => -1.5*$profile->od/2, 'y' => -$this->baseAdapterThk],
+                    'B' => ['x' => 1.5*$profile->od/2, 'y' => -$this->baseAdapterThk],
+                    'C' => ['x' => 1.5*$profile->od/2, 'y' => 0],
+                    'D' => ['x' => -1.5*$profile->od/2, 'y' => 0],
+                ];
+            }
+
            $this->solutionTubeData[$i]['nested'] = $tubeCoordinates;
-
-
-
-
-
         }
 
-        // dd($this->solutionTubeData);
+        // dd($this->adapters);
 
-
-
-
-
+        // dd($this->solutionSet);
+        // dd(vars: $this->solutionTubeData);
     } 
 
 

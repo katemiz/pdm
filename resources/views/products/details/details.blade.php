@@ -1,6 +1,6 @@
 <section class="section container has-background-white">
 
-    {{-- <script src="{{ asset('/js/confirm_modal.js') }}"></script> --}}
+    <script src="{{ asset('/js/confirm_modal.js') }}"></script>
 
     <script>
 

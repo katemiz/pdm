@@ -219,16 +219,16 @@
                 <div class="column">
 
                     @if ($part_type == 'Standard')
+
                         <p class="title has-text-weight-light is-size-2">{{$standard_number}} {{$std_params}}</p>
                         <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
+
                     @else
                         <p class="title has-text-weight-light is-size-2">
-                            {{$part_number}}{{ $config_number ? '-'.$config_number:'' }}
-                            <span class="has-text-grey-lighter">-{{$version}}</span>
+                            {{$part_number}}{{ $config_number ? '-'.$config_number:'' }}-{{$version}}
+                            {{-- <span class="has-text-grey-lighter mx-0">-{{$version}}</span> --}}
                         </p>
                         <p class="subtitle has-text-weight-light is-size-6">{{ $description }}</p>
-
-
 
                         @if ($base_part)
                         <p>
@@ -240,7 +240,6 @@
 
                         </p>
                         @endif 
-
 
                     @endif
 
@@ -266,10 +265,10 @@
 
 
                 @if  ($is_mirror_of)
-                <div class="column is-8">
-                <p class="title has-text-weight-light is-size-2"><a href="/details/Detail/view/{{$is_mirror_of}}">{{$is_mirror_of_part_number}}<span class="has-text-grey-lighter">-{{$is_mirror_of_part_version}}</span></a></p>
-                <p class="subtitle has-text-weight-light is-size-6">{{ $is_mirror_of_part_description }}</p>
-                </div>
+                    <div class="column is-8">
+                    <p class="title has-text-weight-light is-size-2"><a href="/details/Detail/view/{{$is_mirror_of}}">{{$is_mirror_of_part_number}}<span class="has-text-grey-lighter">-{{$is_mirror_of_part_version}}</span></a></p>
+                    <p class="subtitle has-text-weight-light is-size-6">{{ $is_mirror_of_part_description }}</p>
+                    </div>
                 @endif
 
                 </div>

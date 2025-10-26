@@ -99,6 +99,7 @@
         <tbody>
 
             @foreach ($items as $record)
+            @if ($record->basePartId === 0)
             <tr wire:key="{{ $record->id }}">
 
                 <td>{{ $record->full_part_number }}</td>
@@ -110,16 +111,6 @@
                 </td>
                 <td>{{ $record->description }}</td>
                 <td>{{ $record->created_at }}</td>
-{{--
-                @foreach (array_keys($constants['list']['headers']) as $col_name)
-                    <td class="has-text-{{ $constants['list']['headers'][$col_name]['align'] ? $constants['list']['headers'][$col_name]['align'] : 'left' }}">
-                        @if (isset($constants['list']['headers'][$col_name]['is_html']) && $constants['list']['headers'][$col_name]['is_html'])
-                            {!! $record[$col_name] !!}
-                        @else
-                            {{ $record[$col_name] }}
-                        @endif
-                    </td>
-                @endforeach --}}
 
                 <td class="has-text-right">
 
@@ -186,6 +177,7 @@
                 </td>
 
             </tr>
+            @endif
             @endforeach
 
         </tbody>

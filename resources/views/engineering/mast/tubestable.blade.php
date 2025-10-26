@@ -11,9 +11,8 @@
             <th class="has-text-right">Moment<br>Capacity</th>
 
             @if ($action == 'deflection')
-            <th class="has-text-right">Wind<br>Load</th>
+                <th class="has-text-right">Wind<br>Load</th>
             @endif
-
 
             <th class="has-text-centered has-background-white-ter" colspan="2">Pneumatic<br>Load Capacity<sup>(1)</sup>
                 <br><br>
@@ -30,7 +29,8 @@
 
             <th class="has-text-centered">P<sub>cr</sub><sup>(2)</sup>
 
-                <br><br>
+                <br>
+                <br>
                 <br>
 
                 <a class="" wire:click='decreaseBucklingLength'>
@@ -51,26 +51,26 @@
 
         @foreach ($tubeData as $i => $tube)
 
-           @if ( $tube["no"] >= $startTubeNo && $tube["no"]  <= $endTubeNo)
+            @if ($tube["no"] >= $startTubeNo && $tube["no"] <= $endTubeNo)
 
-            <tr>
-                <th>
-                    <a wire:click="GetMore({{ $i }})" >MT-{{ sprintf("%02d",$i+1) }}</a>
-                </th>
-                <td class="has-text-right">{{ sprintf("%.2f",round($tube["od"],2)) }} mm</td>
-                <td class="has-text-right">{{ sprintf("%.2f",round($tube["id"],2)) }} mm</td>
-                <td class="has-text-right">{{ sprintf("%.2f",round($tube["thk"],2)) }} mm</td>
-                <td class="has-text-right">{{ sprintf("%.2f",round($tube["mass"],2)) }} kg/m</td>
-                <td class="has-text-right">{{ round($tube["moment"],0) }} Nm</td>
+                <tr>
+                    <th>
+                        <a wire:click="GetMore({{ $i }})">MT-{{ sprintf("%02d", $i + 1) }}</a>
+                    </th>
+                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["od"], 2)) }} mm</td>
+                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["id"], 2)) }} mm</td>
+                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["thk"], 2)) }} mm</td>
+                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["mass"], 2)) }} kg/m</td>
+                    <td class="has-text-right">{{ round($tube["moment"], 0) }} Nm</td>
 
-                @if ($action == 'deflection')
-                <td class="has-text-right">{{ round($tube["windForce"],0) }} N</td>
-                @endif
+                    @if ($action == 'deflection')
+                        <td class="has-text-right">{{ round($tube["windForce"], 0) }} N</td>
+                    @endif
 
-                <td class="has-text-right has-background-white-ter">{{ round($tube["pressureLoad"],0) }} N</td>
-                <td class="has-text-right has-background-white-ter">{{ round($tube["pressureLoad"] / 9.81, 0) }} kg</td>
-                <td class="has-text-right">{{ round($tube["criticalLoad"],0) }} N</td>
-            </tr>
+                    <td class="has-text-right has-background-white-ter">{{ round($tube["pressureLoad"], 0) }} N</td>
+                    <td class="has-text-right has-background-white-ter">{{ round($tube["pressureLoad"] / 9.81, 0) }} kg</td>
+                    <td class="has-text-right">{{ round($tube["criticalLoad"], 0) }} N</td>
+                </tr>
 
             @endif
 
@@ -80,4 +80,3 @@
 
 
 </table>
-

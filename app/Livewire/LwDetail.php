@@ -609,7 +609,7 @@ class LwDetail extends Component
 
             case 'Detail':
             case 'MakeFrom':
-            case 'MultipleConfigured':
+            case 'MultipleConfigured': // Just like Detail
 
                 $props = $this->validate([
                     'c_notice_id' => 'required',

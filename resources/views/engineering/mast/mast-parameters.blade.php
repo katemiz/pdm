@@ -202,8 +202,8 @@
 
             <div class="level-item has-text-centered">
                 <div>
-                    <p class="heading">Mast Weight</p>
-                    <p class="title">{{ round($windLoadOnPayload, 0) }}</p>
+                    <p class="heading">Mast Tubes Weight</p>
+                    <p class="title">{{ round($mastWeight, 0) }}</p>
                     <p class="heading">kg</p>
                 </div>
             </div>

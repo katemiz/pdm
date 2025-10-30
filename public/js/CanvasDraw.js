@@ -3,7 +3,7 @@ class CanvasClass {
     constructor(data, graphType) {
 
 
-        console.log('CanvasClass start:', data)
+        console.log('CanvasClass start:', data,graphType)
 
 
         // Data
@@ -13,8 +13,8 @@ class CanvasClass {
 
 
         // Constants
-        this.MX = 1;       // % Margin in X Direction
-        this.MY = 1;       // % Margin in X Direction
+        this.MX = 3;       // % Margin in X Direction
+        this.MY = 3;       // % Margin in X Direction
 
         this.R = 6;        // DIA OF REFERENCE CIRCLES
 
@@ -31,50 +31,38 @@ class CanvasClass {
     run() {
 
         this.setValues()
-        // this.drawMastTubes()
+     
+        // BASE ADAPTER
         this.drawBaseAdapter()
 
+        // TUBES
+        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
+            this.drawRectangle(tube, this.g);
+        }
 
-        // this.drawFixedTubeFlange(tube, parent) {
+        // DIM TEXT LINES
+        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
+            this.drawDimTextLine(tube);
+        }
+
+        // FLANGES
+        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
+            // this.drawFixedTubeFlange(tube);
+        }
+
+        // PAYLOAD FLANGE
+        this.drawPayloadAdapter(this.data.payloadTube, this.g);
 
         this.drawMastCenterline()
+
+
+        this.drawDimTextLineTopBottom()
 
         this.svg.appendChild(this.g)
         this.svg.appendChild(this.gtext)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // let r = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
-
-
-
-        // r.setAttribute('x', 10)
-        // r.setAttribute('y', 10)
-        // r.setAttribute('width', this.svgW - 20)
-        // r.setAttribute('height', this.svgH - 20)
-
-        // r.setAttribute('fill', '#d3b717ff')
-        // r.setAttribute('style', 'fill-opacity: .25;')
-        // r.setAttribute('stroke', '#28272e')
-        // r.setAttribute('stroke-width', '4')
-
-        // this.g.appendChild(r)
 
     }
 
@@ -103,29 +91,27 @@ class CanvasClass {
         let totalW, totalH
 
         if (this.graphType === 'Loads') {
-            totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
+            this.totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
             totalH = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
         }
 
         if (this.graphType === 'Nested') {
-            totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
-            totalH = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
+            this.totalH = (this.data.nestedHeight ) / (1 - 2 * this.MX / 100)
+            totalW = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
         }
 
         if (this.graphType === 'Extended') {
-            totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
+            this.totalH = (this.data.extendedHeight) / (1 - 2 * this.MX / 100)
             totalH = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
         }
 
-        this.totalH = totalW
 
 
         // x,y Scales
-        this.sx = this.svgW / totalW
-        this.sy = this.svgH / totalW
+        this.sx = this.svgW / this.totalH
+        this.sy = this.svgH / this.totalH
 
 
-        // console.log('qqqqqqqqqqq', this.svgW, totalW, this.sx)
 
         this.x0 = this.totalH / 3
         this.y0 = this.totalH * this.MY / 100
@@ -182,15 +168,6 @@ class CanvasClass {
 
 
 
-    drawMastTubes() {
-
-        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
-            this.drawRectangle(tube, this.g);
-            // this.drawDimTextLine(tube)
-        }
-
-
-    }
 
 
 
@@ -212,16 +189,29 @@ class CanvasClass {
         }
 
         r.setAttribute('x', this.sx * (this.x0 - tube.od / 2))
-        r.setAttribute('y', this.sy * (this.totalH - y))
+        r.setAttribute('y', this.sy * (this.totalH - (y + this.y0 + tube.length)))
         r.setAttribute('width', this.sx * tube.od)
         r.setAttribute('height', this.sy * tube.length)
 
         r.setAttribute('fill', '#EAE2B7')
         r.setAttribute('style', 'fill-opacity: .25;')
         r.setAttribute('stroke', '#28272e')
-        r.setAttribute('stroke-width', '4')
+        r.setAttribute('stroke-width', '1')
 
         parent.appendChild(r)
+
+
+                console.log({
+                    svgH: this.svgH,
+                    totalH: this.totalH,
+                    sx: this.sx,
+                    x0: this.x0,
+                    y0: this.y0,
+                    tubeod: tube.od,
+                    tubeLength: tube.length,
+                    y: y,
+                })
+
     }
 
 
@@ -302,7 +292,7 @@ class CanvasClass {
             transformedPoints.push(
                 {
                     x: this.sx * (this.x0 + element.x),
-                    y: this.sy * (this.totalH - element.y + this.y0)
+                    y: this.sy * (this.totalH - (element.y + this.y0))
                 }
             )
         });
@@ -318,54 +308,156 @@ class CanvasClass {
 
     drawDimTextLine(tube) {
 
-
         let offset = parseInt(this.data.maxMastTubeDia)
         let textLeaderLength = parseInt(this.data.maxMastTubeDia)
 
-        let x1 = parseInt(offset)
-        let x2 = (x1 + textLeaderLength)
-
         let y
+
+        let textValue
 
         switch (this.graphType) {
             case 'Extended':
                 y = tube.bottomCenterPointExtended
+                textValue = tube.bottomCenterPointExtended
                 break;
 
             case 'Nested':
             default:
                 y = tube.bottomCenterPointNested
+                textValue = tube.bottomCenterPointNested
                 break;
         }
 
-
-        console.log('x0 y0 y H w x1 x2', this.x0, this.y0, y, this.svgH, this.svgW, x1, x2)
-
-
-
+        // BOTTOM FACE coordinates
         let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
-        l.setAttribute('x1', x1)
-        l.setAttribute('y1', this.svgH - y)
-        l.setAttribute('x2', x2)
-        l.setAttribute('y2', this.svgH - y)
+        l.setAttribute('x1', this.sx * (this.x0 + offset))
+        l.setAttribute('y1', this.sy * (this.totalH - (y + this.y0)))
+        l.setAttribute('x2', this.sx * (this.x0 + offset + textLeaderLength))
+        l.setAttribute('y2', this.sy * (this.totalH - (y + this.y0)))
         l.setAttribute('stroke', '#4F6D7A')
-        l.setAttribute('stroke-width', '2')
+        l.setAttribute('stroke-width', '0.5')
 
         this.gtext.appendChild(l)
 
         let t = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
-        t.setAttribute('x', x2 + 220)
-        t.setAttribute('y', this.svgH - y)
-        t.setAttribute('font-size', "4em")
-        t.innerHTML = tube.bottomCenterPointNested
+        t.setAttribute('x', this.sx * (this.x0 + offset + textLeaderLength) + 5)
+        t.setAttribute('y', this.sy * (this.totalH - (y + this.y0)) + 5)
+        t.setAttribute('font-size', "1em")
+        t.innerHTML = textValue
 
         this.gtext.appendChild(t)
+
+
+        // TOP FACE coordinates
+        let l2 = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+
+        l2.setAttribute('x1', this.sx * (this.x0 + offset))
+        l2.setAttribute('y1', this.sy * (this.totalH - (y + this.y0 + tube.length)))
+        l2.setAttribute('x2', this.sx * (this.x0 + offset + textLeaderLength))
+        l2.setAttribute('y2', this.sy * (this.totalH - (y + this.y0 + tube.length)))
+        l2.setAttribute('stroke', '#4F6D7A')
+        l2.setAttribute('stroke-width', '0.5')
+
+        this.gtext.appendChild(l2)
+
+        let t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+
+        t2.setAttribute('x', this.sx * (this.x0 + offset + textLeaderLength) + 5)
+        t2.setAttribute('y', this.sy * (this.totalH - (y + this.y0 + tube.length)) + 5)
+        t2.setAttribute('font-size', "1em")
+        t2.innerHTML = textValue + tube.length
+
+        this.gtext.appendChild(t2)
+
+
+
+
     }
 
 
 
+
+    drawDimTextLineTopBottom() {
+
+        let offset = parseInt(this.data.maxMastTubeDia)
+        let textLeaderLength = parseInt(this.data.maxMastTubeDia)
+
+        let y
+
+        let textValue
+
+
+
+        // BOTTOM FACE coordinates
+        let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+
+        l.setAttribute('x1', this.sx * (this.x0 - offset))
+        l.setAttribute('y1', this.sy * (this.totalH - this.y0))
+        l.setAttribute('x2', this.sx * (this.x0 - offset - textLeaderLength))
+        l.setAttribute('y2', this.sy * (this.totalH - this.y0))
+        l.setAttribute('stroke', '#4F6D7A')
+        l.setAttribute('stroke-width', '0.5')
+
+        this.gtext.appendChild(l)
+
+        let t = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+
+        t.setAttribute('x', this.sx * (this.x0 - offset - textLeaderLength) - 10)
+        t.setAttribute('y', this.sy * (this.totalH - this.y0 - 5))
+        t.setAttribute('font-size', "1em")
+        t.innerHTML = "0"
+
+        this.gtext.appendChild(t)
+
+
+
+        switch (this.graphType) {
+            case 'Extended':
+                y = parseInt(this.data.extendedHeight)
+                textValue = parseInt(this.data.extendedHeight)
+                break;
+
+            case 'Nested':
+            default:
+                y = parseInt(this.data.nestedHeight)
+                textValue = parseInt(this.data.nestedHeight)
+                break;
+        }
+
+console.log("ddddddddddddddd", this.y0 )
+
+let a = this.sy * (this.totalH - (y + this.y0))
+
+console.log("ddddddddddddddd", y )
+
+
+        // // TOP FACE coordinates
+        let l2 = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+
+        l2.setAttribute('x1', this.sx * (this.x0 - offset))
+        l2.setAttribute('y1', this.sy * (this.totalH - (y + this.y0)))
+        l2.setAttribute('x2', this.sx * (this.x0 - offset - textLeaderLength))
+        l2.setAttribute('y2', this.sy * (this.totalH - (y + this.y0)))
+        l2.setAttribute('stroke', '#4F6D7A')
+        l2.setAttribute('stroke-width', '0.5')
+
+        this.gtext.appendChild(l2)
+
+        let t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+
+        t2.setAttribute('x', this.sx * (this.x0 - offset - textLeaderLength) + 5)
+        t2.setAttribute('y', this.sy * (this.totalH - (y + this.y0)) + 5)
+        t2.setAttribute('font-size', "1em")
+        t2.innerHTML = y
+
+        this.gtext.appendChild(t2)
+
+
+
+
+    }
 
 
 
@@ -404,10 +496,48 @@ class CanvasClass {
         r.setAttribute('fill', '#d87d06ff')
         r.setAttribute('style', 'fill-opacity: .4;')
         r.setAttribute('stroke', '#28272e')
-        r.setAttribute('stroke-width', '4')
+        r.setAttribute('stroke-width', '1')
         r.setAttribute('style', 'fill-opacity: .95;')
 
         this.g.appendChild(r)
+    }
+
+
+    drawPayloadAdapter() {
+
+        let smallestTube = this.data.mastTubes[this.data.mastTubes.length - 1]
+        let y
+
+        switch (this.graphType) {
+            case 'Extended':
+                y = smallestTube.bottomCenterPointExtended
+                break;
+
+            case 'Nested':
+            default:
+                y = smallestTube.bottomCenterPointNested
+                break;
+        }
+
+        let topLeft = { 
+            x: this.x0 - smallestTube.od*1.5,
+            y: this.totalH - (y + smallestTube.length + this.y0 + this.data.topAdapterThk)
+        }
+
+        let r = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+
+        r.setAttribute('x', this.sx * topLeft.x)
+        r.setAttribute('y', this.sy * topLeft.y)
+        r.setAttribute('width', this.sx * smallestTube.od * 3)
+        r.setAttribute('height', this.sy * this.data.topAdapterThk)
+
+        r.setAttribute('fill', '#e6347eff')
+        r.setAttribute('style', 'fill-opacity: .25;')
+        r.setAttribute('stroke', '#28272e')
+        r.setAttribute('stroke-width', '1')
+
+        this.g.appendChild(r)
+
     }
 
 

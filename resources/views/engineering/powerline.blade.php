@@ -23,7 +23,7 @@
             <span>Direct Lifting</span>
           </a>
         </li>
-        
+
         <li>
           <a wire:click="setPulleyType(2)">
             <span>Load Divided By 2</span>
@@ -34,12 +34,12 @@
 
 
     <figure class="image {{ $pulleyType === 1 ? '' : ' is-hidden' }}">
-    <img src="{{ asset('images/Powerline1.png') }}" />
+      <img src="{{ asset('images/Powerline1.png') }}" />
     </figure>
 
 
     <figure class="image {{ $pulleyType === 2 ? '' : ' is-hidden' }}">
-    <img src="{{ asset('images/Powerline2.png') }}" />
+      <img src="{{ asset('images/Powerline2.png') }}" />
     </figure>
 
   </div>
@@ -106,15 +106,15 @@
         <div class="field mt-4">
           <label class="label">Reduction Ratio, i</label>
           <div class="control">
-            <input class="input" type="number" placeholder="Tube Lengths" wire:model.live="gearbox_reduction_ratio">
+            <input class="input" type="number" placeholder="Tube Lengths" wire:model.live="gearbox_reduction_ratio"
+              min="1">
           </div>
         </div>
 
         <div class="field">
           <label class="label">Max Allowable Output Torque [Nm]</label>
           <div class="control">
-            <input class="input" type="number" placeholder="Max Torque"
-              wire:model.live="gearbox_allowable_max_torque">
+            <input class="input" type="number" placeholder="Max Torque" wire:model.live="gearbox_allowable_max_torque">
           </div>
         </div>
 
@@ -134,9 +134,15 @@
         <span class="tag is-large is-warning">Drum</span>
 
         <div class="field mt-4">
-          <input type="checkbox" wire:model="drum_has_gearbox" wire:click="$toggle('drum_has_gearbox')"> Drum Has
-          {{ $drum_has_gearbox ? '' : ' No ' }}
-          GearBox
+          <label class="label">Does Drum Has a Gearbox ?</label>
+
+          <div class="buttons has-addons ">
+            <button class="button is-rounded {{ $drum_has_gearbox ? 'is-dark' : '' }}"
+              wire:click="$toggle('drum_has_gearbox')">Has Gearbox</button>
+            <button class="button is-rounded {{ $drum_has_gearbox ? '' : 'is-dark' }}"
+              wire:click="$toggle('drum_has_gearbox')">No Gearbox</button>
+          </div>
+
         </div>
 
         <div class="field">
@@ -227,23 +233,25 @@
         <table class="table is-fullwidth">
 
           <tr>
-            <td>Motor Output Torque</td>
-            <td class="has-text-right">{{ round($motor_max_torque, 1) }} Nm</td>
+            <td>Motor<br>Output Torque</td>
+            <td class="has-text-right">{{ round($motor_max_torque, 1) }}</td>
+            <td class="has-text-right">Nm</td>
           </tr>
 
           <tr>
-            <td>Output Angular Velocity</td>
-            <td class="has-text-right">{{ round($motor_angular_velocity, 1) }} rad/s</td>
-          </tr>
-
-          <tr>
-            <td>Output Angular Velocity</td>
-            <td class="has-text-right">{{ round($motor_rpm, 1) }} rpm</td>
+            <td>Output<br>Angular Velocity</td>
+            <td class="has-text-right">
+              {{ round($motor_angular_velocity, 1) }}<br>
+              {{ round($motor_rpm, 1) }}
+            </td>
+            <td class="has-text-right is-narrow">rad/s<br>rpm</td>
           </tr>
 
           <tr>
             <td>Output Power</td>
-            <td class="has-text-right">{{ round($motor_power, 1) }} W</td>
+            <td class="has-text-right">{{ round($motor_power, 1) }}</td>
+            <td class="has-text-right">W</td>
+
           </tr>
 
         </table>
@@ -256,39 +264,39 @@
         <table class="table is-fullwidth">
 
           <tr>
-            <td>GearBox Output Torque</td>
+            <td>GearBox<br>Output Torque</td>
             <td
               class="has-text-right {{ $gearbox_output_torque > $gearbox_allowable_max_torque ? 'has-text-danger' : '' }}">
-              {{ round($gearbox_output_torque, 1) }} Nm
+              {{ round($gearbox_output_torque, 1) }}
             </td>
+            <td class="has-text-right is-narrow">Nm</td>
+
           </tr>
 
           <tr>
-            <td>GearBox Angular Velocity</td>
-            <td class="has-text-right">{{ round($gearbox_angular_velocity_rad, 1) }} rad/s</td>
+            <td>GearBox<br>Angular Velocity</td>
+            <td class="has-text-right">
+              {{ round($gearbox_angular_velocity_rad, 1) }}<br>
+              {{ round($gearbox_angular_velocity_rpm, 1) }}
+            </td>
+            <td class="has-text-right is-narrow">rad/s<br>rpm</td>
           </tr>
 
           <tr>
-            <td>GearBox Angular Velocity </td>
-            <td class="has-text-right">{{ round($gearbox_angular_velocity_rpm, 1) }} rpm</td>
-          </tr>
-
-          <tr>
-            <td>GearBox Output Power </td>
-            <td class="has-text-right">{{ round($gearbox_output_power, 1) }} W</td>
+            <td>GearBox<br>Output Power </td>
+            <td class="has-text-right">{{ round($gearbox_output_power, 1) }}</td>
+            <td class="has-text-right is-narrow">W</td>
           </tr>
 
           @if ($gearbox_output_torque > $gearbox_allowable_max_torque)
-
             <tr>
-              <td class="has-text-danger" colspan="2">
+              <td class="has-text-danger" colspan="3">
                 <div class="notification is-danger">
                   Output torque is <strong>greater</strong> than maximum <strong>allowable</strong>
                   torque of gearbox
                 </div>
               </td>
             </tr>
-
           @endif
 
         </table>
@@ -300,65 +308,89 @@
         <table class="table is-fullwidth">
 
           <tr>
-            <td>Drum Output Torque</td>
+            <td>Drum<br>Output Torque</td>
             <td
               class="has-text-right {{ $drum_has_gearbox && $drum_output_torque > $drum_gearbox_allowable_max_torque ? 'has-text-danger' : '' }}">
-              {{ round($drum_output_torque, 1) }} Nm
+              {{ round($drum_output_torque, 1) }}
             </td>
+            <td class="has-text-right is-narrow">Nm</td>
           </tr>
 
           <tr>
             <td>Drum Angular Velocity</td>
-            <td class="has-text-right">{{ round($drum_angular_velocity_rad, 1) }} rad/s</td>
-          </tr>
-
-          <tr>
-            <td>Drum Angular Velocity </td>
-            <td class="has-text-right">{{ round($drum_angular_velocity_rpm, 1) }} rpm</td>
-          </tr>
-
-          <tr>
-            <td>Drum Output Power </td>
-            <td class="has-text-right">{{ round($drum_output_power, 1) }} W</td>
-          </tr>
-
-
-
-          <tr>
-            <td>Pull Force<br>Pull Velocity<br>[Wound 1]</td>
             <td class="has-text-right">
-              {{ round($drum_pull_force_wound1, 0) }}
-              N<br>{{ round($drum_pull_velocity_wound1, 3) }} m/s
+              {{ round($drum_angular_velocity_rad, 1) }}<br>
+              {{ round($drum_angular_velocity_rpm, 1) }}
             </td>
+            <td class="has-text-right is-narrow">rad/s<br>rpm</td>
+
+          </tr>
+
+
+
+          <tr>
+            <td>Drum<br>Output Power </td>
+            <td class="has-text-right">{{ round($drum_output_power, 1) }}</td>
+            <td class="has-text-right is-narrow">W</td>
+          </tr>
+
+
+
+          <tr>
+            <td>
+              Pull Force<br>
+              Pull Velocity<br>
+              <span class="has-text-grey-light">[Wrap/Turn #1]</span>
+            </td>
+            <td class="has-text-right">
+              {{ round($drum_pull_force_wound1, 0) }}<br>
+              {{ round($drum_pull_velocity_wound1, 3) }}
+            </td>
+            <td class="has-text-right is-narrow">N<br>m/s</td>
           </tr>
 
           <tr>
-            <td>Pull Force<br>Pull Velocity<br>[Wound 2]</td>
-            <td class="has-text-right">
-              {{ round($drum_pull_force_wound2, 0) }} N<br>
-              {{ round($drum_pull_velocity_wound2, 3) }} m/s
+            <td>
+              Pull Force<br>
+              Pull Velocity<br>
+              <span class="has-text-grey-light">[Wrap/Turn #2]</span>
             </td>
+            <td class="has-text-right">
+              {{ round($drum_pull_force_wound2, 0) }}<br>
+              {{ round($drum_pull_velocity_wound2, 3) }}
+            </td>
+            <td class="has-text-right is-narrow">N<br>m/s</td>
           </tr>
           <tr>
-            <td>Pull Force<br>Pull Velocity<br>[Wound 3]</td>
-            <td class="has-text-right">
-              {{ round($drum_pull_force_wound3, 0) }} N<br>
-              {{ round($drum_pull_velocity_wound3, 3) }} m/s
+            <td>
+              Pull Force<br>
+              Pull Velocity<br>
+              <span class="has-text-grey-light">[Wrap/Turn #3]</span>
             </td>
+            <td class="has-text-right">
+              {{ round($drum_pull_force_wound3, 0) }}<br>
+              {{ round($drum_pull_velocity_wound3, 3) }}
+            </td>
+            <td class="has-text-right is-narrow">N<br>m/s</td>
           </tr>
           <tr>
-            <td>Pull Force<br>Pull Velocity<br>[Wound 4]</td>
-            <td class="has-text-right">
-              {{ round($drum_pull_force_wound4, 0) }} N<br>
-              {{ round($drum_pull_velocity_wound4, 3) }} m/s
+            <td>
+              Pull Force<br>
+              Pull Velocity<br>
+              <span class="has-text-grey-light">[Wrap/Turn #4]</span>
             </td>
+            <td class="has-text-right">
+              {{ round($drum_pull_force_wound4, 0) }}<br>
+              {{ round($drum_pull_velocity_wound4, 3) }}
+            </td>
+            <td class="has-text-right is-narrow">N<br>m/s</td>
           </tr>
 
 
           @if ($drum_has_gearbox && $drum_output_torque > $drum_gearbox_allowable_max_torque)
 
             <tr>
-              <td class="has-text-danger" colspan="2">
+              <td class="has-text-danger" colspan="3">
                 <div class="notification is-danger">
                   Output torque is <strong>greater</strong> than maximum <strong>allowable</strong>
                   torque of drum gearbox
@@ -373,66 +405,71 @@
 
       <div class="cell">
 
-          <table class="table is-fullwidth">
+        <table class="table is-fullwidth">
 
-            <tr>
-              <td class="heading has-text-grey-light">Power Required</td>
-              <td class="heading has-text-grey-light has-text-right">Power Available</td>
-            </tr>
+          <tr>
+            <td class="heading has-text-grey-light">Power Required</td>
+            <td class="heading has-text-grey-light has-text-right">Power Available</td>
+          </tr>
 
-            <tr>
-              <td class="">
-                  {{ round($power_required, 0) }} W
-              </td>
-              <td class="is-pulled-right">
-                  <div class="cell tags has-addons">
-                    <span class="tag">{{ round($drum_output_power, 0) }} W</span>
-                    <span class="tag {{ $drum_output_power > $power_required ? 'is-success' : 'is-danger' }}">{{ $drum_output_power > $power_required ? 'OK' : 'X' }}</span>
-                  </div>
-              </td>
-            </tr>
+          <tr>
+            <td class="">
+              {{ round($power_required, 0) }} W
+            </td>
+            <td class="is-pulled-right">
+              <div class="cell tags has-addons">
+                <span class="tag">{{ round($drum_output_power, 0) }} W</span>
+                <span
+                  class="tag {{ $drum_output_power > $power_required ? 'is-success' : 'is-danger' }}">{{ $drum_output_power > $power_required ? 'OK' : 'X' }}</span>
+              </div>
+            </td>
+          </tr>
 
-          </table>
+        </table>
 
-          <table class="table is-fullwidth">
+        <table class="table is-fullwidth">
 
-            <tr>
-              <td class="heading has-text-grey-light">Force Required</td>
-              <td class="heading has-text-grey-light has-text-right">Force Available</td>
-            </tr>
+          <tr>
+            <td class="heading has-text-grey-light">Force Required</td>
+            <td class="heading has-text-grey-light has-text-right">Force Available</td>
+          </tr>
 
-            <tr>
-              <td class="">
-                  {{ round($force_required, 0) }} N
-              </td>
-              <td class="is-pulled-right">
-                  <div class="cell tags has-addons">
-                    <span class="tag">{{ round($lift_force_1, 0) }} N</span>
-                    <span class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_1 > $force_required ? 'OK' : 'X' }}</span>
-                  </div>
+          <tr>
+            <td class="">
+              {{ round($force_required, 0) }} N
+            </td>
+            <td class="is-pulled-right">
+              <div class="cell tags has-addons">
+                <span class="tag">{{ round($lift_force_1, 0) }} N</span>
+                <span
+                  class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_1 > $force_required ? 'OK' : 'X' }}</span>
+              </div>
 
-                  <div class="cell tags has-addons">
-                    <span class="tag">{{ round($lift_force_2, 0) }} N</span>
-                    <span class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_2 > $force_required ? 'OK' : 'X' }}</span>
-                  </div>
+              <div class="cell tags has-addons">
+                <span class="tag">{{ round($lift_force_2, 0) }} N</span>
+                <span
+                  class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_2 > $force_required ? 'OK' : 'X' }}</span>
+              </div>
 
-                  <div class="cell tags has-addons">
-                    <span class="tag">{{ round($lift_force_3, 0) }} N</span>
-                    <span class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_3 > $force_required ? 'OK' : 'X' }}</span>
-                  </div>
+              <div class="cell tags has-addons">
+                <span class="tag">{{ round($lift_force_3, 0) }} N</span>
+                <span
+                  class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_3 > $force_required ? 'OK' : 'X' }}</span>
+              </div>
 
-                  <div class="cell tags has-addons">
-                    <span class="tag">{{ round($lift_force_4, 0) }} N</span>
-                    <span class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_4 > $force_required ? 'OK' : 'X' }}</span>
-                  </div>
+              <div class="cell tags has-addons">
+                <span class="tag">{{ round($lift_force_4, 0) }} N</span>
+                <span
+                  class="tag {{ $lift_force_1 > $force_required ? 'is-success' : 'is-danger' }}">{{ $lift_force_4 > $force_required ? 'OK' : 'X' }}</span>
+              </div>
 
-              </td>
-            </tr>
+            </td>
+          </tr>
 
-          </table>
+        </table>
       </div>
 
-  </div>
+    </div>
 
 
 </section>

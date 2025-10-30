@@ -32,6 +32,7 @@ class svgClass {
         this.setValues()
         this.drawMastTubes()
         this.drawMastCenterline()
+
     }
 
 
@@ -130,6 +131,9 @@ class svgClass {
         // this.drawAdapters(this.g, 'side')
 
         this.drawTextAndDims()
+
+        this.drawBaseAdapter(this.g)
+
     }
 
 
@@ -263,6 +267,113 @@ class svgClass {
 
 
 
+
+
+
+    drawBaseAdapter(parent, adapterType) {
+
+        let od = 200
+        let h = 10
+
+        let x0 = 300
+        let y0 = 300
+
+        let points =
+            (x0 - (0.58 * od + 2.5 * h)) + ',' + y0 + ',' +
+            (x0 - (0.58 * od + 2.5 * h)) + ',' + (y0 + h) + ',' +
+            (x0 - (0.58 * od)) + ',' + (y0 + h) + ',' +
+            (x0 - (0.58 * od)) + ',' + (y0 + 5 * h) + ',' +
+            (x0 - (0.50 * od)) + ',' + (y0 + 5 * h) + ',' +
+            (x0 - (0.50 * od)) + ',' + (y0 + h) + ',' +
+            (x0 + (0.50 * od)) + ',' + (y0 + h) + ',' +
+            (x0 + (0.50 * od)) + ',' + (y0 + 5 * h) + ',' +
+            (x0 + (0.58 * od)) + ',' + (y0 + 5 * h) + ',' +
+            (x0 + (0.58 * od)) + ',' + (y0 + h) + ',' +
+            (x0 + (0.58 * od + 2.5 * h)) + ',' + (y0 + h) + ',' +
+            (x0 + (0.58 * od + 2.5 * h)) + ',' + y0;
+
+
+
+
+        // let points = this.adapters[adapterType].points
+
+        // points = points[this.svgType]
+
+        let r = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+
+        r.setAttribute('points', points)
+
+
+        r.setAttribute('fill', '#3deb11ff')
+        r.setAttribute('style', 'fill-opacity: .4;')
+        r.setAttribute('stroke', '#28272e')
+        r.setAttribute('stroke-width', '4')
+
+        r.setAttribute('style', 'fill-opacity: .95;')
+
+        parent.appendChild(r)
+    }
+
+
+    drawFixedTubeFlange(parent, adapterType) {
+
+        let od = 200
+        let h = 10
+
+        let x0 = 300
+        let y0 = 300
+
+        let points =
+            (x0 - (0.58 * od + 2.5 * h)) + ',' + y0 + ',' +
+            (x0 - (0.58 * od + 2.5 * h)) + ',' + (y0 + h) + ',' +
+            (x0 - (0.58 * od)) + ',' + (y0 + h) + ',' +
+            (x0 - (0.58 * od)) + ',' + (y0 + 5 * h) + ',' +
+            (x0 - (0.50 * od)) + ',' + (y0 + 5 * h) + ',' +
+            (x0 - (0.50 * od)) + ',' + (y0 + h) + ',' +
+            (x0 + (0.50 * od)) + ',' + (y0 + h) + ',' +
+            (x0 + (0.50 * od)) + ',' + (y0 + 5 * h) + ',' +
+            (x0 + (0.58 * od)) + ',' + (y0 + 5 * h) + ',' +
+            (x0 + (0.58 * od)) + ',' + (y0 + h) + ',' +
+            (x0 + (0.58 * od + 2.5 * h)) + ',' + (y0 + h) + ',' +
+            (x0 + (0.58 * od + 2.5 * h)) + ',' + y0;
+
+
+
+
+        // let points = this.adapters[adapterType].points
+
+        // points = points[this.svgType]
+
+        let r = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+
+        r.setAttribute('points', points)
+
+
+        r.setAttribute('fill', '#3deb11ff')
+        r.setAttribute('style', 'fill-opacity: .4;')
+        r.setAttribute('stroke', '#28272e')
+        r.setAttribute('stroke-width', '4')
+
+        r.setAttribute('style', 'fill-opacity: .95;')
+
+        parent.appendChild(r)
+    }
+
+
+
+
+
+
+
+    // <polygon
+    //     points="
+    //     60,100
+    //     100,180
+    //     140,140
+    //     180,180
+    //     220,100
+    //   "
+    // />
 
 
 

@@ -182,7 +182,7 @@ class Powerline extends Component
 
         // P = T*n*2PI/60
 
-        $this->gearbox_output_torque = $this->gearbox_efficiency*$this->motor_max_torque/$this->gearbox_reduction_ratio;
+        $this->gearbox_output_torque = $this->gearbox_efficiency*$this->motor_max_torque*$this->gearbox_reduction_ratio/100;
 
         $this->gearbox_angular_velocity_rpm = $this->motor_rpm/$this->gearbox_reduction_ratio;
         $this->gearbox_angular_velocity_rad = 2*pi()*$this->gearbox_angular_velocity_rpm/60; // rad/sec

@@ -46,21 +46,13 @@ class Engineering extends Component
                 $this->geometryRectangle();
                 break;
 
-
             case 'geometry-lshape':
                 $this->geometryLshape();
                 break;
 
-
             case 'mast-pneumatic':
                 //$this->geometryLshape();
                 break;
-
-
-
-
-
-
 
             default:
                 # code...

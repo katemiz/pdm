@@ -719,7 +719,7 @@
 
                 @case('MultipleConfigured')
                     @if ($uid)
-                        <button wire:click.prevent="updateItem()" class="button is-dark">Update Multiple Configured Part</button>
+                        <button wire:click.prevent="updateItem()" class="button is-dark">Update Multiple Configured Partttt</button>
                     @else
                         <button wire:click.prevent="storeItem()" class="button is-dark">New Multiple Configured Part</button>
                     @endif

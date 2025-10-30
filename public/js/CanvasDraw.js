@@ -13,12 +13,14 @@ class CanvasClass {
 
 
         // Constants
-        this.MX = 300;       // Margin in X Direction
-        this.MY = 30;       // Margin in X Direction
+        this.MX = 1;       // % Margin in X Direction
+        this.MY = 1;       // % Margin in X Direction
 
         this.R = 6;        // DIA OF REFERENCE CIRCLES
 
         this.CANVAS_DIV = 'svgDiv'
+
+        this.totalH;
 
         this.hasBaseAdapter = true
         this.hasTopAdapter = true
@@ -29,12 +31,50 @@ class CanvasClass {
     run() {
 
         this.setValues()
-        this.drawMastTubes()
+        // this.drawMastTubes()
         this.drawBaseAdapter()
+
+
+        // this.drawFixedTubeFlange(tube, parent) {
+
         this.drawMastCenterline()
 
         this.svg.appendChild(this.g)
         this.svg.appendChild(this.gtext)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        // let r = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+
+
+
+        // r.setAttribute('x', 10)
+        // r.setAttribute('y', 10)
+        // r.setAttribute('width', this.svgW - 20)
+        // r.setAttribute('height', this.svgH - 20)
+
+        // r.setAttribute('fill', '#d3b717ff')
+        // r.setAttribute('style', 'fill-opacity: .25;')
+        // r.setAttribute('stroke', '#28272e')
+        // r.setAttribute('stroke-width', '4')
+
+        // this.g.appendChild(r)
 
     }
 
@@ -63,31 +103,32 @@ class CanvasClass {
         let totalW, totalH
 
         if (this.graphType === 'Loads') {
-            totalW = 2 * this.MX + this.data.extendedHeight + 2 * this.data.zOffset
-            totalH = 2 * this.MY + this.data.maxMastTubeDia + 2 * this.data.xOffset
+            totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
+            totalH = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
         }
 
         if (this.graphType === 'Nested') {
-            totalW = 2 * this.MX + this.data.nestedHeight + 2 * this.data.zOffset
-            totalH = 2 * this.MY + this.data.maxMastTubeDia + 2 * this.data.xOffset
+            totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
+            totalH = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
         }
 
         if (this.graphType === 'Extended') {
-            totalW = 2 * this.MX + this.data.extendedHeight + 2 * this.data.zOffset
-            totalH = 2 * this.MY + this.data.maxMastTubeDia + 2 * this.data.xOffset
+            totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
+            totalH = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
         }
 
+        this.totalH = totalW
 
 
         // x,y Scales
         this.sx = this.svgW / totalW
-        this.sy = this.svgH / totalH
+        this.sy = this.svgH / totalW
 
 
         // console.log('qqqqqqqqqqq', this.svgW, totalW, this.sx)
 
-        this.x0 = this.svgW / 3
-        this.y0 = this.svgH - this.MY
+        this.x0 = this.totalH / 3
+        this.y0 = this.totalH * this.MY / 100
 
         console.log('x0 y0', this.x0, this.y0)
 
@@ -117,7 +158,12 @@ class CanvasClass {
             case 'Nested':
             default:
                 // this.g.setAttribute('transform', ' translate(' + this.x0 + ',' + this.y0 + ') scale(' + this.scale + ') rotate(180)')
-                this.g.setAttribute('transform', ' translate(' + this.x0 + ',' + this.y0 + ') scale(' + this.sx + ') rotate(180)')
+                // this.g.setAttribute('transform', ' translate(' + this.x0 + ',' + this.y0 + ') scale(' + this.sx + ') rotate(180)')
+
+                // this.g.setAttribute('transform', ' translate(' + this.x0 + ',' + this.y0 + ') scale(' + this.sx + ')')
+
+
+
                 break;
         }
 
@@ -125,9 +171,10 @@ class CanvasClass {
         // HAVE A DFFERENT GROUP FOR TEXT
         this.gtext = document.createElementNS('http://www.w3.org/2000/svg', 'g')
         // this.gtext.setAttribute('transform', ' scale(' + this.sx + ')')
-        this.gtext.setAttribute('transform', ' translate(' + this.x0 + ',' + this.y0 + ') scale(' + this.sx + ')')
+        // this.gtext.setAttribute('transform', ' translate(' + this.x0 + ',' + (this.svgH - this.y0) + ') scale(' + this.sx + ')')
 
 
+        console.log('canvas w,h', this.svgW, this.svgH)
 
 
     }
@@ -138,31 +185,9 @@ class CanvasClass {
     drawMastTubes() {
 
         for (const [key, tube] of Object.entries(this.data.mastTubes)) {
-
             this.drawRectangle(tube, this.g);
-
-            this.drawFixedTubeFlange(tube, this.g)
-
-            this.drawDimTextLine(tube)
-
-
-            // if (this.svgType === 'Nested') {
-            //     this.drawRectangle(profile.od, profile.length, profile.nested.A.x, profile.nested.A.y, this.g);
-            // }
-
-            // if (this.svgType === 'Extended') {
-            //     this.drawRectangle(profile.od * this.k, profile.length, profile.extended.A.x * this.k, profile.extended.A.y, this.g);
-            // }
+            // this.drawDimTextLine(tube)
         }
-
-
-
-
-        // this.drawAdapters(this.g, 'base')
-        // this.drawAdapters(this.g, 'top')
-        // this.drawAdapters(this.g, 'side')
-
-        // this.drawTextAndDims()
 
 
     }
@@ -173,7 +198,7 @@ class CanvasClass {
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
 
-        let x = 0, y
+        let y
 
         switch (this.graphType) {
             case 'Extended':
@@ -186,13 +211,10 @@ class CanvasClass {
                 break;
         }
 
-        // let lowerLeft = {"x":x-tube.od/2,"y":y}
-        // let upperRight = {"x":x+tube.od/2,"y":y+tube.length}
-
-        r.setAttribute('x', x - tube.od / 2)
-        r.setAttribute('y', y)
-        r.setAttribute('width', tube.od)
-        r.setAttribute('height', tube.length)
+        r.setAttribute('x', this.sx * (this.x0 - tube.od / 2))
+        r.setAttribute('y', this.sy * (this.totalH - y))
+        r.setAttribute('width', this.sx * tube.od)
+        r.setAttribute('height', this.sy * tube.length)
 
         r.setAttribute('fill', '#EAE2B7')
         r.setAttribute('style', 'fill-opacity: .25;')
@@ -208,44 +230,45 @@ class CanvasClass {
     drawFixedTubeFlange(tube, parent) {
 
         let od = tube.od
-        let h = this.data.headLength * 0.5
+        let height = this.data.headLength * 0.5
 
-        let x0 = 0
-        let y0
+        let centerx = 0
+        let centery = 0
 
-        switch (this.graphType) {
-            case 'Extended':
-                y0 = tube.bottomCenterPointExtended + tube.length
-                break;
+        // Counterclockwise
+        let points1 = [
+            { "x": centerx - 0.50 * od, "y": centery },
+            { "x": centerx - 0.75 * od, "y": centery },
+            { "x": centerx - 0.75 * od, "y": 0.25 * height },
+            { "x": centerx - 0.58 * od, "y": 0.25 * height },
+            { "x": centerx - 0.58 * od, "y": height },
+            { "x": centerx - 0.50 * od, "y": height },
+        ]
 
-            case 'Nested':
-            default:
-                y0 = tube.bottomCenterPointNested + tube.length
-                break;
-        }
+        let points2 = [
+            { "x": centerx + 0.50 * od, "y": centery },
+            { "x": centerx + 0.75 * od, "y": centery },
+            { "x": centerx + 0.75 * od, "y": 0.25 * height },
+            { "x": centerx + 0.58 * od, "y": 0.25 * height },
+            { "x": centerx + 0.58 * od, "y": height },
+            { "x": centerx + 0.50 * od, "y": height },
+        ]
+
+        console.log("öncesi \n", points2)
+
+        console.log("totalH \n", this.totalH)
 
 
+        points1 = this.transformPoints(points1, true)
+        points2 = this.transformPoints(points2, true)
 
-        let points =
-            (x0 - (0.50 * od)) + ',' + y0 + ',' +
-            (x0 - (0.74 * od)) + ',' + y0 + ',' +
-            (x0 - (0.74 * od)) + ',' + (y0 - .25 * h) + ',' +
-            (x0 - (0.58 * od)) + ',' + (y0 - .25 * h) + ',' +
-            (x0 - (0.58 * od)) + ',' + (y0 - h) + ',' +
-            (x0 - (0.50 * od)) + ',' + (y0 - h) + ',';
 
-        let points2 =
-            (x0 + (0.50 * od)) + ',' + y0 + ',' +
-            (x0 + (0.74 * od)) + ',' + y0 + ',' +
-            (x0 + (0.74 * od)) + ',' + (y0 - .25 * h) + ',' +
-            (x0 + (0.58 * od)) + ',' + (y0 - .25 * h) + ',' +
-            (x0 + (0.58 * od)) + ',' + (y0 - h) + ',' +
-            (x0 + (0.50 * od)) + ',' + (y0 - h) + ',';
+        console.log("PPPP \n", points2)
 
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
 
-        r.setAttribute('points', points)
+        r.setAttribute('points', points1)
         r.setAttribute('fill', '#3deb11ff')
         r.setAttribute('style', 'fill-opacity: .4;')
         r.setAttribute('stroke', '#28272e')
@@ -257,7 +280,7 @@ class CanvasClass {
         let r2 = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
 
         r2.setAttribute('points', points2)
-        r2.setAttribute('fill', '#3deb11ff')
+        r2.setAttribute('fill', '#4976c9ff')
         r2.setAttribute('style', 'fill-opacity: .4;')
         r2.setAttribute('stroke', '#28272e')
         r2.setAttribute('stroke-width', '1')
@@ -268,6 +291,28 @@ class CanvasClass {
         parent.appendChild(r2)
     }
 
+
+
+    transformPoints(dizin, returnString = false) {
+
+        let transformedPoints = []
+
+        dizin.forEach(element => {
+
+            transformedPoints.push(
+                {
+                    x: this.sx * (this.x0 + element.x),
+                    y: this.sy * (this.totalH - element.y + this.y0)
+                }
+            )
+        });
+
+        if (returnString) {
+            return transformedPoints.map(point => `${point.x},${point.y}`).join(',');
+        }
+
+        return transformedPoints
+    }
 
 
 
@@ -294,16 +339,16 @@ class CanvasClass {
         }
 
 
-        console.log('y', this.x0, y, this.svgH, x1, x2)
+        console.log('x0 y0 y H w x1 x2', this.x0, this.y0, y, this.svgH, this.svgW, x1, x2)
 
 
 
         let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
         l.setAttribute('x1', x1)
-        l.setAttribute('y1', y - 1070)
+        l.setAttribute('y1', this.svgH - y)
         l.setAttribute('x2', x2)
-        l.setAttribute('y2', y - 1070)
+        l.setAttribute('y2', this.svgH - y)
         l.setAttribute('stroke', '#4F6D7A')
         l.setAttribute('stroke-width', '2')
 
@@ -312,7 +357,7 @@ class CanvasClass {
         let t = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
         t.setAttribute('x', x2 + 220)
-        t.setAttribute('y', this.svgH - y - 1070)
+        t.setAttribute('y', this.svgH - y)
         t.setAttribute('font-size', "4em")
         t.innerHTML = tube.bottomCenterPointNested
 
@@ -329,27 +374,29 @@ class CanvasClass {
         let od = this.data.mastTubes[0].od
         let h = this.data.baseAdapterThk
 
-        // let x0 = this.x0
-        // let y0 = this.y0
+        let centerx = 0
+        let centery = 0
 
-        let x0 = 0
-        let y0 = 0
+        // Counterclockwise
+        let points = [
+            { "x": centerx - 0.75 * od, "y": centery },
+            { "x": centerx - 0.75 * od, "y": h },
+            { "x": centerx - 0.58 * od, "y": h },
+            { "x": centerx - 0.58 * od, "y": 5 * h },
+            { "x": centerx - 0.50 * od, "y": 5 * h },
+            { "x": centerx - 0.50 * od, "y": h },
+            { "x": centerx + 0.50 * od, "y": h },
+            { "x": centerx + 0.50 * od, "y": 5 * h },
+            { "x": centerx + 0.58 * od, "y": 5 * h },
+            { "x": centerx + 0.58 * od, "y": h },
+            { "x": centerx + 0.75 * od, "y": h },
+            { "x": centerx + 0.75 * od, "y": centery }
+        ]
+        console.log("oncesi", points)
 
-        console.log(x0, y0)
+        points = this.transformPoints(points, true)
 
-        let points =
-            (x0 - (0.58 * od + 2.5 * h)) + ',' + y0 + ',' +
-            (x0 - (0.58 * od + 2.5 * h)) + ',' + (y0 + h) + ',' +
-            (x0 - (0.58 * od)) + ',' + (y0 + h) + ',' +
-            (x0 - (0.58 * od)) + ',' + (y0 + 5 * h) + ',' +
-            (x0 - (0.50 * od)) + ',' + (y0 + 5 * h) + ',' +
-            (x0 - (0.50 * od)) + ',' + (y0 + h) + ',' +
-            (x0 + (0.50 * od)) + ',' + (y0 + h) + ',' +
-            (x0 + (0.50 * od)) + ',' + (y0 + 5 * h) + ',' +
-            (x0 + (0.58 * od)) + ',' + (y0 + 5 * h) + ',' +
-            (x0 + (0.58 * od)) + ',' + (y0 + h) + ',' +
-            (x0 + (0.58 * od + 2.5 * h)) + ',' + (y0 + h) + ',' +
-            (x0 + (0.58 * od + 2.5 * h)) + ',' + y0;
+        console.log("sonras", points)
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
 
@@ -368,12 +415,14 @@ class CanvasClass {
 
         let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
-        l.setAttribute('x1', 0)
-        l.setAttribute('y1', this.MY / 2)
-        l.setAttribute('x2', 0)
-        l.setAttribute('y2', this.svgH - this.MY / 2)
+        l.setAttribute('x1', this.sx * this.x0)
+        l.setAttribute('y1', this.sy * this.totalH * this.MY / 100)
+        l.setAttribute('x2', this.sx * this.x0)
+        l.setAttribute('y2', this.sy * this.totalH * (1 - this.MY / 100))
         l.setAttribute('stroke', 'rgb(100, 0, 0)')
         l.setAttribute('stroke-width', '1')
+
+        console.log('totalH', this.totalH, this.sy)
 
         this.g.appendChild(l)
     }
@@ -554,33 +603,6 @@ function SILdrawCanvas(data) {
     let p = new CanvasClass(e.detail.data, e.detail.graphType);
 
     p.run()
-
-
-
-
-
-
-
-
-
-
-    // let canvasParent = document.getElementById("canvasDiv");
-
-    // if (document.getElementById("figCanvas")) {
-    //     document.getElementById("figCanvas").remove();
-    // }
-
-    // let canvas = document.createElement("canvas");
-    // canvas.id = "figCanvas";
-
-    // canvasParent.appendChild(canvas);
-
-    // let myMast = new CanvasClass(data, canvas);
-    // myMast.setCanvasValues();
-
-    // console.log(new Date())
-
-
 
 }
 

@@ -1,29 +1,8 @@
 <section class="section container">
 
-    {{--
-    <script src="{{ asset(path: '/js/svgClass.js') }}"></script> --}}
     <script src="{{ asset('/js/CanvasDraw.js') }}"> </script>
 
     <script>
-
-        // document.addEventListener('drawSvg', event => {
-
-        //     const solutionSet = event.detail[0].solutionSet;
-        //     const solutionTubeData = event.detail[0].solutionTubeData;
-        //     const currentSolution = event.detail[0].currentSolution;
-        //     const svgType = event.detail[0].svgType;
-        //     const adapters = event.detail[0].adapters
-
-        //     if (document.getElementById('svg')) {
-        //         document.getElementById('svg').remove()
-        //     }
-
-        //     let p = new svgClass(solutionSet, solutionTubeData, currentSolution, svgType, adapters);
-
-        //     p.run()
-        // });
-
-
 
         window.addEventListener("triggerCanvasDraw", function (e) {
 
@@ -38,10 +17,6 @@
             p.run()
         })
 
-
-
-
-
     </script>
 
     <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
@@ -51,10 +26,32 @@
         </ul>
     </nav>
 
-    <header class="mb-6">
-        <h1 class="title has-text-weight-light is-size-1">Mast Configurator</h1>
-        <h2 class="subtitle has-text-weight-light">Payload - Extended / Nested Height - Weight</h2>
-    </header>
+
+
+    <div class="fixed-grid has-2-cols">
+
+        <div class="grid">
+            
+            <div class="cell">
+
+                <header class="mb-6">
+                    <h1 class="title has-text-weight-light is-size-1">Mast Configurator</h1>
+                    <h2 class="subtitle has-text-weight-light">Payload - Extended / Nested Height - Weight</h2>
+                </header>
+
+            </div>
+
+            <div class="cell has-text-right">
+                <a href="/product-brochure" class="button is-danger is-light" target="_blank">
+                    <span class="icon has-text-danger"><x-carbon-document-pdf /></span>
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+
+
 
 
 
@@ -308,5 +305,12 @@
     </div>
 
 
+
+    <div class="column">
+
+
+        <img id="graphImage"  alt="Mast Configurator Diagram">
+
+    </div>
 
 </section>

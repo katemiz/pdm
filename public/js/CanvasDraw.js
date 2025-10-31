@@ -2,15 +2,11 @@ class CanvasClass {
 
     constructor(data, graphType) {
 
-
         console.log('CanvasClass start:', data,graphType)
-
 
         // Data
         this.data = data
-
         this.graphType = graphType
-
 
         // Constants
         this.MX = 3;       // % Margin in X Direction
@@ -37,7 +33,7 @@ class CanvasClass {
 
         // TUBES
         for (const [key, tube] of Object.entries(this.data.mastTubes)) {
-            this.drawRectangle(tube, this.g);
+            this.drawRectangle(tube);
         }
 
         // DIM TEXT LINES
@@ -54,14 +50,10 @@ class CanvasClass {
         this.drawPayloadAdapter(this.data.payloadTube, this.g);
 
         this.drawMastCenterline()
-
-
         this.drawDimTextLineTopBottom()
-
         this.svg.appendChild(this.g)
-        this.svg.appendChild(this.gtext)
 
-
+        this.exportToPng()
 
 
     }
@@ -88,30 +80,21 @@ class CanvasClass {
         this.svg.setAttribute('width', this.svgW)
         this.svg.setAttribute('height', this.svgH)
 
-        let totalW, totalH
-
         if (this.graphType === 'Loads') {
             this.totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
-            totalH = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
         }
 
         if (this.graphType === 'Nested') {
             this.totalH = (this.data.nestedHeight ) / (1 - 2 * this.MX / 100)
-            totalW = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
         }
 
         if (this.graphType === 'Extended') {
             this.totalH = (this.data.extendedHeight) / (1 - 2 * this.MX / 100)
-            totalH = (this.data.maxMastTubeDia + 2 * this.data.xOffset) / (1 - 2 * this.MY / 100)
         }
-
-
 
         // x,y Scales
         this.sx = this.svgW / this.totalH
         this.sy = this.svgH / this.totalH
-
-
 
         this.x0 = this.totalH / 3
         this.y0 = this.totalH * this.MY / 100
@@ -138,29 +121,10 @@ class CanvasClass {
 
         this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
 
-        switch (this.graphType) {
+        this.gNested = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        this.gExtended = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        this.gLoads = document.createElementNS('http://www.w3.org/2000/svg', 'g')
 
-            case 'Extended':
-            case 'Nested':
-            default:
-                // this.g.setAttribute('transform', ' translate(' + this.x0 + ',' + this.y0 + ') scale(' + this.scale + ') rotate(180)')
-                // this.g.setAttribute('transform', ' translate(' + this.x0 + ',' + this.y0 + ') scale(' + this.sx + ') rotate(180)')
-
-                // this.g.setAttribute('transform', ' translate(' + this.x0 + ',' + this.y0 + ') scale(' + this.sx + ')')
-
-
-
-                break;
-        }
-
-
-        // HAVE A DFFERENT GROUP FOR TEXT
-        this.gtext = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-        // this.gtext.setAttribute('transform', ' scale(' + this.sx + ')')
-        // this.gtext.setAttribute('transform', ' translate(' + this.x0 + ',' + (this.svgH - this.y0) + ') scale(' + this.sx + ')')
-
-
-        console.log('canvas w,h', this.svgW, this.svgH)
 
 
     }
@@ -171,7 +135,7 @@ class CanvasClass {
 
 
 
-    drawRectangle(tube, parent) {
+    drawRectangle(tube) {
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
 
@@ -198,20 +162,7 @@ class CanvasClass {
         r.setAttribute('stroke', '#28272e')
         r.setAttribute('stroke-width', '1')
 
-        parent.appendChild(r)
-
-
-                console.log({
-                    svgH: this.svgH,
-                    totalH: this.totalH,
-                    sx: this.sx,
-                    x0: this.x0,
-                    y0: this.y0,
-                    tubeod: tube.od,
-                    tubeLength: tube.length,
-                    y: y,
-                })
-
+        this.g.appendChild(r)
     }
 
 
@@ -338,7 +289,7 @@ class CanvasClass {
         l.setAttribute('stroke', '#4F6D7A')
         l.setAttribute('stroke-width', '0.5')
 
-        this.gtext.appendChild(l)
+        this.g.appendChild(l)
 
         let t = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
@@ -347,7 +298,7 @@ class CanvasClass {
         t.setAttribute('font-size', "1em")
         t.innerHTML = textValue
 
-        this.gtext.appendChild(t)
+        this.g.appendChild(t)
 
 
         // TOP FACE coordinates
@@ -360,7 +311,7 @@ class CanvasClass {
         l2.setAttribute('stroke', '#4F6D7A')
         l2.setAttribute('stroke-width', '0.5')
 
-        this.gtext.appendChild(l2)
+        this.g.appendChild(l2)
 
         let t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
@@ -369,7 +320,7 @@ class CanvasClass {
         t2.setAttribute('font-size', "1em")
         t2.innerHTML = textValue + tube.length
 
-        this.gtext.appendChild(t2)
+        this.g.appendChild(t2)
 
 
 
@@ -383,12 +334,8 @@ class CanvasClass {
 
         let offset = parseInt(this.data.maxMastTubeDia)
         let textLeaderLength = parseInt(this.data.maxMastTubeDia)
-
         let y
-
         let textValue
-
-
 
         // BOTTOM FACE coordinates
         let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
@@ -400,18 +347,16 @@ class CanvasClass {
         l.setAttribute('stroke', '#4F6D7A')
         l.setAttribute('stroke-width', '0.5')
 
-        this.gtext.appendChild(l)
+        this.g.appendChild(l)
 
         let t = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
-        t.setAttribute('x', this.sx * (this.x0 - offset - textLeaderLength) - 10)
-        t.setAttribute('y', this.sy * (this.totalH - this.y0 - 5))
+        t.setAttribute('x', this.sx * (this.x0 - offset - textLeaderLength) - 50)
+        t.setAttribute('y', this.sy * (this.totalH - this.y0 + 15))
         t.setAttribute('font-size', "1em")
         t.innerHTML = "0"
 
-        this.gtext.appendChild(t)
-
-
+        this.g.appendChild(t)
 
         switch (this.graphType) {
             case 'Extended':
@@ -426,13 +371,6 @@ class CanvasClass {
                 break;
         }
 
-console.log("ddddddddddddddd", this.y0 )
-
-let a = this.sy * (this.totalH - (y + this.y0))
-
-console.log("ddddddddddddddd", y )
-
-
         // // TOP FACE coordinates
         let l2 = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
@@ -443,20 +381,16 @@ console.log("ddddddddddddddd", y )
         l2.setAttribute('stroke', '#4F6D7A')
         l2.setAttribute('stroke-width', '0.5')
 
-        this.gtext.appendChild(l2)
+        this.g.appendChild(l2)
 
         let t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
-        t2.setAttribute('x', this.sx * (this.x0 - offset - textLeaderLength) + 5)
-        t2.setAttribute('y', this.sy * (this.totalH - (y + this.y0)) + 5)
+        t2.setAttribute('x', this.sx * (this.x0 - offset - textLeaderLength) - 70)
+        t2.setAttribute('y', this.sy * (this.totalH - (y + this.y0 )) + 5)
         t2.setAttribute('font-size', "1em")
         t2.innerHTML = y
 
-        this.gtext.appendChild(t2)
-
-
-
-
+        this.g.appendChild(t2)
     }
 
 
@@ -551,8 +485,6 @@ console.log("ddddddddddddddd", y )
         l.setAttribute('y2', this.sy * this.totalH * (1 - this.MY / 100))
         l.setAttribute('stroke', 'rgb(100, 0, 0)')
         l.setAttribute('stroke-width', '1')
-
-        console.log('totalH', this.totalH, this.sy)
 
         this.g.appendChild(l)
     }
@@ -709,6 +641,90 @@ console.log("ddddddddddddddd", y )
         this.g.stroke();
         this.g.restore();
     }
+
+
+
+
+
+
+
+
+
+
+    exportToPng(){
+
+        console.log('son data', this.data)
+
+        localStorage.setItem('data', JSON.stringify(this.data));
+
+        return true;
+
+
+
+        const girdi = document.getElementById('svg')
+        // const cikti = document.getElementById('resim')
+
+        let svgData = new XMLSerializer().serializeToString(girdi)
+
+        if (!svgData.match(/xmlns/i)) {
+            svgData = svgData.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+        }
+
+        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' })
+        const url = URL.createObjectURL(svgBlob)
+
+        const image = new Image()
+
+        image.onload = () => {
+            console.log('Image loaded!')
+            
+            const width = girdi.getAttribute('width') || girdi.getBoundingClientRect().width || 800
+            const height = girdi.getAttribute('height') || girdi.getBoundingClientRect().height || 600
+
+            const canvas = document.createElement('canvas')
+            canvas.width = width
+            canvas.height = height
+
+            const context = canvas.getContext('2d')
+            context.drawImage(image, 0, 0, width, height)
+
+            const dataUrl = canvas.toDataURL('image/png')
+            // cikti.src = dataUrl
+
+
+
+
+
+
+            canvas.toBlob((blob) => {
+                const downloadUrl = URL.createObjectURL(blob)
+                const link = document.createElement('a')
+                link.download = 'converted-image.png' // Set filename here
+                link.href = downloadUrl
+                link.click()
+                
+                // Clean up
+                URL.revokeObjectURL(downloadUrl)
+            }, 'image/png')
+
+
+
+
+            URL.revokeObjectURL(url) // Clean up
+        }
+
+        image.onerror = (e) => {
+            console.error('Image failed to load!', e)
+            URL.revokeObjectURL(url)
+        }
+
+        image.src = url
+    }
+
+
+
+
+
 }
 
 
@@ -719,12 +735,7 @@ console.log("ddddddddddddddd", y )
 
 function SILdrawCanvas(data) {
 
-
     console.log("All Data in DrawCanvas", data)
-
-
-
-
 
     if (document.getElementById('svg')) {
         document.getElementById('svg').remove()

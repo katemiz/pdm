@@ -166,7 +166,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/engineering/mast/{action}', EngMast::class);
     Route::get('/engineering/{action}', Engineering::class);
 
-
+    Route::get('/product-brochure', function () {
+        return view('product-brochure');
+    });
 
 
     // DENEME AMACLI

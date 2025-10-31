@@ -235,7 +235,7 @@ class Configurator extends Component
 
     public $mastWeight = 0; // kg
 
-
+    public $maxPayloadCapacity = 500; // kg
 
 
 
@@ -250,6 +250,7 @@ class Configurator extends Component
 
     public function render()
     {
+
         $this->error = null; 
 
         if ($this->endTubeNo <= $this->startTubeNo) {
@@ -265,7 +266,6 @@ class Configurator extends Component
         $this->WindLoadOnPayload();
 
         $this->getMastHeights();
-        $this->calculateMastWeight();
         $this->calculateTubeWindLoads();
         $this->prepareAllData();
 
@@ -415,6 +415,13 @@ class Configurator extends Component
         $this->allData["windLoadOnPayload"] = $this->windLoadOnPayload;
         $this->allData["allTubes"] = $this->allTubes;
         $this->allData["mastTubes"] = $this->mastTubes;
+
+        $this->calculateMastWeight();
+        $this->allData["mastWeight"] = $this->mastWeight;
+        $this->allData["maxPayloadCapacity"] = $this->maxPayloadCapacity;
+        $this->allData["windspeed"] = $this->windspeed;
+        $this->allData["sailarea"] = $this->sailarea;
+
     }
 
 
@@ -680,6 +687,10 @@ class Configurator extends Component
 
         return true;
     }
+
+
+
+
 
 
 

@@ -163,6 +163,20 @@
                 </div>
             </div>
 
+
+
+            <div class="cell my-2">
+
+                <label class="label">Maximum Payload<br>Capacity [kg]</label>
+                <div class="control">
+                    <input class="input" type="number" placeholder="Head Dimension" wire:model.live="maxPayloadCapacity"
+                        step="1">
+                </div>
+            </div>
+
+
+
+
         </div>
 
     </div>

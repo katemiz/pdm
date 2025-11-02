@@ -6,6 +6,7 @@ use Livewire\Component;
 
 use App\Livewire\EngMast;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class Configurator extends Component
@@ -422,6 +423,21 @@ class Configurator extends Component
         $this->allData["windspeed"] = $this->windspeed;
         $this->allData["sailarea"] = $this->sailarea;
 
+        $q = [
+            $this->maxPayloadCapacity,
+            $this->startTubeNo,
+            $this->endTubeNo,
+            $this->lengthMTTubes,
+            $this->overlapMTTubes,
+            $this->headMTTubes,
+            $this->windspeed,
+            $this->sailarea
+        ];
+
+        $this->allData["qr"] = url('/product-brochure?qr=').implode('-',$q);
+                    
+
+
     }
 
 
@@ -687,6 +703,35 @@ class Configurator extends Component
 
         return true;
     }
+
+
+
+
+
+
+
+
+
+
+
+    // In your controller
+    public function generatePDF()
+    {
+
+
+
+        return $this->redirect('/product-brochure');
+
+
+    }
+
+
+
+
+
+
+
+
 
 
 

@@ -2,7 +2,7 @@ class CanvasClass {
 
     constructor(data, graphType) {
 
-        console.log('CanvasClass start:', data,graphType)
+        // console.log('CanvasClass start:', data, graphType)
 
         // Data
         this.data = data
@@ -27,7 +27,7 @@ class CanvasClass {
     run() {
 
         this.setValues()
-     
+
         // BASE ADAPTER
         this.drawBaseAdapter()
 
@@ -53,7 +53,16 @@ class CanvasClass {
         this.drawDimTextLineTopBottom()
         this.svg.appendChild(this.g)
 
-        this.exportToPng()
+        localStorage.setItem('data', JSON.stringify(this.data))
+
+
+
+        this.svgToPng();
+
+        this.svgToPng2(document.getElementById('svg'), 0, 0, 100, 100);
+
+
+        //this.exportToPng()
 
 
     }
@@ -85,7 +94,7 @@ class CanvasClass {
         }
 
         if (this.graphType === 'Nested') {
-            this.totalH = (this.data.nestedHeight ) / (1 - 2 * this.MX / 100)
+            this.totalH = (this.data.nestedHeight) / (1 - 2 * this.MX / 100)
         }
 
         if (this.graphType === 'Extended') {
@@ -99,7 +108,7 @@ class CanvasClass {
         this.x0 = this.totalH / 3
         this.y0 = this.totalH * this.MY / 100
 
-        console.log('x0 y0', this.x0, this.y0)
+        // console.log('x0 y0', this.x0, this.y0)
 
         // SVG BACKGROUND RECTANGLE
         let bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
@@ -386,7 +395,7 @@ class CanvasClass {
         let t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text')
 
         t2.setAttribute('x', this.sx * (this.x0 - offset - textLeaderLength) - 70)
-        t2.setAttribute('y', this.sy * (this.totalH - (y + this.y0 )) + 5)
+        t2.setAttribute('y', this.sy * (this.totalH - (y + this.y0)) + 5)
         t2.setAttribute('font-size', "1em")
         t2.innerHTML = y
 
@@ -418,11 +427,11 @@ class CanvasClass {
             { "x": centerx + 0.75 * od, "y": h },
             { "x": centerx + 0.75 * od, "y": centery }
         ]
-        console.log("oncesi", points)
+        // console.log("oncesi", points)
 
         points = this.transformPoints(points, true)
 
-        console.log("sonras", points)
+        // console.log("sonras", points)
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
 
@@ -453,8 +462,8 @@ class CanvasClass {
                 break;
         }
 
-        let topLeft = { 
-            x: this.x0 - smallestTube.od*1.5,
+        let topLeft = {
+            x: this.x0 - smallestTube.od * 1.5,
             y: this.totalH - (y + smallestTube.length + this.y0 + this.data.topAdapterThk)
         }
 
@@ -651,13 +660,12 @@ class CanvasClass {
 
 
 
-    exportToPng(){
+    svgToPng() {
 
-        console.log('son data', this.data)
+        // console.log('son data', this.data)
 
         localStorage.setItem('data', JSON.stringify(this.data));
 
-        return true;
 
 
 
@@ -677,7 +685,7 @@ class CanvasClass {
 
         image.onload = () => {
             console.log('Image loaded!')
-            
+
             const width = girdi.getAttribute('width') || girdi.getBoundingClientRect().width || 800
             const height = girdi.getAttribute('height') || girdi.getBoundingClientRect().height || 600
 
@@ -689,6 +697,8 @@ class CanvasClass {
             context.drawImage(image, 0, 0, width, height)
 
             const dataUrl = canvas.toDataURL('image/png')
+
+            document.getElementById('nested').svg = dataUrl
             // cikti.src = dataUrl
 
 
@@ -696,30 +706,125 @@ class CanvasClass {
 
 
 
-            canvas.toBlob((blob) => {
-                const downloadUrl = URL.createObjectURL(blob)
-                const link = document.createElement('a')
-                link.download = 'converted-image.png' // Set filename here
-                link.href = downloadUrl
-                link.click()
-                
-                // Clean up
-                URL.revokeObjectURL(downloadUrl)
-            }, 'image/png')
+            // canvas.toBlob((blob) => {
+            //     const downloadUrl = URL.createObjectURL(blob)
+            //     const link = document.createElement('a')
+            //     link.download = 'converted-image.png' // Set filename here
+            //     link.href = downloadUrl
+            //     link.click()
+
+            //     // Clean up
+            //     URL.revokeObjectURL(downloadUrl)
+            // }, 'image/png')
 
 
 
 
-            URL.revokeObjectURL(url) // Clean up
+            // URL.revokeObjectURL(url) // Clean up
         }
 
-        image.onerror = (e) => {
-            console.error('Image failed to load!', e)
-            URL.revokeObjectURL(url)
-        }
+        // image.onerror = (e) => {
+        //     console.error('Image failed to load!', e)
+        //     URL.revokeObjectURL(url)
+        // }
 
-        image.src = url
+        // image.src = url
     }
+
+
+
+
+
+
+
+
+
+
+
+    svgToPng2(svgElement, x, y, width, height) {
+
+
+
+        return new Promise((resolve, reject) => {
+
+            // 1. Serialize and Fix Namespace
+            let svgData = new XMLSerializer().serializeToString(svgElement);
+            if (!svgData.match(/xmlns/i)) {
+                svgData = svgData.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
+            }
+
+            // 2. Create Loadable Image Source
+            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+            const url = URL.createObjectURL(svgBlob);
+            const image = new Image();
+
+            // --- Core Asynchronous Logic ---
+            image.onload = () => {
+                try {
+                    // Determine dimensions for the Canvas (for best quality, match source size)
+                    const canvasWidth = svgElement.getAttribute('width') || svgElement.getBoundingClientRect().width || 800;
+                    const canvasHeight = svgElement.getAttribute('height') || svgElement.getBoundingClientRect().height || 600;
+
+                    // 3. Draw to Canvas and Get PNG Data
+                    const canvas = document.createElement('canvas');
+                    canvas.width = canvasWidth;
+                    canvas.height = canvasHeight;
+
+                    const context = canvas.getContext('2d');
+                    context.drawImage(image, 0, 0, canvasWidth, canvasHeight);
+
+                    // Get the final PNG data URL
+                    const dataUrl = canvas.toDataURL('image/png');
+
+
+
+                    // console.log("Sonuc ", x, y, width, height)
+
+                    document.getElementById('nested').src = dataUrl
+
+
+
+
+
+
+                    // Clean up the temporary URL
+                    URL.revokeObjectURL(url);
+
+                    resolve(); // Operation successful
+                } catch (error) {
+                    URL.revokeObjectURL(url);
+                    reject(error);
+                }
+            };
+
+            image.onerror = (error) => {
+                URL.revokeObjectURL(url);
+                reject(new Error('Failed to load SVG image source.'));
+            };
+
+            // Trigger the image loading process
+            image.src = url;
+        });
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

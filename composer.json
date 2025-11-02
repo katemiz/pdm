@@ -6,6 +6,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "barryvdh/laravel-dompdf": "^3.1",
         "barryvdh/laravel-ide-helper": "^3.0",
         "blade-ui-kit/blade-icons": "^1.5",
         "codeat3/blade-carbon-icons": "^2.13",

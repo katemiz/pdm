@@ -9,5 +9,11 @@
         "axios": "^1.1.2",
         "laravel-vite-plugin": "^0.8.0",
         "vite": "^4.0.0"
+    },
+    "dependencies": {
+        "jspdf": "^3.0.3",
+        "jspdf-autotable": "^5.0.2",
+        "qrcode": "^1.5.4",
+        "svg2pdf.js": "^2.6.0"
     }
 }

@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\PDFController;
+use App\Http\Controllers\PDFProductBrochure;
+
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
@@ -42,6 +44,7 @@ use App\Livewire\MatFamilyManager;
 
 
 use App\Livewire\LwCompany;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -155,7 +158,7 @@ Route::middleware(['auth'])->group(function () {
 
     // PDF GENERATION
     Route::get('/pdf/bom/{id}', [PDFController::class, 'getType']);
-    Route::get('/pdf/cascadedbom/{id}', [PDFController::class, 'generateCascadedPdf']);
+    Route::get('/pdf/cascadedbom/{id}', action: [PDFController::class, 'generateCascadedPdf']);
 
 
     // ENGINEERING
@@ -171,8 +174,18 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
+    // Route::get(uri: '/product-brochure', [PDFProductBrochure::class, 'generatePdf']);
+
+    // Route::get('/product-brochure', action: [PDFProductBrochure::class, 'generatePdf']);
+
+
+
     // DENEME AMACLI
     Route::get('/viewme', LwProduct2::class);
+
+
+
+
 
 
 });

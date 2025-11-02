@@ -1,8 +1,14 @@
 <section class="section container">
 
     <script src="{{ asset('/js/CanvasDraw.js') }}"> </script>
+    <script src="{{ asset('/js/productBrochure.js') }}"> </script>
+
+
 
     <script>
+
+
+
 
         window.addEventListener("triggerCanvasDraw", function (e) {
 
@@ -16,6 +22,20 @@
 
             p.run()
         })
+
+        async function exportToPdf() {
+
+            const data = JSON.parse(localStorage.getItem('data'));
+
+
+            let brochure = new PdfBrochure(data)
+
+            await brochure.init();  // ✅ Initialize QR code first
+            brochure.run();
+
+        }
+
+
 
     </script>
 
@@ -31,7 +51,7 @@
     <div class="fixed-grid has-2-cols">
 
         <div class="grid">
-            
+
             <div class="cell">
 
                 <header class="mb-6">
@@ -42,7 +62,17 @@
             </div>
 
             <div class="cell has-text-right">
-                <a href="/product-brochure" class="button is-danger is-light" target="_blank">
+                {{-- <a href="/product-brochure" class="button is-danger is-light" target="_blank">
+                    <span class="icon has-text-danger"><x-carbon-document-pdf /></span>
+                </a> --}}
+
+
+                {{-- <a wire:click="generatePDF" class="button is-danger is-light" target="_blank">PDF 2
+                    <span class="icon has-text-danger"><x-carbon-document-pdf /></span>
+                </a> --}}
+
+
+                <a href="javascript:exportToPdf('data')" class="button is-danger is-light">
                     <span class="icon has-text-danger"><x-carbon-document-pdf /></span>
                 </a>
             </div>
@@ -306,10 +336,28 @@
 
 
 
-    <div class="column">
+    <div class="column is-hidden">
 
 
-        <img id="graphImage"  alt="Mast Configurator Diagram">
+        <img id="graphImage" alt="Mast Configurator Diagram">
+
+        <figure class="image my-0 mx-6">
+            <img src="{{ asset(path: 'images/mtwr2.png') }}" alt="MTWR" id="resim">
+        </figure>
+
+        <img alt="Nested" id="nested">
+        <img src="{{ asset(path: 'images/masttech.png') }}" alt="masttech" id="masttech">
+
+
+
+        <img src="{{ asset(path: 'images/arrows-vertical.png') }}" alt="icon" id="a5">
+        <img src="{{ asset(path: 'images/barbell.png') }}" alt="icon" id="a1">
+        <img src="{{ asset(path: 'images/engine.png') }}" alt="icon" id="a3">
+        <img src="{{ asset(path: 'images/person-simple-ski.png') }}" alt="icon" id="a4">
+        <img src="{{ asset(path: 'images/wind.png') }}" alt="icon" id="a2">
+
+        <img src="{{ asset(path: 'images/dot-outline.png') }}" alt="icon" id="dot">
+
 
     </div>
 

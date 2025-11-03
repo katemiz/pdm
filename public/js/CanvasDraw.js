@@ -55,16 +55,11 @@ class CanvasClass {
 
         localStorage.setItem('data', JSON.stringify(this.data))
 
-
-
         this.svgToPng();
 
         this.svgToPng2(document.getElementById('svg'), 0, 0, 100, 100);
 
-
         //this.exportToPng()
-
-
     }
 
 
@@ -407,7 +402,7 @@ class CanvasClass {
     drawBaseAdapter() {
 
         let od = this.data.mastTubes[0].od
-        let h = this.data.baseAdapterThk
+        let h = parseInt(this.data.baseAdapterThk)
 
         let centerx = 0
         let centery = 0

@@ -77,7 +77,7 @@ class PdfBrochure {
         this.dimensionPages('nested')
         this.dimensionPages('extended')
 
-        this.pdf.save('multiple-tables.pdf');
+        this.pdf.save(this.mastCode + '.pdf');
     }
 
 

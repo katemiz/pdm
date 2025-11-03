@@ -15,12 +15,14 @@
             if (document.getElementById('svg')) {
                 document.getElementById('svg').remove()
 
-                console.log('svg removed')
+                // console.log('svg removed')
             }
 
-            let p = new CanvasClass(e.detail.data, e.detail.graphType);
+            let pNested = new CanvasClass(e.detail.data, e.detail.graphType);
+            pNested.run()
 
-            p.run()
+            let pExtended = new CanvasClass(e.detail.data, 'Extended');
+            pExtended.run()
         })
 
         async function exportToPdf() {

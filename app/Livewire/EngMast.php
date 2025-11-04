@@ -237,8 +237,13 @@ class EngMast extends Component
                 $this->MasttechProfiles();
                 break;
 
-            case 'heights':
-                $this->MastHeights();
+            // case 'heights':
+            //     $this->MastHeights();
+            //     break;
+
+            case 'configurator':
+                return view('engineering.configurator');
+
                 break;
 
             case 'deflection':

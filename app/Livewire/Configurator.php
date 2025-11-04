@@ -270,7 +270,7 @@ class Configurator extends Component
         $this->calculateTubeWindLoads();
         $this->prepareAllData();
 
-        $this->dispatch('triggerCanvasDraw',data : $this->allData, graphType:$this->graphType);
+        $this->dispatch('triggerCanvasDraw',data : $this->allData);
 
         return view('engineering.configurator');
     }

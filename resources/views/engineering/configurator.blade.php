@@ -1,7 +1,7 @@
 <section class="section container">
 
-    <script src="{{ asset('/js/CanvasDraw.js') }}"> </script>
-    <script src="{{ asset('/js/productBrochure.js') }}"> </script>
+    {{-- <script src="{{ asset('/js/CanvasDraw.js') }}"> </script> --}}
+    {{-- <script src="{{ asset('/js/productBrochure.js') }}"> </script> --}}
 
 
 
@@ -14,14 +14,12 @@
 
             if (document.getElementById('svg')) {
                 document.getElementById('svg').remove()
-
-                // console.log('svg removed')
             }
 
-            let pNested = new CanvasClass(e.detail.data, e.detail.graphType);
+            let pNested = new MastDraw(e.detail.data, 'Nested');
             pNested.run()
 
-            let pExtended = new CanvasClass(e.detail.data, 'Extended');
+            let pExtended = new MastDraw(e.detail.data, 'Extended');
             pExtended.run()
         })
 
@@ -29,13 +27,41 @@
 
             const data = JSON.parse(localStorage.getItem('data'));
 
-
-            let brochure = new PdfBrochure(data)
+            let brochure = new GenerateBrochure(data)
 
             await brochure.init();  // ✅ Initialize QR code first
             brochure.run();
-
         }
+
+
+        function toggleGraph(jsGraphType) {
+
+            document.getElementById('divSvgNested').classList.add('is-hidden');
+            document.getElementById('divSvgExtended').classList.add('is-hidden');
+            document.getElementById('divSvgLoads').classList.add('is-hidden');
+
+            document.getElementById('liSvgNested').classList.remove('is-active');
+            document.getElementById('liSvgExtended').classList.remove('is-active');
+            document.getElementById('liSvgLoads').classList.remove('is-active');
+
+            if (jsGraphType === 'Nested') {
+                document.getElementById('divSvgNested').classList.remove('is-hidden');
+                document.getElementById('svgHeader').innerHTML = "Nested Position";
+                document.getElementById('liSvgNested').classList.add('is-active');
+
+            } else if (jsGraphType === 'Extended') {
+                document.getElementById('divSvgExtended').classList.remove('is-hidden');
+                document.getElementById('svgHeader').innerHTML = "Extended Position";
+                document.getElementById('liSvgExtended').classList.add('is-active');
+
+            } else if (jsGraphType === 'Loads') {
+                document.getElementById('divSvgLoads').classList.remove('is-hidden');
+                document.getElementById('svgHeader').innerHTML = "Loads Analysis";
+                document.getElementById('liSvgLoads').classList.add('is-active');
+            }
+        }
+
+
 
 
 
@@ -64,16 +90,6 @@
             </div>
 
             <div class="cell has-text-right">
-                {{-- <a href="/product-brochure" class="button is-danger is-light" target="_blank">
-                    <span class="icon has-text-danger"><x-carbon-document-pdf /></span>
-                </a> --}}
-
-
-                {{-- <a wire:click="generatePDF" class="button is-danger is-light" target="_blank">PDF 2
-                    <span class="icon has-text-danger"><x-carbon-document-pdf /></span>
-                </a> --}}
-
-
                 <a href="javascript:exportToPdf('data')" class="button is-danger is-light">
                     <span class="icon has-text-danger"><x-carbon-document-pdf /></span>
                 </a>
@@ -110,35 +126,40 @@
 
 
 
-
-
-
-
-
-    <div class="tabs">
+    <div class="tabs" wire:ignore>
         <ul>
-            <li class="{{$graphType === 'Loads' ? ' is-active' : ''}}">
-                <a wire:click="toggleGraphType('Loads')">Loads Analysis</a>
+            <li id="liSvgLoads">
+                <a href="javascript:void(0)" onclick="toggleGraph('Loads')">Loads Analysis</a>
             </li>
 
-            <li class="{{$graphType === 'Extended' ? ' is-active' : ''}}">
-                <a wire:click="toggleGraphType('Extended')">Extended Position</a>
+            <li id="liSvgExtended" >
+                <a href="javascript:void(0)" onclick="toggleGraph('Extended')">Extended Position</a>
             </li>
-            <li class="{{$graphType === 'Nested' ? ' is-active' : ''}}">
-                <a wire:click="toggleGraphType('Nested')">Nested Position</a>
+            <li id="liSvgNested" class="is-active">
+                <a href="javascript:void(0)" onclick="toggleGraph('Nested')">Nested Position</a>
             </li>
         </ul>
     </div>
 
 
 
-    <div class="p-0" id="svgDiv" wire:ignore>
+
+
+    <div id='svgDivs' class="p-0" wire:ignore>
 
         <header class="mb-6">
-            <h1 class="title has-text-weight-light is-size-1" id="tabHeader"></h1>
+            <h1 class="title has-text-weight-light is-size-1" id="svgHeader"></h1>
         </header>
 
-        {{-- svg to be added dynamically here --}}
+        <div id="divSvgNested">
+            {{-- svg to be added dynamically here --}}
+        </div>
+        <div id="divSvgExtended" class="is-hidden">
+            {{-- svg to be added dynamically here --}}
+        </div>
+        <div id="divSvgLoads" class="is-hidden">
+            {{-- svg to be added dynamically here --}}
+        </div>
 
     </div>
 
@@ -146,7 +167,6 @@
 
 
     @include('engineering.mast.info')
-    {{-- @include('engineering.mast.tubestable') --}}
 
 
 
@@ -179,8 +199,6 @@
 
 
     {{-- // MODALS --}}
-
-
     <div class="modal {{ $showModal ? 'is-active' : '' }}" id="modal">
         <div class="modal-background" wire:click="toggleModal"></div>
         <div class="modal-content box">
@@ -302,8 +320,6 @@
     </div>
 
 
-
-
     <div class="modal {{ $showHelpModal ? 'is-active' : '' }}" id="modalHelp">
         <div class="modal-background" wire:click="toggleHelpModal('mparams')"></div>
         <div class="modal-content box">
@@ -337,26 +353,23 @@
     </div>
 
 
-
+    {{-- // HIDDEN IMAGES --}}
     <div class="column is-hidden">
 
-
         <img id="graphImage" alt="Mast Configurator Diagram">
+        <img src="{{ asset(path: 'images/mtwr2.png') }}" alt="MTWR" id="resim">
+        <img id="NestedSvgImage" alt="Nested Position Diagram">
+        <img id="ExtendedSvgImage" alt="Extended Position Diagram">
 
-        <figure class="image my-0 mx-6">
-            <img src="{{ asset(path: 'images/mtwr2.png') }}" alt="MTWR" id="resim">
-        </figure>
-
-        <img alt="Nested" id="nested">
         <img src="{{ asset(path: 'images/masttech.png') }}" alt="masttech" id="masttech">
 
 
 
-        <img src="{{ asset(path: 'images/arrows-vertical.png') }}" alt="icon" id="a5">
-        <img src="{{ asset(path: 'images/barbell.png') }}" alt="icon" id="a1">
-        <img src="{{ asset(path: 'images/engine.png') }}" alt="icon" id="a3">
-        <img src="{{ asset(path: 'images/person-simple-ski.png') }}" alt="icon" id="a4">
-        <img src="{{ asset(path: 'images/wind.png') }}" alt="icon" id="a2">
+        <img src="{{ asset(path: 'images/arrows-vertical.png') }}" alt="icon" id="heightIcon">
+        <img src="{{ asset(path: 'images/barbell.png') }}" alt="icon" id="barbellIcon">
+        <img src="{{ asset(path: 'images/engine.png') }}" alt="icon" id="engineIcon">
+        <img src="{{ asset(path: 'images/person-simple-ski.png') }}" alt="icon" id="personIcon">
+        <img src="{{ asset(path: 'images/wind.png') }}" alt="icon" id="windIcon">
 
         <img src="{{ asset(path: 'images/dot-outline.png') }}" alt="icon" id="dot">
 

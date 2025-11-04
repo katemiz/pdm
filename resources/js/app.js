@@ -1,4 +1,4 @@
-import './bootstrap';
+// import './bootstrap';
 
 
 import jsPDF from 'jspdf';
@@ -7,10 +7,21 @@ import autoTable from 'jspdf-autotable';
 
 import QRCode from 'qrcode';
 
+import Swal from 'sweetalert2';
 
-// import { Canvg } from 'canvg';
+
+import MastDraw from './MastDraw.js';
+import GenerateBrochure from './GenerateBrochure.js';
+
+
+window.Swal = Swal;
+
+window.MastDraw = MastDraw;
+window.GenerateBrochure = GenerateBrochure;
+
+
 
 window.jsPDF = jsPDF;
 window.autoTable = autoTable;
 window.QRCode = QRCode;
-// window.Canvg = Canvg
+// window.svg2pdf = svg2pdf;

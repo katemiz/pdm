@@ -1,12 +1,12 @@
-class CanvasClass {
+export default class MastDraw {
 
-    constructor(data, graphType) {
+    constructor(data, svgId) {
 
-        // console.log('CanvasClass start:', data, graphType)
+        console.log('MastDrawClass start:', data, svgId)
 
         // Data
         this.data = data
-        this.graphType = graphType
+        this.svgId = svgId
 
         // Constants
         this.MX = 3;       // % Margin in X Direction
@@ -14,13 +14,34 @@ class CanvasClass {
 
         this.R = 6;        // DIA OF REFERENCE CIRCLES
 
-        this.CANVAS_DIV = 'svgDiv'
+        switch (this.svgId) {
+
+            default:
+            case 'Nested':
+                this.divId = 'divSvgNested'
+                break;
+
+            case 'Extended':
+                this.divId = 'divSvgExtended'
+                break;
+
+            case 'Loads':
+                this.divId = 'divSvgLoads'
+                break;
+
+        }
 
         this.totalH;
 
-        this.hasBaseAdapter = true
-        this.hasTopAdapter = true
-        this.hasSideAdapter = true
+
+        // this.hasBaseAdapter = true
+        // this.hasTopAdapter = true
+        // this.hasSideAdapter = true
+
+        this.containerDiv  = document.getElementById('svgDivs');
+
+
+
     }
 
 
@@ -32,19 +53,20 @@ class CanvasClass {
         this.drawBaseAdapter()
 
         // TUBES
-        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
+        this.data.mastTubes.forEach(tube => {  
             this.drawRectangle(tube);
-        }
+        });
+
 
         // DIM TEXT LINES
-        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
+        this.data.mastTubes.forEach(tube => {
             this.drawDimTextLine(tube);
-        }
+        });
 
         // FLANGES
-        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
+        this.data.mastTubes.forEach(tube => {
             // this.drawFixedTubeFlange(tube);
-        }
+        });
 
         // PAYLOAD FLANGE
         this.drawPayloadAdapter(this.data.payloadTube, this.g);
@@ -55,9 +77,9 @@ class CanvasClass {
 
         localStorage.setItem('data', JSON.stringify(this.data))
 
-        this.svgToPng();
-
-        this.svgToPng2(document.getElementById('svg'), 0, 0, 100, 100);
+        // this.svgToPng();
+        this.svgToPng('NestedSvg');
+        this.svgToPng('ExtendedSvg');
 
         //this.exportToPng()
     }
@@ -65,34 +87,32 @@ class CanvasClass {
 
     setValues() {
 
-        // TAB TITLE HEADER UPDATE
-
-        document.getElementById('tabHeader').innerHTML = this.graphType
-
         // CREATE SVG ELEMENT
         this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        this.svg.id = 'svg'
+        this.svg.id = this.svgId+'Svg';
 
         // CONTAINER AND SVG ELEMENT
-        this.div = document.getElementById(this.CANVAS_DIV)
+        this.div = document.getElementById(this.divId)
 
         this.div.appendChild(this.svg)
 
-        this.svgW = this.div.clientWidth - window.getComputedStyle(this.div).paddingLeft.replace('px', '') - window.getComputedStyle(this.div).paddingRight.replace('px', '')
+        this.svgW = this.containerDiv.clientWidth - window.getComputedStyle(this.containerDiv).paddingLeft.replace('px', '') - window.getComputedStyle(this.containerDiv).paddingRight.replace('px', '')
         this.svgH = this.svgW
+
+        console.log('svgW svgH', this.svgW, this.svgH)
 
         this.svg.setAttribute('width', this.svgW)
         this.svg.setAttribute('height', this.svgH)
 
-        if (this.graphType === 'Loads') {
+        if (this.svgId === 'Loads') {
             this.totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
         }
 
-        if (this.graphType === 'Nested') {
+        if (this.svgId === 'Nested') {
             this.totalH = (this.data.nestedHeight) / (1 - 2 * this.MX / 100)
         }
 
-        if (this.graphType === 'Extended') {
+        if (this.svgId === 'Extended') {
             this.totalH = (this.data.extendedHeight) / (1 - 2 * this.MX / 100)
         }
 
@@ -100,34 +120,31 @@ class CanvasClass {
         this.sx = this.svgW / this.totalH
         this.sy = this.svgH / this.totalH
 
-        this.x0 = this.totalH / 3
+        this.x0 = this.totalH * 0.495
         this.y0 = this.totalH * this.MY / 100
 
         // console.log('x0 y0', this.x0, this.y0)
 
         // SVG BACKGROUND RECTANGLE
-        let bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+        // let bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
 
-        bg.setAttribute('width', this.svgW)
-        bg.setAttribute('height', this.svgW)
-        bg.setAttribute('fill', '#a3a5a3ff')
+        // bg.setAttribute('width', this.svgW)
+        // bg.setAttribute('height', this.svgW)
+        // bg.setAttribute('fill', '#a3a5a3ff')
 
-        bg.setAttribute('style', 'fill-opacity: .20;')
+        // bg.setAttribute('style', 'fill-opacity: .20;')
 
-        this.svg.appendChild(bg)
+        // this.svg.appendChild(bg)
 
 
 
-        // PREPARE FOR DFFERENT CONFGURATONS
-        // Loads
-        // Extended
-        // Nested
+
 
         this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
 
-        this.gNested = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-        this.gExtended = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-        this.gLoads = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        // this.gNested = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        // this.gExtended = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        // this.gLoads = document.createElementNS('http://www.w3.org/2000/svg', 'g')
 
 
 
@@ -145,7 +162,7 @@ class CanvasClass {
 
         let y
 
-        switch (this.graphType) {
+        switch (this.svgId) {
             case 'Extended':
                 y = tube.bottomCenterPointExtended
                 break;
@@ -270,7 +287,7 @@ class CanvasClass {
 
         let textValue
 
-        switch (this.graphType) {
+        switch (this.svgId) {
             case 'Extended':
                 y = tube.bottomCenterPointExtended
                 textValue = tube.bottomCenterPointExtended
@@ -362,7 +379,7 @@ class CanvasClass {
 
         this.g.appendChild(t)
 
-        switch (this.graphType) {
+        switch (this.svgId) {
             case 'Extended':
                 y = parseInt(this.data.extendedHeight)
                 textValue = parseInt(this.data.extendedHeight)
@@ -446,7 +463,7 @@ class CanvasClass {
         let smallestTube = this.data.mastTubes[this.data.mastTubes.length - 1]
         let y
 
-        switch (this.graphType) {
+        switch (this.svgId) {
             case 'Extended':
                 y = smallestTube.bottomCenterPointExtended
                 break;
@@ -655,7 +672,7 @@ class CanvasClass {
 
 
 
-    svgToPng() {
+    SILsvgToPng(svgIdId) {
 
         // console.log('son data', this.data)
 
@@ -664,7 +681,7 @@ class CanvasClass {
 
 
 
-        const girdi = document.getElementById('svg')
+        const girdi = document.getElementById(svgIdId)
         // const cikti = document.getElementById('resim')
 
         let svgData = new XMLSerializer().serializeToString(girdi)
@@ -736,9 +753,13 @@ class CanvasClass {
 
 
 
-    svgToPng2(svgElement, x, y, width, height) {
+    svgToPng(elId) {
+
+        let svgElement = document.getElementById(elId)
+        let imgId = elId + 'Image'
 
 
+        console.log('SVG to PNG:', svgElement, imgId, typeof svgElement)
 
         return new Promise((resolve, reject) => {
 
@@ -775,11 +796,7 @@ class CanvasClass {
 
                     // console.log("Sonuc ", x, y, width, height)
 
-                    document.getElementById('nested').src = dataUrl
-
-
-
-
+                    document.getElementById(imgId).src = dataUrl
 
 
                     // Clean up the temporary URL
@@ -841,7 +858,7 @@ function SILdrawCanvas(data) {
         document.getElementById('svg').remove()
     }
 
-    let p = new CanvasClass(e.detail.data, e.detail.graphType);
+    let p = new CanvasClass(e.detail.data, e.detail.svgId);
 
     p.run()
 

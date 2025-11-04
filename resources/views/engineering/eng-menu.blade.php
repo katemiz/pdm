@@ -92,7 +92,7 @@
           <div class="media">
             <div class="media-content">
               <p class="title is-4">
-                <a href="/engineering/mast/heights">Number of Sections/Extended/Nested Heights</a>
+                <a href="/engineering/configurator">Mast Configurator</a>
               </p>
             </div>
           </div>

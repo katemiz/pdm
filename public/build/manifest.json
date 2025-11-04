@@ -1,6 +1,6 @@
 {
   "node_modules/canvg/lib/index.es.js": {
-    "file": "assets/index.es-81b275ee.js",
+    "file": "assets/index.es-c9013817.js",
     "imports": [
       "resources/js/app.js"
     ],
@@ -18,7 +18,7 @@
     "src": "node_modules/html2canvas/dist/html2canvas.esm.js"
   },
   "resources/css/app.css": {
-    "file": "assets/app-4ed993c7.js",
+    "file": "assets/app-06744f26.css",
     "isEntry": true,
     "src": "resources/css/app.css"
   },
@@ -28,7 +28,7 @@
       "node_modules/dompurify/dist/purify.es.mjs",
       "node_modules/canvg/lib/index.es.js"
     ],
-    "file": "assets/app-06f56e6b.js",
+    "file": "assets/app-d37e1835.js",
     "isEntry": true,
     "src": "resources/js/app.js"
   }

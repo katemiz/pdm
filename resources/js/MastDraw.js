@@ -2,7 +2,7 @@ export default class MastDraw {
 
     constructor(data, svgId) {
 
-        console.log('MastDrawClass start:', data, svgId)
+        // console.log('MastDrawClass start:', data, svgId)
 
         // Data
         this.data = data
@@ -87,9 +87,15 @@ export default class MastDraw {
 
     setValues() {
 
+        const elId = this.svgId+'Svg';
+
+        if (document.getElementById(elId)){
+            document.getElementById(elId).remove();
+        } 
+
         // CREATE SVG ELEMENT
         this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        this.svg.id = this.svgId+'Svg';
+        this.svg.id = elId;
 
         // CONTAINER AND SVG ELEMENT
         this.div = document.getElementById(this.divId)
@@ -99,7 +105,7 @@ export default class MastDraw {
         this.svgW = this.containerDiv.clientWidth - window.getComputedStyle(this.containerDiv).paddingLeft.replace('px', '') - window.getComputedStyle(this.containerDiv).paddingRight.replace('px', '')
         this.svgH = this.svgW
 
-        console.log('svgW svgH', this.svgW, this.svgH)
+        // console.log('svgW svgH', this.svgW, this.svgH)
 
         this.svg.setAttribute('width', this.svgW)
         this.svg.setAttribute('height', this.svgH)
@@ -758,6 +764,9 @@ export default class MastDraw {
         let svgElement = document.getElementById(elId)
         let imgId = elId + 'Image'
 
+        if (svgElement === null) {
+            return true;
+        }
 
         console.log('SVG to PNG:', svgElement, imgId, typeof svgElement)
 

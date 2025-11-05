@@ -2,7 +2,7 @@ export default class MastDraw {
 
     constructor(data, svgId) {
 
-        // console.log('MastDrawClass start:', data, svgId)
+        console.log('MastDrawClass start:', data, svgId)
 
         // Data
         this.data = data
@@ -180,9 +180,9 @@ export default class MastDraw {
         }
 
         r.setAttribute('x', this.sx * (this.x0 - tube.od / 2))
-        r.setAttribute('y', this.sy * (this.totalH - (y + this.y0 + tube.length)))
+        r.setAttribute('y', this.sy * (this.totalH - (y + this.y0 + parseInt(tube.length))))
         r.setAttribute('width', this.sx * tube.od)
-        r.setAttribute('height', this.sy * tube.length)
+        r.setAttribute('height', this.sy * parseInt(tube.length))
 
         r.setAttribute('fill', '#EAE2B7')
         r.setAttribute('style', 'fill-opacity: .25;')

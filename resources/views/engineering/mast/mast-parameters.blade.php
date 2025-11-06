@@ -137,13 +137,6 @@
                 </div>
             </div>
 
-            <div class="cell my-2">
-                <label class="label">Payload Mass<br>[kg]</label>
-                <div class="control">
-                    <input class="input" type="number" placeholder="Payload Mass" wire:model.live="payloadMass" min="0"
-                        max="1000" step="1">
-                </div>
-            </div>
 
             <div class="cell my-2">
 

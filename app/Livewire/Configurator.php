@@ -83,7 +83,7 @@ class Configurator extends Component
     public $airdensity = 1.25; // kg/m3 see NASA https://www.earthdata.nasa.gov/topics/atmosphere/air-mass-density
     public $hellman_coefficient = 0.25;       // Hellmann exponent; taken as 0.25 for all tubes
 
-    public $payloadMass = 50;
+    //public $payloadMass = 50;
 
     public $realTubeData = [
         [
@@ -236,7 +236,7 @@ class Configurator extends Component
 
     public $mastWeight = 0; // kg
 
-    public $maxPayloadCapacity = 500; // kg
+    public $maxPayloadCapacity = 10; // kg
 
 
 
@@ -340,9 +340,9 @@ class Configurator extends Component
 
             $this->allTubes[$i] = [
                 "no" => $i+1,
-                "od" => $od,
-                "id" => $id,
-                "thk" => $t,
+                "od" => round($od,2),
+                "id" => round($id,2),
+                "thk" => round($t,2),
                 "pressureLoad" => $this->CalculateLiftCapacity($od),
                 "length" =>$this->lengthMTTubes
             ];
@@ -386,6 +386,8 @@ class Configurator extends Component
             }
 
             $this->maxMastTubeDia = max($this->maxMastTubeDia,$tube['od']);
+
+            $this->maxPayloadCapacity = $tube['criticalLoad']; // kg
         }   
 
         $this->allData['baseAdapter']['bottomCenterPointNested'] = 0;
@@ -419,9 +421,14 @@ class Configurator extends Component
 
         $this->calculateMastWeight();
         $this->allData["mastWeight"] = $this->mastWeight;
-        $this->allData["maxPayloadCapacity"] = $this->maxPayloadCapacity;
         $this->allData["windspeed"] = $this->windspeed;
         $this->allData["sailarea"] = $this->sailarea;
+
+
+
+
+        $this->allData["maxPayloadCapacity"] = $this->maxPayloadCapacity;
+
 
         $q = [
             $this->maxPayloadCapacity,

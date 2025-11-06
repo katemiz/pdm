@@ -32,16 +32,7 @@ export default class MastDraw {
         }
 
         this.totalH;
-
-
-        // this.hasBaseAdapter = true
-        // this.hasTopAdapter = true
-        // this.hasSideAdapter = true
-
         this.containerDiv  = document.getElementById('svgDivs');
-
-
-
     }
 
 
@@ -80,8 +71,6 @@ export default class MastDraw {
         // this.svgToPng();
         this.svgToPng('NestedSvg');
         this.svgToPng('ExtendedSvg');
-
-        //this.exportToPng()
     }
 
 
@@ -105,8 +94,6 @@ export default class MastDraw {
         this.svgW = this.containerDiv.clientWidth - window.getComputedStyle(this.containerDiv).paddingLeft.replace('px', '') - window.getComputedStyle(this.containerDiv).paddingRight.replace('px', '')
         this.svgH = this.svgW
 
-        // console.log('svgW svgH', this.svgW, this.svgH)
-
         this.svg.setAttribute('width', this.svgW)
         this.svg.setAttribute('height', this.svgH)
 
@@ -129,31 +116,7 @@ export default class MastDraw {
         this.x0 = this.totalH * 0.495
         this.y0 = this.totalH * this.MY / 100
 
-        // console.log('x0 y0', this.x0, this.y0)
-
-        // SVG BACKGROUND RECTANGLE
-        // let bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
-
-        // bg.setAttribute('width', this.svgW)
-        // bg.setAttribute('height', this.svgW)
-        // bg.setAttribute('fill', '#a3a5a3ff')
-
-        // bg.setAttribute('style', 'fill-opacity: .20;')
-
-        // this.svg.appendChild(bg)
-
-
-
-
-
         this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-
-        // this.gNested = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-        // this.gExtended = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-        // this.gLoads = document.createElementNS('http://www.w3.org/2000/svg', 'g')
-
-
-
     }
 
 
@@ -293,6 +256,8 @@ export default class MastDraw {
 
         let textValue
 
+        tube.length = parseInt(tube.length)
+
         switch (this.svgId) {
             case 'Extended':
                 y = tube.bottomCenterPointExtended
@@ -348,10 +313,6 @@ export default class MastDraw {
         t2.innerHTML = textValue + tube.length
 
         this.g.appendChild(t2)
-
-
-
-
     }
 
 
@@ -362,7 +323,7 @@ export default class MastDraw {
         let offset = parseInt(this.data.maxMastTubeDia)
         let textLeaderLength = parseInt(this.data.maxMastTubeDia)
         let y
-        let textValue
+        let textValue = 'Initial Value'
 
         // BOTTOM FACE coordinates
         let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
@@ -482,7 +443,7 @@ export default class MastDraw {
 
         let topLeft = {
             x: this.x0 - smallestTube.od * 1.5,
-            y: this.totalH - (y + smallestTube.length + this.y0 + this.data.topAdapterThk)
+            y: this.totalH - (y + parseInt(smallestTube.length) + this.y0 + this.data.topAdapterThk)
         }
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
@@ -498,7 +459,6 @@ export default class MastDraw {
         r.setAttribute('stroke-width', '1')
 
         this.g.appendChild(r)
-
     }
 
 
@@ -518,39 +478,7 @@ export default class MastDraw {
 
 
 
-    SILsetCanvasValues() {
 
-        // WIDTH AND HEIGHT
-        this.c.width = 0.95 * document.getElementById(this.CANVAS_DIV).offsetWidth;
-        this.c.height = 0.3 * this.c.width;
-
-        this.w = this.c.width;
-        this.h = this.c.height;
-
-        // this.g.fillStyle = 'lightblue';
-        // this.g.fillRect(0, 0, this.w, this.h);
-
-        let totalW = 2 * this.MX + this.data.extendedHeight + 2 * this.data.zOffset
-        let totalH = 2 * this.MY + this.data.maxMastTubeDia + 2 * this.data.xOffset
-
-        // x,y Scales
-        this.sx = this.w / totalW
-        this.sy = this.h / totalH
-
-        this.tubes = this.data.mastTubes
-
-        this.startTubeNo = this.data.startTubeNo
-        this.endTubeNo = this.data.endTubeNo
-
-        this.data.mastTubes.toArray.forEach(tube => {
-            this.drawTubes(tube)
-        });
-
-
-
-
-        this.auxiliaryCurves()
-    }
 
 
 
@@ -596,7 +524,7 @@ export default class MastDraw {
 
 
 
-    drawTubes(tube) {
+    SILdrawTubes(tube) {
 
         let x0 = (this.MX + this.R + tube.heights.ebh - this.zeroizeHeight) * this.sx
         let y0 = this.h / 2 - tube.od / 2 * this.sy
@@ -678,76 +606,6 @@ export default class MastDraw {
 
 
 
-    SILsvgToPng(svgIdId) {
-
-        // console.log('son data', this.data)
-
-        localStorage.setItem('data', JSON.stringify(this.data));
-
-
-
-
-        const girdi = document.getElementById(svgIdId)
-        // const cikti = document.getElementById('resim')
-
-        let svgData = new XMLSerializer().serializeToString(girdi)
-
-        if (!svgData.match(/xmlns/i)) {
-            svgData = svgData.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
-        }
-
-        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' })
-        const url = URL.createObjectURL(svgBlob)
-
-        const image = new Image()
-
-        image.onload = () => {
-            console.log('Image loaded!')
-
-            const width = girdi.getAttribute('width') || girdi.getBoundingClientRect().width || 800
-            const height = girdi.getAttribute('height') || girdi.getBoundingClientRect().height || 600
-
-            const canvas = document.createElement('canvas')
-            canvas.width = width
-            canvas.height = height
-
-            const context = canvas.getContext('2d')
-            context.drawImage(image, 0, 0, width, height)
-
-            const dataUrl = canvas.toDataURL('image/png')
-
-            document.getElementById('nested').svg = dataUrl
-            // cikti.src = dataUrl
-
-
-
-
-
-
-            // canvas.toBlob((blob) => {
-            //     const downloadUrl = URL.createObjectURL(blob)
-            //     const link = document.createElement('a')
-            //     link.download = 'converted-image.png' // Set filename here
-            //     link.href = downloadUrl
-            //     link.click()
-
-            //     // Clean up
-            //     URL.revokeObjectURL(downloadUrl)
-            // }, 'image/png')
-
-
-
-
-            // URL.revokeObjectURL(url) // Clean up
-        }
-
-        // image.onerror = (e) => {
-        //     console.error('Image failed to load!', e)
-        //     URL.revokeObjectURL(url)
-        // }
-
-        // image.src = url
-    }
 
 
 
@@ -768,7 +626,7 @@ export default class MastDraw {
             return true;
         }
 
-        console.log('SVG to PNG:', svgElement, imgId, typeof svgElement)
+        // console.log('SVG to PNG:', svgElement, imgId, typeof svgElement)
 
         return new Promise((resolve, reject) => {
 
@@ -852,33 +710,3 @@ export default class MastDraw {
 
 
 }
-
-
-
-
-
-
-
-function SILdrawCanvas(data) {
-
-    console.log("All Data in DrawCanvas", data)
-
-    if (document.getElementById('svg')) {
-        document.getElementById('svg').remove()
-    }
-
-    let p = new CanvasClass(e.detail.data, e.detail.svgId);
-
-    p.run()
-
-}
-
-
-
-
-
-
-
-
-
-

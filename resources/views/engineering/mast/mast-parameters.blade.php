@@ -1,10 +1,54 @@
 <div class="column p-4">
 
+
+
+
+    <div class="column">
+        <label class="label">Mast Type</label>
+
+        <div class="control">
+
+            <label class="checkbox is-block">
+                <input type="radio" wire:model.live="mastType" value="MTWR"> MTWR Electromechanical Mast with Steel Ropes
+            </label>
+
+            <label class="checkbox is-block">
+                <input type="radio" wire:model.live="mastType" value="MTPX"> MTPX Pneumatical Mast
+            </label>
+
+        </div>
+
+    </div>
+
+    <br><br>
+
+
     @if ($error)
         <div class="notification is-danger">{{ $error }}</div>
     @else
         <h1 class="title">[ {{$noOfActiveTubes}} Sections ]</h1>
     @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     <div class="fixed-grid has-4-cols">
@@ -21,10 +65,10 @@
 
                             @foreach ($allTubes as $tube)
 
-                                <option value="{{ $tube["no"] }}">
-                                    MT-{{ sprintf("%02d", $tube["no"]) }}
+                                <option value="{{ $tube['no'] }}">
+                                    MT-{{ sprintf("%02d", $tube['no']) }}
                                     &nbsp; &nbsp;&nbsp;&nbsp; &#8960;
-                                    {{ sprintf("%6.2f", round($tube["od"], 2)) }}
+                                    {{ sprintf("%6.2f", round($tube['od'], 2)) }}
                                 </option>
 
                             @endforeach
@@ -162,7 +206,7 @@
 
                 <label class="label">Maximum Payload<br>Capacity [kg]</label>
                 <div class="control">
-                    <input class="input" type="number" placeholder="Head Dimension" wire:model.live="maxPayloadCapacity"
+                    <input class="input" type="number" placeholder="Max Payload Capacity" wire:model.live="maxPayloadCapacity"
                         step="1">
                 </div>
             </div>

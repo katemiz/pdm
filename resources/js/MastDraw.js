@@ -4,6 +4,8 @@ export default class MastDraw {
 
         console.log('MastDrawClass start:', data, svgId)
 
+        console.log('Critical Load:', data.startTubeNo, data.endTubeNo, data.mastTubes)
+
         // Data
         this.data = data
         this.svgId = svgId

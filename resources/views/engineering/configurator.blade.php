@@ -371,6 +371,14 @@
         <img src="{{ asset(path: 'images/person-simple-ski.png') }}" alt="icon" id="personIcon">
         <img src="{{ asset(path: 'images/wind.png') }}" alt="icon" id="windIcon">
 
+
+        <img src="{{ asset(path: 'images/Compressor.png') }}" alt="icon" id="compressorIcon">
+        <img src="{{ asset(path: 'images/NoPressureNeeded.png') }}" alt="icon" id="noPressureNeededIcon">
+
+        <img src="{{ asset(path: 'images/AutoLocking.png') }}" alt="icon" id="autoLockingIcon">
+
+
+
         <img src="{{ asset(path: 'images/dot-outline.png') }}" alt="icon" id="dot">
 
 

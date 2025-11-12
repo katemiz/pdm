@@ -4,370 +4,352 @@ namespace App\Livewire;
 
 use Livewire\Component;
 
-use App\Livewire\EngMast;
-
-use Barryvdh\DomPDF\Facade\Pdf;
-
-
 class Configurator extends Component
 {
-
-
-    public $action='deflection';
+    public $action = 'deflection';
 
     public $graphType = 'Nested';
 
     public $showHelpModal = false;
 
-    public $modalType; 
+    public $modalType;
 
-
-
-
+    public $mastType = 'MTPX'; // 'MTPX' or 'MTWR'
 
     public $overlapDimension = 500;  // m
+
     public $headDimension = 60; // m
-    public $n; // Number of Sections 
-    public $n_min = 2; 
-    public $n_max = 15; 
+
+    public $n; // Number of Sections
+
+    public $n_min = 2;
+
+    public $n_max = 15;
 
     public $x; // Tube length variable
 
-
     public $extendedHeight;
-
-
 
     public $nestedHeight;
 
-
     public $tube_length_min = 400;
+
     public $tube_length_max = 3400;
 
     public $tube_length_increment = 10;
 
-
     public $maxMastTubeDia;
 
     public $topAdapterThk = 12;
+
     public $baseAdapterThk = 20;
 
     public $adapters = [];
 
     public $points = [];
 
-    public $mtProfiles;
     public $startTubeNo = 1;
+
     public $endTubeNo;
 
     public $showModal = false;
 
-
-
-
     public $showOtherParams = false;
-    // public $svgType = 'Nested'; // 'Extended' or 'Nested'
 
     public $error;
+
     public $noOfMTTubes = 16; // quantity
+
     public $noOfActiveTubes = 16; // quantity
 
     public $allData = [];
+
     public $allTubes = [];
+
     public $mastTubes = [];
 
-
     public $cd = 1.5;
-    public $sailarea = 1.50;
-    public $windspeed = 120;
-    public $airdensity = 1.25; // kg/m3 see NASA https://www.earthdata.nasa.gov/topics/atmosphere/air-mass-density
-    public $hellman_coefficient = 0.25;       // Hellmann exponent; taken as 0.25 for all tubes
 
-    //public $payloadMass = 50;
+    public $sailarea = 1.50;
+
+    public $windspeed = 120;
+
+    public $airdensity = 1.25; // kg/m3 see NASA https://www.earthdata.nasa.gov/topics/atmosphere/air-mass-density
+
+    public $hellman_coefficient = 0.25;       // Hellmann exponent; taken as 0.25 for all tubes
 
     public $realTubeData = [
         [
-            "no" => 1,
-            "area" => 531.42,
-            "inertia" => 144359.94,
+            'no' => 1,
+            'area' => 531.42,
+            'inertia' => 144359.94,
         ],
 
         [
-            "no" => 2,
-            "area" => 657.93,
-            "inertia" => 351727.54,
+            'no' => 2,
+            'area' => 657.93,
+            'inertia' => 351727.54,
         ],
         [
-            "no" => 3,
-            "area" => 852.28,
-            "inertia" => 733496.51,
+            'no' => 3,
+            'area' => 852.28,
+            'inertia' => 733496.51,
         ],
         [
-            "no" => 4,
-            "area" => 1057.42,
-            "inertia" => 1372498.49,
+            'no' => 4,
+            'area' => 1057.42,
+            'inertia' => 1372498.49,
         ],
         [
-            "no" => 5,
-            "area" => 1290.94,
-            "inertia" => 2372673.47,
+            'no' => 5,
+            'area' => 1290.94,
+            'inertia' => 2372673.47,
         ],
         [
-            "no" => 6,
-            "area" => 1553.09,
-            "inertia" => 3861481.58,
+            'no' => 6,
+            'area' => 1553.09,
+            'inertia' => 3861481.58,
         ],
 
         [
-            "no" => 7,
-            "area" => 1844.42,
-            "inertia" => 5992457.14,
+            'no' => 7,
+            'area' => 1844.42,
+            'inertia' => 5992457.14,
         ],
         [
-            "no" => 8,
-            "area" => 2165.56,
-            "inertia" => 8947902.11,
+            'no' => 8,
+            'area' => 2165.56,
+            'inertia' => 8947902.11,
         ],
         [
-            "no" => 9,
-            "area" => 2517.21,
-            "inertia" => 12941721.43,
+            'no' => 9,
+            'area' => 2517.21,
+            'inertia' => 12941721.43,
         ],
         [
-            "no" => 10,
-            "area" => 2900.08,
-            "inertia" => 18222403.31,
+            'no' => 10,
+            'area' => 2900.08,
+            'inertia' => 18222403.31,
         ],
         [
-            "no" => 11,
-            "area" => 3538.49,
-            "inertia" => 26761768.83,
+            'no' => 11,
+            'area' => 3538.49,
+            'inertia' => 26761768.83,
         ],
         [
-            "no" => 12,
-            "area" => 3986.05,
-            "inertia" => 35883568.00,
+            'no' => 12,
+            'area' => 3986.05,
+            'inertia' => 35883568.00,
         ],
         [
-            "no" => 13,
-            "area" => 4467.07,
-            "inertia" => 47211434.31,
+            'no' => 13,
+            'area' => 4467.07,
+            'inertia' => 47211434.31,
         ],
         [
-            "no" => 14,
-            "area" => 4982.29,
-            "inertia" => 61316545.00,
+            'no' => 14,
+            'area' => 4982.29,
+            'inertia' => 61316545.00,
         ],
         [
-            "no" => 15,
-            "area" => 5532.44,
-            "inertia" => 78621879.48,
+            'no' => 15,
+            'area' => 5532.44,
+            'inertia' => 78621879.48,
         ],
         [
-            "no" => 16,
-            "area" => 6118.30,
-            "inertia" => 99656139.01,
+            'no' => 16,
+            'area' => 6118.30,
+            'inertia' => 99656139.01,
         ],
 
-    ];   
-
-
-    public $terrainCategory =[
-
-       "0" => [ 
-            "no" => "0",
-            "description" => "Sea or coastal area exposed to the open sea",
-            "z0" => 0.003, // Roughness length in meters
-            "zmin" => 1, // Minimum height in meters
-        ],
-       "1" => [ 
-            "no" => "I",
-            "description" => "Lakes or flat and horizontal area with negligible vegetation and without obstacles",
-            "z0" => 0.01, // Roughness length in meters
-            "zmin" => 1, // Minimum height in meters
-        ],
-       "2" => [
-            "no" => "II",
-            "description" => "Area with low vegetation such as grass and isolated obstacles (trees, buildings) with separations of at least 20 obstacle heights",
-            "z0" => 0.05, // Roughness length in meters
-            "zmin" => 2, // Minimum height in meters
-        ],
-       "3" => [
-            "no" => "III",
-            "description" => "Area with regular cover of vegetation or buildings or with isolated obstacles with separations of maximum 20 obstacle heights (such as as villages, suburban terrain, permanent forest)",
-            "z0" => 0.3, // Roughness length in meters
-            "zmin" => 5, // Minimum height in meters
-       ],
-
-        "4" => [
-            "no" => "IV",
-            "description" => "Area in which at least 15 % of the surface is covered with buildings and their average height exceeds 15 m",
-            "z0" => 1, // Roughness length in meters
-            "zmin" => 10, // Minimum height in meters
-       ],
     ];
 
-    public $activeTerrainCategory = 2; // Default to category II 
+    public $terrainCategory = [
+
+        '0' => [
+            'no' => '0',
+            'description' => 'Sea or coastal area exposed to the open sea',
+            'z0' => 0.003, // Roughness length in meters
+            'zmin' => 1, // Minimum height in meters
+        ],
+        '1' => [
+            'no' => 'I',
+            'description' => 'Lakes or flat and horizontal area with negligible vegetation and without obstacles',
+            'z0' => 0.01, // Roughness length in meters
+            'zmin' => 1, // Minimum height in meters
+        ],
+        '2' => [
+            'no' => 'II',
+            'description' => 'Area with low vegetation such as grass and isolated obstacles (trees, buildings) with separations of at least 20 obstacle heights',
+            'z0' => 0.05, // Roughness length in meters
+            'zmin' => 2, // Minimum height in meters
+        ],
+        '3' => [
+            'no' => 'III',
+            'description' => 'Area with regular cover of vegetation or buildings or with isolated obstacles with separations of maximum 20 obstacle heights (such as as villages, suburban terrain, permanent forest)',
+            'z0' => 0.3, // Roughness length in meters
+            'zmin' => 5, // Minimum height in meters
+        ],
+
+        '4' => [
+            'no' => 'IV',
+            'description' => 'Area in which at least 15 % of the surface is covered with buildings and their average height exceeds 15 m',
+            'z0' => 1, // Roughness length in meters
+            'zmin' => 10, // Minimum height in meters
+        ],
+    ];
+
+    public $activeTerrainCategory = 2; // Default to category II
 
     public $factorOfSafety = 2.0; // Factor of Safety
-    public $tubeBucklingLength = 3000; // mm
+
+    public $tubeBucklingLength; // mm
+
     public $E = 70000; // MPa for Aluminum
+
     public $yieldStrength = 170; // MPa
+
     public $ultimateStrength = 210; // MPa
+
     public $materialDensity = 2.704; // g/cm3
+
     public $pressure = 2; // Bars
 
-
-
     public $windLoadOnPayload;
+
     public $lengthMTTubes = 2000; // mm
 
     public $overlapMTTubes = 500; // mm
+
     public $headMTTubes = 70; // mm
 
     public $xOffset = 100;
+
     public $zOffset = 500;
+
     public $smallestTubeId = 44; // mm
+
     public $smallestTubeThickness = 2; // mm
+
     public $gapBetweenTubes = 7; // mm
+
     public $thicknessIncrement = 0.2; // mm
 
-
-
     public $mastWeight = 0; // kg
+    public $mastWeightBreakdown = []; // kg
 
-    public $maxPayloadCapacity = 10; // kg
-
-
+    public $maxPayloadCapacity = 1000; // kg
 
     public function mount()
     {
-        $mtProfiles = new EngMast();
-        $mtProfiles->MasttechProfiles();
-        $this->mtProfiles =  $mtProfiles->tubeData;
-        $this->endTubeNo = count($this->mtProfiles);
-    }
+        if (request()->has('qr')) {
 
+            $qr = explode('-', request()->get('qr'));
+
+            $this->maxPayloadCapacity = floatval($qr[0]);
+            $this->startTubeNo = intval($qr[1]);
+            $this->endTubeNo = intval($qr[2]);
+            $this->lengthMTTubes = floatval($qr[3]);
+            $this->overlapMTTubes = floatval($qr[4]);
+            $this->headMTTubes = floatval($qr[5]);
+            $this->windspeed = floatval($qr[6]);
+            $this->sailarea = floatval($qr[7]);
+
+        } else {
+
+            $this->endTubeNo = count($this->realTubeData);
+        }
+    }
 
     public function render()
     {
-
-        $this->error = null; 
+        $this->error = null;
 
         if ($this->endTubeNo <= $this->startTubeNo) {
 
             $this->noOfActiveTubes = null;
-            $this->error = "End Tube Diameter must be greater than Start Tube Diameter"; 
+            $this->error = 'End Tube Diameter must be greater than Start Tube Diameter';
         } else {
 
-            $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1; 
+            $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1;
         }
 
         $this->MasttechProfiles();
+
         $this->WindLoadOnPayload();
 
         $this->getMastHeights();
         $this->calculateTubeWindLoads();
         $this->prepareAllData();
 
-        $this->dispatch('triggerCanvasDraw',data : $this->allData);
+        $this->dispatch('triggerCanvasDraw', data : $this->allData);
 
         return view('engineering.configurator');
     }
 
-
-
-    public function toggleHelpModal($modalType) {
-
-        $this->modalType = $modalType; 
-        $this->showHelpModal = !$this->showHelpModal;
+    public function toggleHelpModal($modalType)
+    {
+        $this->modalType = $modalType;
+        $this->showHelpModal = ! $this->showHelpModal;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public function getMastHeights(){
+    public function getMastHeights()
+    {
 
         if ($this->noOfActiveTubes == null || $this->lengthMTTubes == null || $this->overlapMTTubes == null || $this->headMTTubes == null) {
 
             $this->extendedHeight = 0;
-            $this->nestedHeight   = 0;
+            $this->nestedHeight = 0;
 
             return true;
         }
 
-        $this->extendedHeight   = $this->noOfActiveTubes*$this->lengthMTTubes-($this->noOfActiveTubes-1)*$this->overlapMTTubes+$this->topAdapterThk+$this->baseAdapterThk;
-        $this->nestedHeight     = $this->lengthMTTubes+($this->noOfActiveTubes-1)*$this->headMTTubes+$this->topAdapterThk+$this->baseAdapterThk;
+        $this->extendedHeight = $this->noOfActiveTubes * $this->lengthMTTubes - ($this->noOfActiveTubes - 1) * $this->overlapMTTubes + $this->topAdapterThk + $this->baseAdapterThk;
+        $this->nestedHeight = $this->lengthMTTubes + ($this->noOfActiveTubes - 1) * $this->headMTTubes + $this->topAdapterThk + $this->baseAdapterThk;
 
         return true;
-    } 
+    }
 
-
-
-
-    public function toggleGraphType($position) {
+    public function toggleGraphType($position)
+    {
         $this->graphType = $position;
     }
 
-
-
-
-
-
-
-
-
-    public function MasttechProfiles() {
+    public function MasttechProfiles()
+    {
 
         $id = $this->smallestTubeId;
-        $t  = $this->smallestTubeThickness;
-        $od = $this->smallestTubeId + 2*$this->smallestTubeThickness;
+        $t = $this->smallestTubeThickness;
+        $od = $this->smallestTubeId + 2 * $this->smallestTubeThickness;
 
         for ($i = 0; $i < $this->noOfMTTubes; $i++) {
 
             $this->allTubes[$i] = [
-                "no" => $i+1,
-                "od" => round($od,2),
-                "id" => round($id,2),
-                "thk" => round($t,2),
-                "pressureLoad" => $this->CalculateLiftCapacity($od),
-                "length" =>$this->lengthMTTubes
+                'no' => $i + 1,
+                'od' => round($od, 2),
+                'id' => round($id, 2),
+                'thk' => round($t, 2),
+                'pressureLoad' => $this->CalculateLiftCapacity($od),
+                'length' => $this->lengthMTTubes,
             ];
 
-            $this->CalculateArea($od,$id,$i);
-            $this->CalculateMass($od,$id, $i);
-            $this->CalculateInertia($od,$id, $i);
-            $this->CalculateMomentCapability($od,$id, $i);
+            $this->CalculateArea($od, $id, $i);
+            $this->CalculateMass($od, $id, $i);
+            $this->CalculateInertia($od, $id, $i);
+            $this->CalculateMomentCapability($od, $id, $i);
+            $this->ProfileCriticalLoad($od, $id, $i);
+            $this->EI($od, $id, $i);
 
-            $this->ProfileCriticalLoad($od,$id, $i);
-
-            $this->EI($od,$id,$i);
-
-
-            $id = $od+2*$this->gapBetweenTubes;
+            $id = $od + 2 * $this->gapBetweenTubes;
             $t += $this->thicknessIncrement;
-            $od = $id+2*$t;
+            $od = $id + 2 * $t;
         }
 
         $this->getElementCoordinates();
     }
 
-
-
-    public function getElementCoordinates() {
+    public function getElementCoordinates()
+    {
 
         $this->maxMastTubeDia = 0;
 
@@ -375,60 +357,60 @@ class Configurator extends Component
             return $element['no'] >= $this->startTubeNo && $element['no'] <= $this->endTubeNo;
         });
 
-        $this->mastTubes =array_reverse($this->mastTubes);
+        $this->mastTubes = array_reverse($this->mastTubes);
 
         foreach (array_reverse($this->mastTubes) as $i => $tube) {
 
             if ($tube['no'] >= $this->startTubeNo && $tube['no'] <= $this->endTubeNo) {
 
-                $this->mastTubes[$i]['bottomCenterPointNested'] = $this->baseAdapterThk + $i*$this->headMTTubes;
-                $this->mastTubes[$i]['bottomCenterPointExtended'] = $this->baseAdapterThk + $i*$this->lengthMTTubes-$i*$this->overlapMTTubes;
+                $this->mastTubes[$i]['bottomCenterPointNested'] = $this->baseAdapterThk + $i * $this->headMTTubes;
+                $this->mastTubes[$i]['bottomCenterPointExtended'] = $this->baseAdapterThk + $i * $this->lengthMTTubes - $i * $this->overlapMTTubes;
             }
 
-            $this->maxMastTubeDia = max($this->maxMastTubeDia,$tube['od']);
+            $this->maxMastTubeDia = max($this->maxMastTubeDia, $tube['od']);
 
-            $this->maxPayloadCapacity = $tube['criticalLoad']; // kg
-        }   
+        }
 
         $this->allData['baseAdapter']['bottomCenterPointNested'] = 0;
         $this->allData['baseAdapter']['bottomCenterPointExtended'] = 0;
 
-        $this->allData['topAdapter']['bottomCenterPointNested'] = $this->nestedHeight -$this->topAdapterThk;
-        $this->allData['topAdapter']['bottomCenterPointExtended'] = $this->extendedHeight -$this->topAdapterThk;
+        $this->allData['topAdapter']['bottomCenterPointNested'] = $this->nestedHeight - $this->topAdapterThk;
+        $this->allData['topAdapter']['bottomCenterPointExtended'] = $this->extendedHeight - $this->topAdapterThk;
     }
 
+    public function prepareAllData()
+    {
 
-
-
-    public function prepareAllData() {
-
-        $this->allData["xOffset"] = floatval($this->xOffset);
-        $this->allData["zOffset"] = floatval($this->zOffset);
-        $this->allData["extendedHeight"] = $this->extendedHeight;
-        $this->allData["nestedHeight"] = $this->nestedHeight;
-        $this->allData["baseAdapterThk"] = $this->baseAdapterThk;
-        $this->allData["topAdapterThk"] = $this->topAdapterThk;
-        $this->allData["maxMastTubeDia"] = $this->maxMastTubeDia;
-        $this->allData["tubeLength"] = $this->lengthMTTubes;
-        $this->allData["noOfTubes"] = $this->noOfMTTubes;
-        $this->allData["overlapLength"] = $this->overlapMTTubes;
-        $this->allData["headLength"] = $this->headMTTubes;
-        $this->allData["startTubeNo"] = intval($this->startTubeNo);
-        $this->allData["endTubeNo"] = intval($this->endTubeNo);
-        $this->allData["windLoadOnPayload"] = $this->windLoadOnPayload;
-        $this->allData["allTubes"] = $this->allTubes;
-        $this->allData["mastTubes"] = $this->mastTubes;
+        $this->allData['mastType'] = $this->mastType; 
+        $this->allData['xOffset'] = floatval($this->xOffset);
+        $this->allData['zOffset'] = floatval($this->zOffset);
+        $this->allData['extendedHeight'] = $this->extendedHeight;
+        $this->allData['nestedHeight'] = $this->nestedHeight;
+        $this->allData['baseAdapterThk'] = $this->baseAdapterThk;
+        $this->allData['topAdapterThk'] = $this->topAdapterThk;
+        $this->allData['maxMastTubeDia'] = $this->maxMastTubeDia;
+        $this->allData['tubeLength'] = $this->lengthMTTubes;
+        $this->allData['noOfTubes'] = $this->noOfMTTubes;
+        $this->allData['overlapLength'] = $this->overlapMTTubes;
+        $this->allData['headLength'] = $this->headMTTubes;
+        $this->allData['startTubeNo'] = intval($this->startTubeNo);
+        $this->allData['endTubeNo'] = intval($this->endTubeNo);
+        $this->allData['windLoadOnPayload'] = $this->windLoadOnPayload;
+        $this->allData['allTubes'] = $this->allTubes;
+        $this->allData['mastTubes'] = $this->mastTubes;
 
         $this->calculateMastWeight();
-        $this->allData["mastWeight"] = $this->mastWeight;
-        $this->allData["windspeed"] = $this->windspeed;
-        $this->allData["sailarea"] = $this->sailarea;
+        $this->allData['mastWeight'] = $this->mastWeight;
+        $this->allData['mastWeightBreakdown'] = $this->mastWeightBreakdown;
 
+        $this->allData['windspeed'] = $this->windspeed;
+        $this->allData['sailarea'] = $this->sailarea;
 
+        $minCriticalLoad = collect($this->mastTubes)->min('criticalLoad') / 98.1; // Critical load is divided : kg
 
+        $this->maxPayloadCapacity = round(min($minCriticalLoad, 500), 0); // Critical load is divided : kg
 
-        $this->allData["maxPayloadCapacity"] = $this->maxPayloadCapacity;
-
+        $this->allData['maxPayloadCapacity'] = $this->maxPayloadCapacity; // kg
 
         $q = [
             $this->maxPayloadCapacity,
@@ -438,72 +420,65 @@ class Configurator extends Component
             $this->overlapMTTubes,
             $this->headMTTubes,
             $this->windspeed,
-            $this->sailarea
+            $this->sailarea,
         ];
 
-        $this->allData["qr"] = url('/product-brochure?qr=').implode('-',$q);
-                    
-
-
+        $this->allData['qr'] = url('/engineering/configurator?qr=').implode('-', $q);
     }
 
-
-
-    public function CalculateLiftCapacity($od) {
-
+    public function CalculateLiftCapacity($od)
+    {
         // Circular Area
-        $area = pi()/4*pow($od,2);
-        $pi_mpa = $this->pressure*0.1;
+        $area = pi() / 4 * pow($od, 2);
+        $pi_mpa = $this->pressure * 0.1;
 
-        return $pi_mpa*$area;
+        return $pi_mpa * $area;
     }
 
-
-    public function CalculateArea($od,$id,$i) {
-
-        $this->allTubes[$i]['areaBasic'] = (pow($od,2)- pow($id,2))*pi()/4; // mm2
+    public function CalculateArea($od, $id, $i)
+    {
+        $this->allTubes[$i]['areaBasic'] = (pow($od, 2) - pow($id, 2)) * pi() / 4; // mm2
         $this->allTubes[$i]['area'] = $this->realTubeData[$i]['area'];
 
         return true;
     }
 
+    public function CalculateMass($od, $id, $i)
+    {
 
-    public function CalculateMass($od,$id,$i) {
+        $this->allTubes[$i]['mass'] = $this->materialDensity * $this->realTubeData[$i]['area'] / 1000; // kg/m
 
-        $this->allTubes[$i]['mass'] = $this->materialDensity * $this->realTubeData[$i]['area']/1000; // kg/m
         return true;
     }
 
-    public function CalculateInertia($od,$id,$i) {
+    public function CalculateInertia($od, $id, $i)
+    {
 
         // Moment of Inertia for a hollow tube
         // I = π/64*(od^4-id^4)
         // od = outer diameter
         // id = inner diameter
 
-        $this->allTubes[$i]['inertiaBasic'] = pi()/64*(pow($od,4)-pow($id,4)); // mm4
+        $this->allTubes[$i]['inertiaBasic'] = pi() / 64 * (pow($od, 4) - pow($id, 4)); // mm4
         $this->allTubes[$i]['inertia'] = $this->realTubeData[$i]['inertia'];
 
         return true;
     }
 
-
-
-
-
-    public function CalculateMomentCapability($od,$id,$i) {
+    public function CalculateMomentCapability($od, $id, $i)
+    {
 
         // Moment Capability
         // M = σ * I / y
 
-        $this->allTubes[$i]['momentBasic'] = $this->yieldStrength*pi()*(pow($od,4)-pow($id,4))/(32*$od*1000); // Nm
-        $this->allTubes[$i]['moment'] = $this->yieldStrength*$this->realTubeData[$i]['inertia']/(0.5*$od*1000); // Nm
+        $this->allTubes[$i]['momentBasic'] = $this->yieldStrength * pi() * (pow($od, 4) - pow($id, 4)) / (32 * $od * 1000); // Nm
+        $this->allTubes[$i]['moment'] = $this->yieldStrength * $this->realTubeData[$i]['inertia'] / (0.5 * $od * 1000); // Nm
 
         return true;
     }
 
-
-    public function ProfileCriticalLoad($od,$id,$i) {
+    public function ProfileCriticalLoad($od, $id, $i)
+    {
 
         // Euler Column Critical Load Formula is used
 
@@ -513,54 +488,108 @@ class Configurator extends Component
         // L = Length of the column
         // Pcr = Critical Load
 
-       $this->allTubes[$i]['criticalLoad'] = pi()*$this->E*$this->realTubeData[$i]['inertia']/(pow($this->tubeBucklingLength,2)*$this->factorOfSafety);
+        $this->tubeBucklingLength = $this->lengthMTTubes * 1.5; // mm
 
-       return true;
-    }
-
-
-    public function EI($od,$id,$i) {
-        // EI = E*I
-        // E = Young's Modulus
-        // I = Moment of Inertia
-
-       $this->allTubes[$i]['EI'] = $this->E*$this->realTubeData[$i]['inertia']; // Nmm2 
-    }
-
-
-
-    public function WindLoadOnPayload() {
-
-        if ($this->sailarea == null || $this->windspeed == null|| $this->cd == null) {
-
-            $this->windLoadOnPayload = 0;
-            return true;
-        }
-
-        $this->windLoadOnPayload = 0.5*$this->airdensity*$this->cd*$this->sailarea*pow($this->windspeed/3.6,2);
-    }
-
-
-
-    public function calculateMastWeight() {
-
-       $weight = 0;
-
-       foreach ($this->mastTubes as $key => $value) {
-           $weight += $value['mass'];
-       }
-
-        $this->mastWeight = $weight * $this->lengthMTTubes / 1000; // kg
+        $this->allTubes[$i]['criticalLoad'] = pi() * $this->E * $this->realTubeData[$i]['inertia'] / (pow($this->tubeBucklingLength, 2) * $this->factorOfSafety);
 
         return true;
     }
 
+    public function EI($od, $id, $i)
+    {
+        // EI = E*I
+        // E = Young's Modulus
+        // I = Moment of Inertia
 
+        $this->allTubes[$i]['EI'] = $this->E * $this->realTubeData[$i]['inertia']; // Nmm2
+    }
 
+    public function WindLoadOnPayload()
+    {
+        if ($this->sailarea == null || $this->windspeed == null || $this->cd == null) {
 
+            $this->windLoadOnPayload = 0;
 
+            return true;
+        }
 
-    public function calculateTubeWindLoads() {
+        $this->windLoadOnPayload = 0.5 * $this->airdensity * $this->cd * $this->sailarea * pow($this->windspeed / 3.6, 2);
+    }
+
+    public function calculateMastWeight()
+    {
+
+        $this->mastWeight = 0;
+        $this->mastWeightBreakdown = [];
+
+        $tubesWeight = 0;
+
+        foreach ($this->mastTubes as $key => $value) {
+            $tubesWeight += $value['mass'] * $this->lengthMTTubes / 1000; // kg;
+        }
+
+        $this->mastWeightBreakdown['tubes'] = $tubesWeight; // kg
+
+        // PNEUMATIC MAST EQUATIONS
+
+        if ($this->mastType == 'MTPX') {
+
+            // Base Fitting Interface
+            $this->mastWeightBreakdown['baseFlange'] = 0.755 * ($this->endTubeNo - 4) + 3.3; // kg
+
+            // Fixed Tube Head Flanges
+            $fixedFlangeWeight = 0;
+
+            foreach ($this->mastTubes as $key => $tube) {
+                $fixedFlangeWeight += 0.047 * ($tube['no'] - 10) + 0.8; // kg
+            }
+
+            $this->mastWeightBreakdown['fixedTubeHeadFlanges'] = $fixedFlangeWeight;
+
+            // Ring Holder Flanges
+            $ringHolderFlangeWeight = 0;
+
+            foreach ($this->mastTubes as $key => $tube) {
+
+                if ($tube['no'] != $this->endTubeNo) {
+                    $ringHolderFlangeWeight += 0.133 * ($tube['no'] - 8) + 2; // kg
+                }
+            }
+
+            $this->mastWeightBreakdown['ringHolderFlanges'] = $ringHolderFlangeWeight;
+
+            // Rings
+            $ringWeight = 0;
+            foreach ($this->mastTubes as $key => $tube) {
+
+                if ($tube['no'] != $this->endTubeNo) {
+                    $ringWeight += 0.157 * ($tube['no'] - 11) + 1.6; // kg
+                }
+            }
+
+            $this->mastWeightBreakdown['rings'] = $ringWeight;
+
+            // Ice Breakers
+            $iceBreakerWeight = 0;
+            foreach ($this->mastTubes as $key => $tube) {
+
+                if ($tube['no'] != $this->endTubeNo) {
+                    $iceBreakerWeight += 0.014 * ($tube['no'] - 11) + 0.3; // kg
+                }
+            }
+            $this->mastWeightBreakdown['iceBreakers'] = $iceBreakerWeight;
+
+            // Payload Adapter
+            $this->mastWeightBreakdown['payloadAdapter'] = 0.3 * ($this->startTubeNo - 9) + 2.9; // kg
+        }
+
+        $this->mastWeight = array_sum($this->mastWeightBreakdown) * 1.05; // kg with 5% extra for bolts and nuts
+
+        return true;
+    }
+
+    public function calculateTubeWindLoads()
+    {
 
         /*
         1. Calculate Reference Area
@@ -583,7 +612,6 @@ class Configurator extends Component
 
         */
 
-
         // $this->getElementCoordinates();
 
         return true;
@@ -594,48 +622,48 @@ class Configurator extends Component
             $paramsArray = [];
 
             // Reference Area
-            $refArea = ($tube["heights"]["eth"] - $tube["heights"]["kinkh"]) * $tube["od"] / 1000000; // m2
-            $paramsArray["referenceArea"] = $refArea;
+            $refArea = ($tube['heights']['eth'] - $tube['heights']['kinkh']) * $tube['od'] / 1000000; // m2
+            $paramsArray['referenceArea'] = $refArea;
 
             // Reference Height
-            $Ze = $tube["heights"]["eth"] / 1000; // Extended top height in meters
-            $paramsArray["Ze"] = $Ze;
+            $Ze = $tube['heights']['eth'] / 1000; // Extended top height in meters
+            $paramsArray['Ze'] = $Ze;
 
             // Terrain Factor kr
-            $Z0 = $this->terrainCategory[$this->activeTerrainCategory]["z0"]; // Roughness length in meters 
-            $kr = 0.19 * pow($Z0/0.05, 0.07);
-            $paramsArray["kr"] = $kr;
-            
+            $Z0 = $this->terrainCategory[$this->activeTerrainCategory]['z0']; // Roughness length in meters
+            $kr = 0.19 * pow($Z0 / 0.05, 0.07);
+            $paramsArray['kr'] = $kr;
+
             // Roughness factor cr(ze) at the reference height
-            $maxHeight = max($Ze ,$this->terrainCategory[$this->activeTerrainCategory]["zmin"]);
+            $maxHeight = max($Ze, $this->terrainCategory[$this->activeTerrainCategory]['zmin']);
             $Cr = $kr * log($maxHeight / $Z0); // Roughness factor at the reference height
 
-            $paramsArray["Cr"] = $Cr;
-            $paramsArray["maxHeight"] = $maxHeight;
+            $paramsArray['Cr'] = $Cr;
+            $paramsArray['maxHeight'] = $maxHeight;
 
             // Calculate the mean wind speed at the height of the tube
-            $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s  
-            $paramsArray["Vm"] = $Vm;
+            $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s
+            $paramsArray['Vm'] = $Vm;
 
             // Turbulence Intensity
-            $TI = 1.0 / ( 1.0 * log($maxHeight / $Z0) );
-            $paramsArray["TurbulenceIntensity"] = $TI; // Turbulence Intensity
+            $TI = 1.0 / (1.0 * log($maxHeight / $Z0));
+            $paramsArray['TurbulenceIntensity'] = $TI; // Turbulence Intensity
 
             // Basic Velocity Pressure
             // Basic Velocity Pressure Formula: q = 0.5 * ρ * V^2
 
-            $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2 
-            $paramsArray["BasicVelocityPressure"] = $q; // Basic velocity pressure in N/m2
+            $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2
+            $paramsArray['BasicVelocityPressure'] = $q; // Basic velocity pressure in N/m2
 
             // Peak Velocity Pressure
             // Peak Velocity Pressure Formula: qp =[ 1+ 7* TI ] * 0.5 *  ρ *  Vm^2
             $qp = (1 + 7 * $TI) * 0.5 * $this->airdensity * pow($Vm, 2); // Peak velocity pressure in N/m2
-            $paramsArray["PeakVelocityPressure"] = $qp; // Peak velocity pressure in N/m2
+            $paramsArray['PeakVelocityPressure'] = $qp; // Peak velocity pressure in N/m2
 
             // Wind velocity corresponding to peak velocity pressure
             // Wind Velocity Formula: Vp = sqrt(2 * qp / ρ)
             $Vp = sqrt(2 * $qp / $this->airdensity); // Wind velocity in m/s corresponding to peak velocity pressure
-            $paramsArray["WindVelocityForPeakVelocityPressure"] = $Vp; // Wind velocity in m/s corresponding to peak velocity pressure
+            $paramsArray['WindVelocityForPeakVelocityPressure'] = $Vp; // Wind velocity in m/s corresponding to peak velocity pressure
 
             // Reynolds Number
             // Reynolds Number Formula: Re = ρ * Vp * D / μ
@@ -646,8 +674,8 @@ class Configurator extends Component
             // D = characteristic length (m) (outer diameter of the tube)
             // μ = dynamic viscosity of air (kg/(m·s)) (assumed to be 1.81e-5 kg/(m·s) at 20°C)
             $mu = 15e-6; // Dynamic viscosity of air in kg/(m·s) at 20°C
-            $Re = ( $Vp * $tube["od"] / 1000) / $mu; // Reynolds number (dimensionless)
-            $paramsArray["ReynoldsNumber"] = $Re; // Reynolds number (dimensionless)
+            $Re = ($Vp * $tube['od'] / 1000) / $mu; // Reynolds number (dimensionless)
+            $paramsArray['ReynoldsNumber'] = $Re; // Reynolds number (dimensionless)
 
             // Structural Factor
             // Structural Factor is taken as 1.0 for this calculation
@@ -655,40 +683,40 @@ class Configurator extends Component
 
             // Surface Roughness
             // Surface Roughness is taken as 0.1 for Aluminum coated tubes
-            $surfaceRoughness = 0.2; 
-            $paramsArray["SurfaceRoughness"] = $surfaceRoughness; // Surface Roughness in mm
+            $surfaceRoughness = 0.2;
+            $paramsArray['SurfaceRoughness'] = $surfaceRoughness; // Surface Roughness in mm
 
             // Effective Slenderness
 
-            $l_b = $tube["length"] / $tube["od"]; // Convert length to meters
-            $paramsArray["l_b"] = $l_b; // Slenderness ratio (dimensionless)
+            $l_b = $tube['length'] / $tube['od']; // Convert length to meters
+            $paramsArray['l_b'] = $l_b; // Slenderness ratio (dimensionless)
 
-            if ($tube["length"]/1000 <= 15) {
+            if ($tube['length'] / 1000 <= 15) {
 
-                $effective_slenderness  = min($l_b, 70); // Limit to a maximum of 70
+                $effective_slenderness = min($l_b, 70); // Limit to a maximum of 70
 
             } else {
-                $effective_slenderness  = min(0.7 * $l_b, 70); // Limit to a maximum of 70
+                $effective_slenderness = min(0.7 * $l_b, 70); // Limit to a maximum of 70
             }
 
-            $paramsArray["EffectiveSlenderness"] = $effective_slenderness; // Effective Slenderness (dimensionless)
+            $paramsArray['EffectiveSlenderness'] = $effective_slenderness; // Effective Slenderness (dimensionless)
 
             // End Effect Factor
-            if ($effective_slenderness <= 10 ) {
+            if ($effective_slenderness <= 10) {
                 // $end_effect_factor = 0.01 * $effective_slenderness + 0.59; // For slenderness less than or equal to 10
-                $end_effect_factor = 0.6023079 * pow($effective_slenderness,0.0657553); // For slenderness less than or equal to 10
+                $end_effect_factor = 0.6023079 * pow($effective_slenderness, 0.0657553); // For slenderness less than or equal to 10
 
             } else {
                 $end_effect_factor = 0.698573 + 0.001977401 * $effective_slenderness + 0.00008741341 * pow($effective_slenderness, 2) - 0.00000103591 * pow($effective_slenderness, 3); // For slenderness greater than 10
-            } 
+            }
 
-            $paramsArray["EndEffectFactor"] = $end_effect_factor; // End Effect Factor (dimensionless)
+            $paramsArray['EndEffectFactor'] = $end_effect_factor; // End Effect Factor (dimensionless)
 
             // Force Coefficient without End Effect
-            $k_b = $surfaceRoughness / $tube["od"]; // Equivalent Roughness
-            $paramsArray["k_b"] = $k_b; // Equivalent Roughness (dimensionless)
+            $k_b = $surfaceRoughness / $tube['od']; // Equivalent Roughness
+            $paramsArray['k_b'] = $k_b; // Equivalent Roughness (dimensionless)
 
-            $paramsArray["forceCoefficientWoEndEffect"] = $this->calculateForceCoefficientWOEndEffect($Re, $k_b);
+            $paramsArray['forceCoefficientWoEndEffect'] = $this->calculateForceCoefficientWOEndEffect($Re, $k_b);
 
             // Force Coefficient
             // EndEffect Facor * Force Coefficient without End Effect
@@ -697,54 +725,18 @@ class Configurator extends Component
             // Cf = Force Coefficient (dimensionless)
             // Cfw = Force Coefficient without End Effect (dimensionless)
             // EndEffectFactor = End Effect Factor (dimensionless)
-            $forceCoefficient = $paramsArray["forceCoefficientWoEndEffect"] * $end_effect_factor; // Force Coefficient (dimensionless)
-            $paramsArray["forceCoefficient"] = $forceCoefficient; // Force Coefficient (dimensionless)
+            $forceCoefficient = $paramsArray['forceCoefficientWoEndEffect'] * $end_effect_factor; // Force Coefficient (dimensionless)
+            $paramsArray['forceCoefficient'] = $forceCoefficient; // Force Coefficient (dimensionless)
 
-            $this->allTubes[$key]["windLoadParameters"] = $paramsArray;
+            $this->allTubes[$key]['windLoadParameters'] = $paramsArray;
 
             // Total Wind Force
             // Total Wind Force Formula: Fw = Structural Factor * Force Coefficient * Peak Velocity Pressure * Reference Area
-            $this->allTubes[$key]["windForce"] = $structuralFactor * $forceCoefficient * $qp * $refArea;
+            $this->allTubes[$key]['windForce'] = $structuralFactor * $forceCoefficient * $qp * $refArea;
 
         }
 
         return true;
     }
-
-
-
-
-
-
-
-
-
-
-
-    // In your controller
-    public function generatePDF()
-    {
-
-
-
-        return $this->redirect('/product-brochure');
-
-
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

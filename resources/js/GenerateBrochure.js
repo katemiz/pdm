@@ -18,17 +18,32 @@ export default class GenerateBrochure {
 
         this.logoImage
 
-        this.qrCodeImage = null  // Store QR code here
+        this.qrCodeImage = null  // Store QR code 
+        
 
-        this.props = [
-            { name: 'barbellIcon', text: ['Increased Payload Capacity', 'with new tubes and steel wires'] },
-            { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'for low twist and deflection'] },
-            { name: 'engineIcon', text: ['AC/DC Motor Driven', 'Pulley System'] },
-            { name: 'personIcon', text: ['New patented low friction', 'slide mechanism'] },
-            { name: 'heightIcon', text: ['Bigger extended heights', 'up to 25m'] },
-        ]
 
-        this.mastCode = (this.data.extendedHeight / 1000).toFixed(0) + 'MTWR-' + (this.data.nestedHeight / 1000).toFixed(1) + '-' + this.data.mastTubes.length
+
+        if (this.data.mastType == 'MTWR') {
+            this.props = [
+                { name: 'barbellIcon', text: ['Increased Payload Capacity', 'with new tubes and steel wires'] },
+                { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'for low twist and deflection'] },
+                { name: 'engineIcon', text: ['AC/DC Motor Driven', 'Pulley System'] },
+                { name: 'personIcon', text: ['New patented low friction', 'slide mechanism'] },
+                { name: 'heightIcon', text: ['Bigger extended heights', 'up to 25m'] },
+            ]
+        } else {
+            this.props = [
+                { name: 'barbellIcon', text: ['High Payload Capacity', 'with new tubes and steel wires'] },
+                { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'for low twist and deflection'] },
+                { name: 'compressorIcon', text: ['Pneumatically driven by', 'Air Compressor System'] },
+                { name: 'personIcon', text: ['New patented low friction', 'slide mechanism'] },
+                { name: 'autoLockingIcon', text: ['Automatic Locking Mechanism', 'triggered by actuator and mechanical locks'] },
+                { name: 'noPressureNeededIcon', text: ['No pressurisation needed', 'in operation when locked'] },
+                { name: 'heightIcon', text: ['Bigger extended heights', 'up to 25m'] },
+            ]
+        }
+
+        this.mastCode = (this.data.extendedHeight / 1000).toFixed(0) + this.data.mastType + '-' + (this.data.nestedHeight / 1000).toFixed(1) + '-' + this.data.mastTubes.length
     }
 
 
@@ -38,14 +53,6 @@ export default class GenerateBrochure {
             width: 160,
             margin: 1
         });
-
-        // if (this.dotIcon) {
-        //     const svgElement = document.getElementById(this.dotIcon);
-        //     if (svgElement) {
-        //         // Get PNG data directly
-        //         this.logoImage = await this.svgToPngData(svgElement, 2);
-        //     }
-        // }
     }
 
 
@@ -99,7 +106,7 @@ export default class GenerateBrochure {
         // COVER TITLE AND SUBTITLE
         this.pdf.setFontSize(96);
         this.pdf.setFont('helvetica', 'bold');
-        this.pdf.text('MTWR', this.mx, this.pageHeight * 0.27);
+        this.pdf.text(this.data.mastType, this.mx, this.pageHeight * 0.27);
 
         this.pdf.setFontSize(24);
         this.pdf.setFont('helvetica', 'normal');
@@ -154,7 +161,7 @@ export default class GenerateBrochure {
 
         this.pdf.setTextColor(25, 50, 60);
         this.pdf.setFont('helvetica', 'bold');
-        this.pdf.text('MTWR', 3 * this.mx, 60);
+        this.pdf.text(this.data.mastType, 3 * this.mx, 60);
 
         this.pdf.setFontSize(16);
 

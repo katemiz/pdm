@@ -357,7 +357,9 @@
     <div class="column is-hidden">
 
         <img id="graphImage" alt="Mast Configurator Diagram">
-        <img src="{{ asset(path: 'images/mtwr2.png') }}" alt="MTWR" id="resim">
+        <img src="{{ asset(path: 'images/mtwr_background.png') }}" alt="MTWR" id="MTWR">
+        <img src="{{ asset(path: 'images/mtpx_background.png') }}" alt="MTPX" id="MTPX">
+
         <img id="NestedSvgImage" alt="Nested Position Diagram">
         <img id="ExtendedSvgImage" alt="Extended Position Diagram">
 

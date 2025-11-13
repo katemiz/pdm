@@ -29,17 +29,17 @@ export default class GenerateBrochure {
                 { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'for low twist and deflection'] },
                 { name: 'engineIcon', text: ['AC/DC Motor Driven', 'Pulley System'] },
                 { name: 'personIcon', text: ['New patented low friction', 'slide mechanism'] },
-                { name: 'heightIcon', text: ['Bigger extended heights', 'up to 25m'] },
+                { name: 'heightIcon', text: ['Heights Up To', '25m'] },
             ]
         } else {
             this.props = [
-                { name: 'barbellIcon', text: ['High Payload Capacity', 'with new tubes and steel wires'] },
-                { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'for low twist and deflection'] },
+                { name: 'barbellIcon', text: ['High Payload Capacity', 'Low Twist/Deflection','with new AL stiffened tube profiles'] },
+                // { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'for low twist and deflection'] },
                 { name: 'compressorIcon', text: ['Pneumatically driven by', 'Air Compressor System'] },
                 { name: 'personIcon', text: ['New patented low friction', 'slide mechanism'] },
                 { name: 'autoLockingIcon', text: ['Automatic Locking Mechanism', 'triggered by actuator and mechanical locks'] },
                 { name: 'noPressureNeededIcon', text: ['No pressurisation needed', 'in operation when locked'] },
-                { name: 'heightIcon', text: ['Bigger extended heights', 'up to 25m'] },
+                { name: 'heightIcon', text: ['Heights Up To', '25m'] },
             ]
         }
 
@@ -87,24 +87,30 @@ export default class GenerateBrochure {
 
         // this.pdf.setFillColor(204, 204, 204); // RGB: light orange
 
-        this.pdf.setFillColor(169, 63, 85);
-        this.pdf.rect(0, 0, this.pageWidth, this.pageHeight, 'F');
+        // this.pdf.setFillColor(169, 63, 85);
+        // this.pdf.rect(0, 0, this.pageWidth, this.pageHeight, 'F');
 
-        const imgWidth = 86
+        // const imgWidth = 86
 
         // this.pdf.setFillColor(104, 104, 24); // RGB: light orange
         // this.pdf.rect(this.pageWidth - this.mx - imgWidth, this.my, imgWidth, this.pageHeight - 2 * this.my, 'F');
 
         // console.log(imgWidth, this.pageHeight - 2 * this.my)
 
-        this.pdf.addImage(document.getElementById('resim'), 'PNG', this.pageWidth - this.mx - imgWidth, this.my, 86, 273);
 
+
+        this.pdf.addImage(document.getElementById(this.data.mastType), 'PNG', 0, 0, 210, 297);
+
+
+
+        // this.pdf.setFillColor(169, 163, 85, 0.5);
+        // this.pdf.rect(0, this.pageHeight*0.16, this.pageWidth, 46, 'F');
 
 
         this.addHeaderFooter()
 
         // COVER TITLE AND SUBTITLE
-        this.pdf.setFontSize(96);
+        this.pdf.setFontSize(72);
         this.pdf.setFont('helvetica', 'bold');
         this.pdf.text(this.data.mastType, this.mx, this.pageHeight * 0.27);
 
@@ -119,7 +125,7 @@ export default class GenerateBrochure {
         // SMALL ICONS AND EXPLANATIONS
         const imgS = 12
 
-        let y = 120
+        let y = 110
         const gap = 20
 
         this.pdf.setFontSize(14);
@@ -153,10 +159,9 @@ export default class GenerateBrochure {
 
         this.addHeaderFooter()
 
-
         this.pdf.setFontSize(72);
 
-        this.pdf.setFillColor(243, 247, 240); // RGB: light orange
+        this.pdf.setFillColor(243, 247, 240); 
         this.pdf.rect(0, 35, 160, 40, 'F');
 
         this.pdf.setTextColor(25, 50, 60);
@@ -257,23 +262,26 @@ export default class GenerateBrochure {
 
         this.addHeaderFooter()
 
-        this.pdf.setFillColor(169, 63, 85);
+        this.pdf.setFillColor(25, 50, 60); 
+
         this.pdf.rect(this.pageWidth / 2 - 50, 0, 100, 36, 'F');
 
         this.pdf.setFontSize(16);
         this.pdf.setFont('courier', 'normal');
-        this.pdf.text(this.mastCode, this.pageWidth / 2, 20, { align: 'center' });
+        this.pdf.setTextColor(255, 255, 255);
 
+        this.pdf.text(this.mastCode, this.pageWidth / 2, 20, { align: 'center' });
         this.pdf.text(metin, this.pageWidth / 2, 30, { align: 'center' });
 
         let y = 80
+
+        this.pdf.setTextColor(0, 0, 0);
 
         this.data.mastTubes.forEach(tube => {
             this.pdf.setFontSize(12);
             this.pdf.text(String(tube.od.toFixed(2))+' mm', 3*this.mx, y, { align: 'right' });
             y += 4
         });
-
 
 
         this.pdf.text( ['Section','Tube','Diameters'], 3*this.mx, y+10, { align: 'right' });
@@ -301,6 +309,8 @@ export default class GenerateBrochure {
         // Footer
         this.pdf.setFontSize(9);
         this.pdf.setTextColor(0, 0, 0);
+        this.pdf.setFont('helvetica', 'normal');
+
         this.pdf.text('kapkara.one', pageWidth - this.mx, pageHeight - this.my * 0.6, { align: 'right' });
         this.pdf.text('PDM Product Data Management', this.mx, pageHeight - this.my * 0.6, { align: 'left' });
     }

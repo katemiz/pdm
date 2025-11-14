@@ -47,6 +47,7 @@ return new class extends Migration
             $table->text('finish_text')->nullable();
             $table->boolean(column: 'hasConfigurations')->default(false);
             $table->integer('basePartId')->default(0);
+            $table->string('config_number')->nullable(); 
             $table->text('remarks')->nullable();
             $table->string('status')->default('WIP');
             $table->foreignId('checker_id')->nullable();

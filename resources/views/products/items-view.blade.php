@@ -446,7 +446,7 @@
                 </thead>
 
                 <tbody>
-                @foreach ($configurations as $config)
+                @foreach ($availableConfigurations as $config)
                     <tr>
                         <td><a href="/details/{{ $config->part_type }}/view/{{ $config->id }}">{{ $config->part_number }}-{{ $config->config_number }}</a></td>
                         <td>{{ $config->description }}</td>

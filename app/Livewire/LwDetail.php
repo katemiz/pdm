@@ -152,11 +152,12 @@ class LwDetail extends Component
 
     public $configurationsCount = 3;
     public $configurations = [
-        0 => '',
-        1 => '',
-        2 => '',
+       [ 'config_number' =>'','description' => '' ],
+       [ 'config_number' =>'','description' => '' ],
+       [ 'config_number' =>'','description' => '' ],
     ];
 
+    public $availableConfigurations;
 
     public $multiplePartsHaveSameMaterial = true;
     public $base_part = false;
@@ -337,7 +338,12 @@ class LwDetail extends Component
 
         if ($item->hasConfigurations) {
 
-            $this->configurations = Item::where('basePartId', $this->uid)->get();
+            $this->availableConfigurations = Item::where('basePartId', $this->uid)->get();
+            $this->configurations = [];
+
+            foreach (Item::where('basePartId', $this->uid)->get() as $confPart) {
+                $this->configurations[] = ['config_number' => $confPart->config_number, 'description' => $confPart->description,'id' => $confPart->id];
+            }
         }
 
         if ($item->basePartId) {
@@ -518,10 +524,19 @@ class LwDetail extends Component
 
                 $configurationsArray = [];
 
+                //dd($this->configurations);
+
                 foreach ($this->configurations as $key => $value) { 
 
                     if (!empty($value)) {
-                        $configurationsArray[ $key ] = $value;
+
+                        if ($this->configurationsTitle[$key]) {
+                            $cTitle = $this->configurationsTitle[$key];
+                        } else {
+                            $cTitle =$this->description. ': '.$value;
+                        }
+                        
+                        $configurationsArray[] = [ $value, $cTitle ];
                     }
                 }
 
@@ -565,14 +580,12 @@ class LwDetail extends Component
 
                 if (count($configurationsArray) > 0) {
 
-                    foreach ($configurationsArray as $key => $value) {
+                    foreach ($configurationsArray as $confNoTitle) {
 
                         $configuredProps = $props;
 
-                        $configNo = 100+10*$key;
-
-                        $configuredProps['description'] = $props['description'].'; '. $value;
-                        $configuredProps['config_number'] = $configNo;
+                        $configuredProps['description'] = $confNoTitle[1];
+                        $configuredProps['config_number'] = $confNoTitle[0];
                         $configuredProps['hasConfigurations'] = false; 
                         $configuredProps['basePartId'] = $item->id; 
                         $configuredProps['part_type'] = 'Detail'; 
@@ -647,6 +660,8 @@ class LwDetail extends Component
 
         try {
 
+            //dd($this->part_type);
+
             $aaa = Item::find($this->uid);
 
             $aaa->update($props);
@@ -672,6 +687,61 @@ class LwDetail extends Component
             );
 
             $this->action = 'VIEW';
+
+            // When Part is MultipleConfigured
+            // *****************************************
+
+            if ($this->part_type == 'MultipleConfigured') {
+
+                if (count($this->configurations) > 0) {
+
+                    //dd($this->configurations);
+
+                    $basePartProps = $props; 
+
+                    foreach ($this->configurations as $configuration) {
+
+                        if ( !empty($configuration['id'])) {
+
+                            // Update Existing Configuration Part
+                            $configuredPart = Item::find($configuration['id']);
+                            $configuredPart->update([
+                                'description' => $configuration['description'],
+                                'config_number' => $configuration['config_number'],
+                            ]);
+
+                            continue;
+
+                        } else {
+
+                           
+
+                            // Create New Configuration 
+                            $configuredProps =$basePartProps;
+
+                            $configuredProps['description'] = $configuration['description'];
+                            $configuredProps['config_number'] = $configuration['config_number'];
+                            $configuredProps['hasConfigurations'] = false; 
+                            $configuredProps['basePartId'] = $item->id; 
+                            $configuredProps['part_type'] = 'Detail'; 
+
+                            if ( !Item::create($configuredProps) ) {
+                                dd('Error Creating New Configuration Part', $configuredProps);
+                             dd('Creating New Configuration Part', $configuredProps);
+                            }
+
+                            // try {
+                            //     $sonuc = Item::create($configuredProps);
+
+                            //                                 dd($configuration);
+
+                            // } catch (\Exception $e) {
+                            //     dd($e->getMessage());
+                            // }
+                        }
+                    }
+                }
+            }
 
             $this->getProps();
 
@@ -1141,7 +1211,7 @@ class LwDetail extends Component
 
     public function addConfiguration()
     {
-        $this->configurations[$this->configurationsCount] = '';
+        $this->configurations[$this->configurationsCount] =['config_number' =>'','description' => '' , 'id' => ''];
         $this->configurationsCount++;
     }
 

@@ -193,17 +193,23 @@
 
             <div class="field ">
 
-               @foreach ($configurations as $key => $value)
+               @foreach ($configurations as $key => $configuration)
+
 
                 <div class="columns">
                     
-                    <div class="column is-narrow">
+                    <!-- <div class="column is-narrow">
                         <span class="tag is-light is-large is-fullwidth">{{ 100+$key*10 }}</span>
+                    </div> -->
+
+                    <div class="column is-narrow">
+                        <input class="input" type="text" placeholder="{{ $part_number ? $part_number: ''  }} C{{  sprintf("%02d",$key) }}" wire:model="configurations.{{ $key }}.config_number">
                     </div>
 
                     <div class="column">
-                        <input class="input" type="text" placeholder="Configuration Identifier (eg Dia {{ 100+$key*10 }} )" wire:model="configurations.{{ $key }}">
+                        <input class="input" type="text" placeholder="Configuration Title" wire:model="configurations.{{ $key }}.description">
                     </div>
+
 
                     <div class="column is-narrow">
                     
@@ -218,9 +224,6 @@
                                 <x-carbon-trash-can />
                                 </span>
                             </button>
-
-
-                            
                         </p>
                     </div>
 
@@ -257,10 +260,6 @@
                 </div>
             </div>
             </div>
-
-
-
-
 
             @if ($part_type == 'Detail'|| $multiplePartsHaveSameMaterial)
 

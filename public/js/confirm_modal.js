@@ -100,7 +100,7 @@ window.addEventListener('ConfirmModal',function(e) {
 
         case 'revise':
 
-            sa_title = 'Do you want revise this document?'
+            sa_title = 'Do you want to revise this document?'
             sa_text = 'New revision will be editable.'
             confirmText = 'Revise'
             cancelText ='Cancel'
@@ -111,7 +111,7 @@ window.addEventListener('ConfirmModal',function(e) {
 
         case 'attach':
 
-            sa_title = 'Do you want delete attached file?'
+            sa_title = 'Do you want to delete attached file?'
             sa_text = 'Once deleted, there is no reverting back!'
             confirmText = 'Delete File'
             cancelText ='Cancel'
@@ -119,6 +119,22 @@ window.addEventListener('ConfirmModal',function(e) {
             dispatchRoute = 'deleteAttach'
             dispatchData = {}
             break;
+
+
+
+
+        case 'deleteConfiguration':
+
+            sa_title = 'Do you want to delete selected Configuration Item?'
+            sa_text = 'Once deleted, there is no reverting back!'
+            confirmText = 'Delete Configuration'
+            cancelText ='Cancel'
+
+            dispatchRoute = 'onConfDeleteConfirmed'
+            dispatchData = {id:e.detail.id}
+            break;
+
+
     }
 
 
@@ -151,3 +167,5 @@ window.addEventListener('attachDeleted',function(e) {
         timer: 1500
     })
 })
+
+

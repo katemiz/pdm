@@ -1,6 +1,20 @@
 <div>
     <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
+    <script>
+
+        window.addEventListener('sonuc',function(e) {
+
+            console.log('sonuc =', e.detail.metin)
+                   console.log('id =', e.detail.id)
+
+                   console.log('-----')
+        })
+
+        </script>
+
+
+
     <header class="mb-6">
         @switch($part_type)
 
@@ -211,21 +225,26 @@
                     </div>
 
 
+                    @if ($uid)
+
                     <div class="column is-narrow">
                     
                         <p class="buttons">
-                            <button class="is-static button">
+                            <!-- <button class="is-static button">
                                 <span class="icon is-small has-text-link" >
                                 <x-carbon-pen />
                                 </span>
-                            </button>
-                            <button class="button" wire:click="removeConfiguration({{ $key }})">
+                            </button> -->
+                            <!-- <button class="button" wire:click="removeConfiguration({{ $key }})"> -->
+                            <a class="button" wire:click="triggerConfDelete({{ $configuration['id'] }})">
                                 <span class="icon is-small has-text-danger">
                                 <x-carbon-trash-can />
                                 </span>
-                            </button>
+                            </a>
                         </p>
                     </div>
+
+                   @endif 
 
                 </div> 
 

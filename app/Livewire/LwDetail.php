@@ -28,6 +28,9 @@ use App\Mail\AppMail;
 
 use Carbon\Carbon;
 
+use Illuminate\Support\Facades\Log;
+
+
 
 
 class LwDetail extends Component
@@ -141,7 +144,6 @@ class LwDetail extends Component
     public $parts_list = false;
 
     public $release_integrity_ok = false;
-
 
     public $approved_by;
 
@@ -277,6 +279,18 @@ class LwDetail extends Component
         $this->malzeme_id = $item->malzeme_id;
         $this->part_type = $item->part_type;
 
+
+
+
+
+                            $this->dispatch('sonuc',
+                                metin:'get props',
+                                id : $this->part_type
+                            );
+
+
+
+
         switch ($item->part_type) {
 
             case 'MakeFrom':
@@ -341,9 +355,11 @@ class LwDetail extends Component
             $this->availableConfigurations = Item::where('basePartId', $this->uid)->get();
             $this->configurations = [];
 
-            foreach (Item::where('basePartId', $this->uid)->get() as $confPart) {
+            foreach ($this->availableConfigurations as $confPart) {
                 $this->configurations[] = ['config_number' => $confPart->config_number, 'description' => $confPart->description,'id' => $confPart->id];
             }
+
+           $this->configurationsCount = count($this->configurations);
         }
 
         if ($item->basePartId) {
@@ -526,24 +542,26 @@ class LwDetail extends Component
 
                 //dd($this->configurations);
 
-                foreach ($this->configurations as $key => $value) { 
+                // foreach ($this->configurations as $key => $value) { 
 
-                    if (!empty($value)) {
+                //     if (!empty($value)) {
 
-                        if ($this->configurationsTitle[$key]) {
-                            $cTitle = $this->configurationsTitle[$key];
-                        } else {
-                            $cTitle =$this->description. ': '.$value;
-                        }
+                //         if ($this->configurationsTitle[$key]) {
+                //             $cTitle = $this->configurationsTitle[$key];
+                //         } else {
+                //             $cTitle =$this->description. ': '.$value;
+                //         }
                         
-                        $configurationsArray[] = [ $value, $cTitle ];
-                    }
-                }
+                //         $configurationsArray[] = [ $value, $cTitle ];
+                //     }
+                // }
 
                 break;
         }
 
         try {
+
+
 
             if ($this->part_type == 'MultipleConfigured') {
 
@@ -573,31 +591,44 @@ class LwDetail extends Component
             $this->action = 'VIEW';
 
 
+
             // When Part is MultipleConfigured
             // *****************************************
 
             if ($this->part_type == 'MultipleConfigured') {
 
-                if (count($configurationsArray) > 0) {
 
-                    foreach ($configurationsArray as $confNoTitle) {
+                if (count($this->configurations) > 0) {
+
+
+
+                    foreach ($this->configurations as $configuration) {
 
                         $configuredProps = $props;
 
-                        $configuredProps['description'] = $confNoTitle[1];
-                        $configuredProps['config_number'] = $confNoTitle[0];
+                                                         //dd([ $this->configurations,$this->part_type , $configuredProps ]   );
+
+                        $configuredProps['description'] = $configuration['description'];
+                        $configuredProps['config_number'] = $configuration['config_number'];
                         $configuredProps['hasConfigurations'] = false; 
                         $configuredProps['basePartId'] = $item->id; 
-                        $configuredProps['part_type'] = 'Detail'; 
+                        $configuredProps['part_type'] = 'Detail';
+                        
+                                                                        //dd([ $this->configurations,$this->part_type , $configuredProps ]   );
+
 
                         try {
                             $sonuc = Item::create($configuredProps);
+
+
 
                         } catch (\Exception $e) {
                             dd($e->getMessage());
                         }
                     }
                 }
+
+                            
             }
 
             // **************************
@@ -710,34 +741,76 @@ class LwDetail extends Component
                                 'config_number' => $configuration['config_number'],
                             ]);
 
-                            continue;
+                            //continue;
+
+                            // $this->dispatch('sonuc',
+                            //     metin: 'update'
+                            // );
 
                         } else {
 
-                           
 
+                            // New Configuration having a new config_number based on basePartId will be inserted in DB
                             // Create New Configuration 
-                            $configuredProps =$basePartProps;
+                        
 
-                            $configuredProps['description'] = $configuration['description'];
-                            $configuredProps['config_number'] = $configuration['config_number'];
-                            $configuredProps['hasConfigurations'] = false; 
-                            $configuredProps['basePartId'] = $item->id; 
-                            $configuredProps['part_type'] = 'Detail'; 
+                            //dd($props);
 
-                            if ( !Item::create($configuredProps) ) {
-                                dd('Error Creating New Configuration Part', $configuredProps);
-                             dd('Creating New Configuration Part', $configuredProps);
+
+                            $props['part_type']  = 'Detail';
+                            $props['user_id']  = Auth::id();
+                            $props['updated_uid']  = Auth::id();
+                            $props['weight']  =$aaa['weight'];
+                            $props['remarks']  = $aaa['remarks'];
+
+                            $props['part_number']  = $aaa['part_number'];
+
+                            $props['description'] = $configuration['description'];
+                            $props['config_number'] = $configuration['config_number'];
+                            $props['hasConfigurations'] = false; 
+                            $props['basePartId'] = (int) $this->uid;
+                            
+
+
+
+
+
+                            $this->dispatch('sonuc',
+                                metin:$props,
+                                id : $this->uid
+                            );
+
+                                                  
+
+                            
+                            //dd('ffff');
+
+                            // if ( !Item::create($configuredProps) ) {
+                            //     dd('Error Creating New Configuration Part', $configuredProps);
+                            //     dd('Creating New Configuration Part', $configuredProps);
+                            // }
+
+
+// Different log levels
+
+
+
+                            try {
+
+                                $sonuc = Item::create($props);
+
+                                Log::info('New Item Eklendi OLUMLU ', ['props' => $props, 'sql' =>$sonuc]);
+
+
+                            } catch (\Exception $e) {
+                                dd($e->getMessage());
+
+                                Log::info('New Item Eklendi OLUMSUZ', ['props' => $props, 'sql' =>$sonuc ]);
+
                             }
 
-                            // try {
-                            //     $sonuc = Item::create($configuredProps);
+                            //Log::info('New Item Eklendi EN SON', ['props' => $props, 'sql' =>Item::create($props)->toSql()]);
 
-                            //                                 dd($configuration);
-
-                            // } catch (\Exception $e) {
-                            //     dd($e->getMessage());
-                            // }
                         }
                     }
                 }
@@ -1221,6 +1294,55 @@ class LwDetail extends Component
     {
         unset($this->configurations[$key]);
     }
+
+
+
+    public function triggerConfDelete($idConf)
+    {
+
+        $this->dispatch('ConfirmModal', type:'deleteConfiguration',id : $idConf);
+
+    } 
+
+
+
+
+
+    #[On('onConfDeleteConfirmed')]
+    public function doConfigurationDelete($id) {
+
+        //dd($id);
+
+        Item::find($id)->delete();
+
+
+
+            $this->getProps();
+
+
+
+
+
+                            $this->dispatch('sonuc',
+                                metin:'Configuration Deleted',
+                                id : $id
+                            );
+
+                                                  
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
 
 
 

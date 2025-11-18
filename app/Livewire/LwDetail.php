@@ -279,17 +279,10 @@ class LwDetail extends Component
         $this->malzeme_id = $item->malzeme_id;
         $this->part_type = $item->part_type;
 
-
-
-
-
-                            $this->dispatch('sonuc',
-                                metin:'get props',
-                                id : $this->part_type
-                            );
-
-
-
+        // $this->dispatch('sonuc',
+        //     metin:'get props',
+        //     id : $this->part_type
+        // );
 
         switch ($item->part_type) {
 
@@ -540,28 +533,10 @@ class LwDetail extends Component
 
                 $configurationsArray = [];
 
-                //dd($this->configurations);
-
-                // foreach ($this->configurations as $key => $value) { 
-
-                //     if (!empty($value)) {
-
-                //         if ($this->configurationsTitle[$key]) {
-                //             $cTitle = $this->configurationsTitle[$key];
-                //         } else {
-                //             $cTitle =$this->description. ': '.$value;
-                //         }
-                        
-                //         $configurationsArray[] = [ $value, $cTitle ];
-                //     }
-                // }
-
                 break;
         }
 
         try {
-
-
 
             if ($this->part_type == 'MultipleConfigured') {
 
@@ -590,45 +565,30 @@ class LwDetail extends Component
             $this->dispatch('triggerAttachment', modelId: $this->uid);
             $this->action = 'VIEW';
 
-
-
             // When Part is MultipleConfigured
             // *****************************************
 
             if ($this->part_type == 'MultipleConfigured') {
 
-
                 if (count($this->configurations) > 0) {
-
-
 
                     foreach ($this->configurations as $configuration) {
 
                         $configuredProps = $props;
-
-                                                         //dd([ $this->configurations,$this->part_type , $configuredProps ]   );
 
                         $configuredProps['description'] = $configuration['description'];
                         $configuredProps['config_number'] = $configuration['config_number'];
                         $configuredProps['hasConfigurations'] = false; 
                         $configuredProps['basePartId'] = $item->id; 
                         $configuredProps['part_type'] = 'Detail';
-                        
-                                                                        //dd([ $this->configurations,$this->part_type , $configuredProps ]   );
-
 
                         try {
                             $sonuc = Item::create($configuredProps);
-
-
-
                         } catch (\Exception $e) {
                             dd($e->getMessage());
                         }
                     }
-                }
-
-                            
+                }                     
             }
 
             // **************************
@@ -691,8 +651,6 @@ class LwDetail extends Component
 
         try {
 
-            //dd($this->part_type);
-
             $aaa = Item::find($this->uid);
 
             $aaa->update($props);
@@ -726,8 +684,6 @@ class LwDetail extends Component
 
                 if (count($this->configurations) > 0) {
 
-                    //dd($this->configurations);
-
                     $basePartProps = $props; 
 
                     foreach ($this->configurations as $configuration) {
@@ -741,23 +697,12 @@ class LwDetail extends Component
                                 'config_number' => $configuration['config_number'],
                             ]);
 
-                            //continue;
-
-                            // $this->dispatch('sonuc',
-                            //     metin: 'update'
-                            // );
-
                         } else {
-
 
                             // New Configuration having a new config_number based on basePartId will be inserted in DB
                             // Create New Configuration 
                         
-
-                            //dd($props);
-
-
-                            $props['part_type']  = 'Detail';
+                       $props['part_type']  = 'Detail';
                             $props['user_id']  = Auth::id();
                             $props['updated_uid']  = Auth::id();
                             $props['weight']  =$aaa['weight'];
@@ -770,31 +715,6 @@ class LwDetail extends Component
                             $props['hasConfigurations'] = false; 
                             $props['basePartId'] = (int) $this->uid;
                             
-
-
-
-
-
-                            $this->dispatch('sonuc',
-                                metin:$props,
-                                id : $this->uid
-                            );
-
-                                                  
-
-                            
-                            //dd('ffff');
-
-                            // if ( !Item::create($configuredProps) ) {
-                            //     dd('Error Creating New Configuration Part', $configuredProps);
-                            //     dd('Creating New Configuration Part', $configuredProps);
-                            // }
-
-
-// Different log levels
-
-
-
                             try {
 
                                 $sonuc = Item::create($props);
@@ -808,9 +728,6 @@ class LwDetail extends Component
                                 Log::info('New Item Eklendi OLUMSUZ', ['props' => $props, 'sql' =>$sonuc ]);
 
                             }
-
-                            //Log::info('New Item Eklendi EN SON', ['props' => $props, 'sql' =>Item::create($props)->toSql()]);
-
                         }
                     }
                 }
@@ -1243,9 +1160,7 @@ class LwDetail extends Component
 
         $new_part->has_mirror = null;
 
-
         $new_part->save();
-
 
         // FLAG NOTES
 
@@ -1274,12 +1189,10 @@ class LwDetail extends Component
 
         $new_part->pnotes()->attach(array_unique($part_notes));
 
-
         session()->flash('message','A new part has been created successfully!');
 
         redirect('/details/Detail/form/'.$new_part->id);
     }
-
 
 
     public function addConfiguration()
@@ -1289,61 +1202,22 @@ class LwDetail extends Component
     }
 
 
-
     public function removeConfiguration($key)
     {
         unset($this->configurations[$key]);
     }
 
 
-
     public function triggerConfDelete($idConf)
     {
-
         $this->dispatch('ConfirmModal', type:'deleteConfiguration',id : $idConf);
-
     } 
-
-
-
 
 
     #[On('onConfDeleteConfirmed')]
     public function doConfigurationDelete($id) {
 
-        //dd($id);
-
         Item::find($id)->delete();
-
-
-
-            $this->getProps();
-
-
-
-
-
-                            $this->dispatch('sonuc',
-                                metin:'Configuration Deleted',
-                                id : $id
-                            );
-
-                                                  
-
-
-
-
+        $this->getProps();
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }

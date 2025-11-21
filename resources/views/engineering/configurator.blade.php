@@ -354,18 +354,16 @@
 
 
     {{-- // HIDDEN IMAGES --}}
-    <div class="column is-hidden">
+    <div class="column ">
 
         <img id="graphImage" alt="Mast Configurator Diagram">
         <img src="{{ asset(path: 'images/mtwr_background.png') }}" alt="MTWR" id="MTWR">
-        <img src="{{ asset(path: 'images/mtpx_background.png') }}" alt="MTPX" id="MTPX">
+        <img src="{{ asset(path: 'images/mtpr_background.png') }}" alt="MTPR" id="MTPR">
 
         <img id="NestedSvgImage" alt="Nested Position Diagram">
         <img id="ExtendedSvgImage" alt="Extended Position Diagram">
 
         <img src="{{ asset(path: 'images/masttech.png') }}" alt="masttech" id="masttech">
-
-
 
         <img src="{{ asset(path: 'images/arrows-vertical.png') }}" alt="icon" id="heightIcon">
         <img src="{{ asset(path: 'images/barbell.png') }}" alt="icon" id="barbellIcon">
@@ -373,15 +371,19 @@
         <img src="{{ asset(path: 'images/person-simple-ski.png') }}" alt="icon" id="personIcon">
         <img src="{{ asset(path: 'images/wind.png') }}" alt="icon" id="windIcon">
 
-
         <img src="{{ asset(path: 'images/Compressor.png') }}" alt="icon" id="compressorIcon">
         <img src="{{ asset(path: 'images/NoPressureNeeded.png') }}" alt="icon" id="noPressureNeededIcon">
 
         <img src="{{ asset(path: 'images/AutoLocking.png') }}" alt="icon" id="autoLockingIcon">
 
-
-
         <img src="{{ asset(path: 'images/dot-outline.png') }}" alt="icon" id="dot">
+
+
+                <img src="{{ asset(path: 'images/Accessory1.png') }}" alt="icon" id="accessory1">
+                                <img src="{{ asset(path: 'images/Accessory2.png') }}" alt="icon" id="accessory2">
+                <img src="{{ asset(path: 'images/Accessory3.png') }}" alt="icon" id="accessory3">
+                <img src="{{ asset(path: 'images/Accessory4.png') }}" alt="icon" id="accessory4">
+
 
 
     </div>

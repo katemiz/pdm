@@ -14,7 +14,7 @@ class Configurator extends Component
 
     public $modalType;
 
-    public $mastType = 'MTPX'; // 'MTPX' or 'MTWR'
+    public $mastType = 'MTPR'; // 'MTPR' or 'MTWR'
 
     public $overlapDimension = 500;  // m
 
@@ -532,7 +532,7 @@ class Configurator extends Component
 
         // PNEUMATIC MAST EQUATIONS
 
-        if ($this->mastType == 'MTPX') {
+        if ($this->mastType == 'MTPR') {
 
             // Base Fitting Interface
             $this->mastWeightBreakdown['baseFlange'] = 0.755 * ($this->endTubeNo - 4) + 3.3; // kg

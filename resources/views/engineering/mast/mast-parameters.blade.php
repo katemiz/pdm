@@ -13,7 +13,7 @@
             </label>
 
             <label class="checkbox is-block">
-                <input type="radio" wire:model.live="mastType" value="MTPX"> MTPX Pneumatical Mast
+                <input type="radio" wire:model.live="mastType" value="MTPR"> MTPR Pneumatical Mast
             </label>
 
         </div>

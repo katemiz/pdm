@@ -20,14 +20,11 @@ export default class GenerateBrochure {
 
         this.qrCodeImage = null  // Store QR code 
         
-
-
-
         if (this.data.mastType == 'MTWR') {
             this.props = [
                 { name: 'barbellIcon', text: ['Increased Payload Capacity', 'with new tubes and steel wires'] },
                 { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'for low twist and deflection'] },
-                { name: 'engineIcon', text: ['AC/DC Motor Driven', 'Pulley System'] },
+                { name: 'engineIcon', text: ['AC/DC Motor Driven or Manual', 'Pulley System'] },
                 { name: 'personIcon', text: ['New patented low friction', 'slide mechanism'] },
                 { name: 'heightIcon', text: ['Heights Up To', '25m'] },
             ]
@@ -75,6 +72,8 @@ export default class GenerateBrochure {
         this.propertiesPage()
         this.dimensionPages('NestedSvgImage','Nested Height Diagram')
         this.dimensionPages('ExtendedSvgImage','Extended Height Diagram')
+
+        this.optionalAccessoriesPage()
 
         this.pdf.save(this.mastCode + '.pdf');
     }
@@ -250,6 +249,128 @@ export default class GenerateBrochure {
 
 
 
+
+
+    optionalAccessoriesPage() {
+
+        this.pageWidth = this.pdf.internal.pageSize.getWidth()
+        this.pageHeight = this.pdf.internal.pageSize.getHeight()
+
+        this.pdf.addPage('a4', 'portrait')
+
+        this.pdf.setFillColor(204, 204, 204);
+        this.pdf.rect(0, 0, this.pageWidth, this.pageHeight, 'F');
+
+        this.addHeaderFooter()
+
+        this.pdf.setFillColor(25, 50, 60); 
+
+        this.pdf.rect(this.pageWidth / 2 - 50, 0, 100, 36, 'F');
+
+        this.pdf.setFontSize(16);
+        this.pdf.setFont('courier', 'normal');
+
+                this.pdf.setTextColor(255, 255, 255);
+
+        this.pdf.text(this.mastCode, this.pageWidth / 2, 20, { align: 'center' });
+        this.pdf.text('Optional Hardware', this.pageWidth / 2, 30, { align: 'center' });
+
+
+        let y = 70
+
+
+        // this.pdf.setTextColor(195, 221, 233);
+        this.pdf.setFontSize(32);
+        // this.pdf.setFont('helvetica', 'normal');
+        // this.pdf.text('OPTIONAL HARDWARE', this.mx, y);
+
+
+
+
+        this.props = [
+            { name: 'Side/Vehicle Adaptor', text: ['For Lateral stability and Vehicle Connections', 'Guying Usage Depends on Payload and Mast Height'],image: 'accessory1' },
+            { name: 'Floor/Side/Vehicle Adaptor', text: ['For Lateral stability and Vehicle Connections', 'Guying Usage Depends on Payload and Mast Height'],image: 'accessory2' },
+            { name: 'Compressor', text: ['Presureised Air System Needed'], image: 'accessory4' },
+            { name: 'Transport Lock', text: ['For Heavy Vibration Environments'], image: 'accessory3' },
+        ]
+
+        y += 20
+
+        let y2 = 50
+
+
+        this.pdf.setTextColor(5, 5, 5);
+
+
+        this.pdf.setFontSize(18);
+
+
+        this.pdf.text(String(this.props[0]['name']), this.mx, y2);
+        this.pdf.addImage(document.getElementById(this.props[0]['image']), 'PNG', this.mx, y2+10, 79, 79);
+
+        this.pdf.text(String(this.props[1]['name']), 105, y2);
+        this.pdf.addImage(document.getElementById(this.props[1]['image']), 'PNG', 105, y2+10, 79, 79);
+
+        y2 += 110
+
+        this.pdf.text(String(this.props[2]['name']), this.mx, y2);
+        this.pdf.addImage(document.getElementById(this.props[2]['image']), 'PNG', this.mx, y2+10, 79, 79);
+
+
+        this.pdf.text(String(this.props[3]['name']), 105, y2);
+        this.pdf.addImage(document.getElementById(this.props[3]['image']), 'PNG', 105, y2+10, 79, 79);
+
+        // this.props.forEach ( (prop,key) => {
+
+        //     this.pdf.setTextColor(0, 0, 0);
+        //     this.pdf.setFontSize(24);
+        //     this.pdf.setFont('helvetica', 'normal');
+        //     //this.pdf.text(String(prop['name']), this.mx, y2);
+
+        //     this.pdf.setFontSize(18);
+        //     this.pdf.text(String(prop['name']), this.mx, y2);
+
+        //     if (key == 1 || key == 3) {
+        //         imagex = 105
+        //     }
+            
+
+        //     this.pdf.addImage(document.getElementById(prop['image']), 'PNG', imagex, y2+15, 90, 90);
+
+        //                 if (key == 2 ) {
+
+        //     y2 += 105
+        //                 } 
+
+        // })
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     dimensionPages(imageId,metin) {
 
         this.pageWidth = this.pdf.internal.pageSize.getWidth()
@@ -319,7 +440,10 @@ export default class GenerateBrochure {
 
     addQrCode() {
         if (this.qrCodeImage) {
+
             this.pdf.addImage(this.qrCodeImage, 'PNG', this.mx, this.my + 2, this.qrs, this.qrs);
+            this.pdf.link(this.mx, this.my + 2, this.qrs, this.qrs, { url: this.data.qr });
+
         } else {
             console.error('QR code not initialized. Call init() first.');
         }

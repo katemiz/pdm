@@ -1,14 +1,25 @@
-export default class MastDraw {
+export default class CanvasClass {
 
-    constructor(data, svgId) {
+    constructor(data, graphType) {
 
-        //console.log('MastDrawClass start:', data, svgId)
-
-        //console.log('Critical Load:', data.startTubeNo, data.endTubeNo, data.mastTubes)
+        // console.log('CanvasClass start:', data, graphType)
 
         // Data
         this.data = data
-        this.svgId = svgId
+        this.graphType = graphType
+
+
+        if (this.graphType === 'Loads') {
+            this.svgId = 'svgLoads'
+        }
+
+        if (this.graphType === 'Nested') {
+            this.svgId = 'svgNested'
+        }
+
+        if (this.graphType === 'Extended') {
+            this.svgId = 'svgExtended'
+        }
 
         // Constants
         this.MX = 3;       // % Margin in X Direction
@@ -16,25 +27,13 @@ export default class MastDraw {
 
         this.R = 6;        // DIA OF REFERENCE CIRCLES
 
-        switch (this.svgId) {
-
-            default:
-            case 'Nested':
-                this.divId = 'divSvgNested'
-                break;
-
-            case 'Extended':
-                this.divId = 'divSvgExtended'
-                break;
-
-            case 'Loads':
-                this.divId = 'divSvgLoads'
-                break;
-
-        }
+        this.CANVAS_DIV = 'svgDiv'
 
         this.totalH;
-        this.containerDiv = document.getElementById('svgDivs');
+
+        this.hasBaseAdapter = true
+        this.hasTopAdapter = true
+        this.hasSideAdapter = true
     }
 
 
@@ -46,20 +45,19 @@ export default class MastDraw {
         this.drawBaseAdapter()
 
         // TUBES
-        this.data.mastTubes.forEach(tube => {
+        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
             this.drawRectangle(tube);
-        });
-
+        }
 
         // DIM TEXT LINES
-        this.data.mastTubes.forEach(tube => {
+        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
             this.drawDimTextLine(tube);
-        });
+        }
 
         // FLANGES
-        this.data.mastTubes.forEach(tube => {
+        for (const [key, tube] of Object.entries(this.data.mastTubes)) {
             // this.drawFixedTubeFlange(tube);
-        });
+        }
 
         // PAYLOAD FLANGE
         this.drawPayloadAdapter(this.data.payloadTube, this.g);
@@ -70,44 +68,44 @@ export default class MastDraw {
 
         localStorage.setItem('data', JSON.stringify(this.data))
 
-        // this.svgToPng();
-        this.svgToPng('NestedSvg');
-        this.svgToPng('ExtendedSvg');
+        this.svgToPng();
+
+        this.svgToPng2(document.getElementById(this.svgId), 0, 0, 100, 100);
+
+        //this.exportToPng()
     }
 
 
     setValues() {
 
-        const elId = this.svgId + 'Svg';
+        // TAB TITLE HEADER UPDATE
 
-        if (document.getElementById(elId)) {
-            document.getElementById(elId).remove();
-        }
+        document.getElementById('tabHeader').innerHTML = this.graphType
 
         // CREATE SVG ELEMENT
-        this.svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        this.svg.id = elId;
+        this.svg = document.createElementNS('http://www.w3.org/2000/svg', this.svgId);
+        this.svg.id = this.svgId
 
         // CONTAINER AND SVG ELEMENT
-        this.div = document.getElementById(this.divId)
+        this.div = document.getElementById(this.CANVAS_DIV)
 
         this.div.appendChild(this.svg)
 
-        this.svgW = this.containerDiv.clientWidth - window.getComputedStyle(this.containerDiv).paddingLeft.replace('px', '') - window.getComputedStyle(this.containerDiv).paddingRight.replace('px', '')
+        this.svgW = this.div.clientWidth - window.getComputedStyle(this.div).paddingLeft.replace('px', '') - window.getComputedStyle(this.div).paddingRight.replace('px', '')
         this.svgH = this.svgW
 
         this.svg.setAttribute('width', this.svgW)
         this.svg.setAttribute('height', this.svgH)
 
-        if (this.svgId === 'Loads') {
+        if (this.graphType === 'Loads') {
             this.totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
         }
 
-        if (this.svgId === 'Nested') {
+        if (this.graphType === 'Nested') {
             this.totalH = (this.data.nestedHeight) / (1 - 2 * this.MX / 100)
         }
 
-        if (this.svgId === 'Extended') {
+        if (this.graphType === 'Extended') {
             this.totalH = (this.data.extendedHeight) / (1 - 2 * this.MX / 100)
         }
 
@@ -115,10 +113,37 @@ export default class MastDraw {
         this.sx = this.svgW / this.totalH
         this.sy = this.svgH / this.totalH
 
-        this.x0 = this.totalH * 0.495
+        this.x0 = this.totalH / 3
         this.y0 = this.totalH * this.MY / 100
 
+        // console.log('x0 y0', this.x0, this.y0)
+
+        // SVG BACKGROUND RECTANGLE
+        let bg = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
+
+        bg.setAttribute('width', this.svgW)
+        bg.setAttribute('height', this.svgW)
+        bg.setAttribute('fill', '#a3a5a3ff')
+
+        bg.setAttribute('style', 'fill-opacity: .20;')
+
+        this.svg.appendChild(bg)
+
+
+
+        // PREPARE FOR DFFERENT CONFGURATONS
+        // Loads
+        // Extended
+        // Nested
+
         this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+
+        this.gNested = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        this.gExtended = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+        this.gLoads = document.createElementNS('http://www.w3.org/2000/svg', 'g')
+
+
+
     }
 
 
@@ -133,7 +158,7 @@ export default class MastDraw {
 
         let y
 
-        switch (this.svgId) {
+        switch (this.graphType) {
             case 'Extended':
                 y = tube.bottomCenterPointExtended
                 break;
@@ -145,9 +170,9 @@ export default class MastDraw {
         }
 
         r.setAttribute('x', this.sx * (this.x0 - tube.od / 2))
-        r.setAttribute('y', this.sy * (this.totalH - (y + this.y0 + parseInt(tube.length))))
+        r.setAttribute('y', this.sy * (this.totalH - (y + this.y0 + tube.length)))
         r.setAttribute('width', this.sx * tube.od)
-        r.setAttribute('height', this.sy * parseInt(tube.length))
+        r.setAttribute('height', this.sy * tube.length)
 
         r.setAttribute('fill', '#EAE2B7')
         r.setAttribute('style', 'fill-opacity: .25;')
@@ -258,9 +283,7 @@ export default class MastDraw {
 
         let textValue
 
-        tube.length = parseInt(tube.length)
-
-        switch (this.svgId) {
+        switch (this.graphType) {
             case 'Extended':
                 y = tube.bottomCenterPointExtended
                 textValue = tube.bottomCenterPointExtended
@@ -315,6 +338,10 @@ export default class MastDraw {
         t2.innerHTML = textValue + tube.length
 
         this.g.appendChild(t2)
+
+
+
+
     }
 
 
@@ -325,7 +352,7 @@ export default class MastDraw {
         let offset = parseInt(this.data.maxMastTubeDia)
         let textLeaderLength = parseInt(this.data.maxMastTubeDia)
         let y
-        let textValue = 'Initial Value'
+        let textValue
 
         // BOTTOM FACE coordinates
         let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
@@ -348,7 +375,7 @@ export default class MastDraw {
 
         this.g.appendChild(t)
 
-        switch (this.svgId) {
+        switch (this.graphType) {
             case 'Extended':
                 y = parseInt(this.data.extendedHeight)
                 textValue = parseInt(this.data.extendedHeight)
@@ -432,7 +459,7 @@ export default class MastDraw {
         let smallestTube = this.data.mastTubes[this.data.mastTubes.length - 1]
         let y
 
-        switch (this.svgId) {
+        switch (this.graphType) {
             case 'Extended':
                 y = smallestTube.bottomCenterPointExtended
                 break;
@@ -445,7 +472,7 @@ export default class MastDraw {
 
         let topLeft = {
             x: this.x0 - smallestTube.od * 1.5,
-            y: this.totalH - (y + parseInt(smallestTube.length) + this.y0 + this.data.topAdapterThk)
+            y: this.totalH - (y + smallestTube.length + this.y0 + this.data.topAdapterThk)
         }
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'rect')
@@ -461,6 +488,7 @@ export default class MastDraw {
         r.setAttribute('stroke-width', '1')
 
         this.g.appendChild(r)
+
     }
 
 
@@ -480,7 +508,39 @@ export default class MastDraw {
 
 
 
+    SILsetCanvasValues() {
 
+        // WIDTH AND HEIGHT
+        this.c.width = 0.95 * document.getElementById(this.CANVAS_DIV).offsetWidth;
+        this.c.height = 0.3 * this.c.width;
+
+        this.w = this.c.width;
+        this.h = this.c.height;
+
+        // this.g.fillStyle = 'lightblue';
+        // this.g.fillRect(0, 0, this.w, this.h);
+
+        let totalW = 2 * this.MX + this.data.extendedHeight + 2 * this.data.zOffset
+        let totalH = 2 * this.MY + this.data.maxMastTubeDia + 2 * this.data.xOffset
+
+        // x,y Scales
+        this.sx = this.w / totalW
+        this.sy = this.h / totalH
+
+        this.tubes = this.data.mastTubes
+
+        this.startTubeNo = this.data.startTubeNo
+        this.endTubeNo = this.data.endTubeNo
+
+        this.data.mastTubes.toArray.forEach(tube => {
+            this.drawTubes(tube)
+        });
+
+
+
+
+        this.auxiliaryCurves()
+    }
 
 
 
@@ -526,7 +586,7 @@ export default class MastDraw {
 
 
 
-    SILdrawTubes(tube) {
+    drawTubes(tube) {
 
         let x0 = (this.MX + this.R + tube.heights.ebh - this.zeroizeHeight) * this.sx
         let y0 = this.h / 2 - tube.od / 2 * this.sy
@@ -608,27 +668,90 @@ export default class MastDraw {
 
 
 
+    svgToPng() {
+
+        // console.log('son data', this.data)
+
+        localStorage.setItem('data', JSON.stringify(this.data));
 
 
 
 
+        const girdi = document.getElementById(this.svgId)
+        // const cikti = document.getElementById('resim')
 
+        let svgData = new XMLSerializer().serializeToString(girdi)
 
-
-
-
-
-
-    svgToPng(elId) {
-
-        let svgElement = document.getElementById(elId)
-        let imgId = elId + 'Image'
-
-        if (svgElement === null) {
-            return true;
+        if (!svgData.match(/xmlns/i)) {
+            svgData = svgData.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
         }
 
-        // console.log('SVG to PNG:', svgElement, imgId, typeof svgElement)
+        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' })
+        const url = URL.createObjectURL(svgBlob)
+
+        const image = new Image()
+
+        image.onload = () => {
+            console.log('Image loaded!')
+
+            const width = girdi.getAttribute('width') || girdi.getBoundingClientRect().width || 800
+            const height = girdi.getAttribute('height') || girdi.getBoundingClientRect().height || 600
+
+            const canvas = document.createElement('canvas')
+            canvas.width = width
+            canvas.height = height
+
+            const context = canvas.getContext('2d')
+            context.drawImage(image, 0, 0, width, height)
+
+            const dataUrl = canvas.toDataURL('image/png')
+
+            document.getElementById('nested').svg = dataUrl
+            // cikti.src = dataUrl
+
+
+
+
+
+
+            // canvas.toBlob((blob) => {
+            //     const downloadUrl = URL.createObjectURL(blob)
+            //     const link = document.createElement('a')
+            //     link.download = 'converted-image.png' // Set filename here
+            //     link.href = downloadUrl
+            //     link.click()
+
+            //     // Clean up
+            //     URL.revokeObjectURL(downloadUrl)
+            // }, 'image/png')
+
+
+
+
+            // URL.revokeObjectURL(url) // Clean up
+        }
+
+        // image.onerror = (e) => {
+        //     console.error('Image failed to load!', e)
+        //     URL.revokeObjectURL(url)
+        // }
+
+        // image.src = url
+    }
+
+
+
+
+
+
+
+
+
+
+
+    svgToPng2(svgElement, x, y, width, height) {
+
+
 
         return new Promise((resolve, reject) => {
 
@@ -665,7 +788,11 @@ export default class MastDraw {
 
                     // console.log("Sonuc ", x, y, width, height)
 
-                    document.getElementById(imgId).src = dataUrl
+                    document.getElementById('nested').src = dataUrl
+
+
+
+
 
 
                     // Clean up the temporary URL
@@ -712,3 +839,20 @@ export default class MastDraw {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

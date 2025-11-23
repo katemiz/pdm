@@ -19,7 +19,7 @@ export default class GenerateBrochure {
         this.logoImage
 
         this.qrCodeImage = null  // Store QR code 
-        
+
         if (this.data.mastType == 'MTWR') {
             this.props = [
                 { name: 'barbellIcon', text: ['Increased Payload Capacity', 'with new tubes and steel wires'] },
@@ -30,7 +30,7 @@ export default class GenerateBrochure {
             ]
         } else {
             this.props = [
-                { name: 'barbellIcon', text: ['High Payload Capacity', 'Low Twist/Deflection','with new AL stiffened tube profiles'] },
+                { name: 'barbellIcon', text: ['High Payload Capacity', 'Low Twist/Deflection', 'with new AL stiffened tube profiles'] },
                 // { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'for low twist and deflection'] },
                 { name: 'compressorIcon', text: ['Pneumatically driven by', 'Air Compressor System'] },
                 { name: 'personIcon', text: ['New patented low friction', 'slide mechanism'] },
@@ -40,7 +40,44 @@ export default class GenerateBrochure {
             ]
         }
 
+        this.image_warning = 'Image shown in cover page is for illustration purposes only shows heavy duty mast.'
+
         this.mastCode = (this.data.extendedHeight / 1000).toFixed(0) + this.data.mastType + '-' + (this.data.nestedHeight / 1000).toFixed(1) + '-' + this.data.mastTubes.length
+
+
+
+        this.accessories = [
+            {
+                name: 'Side/Vehicle Adaptor',
+                text: ['For Lateral stability and Vehicle Connections', 'Guying Usage Depends on Payload and Mast Height'],
+                image: 'accessory1'
+            },
+            {
+                name: 'Floor/Side/Vehicle Adaptor',
+                text: ['For Lateral stability and Vehicle Connections', 'Guying Usage Depends on Payload and Mast Height'],
+                image: 'accessory2'
+            },
+            {
+                name: 'Compressor',
+                text: ['Pressurised Air System Needed'],
+                image: 'accessory4'
+            },
+            {
+                name: 'Transport Lock',
+                text: ['For Heavy Vibration Environments'],
+                image: 'accessory3'
+            },
+        ]
+
+
+
+        this.config = {
+            pageBgColor: "204, 204, 204",
+            pageHeaderBgColor: [25, 50, 60],
+            pageFontSize: 12,
+            imgS: 12,
+            gap: 20
+        }
     }
 
 
@@ -70,10 +107,10 @@ export default class GenerateBrochure {
 
         this.coverPage()
         this.propertiesPage()
-        this.dimensionPages('NestedSvgImage','Nested Height Diagram')
-        this.dimensionPages('ExtendedSvgImage','Extended Height Diagram')
-
+        this.dimensionPages('NestedSvgImage', 'Nested Height Diagram')
+        this.dimensionPages('ExtendedSvgImage', 'Extended Height Diagram')
         this.optionalAccessoriesPage()
+        this.disclaimerPage()
 
         this.pdf.save(this.mastCode + '.pdf');
     }
@@ -81,31 +118,7 @@ export default class GenerateBrochure {
 
     coverPage() {
 
-        this.pageWidth = this.pdf.internal.pageSize.getWidth()
-        this.pageHeight = this.pdf.internal.pageSize.getHeight()
-
-        // this.pdf.setFillColor(204, 204, 204); // RGB: light orange
-
-        // this.pdf.setFillColor(169, 63, 85);
-        // this.pdf.rect(0, 0, this.pageWidth, this.pageHeight, 'F');
-
-        // const imgWidth = 86
-
-        // this.pdf.setFillColor(104, 104, 24); // RGB: light orange
-        // this.pdf.rect(this.pageWidth - this.mx - imgWidth, this.my, imgWidth, this.pageHeight - 2 * this.my, 'F');
-
-        // console.log(imgWidth, this.pageHeight - 2 * this.my)
-
-
-
         this.pdf.addImage(document.getElementById(this.data.mastType), 'PNG', 0, 0, 210, 297);
-
-
-
-        // this.pdf.setFillColor(169, 163, 85, 0.5);
-        // this.pdf.rect(0, this.pageHeight*0.16, this.pageWidth, 46, 'F');
-
-
         this.addHeaderFooter()
 
         // COVER TITLE AND SUBTITLE
@@ -117,15 +130,15 @@ export default class GenerateBrochure {
         this.pdf.setFont('helvetica', 'normal');
         this.pdf.text(this.mastCode, this.mx, this.pageHeight * 0.27 + 10);
 
+        this.pdf.setFontSize(8);
+        this.pdf.text(this.image_warning, 207, 294, { angle: 90 });
+
         // QR CODE
         this.addQrCode()
 
-
         // SMALL ICONS AND EXPLANATIONS
-        const imgS = 12
 
         let y = 110
-        const gap = 20
 
         this.pdf.setFontSize(14);
 
@@ -133,14 +146,11 @@ export default class GenerateBrochure {
 
             this.pdf.setFillColor(255, 255, 255);
 
-            this.pdf.rect(this.mx, y, imgS, imgS, 'F');
-            this.pdf.addImage(document.getElementById(element.name), 'PNG', this.mx+imgS*0.15, y+imgS*0.15, imgS * 0.7, imgS * 0.7);
-            this.pdf.text(element.text, this.mx + imgS * 1.2, y, { baseline: 'top' });
-            y = y + gap
+            this.pdf.rect(this.mx, y, this.config.imgS, this.config.imgS, 'F');
+            this.pdf.addImage(document.getElementById(element.name), 'PNG', this.mx + this.config.imgS * 0.15, y + this.config.imgS * 0.15, this.config.imgS * 0.7, this.config.imgS * 0.7);
+            this.pdf.text(element.text, this.mx + this.config.imgS * 1.2, y, { baseline: 'top' });
+            y = y + this.config.gap
         }
-
-        // this.pdf.setFillColor(255, 0, 0);
-        // this.pdf.rect(this.mx, this.pageHeight - 50 - this.my, 50, 50, 'F');
 
         // MASTTECH BIG LOGO
         this.pdf.addImage(document.getElementById('masttech'), 'PNG', this.mx, this.pageHeight - 50 - this.my, 52, 50);
@@ -153,26 +163,9 @@ export default class GenerateBrochure {
 
         this.pdf.addPage('a4', 'portrait')
 
-        this.pdf.setFillColor(25, 50, 60); 
-        this.pdf.rect(0, 0, this.pdf.internal.pageSize.getWidth(), this.pdf.internal.pageSize.getHeight(), 'F');
+        this.addHeaderFooter('General Mast Properties')
 
-        this.addHeaderFooter()
-
-        this.pdf.setFontSize(72);
-
-        this.pdf.setFillColor(243, 247, 240); 
-        this.pdf.rect(0, 35, 160, 40, 'F');
-
-        this.pdf.setTextColor(25, 50, 60);
-        this.pdf.setFont('helvetica', 'bold');
-        this.pdf.text(this.data.mastType, 3 * this.mx, 60);
-
-        this.pdf.setFontSize(16);
-
-        this.pdf.setTextColor(0, 0, 0);
-        this.pdf.setFont('courier', 'normal');
-        this.pdf.text(this.mastCode, 3 * this.mx, 70);
-
+        // this.pageHeaders('General Mast Properties')
 
         const props = [
             ['Maximum Payload Capacity', this.data.maxPayloadCapacity, 'kg'],
@@ -183,66 +176,15 @@ export default class GenerateBrochure {
             ['Maximum Survival Wind Speed', 160, 'km/h'],
             ['Maximum Sail Area', this.data.sailarea, 'm2'],
             ['Mast Tube Material', 'Aluminium', ''],
-            ['Mast Weight', this.data.mastWeight.toFixed(0), 'kg'],
-
+            ['Mast Weight [Estimated]', this.data.mastWeight.toFixed(0), 'kg'],
         ]
 
-        /* 
-                    autoTable(this.pdf, {
-                        head: [['Property', 'Value', 'Unit']],
-                        body: [
-                            ['Maximum Payload Capacity', this.data.maxPayloadCapacity, 'kg'],
-                            ['Extended Height', this.data.extendedHeight, 'kg'],
-                            ['Nested Height', this.data.nestedHeight, 'kg'],
-                            ['Number of Sections', '$25', 'kg'],
-                            ['Maximum Operational Wind Speed', '$25', 'kg'],
-                            ['Maximum Survival Wind Speed', '$25', 'kg'],
-                            ['Maximum Sail Area', '$25', 'kg'],
-                            ['Mast Tube Material', '$25', 'kg'],
-                            ['Mast Weight', '$25', 'kg'],
-        
-                        ],
-                        startY: 140
-                    }); */
-
-        let y = 90
-
-        let textwidth
-
-        props.forEach(element => {
-
-            // CIRCLE DOT
-            this.pdf.setFillColor(100, 204, 204); // RGB: light orange
-            this.pdf.circle(3 * this.mx, y + 2, 4, 'F');
-
-            // PROPERTY NAME
-            this.pdf.setTextColor(127, 255, 255);
-            this.pdf.setFontSize(12);
-            this.pdf.setFont('courier', 'normal');
-            this.pdf.text(String(element[0]), 3.5 * this.mx, y);
-
-            // PROPERTY VALUE
-            this.pdf.setTextColor(255, 255, 255);
-            this.pdf.setFontSize(24);
-            this.pdf.setFont('helvetica', 'bold');
-            this.pdf.text(String(element[1]), 3.5 * this.mx, y + 8);
-
-            // this.pdf.addImage(document.getElementById('dot'), 'PNG', 2 * this.mx, y, 16, 16);
-
-            // PROPERTY UNIT
-            textwidth = this.pdf.getTextWidth(String(element[1]))
-            this.pdf.setTextColor(195, 221, 233);
-            this.pdf.setFontSize(24);
-            this.pdf.setFont('courier', 'normal');
-            this.pdf.text(String(element[2]), 3.5 * this.mx + 1.1 * textwidth, y + 8);
-
-            y += 20
-
+        autoTable(this.pdf, {
+            columnStyles: { 1: { halign: 'right', fontWeight: "bold" } }, // Cells in first column centered and green
+            head: [['Property', 'Value', 'Unit']],
+            body: props,
+            startY: 70
         });
-
-        this.pdf.setFont('helvetica', 'normal');
-
-
     }
 
 
@@ -253,98 +195,32 @@ export default class GenerateBrochure {
 
     optionalAccessoriesPage() {
 
-        this.pageWidth = this.pdf.internal.pageSize.getWidth()
-        this.pageHeight = this.pdf.internal.pageSize.getHeight()
-
         this.pdf.addPage('a4', 'portrait')
+        this.addHeaderFooter('Optional Hardware')
 
-        this.pdf.setFillColor(204, 204, 204);
-        this.pdf.rect(0, 0, this.pageWidth, this.pageHeight, 'F');
+        // ACCESSORIES LIST
+        let starty = 60;
 
-        this.addHeaderFooter()
+        let px, py;
 
-        this.pdf.setFillColor(25, 50, 60); 
+        let img_dim = (this.pageWidth - 2 * this.mx - this.config.gap) / 2;
 
-        this.pdf.rect(this.pageWidth / 2 - 50, 0, 100, 36, 'F');
+        this.pdf.setFontSize(14);
 
-        this.pdf.setFontSize(16);
-        this.pdf.setFont('courier', 'normal');
+        this.accessories.forEach((accessory, key) => {
 
-                this.pdf.setTextColor(255, 255, 255);
+            py = starty;
 
-        this.pdf.text(this.mastCode, this.pageWidth / 2, 20, { align: 'center' });
-        this.pdf.text('Optional Hardware', this.pageWidth / 2, 30, { align: 'center' });
+            if (key % 2 == 0) {
+                px = this.mx;
+            } else {
+                px = this.pageWidth / 2 + this.config.gap / 2;
+                starty += 120
+            }
 
-
-        let y = 70
-
-
-        // this.pdf.setTextColor(195, 221, 233);
-        this.pdf.setFontSize(32);
-        // this.pdf.setFont('helvetica', 'normal');
-        // this.pdf.text('OPTIONAL HARDWARE', this.mx, y);
-
-
-
-
-        this.props = [
-            { name: 'Side/Vehicle Adaptor', text: ['For Lateral stability and Vehicle Connections', 'Guying Usage Depends on Payload and Mast Height'],image: 'accessory1' },
-            { name: 'Floor/Side/Vehicle Adaptor', text: ['For Lateral stability and Vehicle Connections', 'Guying Usage Depends on Payload and Mast Height'],image: 'accessory2' },
-            { name: 'Compressor', text: ['Presureised Air System Needed'], image: 'accessory4' },
-            { name: 'Transport Lock', text: ['For Heavy Vibration Environments'], image: 'accessory3' },
-        ]
-
-        y += 20
-
-        let y2 = 50
-
-
-        this.pdf.setTextColor(5, 5, 5);
-
-
-        this.pdf.setFontSize(18);
-
-
-        this.pdf.text(String(this.props[0]['name']), this.mx, y2);
-        this.pdf.addImage(document.getElementById(this.props[0]['image']), 'PNG', this.mx, y2+10, 79, 79);
-
-        this.pdf.text(String(this.props[1]['name']), 105, y2);
-        this.pdf.addImage(document.getElementById(this.props[1]['image']), 'PNG', 105, y2+10, 79, 79);
-
-        y2 += 110
-
-        this.pdf.text(String(this.props[2]['name']), this.mx, y2);
-        this.pdf.addImage(document.getElementById(this.props[2]['image']), 'PNG', this.mx, y2+10, 79, 79);
-
-
-        this.pdf.text(String(this.props[3]['name']), 105, y2);
-        this.pdf.addImage(document.getElementById(this.props[3]['image']), 'PNG', 105, y2+10, 79, 79);
-
-        // this.props.forEach ( (prop,key) => {
-
-        //     this.pdf.setTextColor(0, 0, 0);
-        //     this.pdf.setFontSize(24);
-        //     this.pdf.setFont('helvetica', 'normal');
-        //     //this.pdf.text(String(prop['name']), this.mx, y2);
-
-        //     this.pdf.setFontSize(18);
-        //     this.pdf.text(String(prop['name']), this.mx, y2);
-
-        //     if (key == 1 || key == 3) {
-        //         imagex = 105
-        //     }
-            
-
-        //     this.pdf.addImage(document.getElementById(prop['image']), 'PNG', imagex, y2+15, 90, 90);
-
-        //                 if (key == 2 ) {
-
-        //     y2 += 105
-        //                 } 
-
-        // })
-
-
+            this.pdf.text(String(accessory.name), px, py);
+            this.pdf.addImage(document.getElementById(accessory.image), 'JPG', px, py + 4, img_dim, img_dim);
+        });
     }
 
 
@@ -366,33 +242,10 @@ export default class GenerateBrochure {
 
 
 
-
-
-
-
-
-    dimensionPages(imageId,metin) {
-
-        this.pageWidth = this.pdf.internal.pageSize.getWidth()
-        this.pageHeight = this.pdf.internal.pageSize.getHeight()
+    dimensionPages(imageId, metin) {
 
         this.pdf.addPage('a4', 'portrait')
-
-        this.pdf.setFillColor(204, 204, 204);
-        this.pdf.rect(0, 0, this.pageWidth, this.pageHeight, 'F');
-
-        this.addHeaderFooter()
-
-        this.pdf.setFillColor(25, 50, 60); 
-
-        this.pdf.rect(this.pageWidth / 2 - 50, 0, 100, 36, 'F');
-
-        this.pdf.setFontSize(16);
-        this.pdf.setFont('courier', 'normal');
-        this.pdf.setTextColor(255, 255, 255);
-
-        this.pdf.text(this.mastCode, this.pageWidth / 2, 20, { align: 'center' });
-        this.pdf.text(metin, this.pageWidth / 2, 30, { align: 'center' });
+        this.addHeaderFooter(metin)
 
         let y = 80
 
@@ -400,40 +253,45 @@ export default class GenerateBrochure {
 
         this.data.mastTubes.forEach(tube => {
             this.pdf.setFontSize(12);
-            this.pdf.text(String(tube.od.toFixed(2))+' mm', 3*this.mx, y, { align: 'right' });
+            this.pdf.text(String(tube.od.toFixed(2)) + ' mm', 3 * this.mx, y, { align: 'right' });
             y += 4
         });
 
-
-        this.pdf.text( ['Section','Tube','Diameters'], 3*this.mx, y+10, { align: 'right' });
+        this.pdf.text(['Section', 'Tube', 'Diameters'], 3 * this.mx, y + 10, { align: 'right' });
         this.pdf.setFontSize(8);
-        this.pdf.text( ['(Bottom to Top)'], 3*this.mx, y+24, { align: 'right' });
-
-        // this.pdf.line(105,  0, 105, 200);
+        this.pdf.text(['(Bottom to Top)'], 3 * this.mx, y + 24, { align: 'right' });
 
         this.pdf.addImage(document.getElementById(imageId), 'PNG', this.mx, 4 * this.my, 180, 180);
     }
 
 
-    addHeaderFooter() {
+    addHeaderFooter(title = false) {
 
-        const pageWidth = this.pdf.internal.pageSize.width;
-        const pageHeight = this.pdf.internal.pageSize.height;
+        this.pageWidth = this.pdf.internal.pageSize.getWidth()
+        this.pageHeight = this.pdf.internal.pageSize.getHeight()
 
+        if (title) {
 
-        /*
-        masttech.com         
-        this.pdf.setFont('helvetica', 'normal');
-        this.pdf.text('masttech.com', this.mx, this.my);
-        */
+            this.pdf.setFillColor(...this.config.pageHeaderBgColor);
+
+            this.pdf.rect(this.pageWidth / 2 - 50, 0, 100, 36, 'F');
+
+            this.pdf.setFontSize(16);
+            this.pdf.setFont('courier', 'normal');
+
+            this.pdf.setTextColor(255, 255, 255);
+
+            this.pdf.text(this.mastCode, this.pageWidth / 2, 20, { align: 'center' });
+            this.pdf.text(title, this.pageWidth / 2, 30, { align: 'center' });
+        }
 
         // Footer
         this.pdf.setFontSize(9);
         this.pdf.setTextColor(0, 0, 0);
         this.pdf.setFont('helvetica', 'normal');
 
-        this.pdf.text('kapkara.one', pageWidth - this.mx, pageHeight - this.my * 0.6, { align: 'right' });
-        this.pdf.text('PDM Product Data Management', this.mx, pageHeight - this.my * 0.6, { align: 'left' });
+        this.pdf.text('kapkara.one', this.pageWidth - this.mx, this.pageHeight - this.my * 0.6, { align: 'right' });
+        this.pdf.text('PDM Product Data Management', this.mx, this.pageHeight - this.my * 0.6, { align: 'left' });
     }
 
 
@@ -450,84 +308,37 @@ export default class GenerateBrochure {
     }
 
 
-    SILaddSvgToPdf(svgElement, x, y, width, height) {
+
+    disclaimerPage() {
+
+        this.pdf.addPage('a4', 'portrait')
+        this.addHeaderFooter('Disclaimer')
+
+        this.pdf.setFontSize(10);
+        this.pdf.setTextColor(0, 0, 0);
+        this.pdf.setFont('helvetica', 'normal');
 
 
-        return new Promise((resolve, reject) => {
+        const disclaimerText = `
+        The information provided in this brochure is for general informational purposes only. While we strive to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the brochure or the information, products, services, or related graphics contained in the brochure for any purpose. Any reliance you place on such information is therefore strictly at your own risk. In no event will we be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or profits arising out of, or in connection with, the use of this brochure. Through this brochure you are able to link to other websites which are not under the control of our company. We have no control over the nature, content and availability of those sites. The inclusion of any links does not necessarily imply a recommendation or endorse the views expressed within them. Every effort is made to keep the brochure up and running smoothly. However, our company takes no responsibility for, and will not be liable for, the brochure being temporarily unavailable due to technical issues beyond our control.
+        `;
 
-            // 1. Serialize and Fix Namespace
-            let svgData = new XMLSerializer().serializeToString(svgElement);
-            if (!svgData.match(/xmlns/i)) {
-                svgData = svgData.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
-            }
+        this.pdf.text(this.pdf.splitTextToSize(disclaimerText, this.pageWidth - 2 * this.mx), this.mx, 60);
 
-            // 2. Create Loadable Image Source
-            const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(svgBlob);
-            const image = new Image();
+        let imgWidth = 84;
+        let imgHeight = 80;
 
-            // --- Core Asynchronous Logic ---
-            image.onload = () => {
-                try {
-                    // Determine dimensions for the Canvas (for best quality, match source size)
-                    const canvasWidth = svgElement.getAttribute('width') || svgElement.getBoundingClientRect().width || 800;
-                    const canvasHeight = svgElement.getAttribute('height') || svgElement.getBoundingClientRect().height || 600;
+        // MASTTECH BIG LOGO
+        this.pdf.addImage(document.getElementById('masttech'), 'PNG', (this.pageWidth - imgWidth) / 2, 120, imgWidth, imgHeight);
 
-                    // 3. Draw to Canvas and Get PNG Data
-                    const canvas = document.createElement('canvas');
-                    canvas.width = canvasWidth;
-                    canvas.height = canvasHeight;
+        const now = new Date();
 
-                    const context = canvas.getContext('2d');
-                    context.drawImage(image, 0, 0, canvasWidth, canvasHeight);
-
-                    // Get the final PNG data URL
-                    const dataUrl = canvas.toDataURL('image/png');
+        this.pdf.text(String(now), this.pageWidth / 2, 220, { align: 'center' });
 
 
 
-                    console.log("Sonuc ", x, y, width, height)
-
-                    document.getElementById('graphImage').src = dataUrl
-
-
-
-                    // --- 4. Bind to jsPDF ---
-                    this.pdf.addImage(dataUrl, 'PNG', x, y, width, height);
-
-
-
-                    this.pdf.addImage(document.getElementById('graphImage'), 'PNG', x, y, width, height);
-
-
-
-
-                    // Clean up the temporary URL
-                    URL.revokeObjectURL(url);
-
-                    resolve(); // Operation successful
-                } catch (error) {
-                    URL.revokeObjectURL(url);
-                    reject(error);
-                }
-            };
-
-            image.onerror = (error) => {
-                URL.revokeObjectURL(url);
-                reject(new Error('Failed to load SVG image source.'));
-            };
-
-            // Trigger the image loading process
-            image.src = url;
-        });
     }
 
-
-
-
-
-
-
 }
 
 
@@ -536,65 +347,4 @@ export default class GenerateBrochure {
 
 
 
-
-
-function SILaddSvgToPdf(svgElement, x, y, width, height) {
-
-    return new Promise((resolve, reject) => {
-
-        // 1. Serialize and Fix Namespace
-        let svgData = new XMLSerializer().serializeToString(svgElement);
-        if (!svgData.match(/xmlns/i)) {
-            svgData = svgData.replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ');
-        }
-
-        // 2. Create Loadable Image Source
-        const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(svgBlob);
-        const image = new Image();
-
-        // --- Core Asynchronous Logic ---
-        image.onload = () => {
-            try {
-                // Determine dimensions for the Canvas (for best quality, match source size)
-                const canvasWidth = svgElement.getAttribute('width') || svgElement.getBoundingClientRect().width || 800;
-                const canvasHeight = svgElement.getAttribute('height') || svgElement.getBoundingClientRect().height || 600;
-
-                // 3. Draw to Canvas and Get PNG Data
-                const canvas = document.createElement('canvas');
-                canvas.width = canvasWidth;
-                canvas.height = canvasHeight;
-
-                const context = canvas.getContext('2d');
-                context.drawImage(image, 0, 0, canvasWidth, canvasHeight);
-
-                // Get the final PNG data URL
-                const dataUrl = canvas.toDataURL('image/png');
-
-                console.log(dataUrl, x, y, width, height)
-
-                document.getElementById('graphImage').src = dataUrl
-
-                // --- 4. Bind to jsPDF ---
-                this.pdf.addImage(dataUrl, 'PNG', x, y, width, height);
-
-                // Clean up the temporary URL
-                URL.revokeObjectURL(url);
-
-                resolve(); // Operation successful
-            } catch (error) {
-                URL.revokeObjectURL(url);
-                reject(error);
-            }
-        };
-
-        image.onerror = (error) => {
-            URL.revokeObjectURL(url);
-            reject(new Error('Failed to load SVG image source.'));
-        };
-
-        // Trigger the image loading process
-        image.src = url;
-    });
-}
 

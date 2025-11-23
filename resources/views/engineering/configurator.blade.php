@@ -1,7 +1,9 @@
 <section class="section container">
 
-    {{-- <script src="{{ asset('/js/CanvasDraw.js') }}"> </script> --}}
-    {{-- <script src="{{ asset('/js/productBrochure.js') }}"> </script> --}}
+    {{--
+    <script src="{{ asset('/js/CanvasDraw.js') }}"> </script> --}}
+    {{--
+    <script src="{{ asset('/js/productBrochure.js') }}"> </script> --}}
 
 
 
@@ -132,7 +134,7 @@
                 <a href="javascript:void(0)" onclick="toggleGraph('Loads')">Loads Analysis</a>
             </li>
 
-            <li id="liSvgExtended" >
+            <li id="liSvgExtended">
                 <a href="javascript:void(0)" onclick="toggleGraph('Extended')">Extended Position</a>
             </li>
             <li id="liSvgNested" class="is-active">
@@ -354,11 +356,11 @@
 
 
     {{-- // HIDDEN IMAGES --}}
-    <div class="column ">
+    <div class="column is-hidden">
 
         <img id="graphImage" alt="Mast Configurator Diagram">
-        <img src="{{ asset(path: 'images/mtwr_background.png') }}" alt="MTWR" id="MTWR">
-        <img src="{{ asset(path: 'images/mtpr_background.png') }}" alt="MTPR" id="MTPR">
+        <img src="{{ asset(path: 'images/mtwr_background.jpg') }}" alt="MTWR" id="MTWR">
+        <img src="{{ asset(path: 'images/mtpr_background.jpg') }}" alt="MTPR" id="MTPR">
 
         <img id="NestedSvgImage" alt="Nested Position Diagram">
         <img id="ExtendedSvgImage" alt="Extended Position Diagram">
@@ -379,10 +381,10 @@
         <img src="{{ asset(path: 'images/dot-outline.png') }}" alt="icon" id="dot">
 
 
-                <img src="{{ asset(path: 'images/Accessory1.png') }}" alt="icon" id="accessory1">
-                                <img src="{{ asset(path: 'images/Accessory2.png') }}" alt="icon" id="accessory2">
-                <img src="{{ asset(path: 'images/Accessory3.png') }}" alt="icon" id="accessory3">
-                <img src="{{ asset(path: 'images/Accessory4.png') }}" alt="icon" id="accessory4">
+        <img src="{{ asset(path: 'images/Accessory1.jpg') }}" alt="icon" id="accessory1">
+        <img src="{{ asset(path: 'images/Accessory2.jpg') }}" alt="icon" id="accessory2">
+        <img src="{{ asset(path: 'images/Accessory3.jpg') }}" alt="icon" id="accessory3">
+        <img src="{{ asset(path: 'images/Accessory4.jpg') }}" alt="icon" id="accessory4">
 
 
 

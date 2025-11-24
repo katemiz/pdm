@@ -18,7 +18,7 @@ class Configurator extends Component
 
     public $overlapDimension = 500;  // m
 
-    public $headDimension = 60; // m
+    //public $headDimension = 55; // m
 
     public $n; // Number of Sections
 
@@ -221,7 +221,7 @@ class Configurator extends Component
 
     public $overlapMTTubes = 500; // mm
 
-    public $headMTTubes = 70; // mm
+    public $headMTTubes; // mm
 
     public $xOffset = 100;
 
@@ -239,6 +239,11 @@ class Configurator extends Component
     public $mastWeightBreakdown = []; // kg
 
     public $maxPayloadCapacity = 1000; // kg
+
+
+    //public $isHeadDistanceInitializedMTWR = false; 
+    //public $isHeadDistanceInitializedMTPR = false; 
+
 
     public function mount()
     {
@@ -261,8 +266,12 @@ class Configurator extends Component
         }
     }
 
+
     public function render()
     {
+
+        $this->initializeHeadDimensison(); 
+
         $this->error = null;
 
         if ($this->endTubeNo <= $this->startTubeNo) {
@@ -287,11 +296,33 @@ class Configurator extends Component
         return view('engineering.configurator');
     }
 
+
     public function toggleHelpModal($modalType)
     {
         $this->modalType = $modalType;
         $this->showHelpModal = ! $this->showHelpModal;
     }
+
+
+
+
+    public function initializeHeadDimensison()
+    {
+        if ($this->mastType == 'MTPR' ) {
+            $this->headMTTubes = 55;
+            //$this->isHeadDistanceInitializedMTPR = true;
+        }
+
+        if ($this->mastType == 'MTWR' ) {
+            $this->headMTTubes = 42;
+            //$this->isHeadDistanceInitializedMTWR = true;
+        }
+    }
+
+
+
+
+
 
     public function getMastHeights()
     {
@@ -310,10 +341,12 @@ class Configurator extends Component
         return true;
     }
 
+
     public function toggleGraphType($position)
     {
         $this->graphType = $position;
     }
+
 
     public function MasttechProfiles()
     {
@@ -348,6 +381,7 @@ class Configurator extends Component
         $this->getElementCoordinates();
     }
 
+
     public function getElementCoordinates()
     {
 
@@ -377,6 +411,7 @@ class Configurator extends Component
         $this->allData['topAdapter']['bottomCenterPointNested'] = $this->nestedHeight - $this->topAdapterThk;
         $this->allData['topAdapter']['bottomCenterPointExtended'] = $this->extendedHeight - $this->topAdapterThk;
     }
+
 
     public function prepareAllData()
     {
@@ -426,6 +461,7 @@ class Configurator extends Component
         $this->allData['qr'] = url('/engineering/configurator?qr=').implode('-', $q);
     }
 
+
     public function CalculateLiftCapacity($od)
     {
         // Circular Area
@@ -435,6 +471,7 @@ class Configurator extends Component
         return $pi_mpa * $area;
     }
 
+
     public function CalculateArea($od, $id, $i)
     {
         $this->allTubes[$i]['areaBasic'] = (pow($od, 2) - pow($id, 2)) * pi() / 4; // mm2
@@ -443,17 +480,17 @@ class Configurator extends Component
         return true;
     }
 
+
     public function CalculateMass($od, $id, $i)
     {
-
         $this->allTubes[$i]['mass'] = $this->materialDensity * $this->realTubeData[$i]['area'] / 1000; // kg/m
 
         return true;
     }
 
+
     public function CalculateInertia($od, $id, $i)
     {
-
         // Moment of Inertia for a hollow tube
         // I = π/64*(od^4-id^4)
         // od = outer diameter
@@ -465,9 +502,9 @@ class Configurator extends Component
         return true;
     }
 
+
     public function CalculateMomentCapability($od, $id, $i)
     {
-
         // Moment Capability
         // M = σ * I / y
 
@@ -477,9 +514,9 @@ class Configurator extends Component
         return true;
     }
 
+
     public function ProfileCriticalLoad($od, $id, $i)
     {
-
         // Euler Column Critical Load Formula is used
 
         // Pcr = π^2EI/4L^2
@@ -495,6 +532,7 @@ class Configurator extends Component
         return true;
     }
 
+
     public function EI($od, $id, $i)
     {
         // EI = E*I
@@ -503,6 +541,7 @@ class Configurator extends Component
 
         $this->allTubes[$i]['EI'] = $this->E * $this->realTubeData[$i]['inertia']; // Nmm2
     }
+
 
     public function WindLoadOnPayload()
     {
@@ -516,9 +555,9 @@ class Configurator extends Component
         $this->windLoadOnPayload = 0.5 * $this->airdensity * $this->cd * $this->sailarea * pow($this->windspeed / 3.6, 2);
     }
 
+
     public function calculateMastWeight()
     {
-
         $this->mastWeight = 0;
         $this->mastWeightBreakdown = [];
 
@@ -647,6 +686,7 @@ class Configurator extends Component
 
         return true;
     }
+
 
     public function calculateTubeWindLoads()
     {

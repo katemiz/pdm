@@ -1,11 +1,5 @@
 <section class="section container">
 
-    {{--
-    <script src="{{ asset('/js/CanvasDraw.js') }}"> </script> --}}
-    {{--
-    <script src="{{ asset('/js/productBrochure.js') }}"> </script> --}}
-
-
 
     <script>
 

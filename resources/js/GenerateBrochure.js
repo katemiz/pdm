@@ -162,10 +162,7 @@ export default class GenerateBrochure {
     propertiesPage() {
 
         this.pdf.addPage('a4', 'portrait')
-
         this.addHeaderFooter('General Mast Properties')
-
-        // this.pageHeaders('General Mast Properties')
 
         const props = [
             ['Maximum Payload Capacity', this.data.maxPayloadCapacity, 'kg'],
@@ -318,7 +315,6 @@ export default class GenerateBrochure {
         this.pdf.setTextColor(0, 0, 0);
         this.pdf.setFont('helvetica', 'normal');
 
-
         const disclaimerText = `
         The information provided in this brochure is for general informational purposes only. While we strive to keep the information up to date and correct, we make no representations or warranties of any kind, express or implied, about the completeness, accuracy, reliability, suitability or availability with respect to the brochure or the information, products, services, or related graphics contained in the brochure for any purpose. Any reliance you place on such information is therefore strictly at your own risk. In no event will we be liable for any loss or damage including without limitation, indirect or consequential loss or damage, or any loss or damage whatsoever arising from loss of data or profits arising out of, or in connection with, the use of this brochure. Through this brochure you are able to link to other websites which are not under the control of our company. We have no control over the nature, content and availability of those sites. The inclusion of any links does not necessarily imply a recommendation or endorse the views expressed within them. Every effort is made to keep the brochure up and running smoothly. However, our company takes no responsibility for, and will not be liable for, the brochure being temporarily unavailable due to technical issues beyond our control.
         `;
@@ -334,9 +330,6 @@ export default class GenerateBrochure {
         const now = new Date();
 
         this.pdf.text(String(now), this.pageWidth / 2, 220, { align: 'center' });
-
-
-
     }
 
 }

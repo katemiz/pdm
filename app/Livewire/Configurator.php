@@ -583,6 +583,66 @@ class Configurator extends Component
             $this->mastWeightBreakdown['payloadAdapter'] = 0.3 * ($this->startTubeNo - 9) + 2.9; // kg
         }
 
+
+        if ($this->mastType == 'MTWR') {
+
+            // Fixed Tube Head Flanges
+            $fixedFlangeWeight = 0;
+
+            foreach ($this->mastTubes as $key => $tube) {
+                $fixedFlangeWeight += 0.0688 * ($tube['no'] - 6) + 0.35; // kg
+            }
+
+            $this->mastWeightBreakdown['fixedTubeHeadFlanges'] = $fixedFlangeWeight;
+
+            // Top Roller Holder Flanges
+            $topRollerHolderFlangeWeight = 0;
+
+            foreach ($this->mastTubes as $key => $tube) {
+
+                if ($tube['no'] != $this->endTubeNo) {
+                    $topRollerHolderFlangeWeight += 0.05556 * ($tube['no'] - 6) + 0.75; // kg
+                }
+            }
+
+            $this->mastWeightBreakdown['topRollerHolderFlanges'] = $topRollerHolderFlangeWeight;
+
+            //Roller Weights
+            $noOfRollers = count($this->mastTubes) *2;
+
+            $this->mastWeightBreakdown['rollerWeights'] = 0.12* $noOfRollers; // 0.12 kg/roller
+
+
+            // Base Adapter weight: Only one base adapter for MTWR
+            $this->mastWeightBreakdown['baseAdapter'] = 0.32225 * ($this->endTubeNo - 6) + 3.5; // kg
+
+
+            // Bottom Roller Holder Flanges
+            $bottomRollerHolderFlangeWeight = 0;
+
+            foreach ($this->mastTubes as $key => $tube) {
+
+                if ($tube['no'] != $this->endTubeNo) {
+                    $bottomRollerHolderFlangeWeight += 0.08889 * ($tube['no'] - 6) + 0.4; // kg
+                }
+            }
+
+            $this->mastWeightBreakdown['bottomRollerHolderFlanges'] = $bottomRollerHolderFlangeWeight;
+
+            // Fıxed Rollers Holder Part Weigts
+            $noOfFixedRollerHolderParts = (count($this->mastTubes) -2) *2;
+
+            $this->mastWeightBreakdown['fixedRollerHolderParts'] = 0.04 * $noOfFixedRollerHolderParts; // 0.04 kg/roller
+
+            // Payload Adapter
+            $this->mastWeightBreakdown['payloadAdapter'] = 0.3567 * ($this->startTubeNo - 6) + 1.74; // kg
+
+            // Steel Wire Weight
+            $wireLength = 2.05*count($this->mastTubes) * $this->lengthMTTubes / 1000; // meters
+            $this->mastWeightBreakdown['steelWire'] = 0.12 * $wireLength; // kg (2.5 kg/meter)
+        }
+
+
         $this->mastWeight = array_sum($this->mastWeightBreakdown) * 1.05; // kg with 5% extra for bolts and nuts
 
         return true;

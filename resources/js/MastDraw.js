@@ -2,7 +2,7 @@ export default class MastDraw {
 
     constructor(data, svgId) {
 
-        //console.log('MastDrawClass start:', data, svgId)
+        // console.log('MastDrawClass start:', data, svgId)
 
         //console.log('Critical Load:', data.startTubeNo, data.endTubeNo, data.mastTubes)
 

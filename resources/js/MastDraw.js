@@ -2,7 +2,7 @@ export default class MastDraw {
 
     constructor(data, svgId) {
 
-        console.log('MastDrawClass start:', data, svgId)
+        //console.log('MastDrawClass start:', data, svgId)
 
         //console.log('Critical Load:', data.startTubeNo, data.endTubeNo, data.mastTubes)
 
@@ -44,8 +44,6 @@ export default class MastDraw {
     run() {
 
         this.setValues()
-
-        //this.drawGround()
 
         // BASE ADAPTER
         this.drawBaseAdapter()
@@ -133,25 +131,6 @@ export default class MastDraw {
     }
 
 
-    drawGround() {
-
-        let r = document.createElementNS('http://www.w3.org/2000/svg', 'line')
-
-        r.setAttribute('x1', this.sx * 2000)
-        r.setAttribute('y1', this.sy * (this.totalH - (this.y0 )))
-        r.setAttribute('x2', this.sx * 8000)
-        r.setAttribute('y2', this.sy * (this.totalH - (this.y0 )))
-
-        this.sy * (this.totalH - (this.y0))
-
-        // r.setAttribute('fill', '#654321')
-        // r.setAttribute('style', 'fill-opacity: .95;')
-        r.setAttribute('stroke', '#28272e')
-        r.setAttribute('stroke-width', '0.4')
-
-        this.g.appendChild(r)
-    }
-
 
 
 
@@ -177,7 +156,7 @@ export default class MastDraw {
         r.setAttribute('width', this.sx * tube.od)
         r.setAttribute('height', this.sy * parseInt(tube.length))
 
-        r.setAttribute('fill', '#EAE2B7')
+        r.setAttribute('fill', '#b8b6b1ff')
         r.setAttribute('style', 'fill-opacity: .25;')
         r.setAttribute('stroke', '#28272e')
         r.setAttribute('stroke-width', '1')
@@ -472,7 +451,7 @@ export default class MastDraw {
         }
 
         let topLeft = {
-            x: this.x0 - smallestTube.od * 1.5,
+            x: this.x0 - smallestTube.od * 0.75,
             y: this.totalH - (y + parseInt(smallestTube.length) + this.y0 + this.data.topAdapterThk)
         }
 
@@ -480,7 +459,7 @@ export default class MastDraw {
 
         r.setAttribute('x', this.sx * topLeft.x)
         r.setAttribute('y', this.sy * topLeft.y)
-        r.setAttribute('width', this.sx * smallestTube.od * 3)
+        r.setAttribute('width', this.sx * smallestTube.od * 1.5)
         r.setAttribute('height', this.sy * this.data.topAdapterThk)
 
         r.setAttribute('fill', '#e6347eff')
@@ -511,78 +490,17 @@ export default class MastDraw {
 
     drawGuying(tube) { 
 
-
-
-
-        let guyingRadius = 0.6*this.data.extendedHeight
-
-
-
-        console.log('Guying Radius:', guyingRadius);
-
-
-
-
-
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
-
-
-
         r.setAttribute('x1', this.sx * (this.x0 - tube.od / 2))
-        //r.setAttribute('y2', this.sy * (this.y0 + parseInt(tube.length)))
         r.setAttribute('y1', this.sy * (this.totalH - (tube.bottomCenterPointExtended + this.y0+ parseInt(tube.length))))
-
-        ///r.setAttribute('x2', this.sx * (this.x0- parseInt(guyingRadius)))
-
         r.setAttribute('x2', this.sx * (2000))
-
-        //r.setAttribute('y2', this.sy * this.y0)
-
         r.setAttribute('y2', this.sy * (this.totalH - (this.y0)))
 
         r.setAttribute('stroke', '#929194ff')
         r.setAttribute('stroke-width', '0.8')
 
         this.g.appendChild(r)
-
-
-
-
-
-
-        // switch (this.svgId) {
-        //     case 'Extended':
-        //         y = tube.bottomCenterPointExtended
-        //         textValue = tube.bottomCenterPointExtended
-        //         break;
-
-        //     case 'Nested':
-        //     default:
-        //         y = tube.bottomCenterPointNested
-        //         textValue = tube.bottomCenterPointNested
-        //         break;
-        // }
-
-        // // BOTTOM FACE coordinates
-        // let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
-
-        // l.setAttribute('x1', this.sx * (this.x0 + offset))
-        // l.setAttribute('y1', this.sy * (this.totalH - (y + this.y0)))
-        // l.setAttribute('x2', this.sx * (this.x0 + offset + textLeaderLength))
-        // l.setAttribute('y2', this.sy * (this.totalH - (y + this.y0)))
-        // l.setAttribute('stroke', '#4F6D7A')
-        // l.setAttribute('stroke-width', '0.5')
-
-
-
-
-
-
-
-
-
-        console.log('Guyings Drawing Not Implemented Yet',this.sx * (this.x0 - tube.od / 2));
     } 
 
 
@@ -628,29 +546,6 @@ export default class MastDraw {
 
 
 
-    SILdrawTubes(tube) {
-
-        let x0 = (this.MX + this.R + tube.heights.ebh - this.zeroizeHeight) * this.sx
-        let y0 = this.h / 2 - tube.od / 2 * this.sy
-        let rw = (tube.length) * this.sx
-        let rh = tube.od * this.sy
-
-        this.g.beginPath();
-        this.g.fillStyle = "LightGray";
-        this.g.strokeStyle = "Black";
-
-        this.g.rect(x0, y0, rw, rh);
-        this.g.stroke();
-        this.g.fill();
-        this.g.closePath();
-
-        this.g.fillStyle = "Green";
-        this.g.fillText('F' + tube.no, x0 + rw / 2 - 5, y0 - 60);
-
-        this.drawPayloadArrow(x0 + rw / 2, y0 - 50, x0 + rw / 2, y0, 4, "green");
-
-        return true;
-    }
 
 
 

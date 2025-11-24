@@ -181,7 +181,6 @@
                 </div>
             </div>
 
-
             <div class="cell my-2">
 
                 <label class="label">Payload Adapter<br>Thickness [mm]</label>
@@ -200,8 +199,6 @@
                 </div>
             </div>
 
-
-
             <div class="cell my-2">
 
                 <label class="label">Maximum Payload<br>Capacity [kg]</label>
@@ -210,9 +207,6 @@
                         step="1">
                 </div>
             </div>
-
-
-
 
         </div>
 
@@ -240,8 +234,6 @@
                 </div>
             </div>
 
-
-
             <div class="level-item has-text-centered">
                 <div>
                     <p class="heading">Wind Load on Payload</p>
@@ -250,15 +242,13 @@
                 </div>
             </div>
 
-
             <div class="level-item has-text-centered">
                 <div>
-                    <p class="heading">Mast Tubes Weight</p>
+                    <p class="heading">Mast Weight [Estimation] </p>
                     <p class="title">{{ round($mastWeight, 0) }}</p>
                     <p class="heading">kg</p>
                 </div>
             </div>
-
 
         </nav>
     </div>

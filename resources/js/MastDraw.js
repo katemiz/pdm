@@ -2,7 +2,7 @@ export default class MastDraw {
 
     constructor(data, svgId) {
 
-        // console.log('MastDrawClass start:', data, svgId)
+        console.log('MastDrawClass start:', data, svgId)
 
         //console.log('Critical Load:', data.startTubeNo, data.endTubeNo, data.mastTubes)
 
@@ -20,14 +20,17 @@ export default class MastDraw {
 
             default:
             case 'Nested':
+                this.coefficient = 0.495
                 this.divId = 'divSvgNested'
                 break;
 
             case 'Extended':
+                this.coefficient = 0.695
                 this.divId = 'divSvgExtended'
                 break;
 
             case 'Loads':
+                this.coefficient = 0.495
                 this.divId = 'divSvgLoads'
                 break;
 
@@ -42,6 +45,8 @@ export default class MastDraw {
 
         this.setValues()
 
+        //this.drawGround()
+
         // BASE ADAPTER
         this.drawBaseAdapter()
 
@@ -50,6 +55,12 @@ export default class MastDraw {
             this.drawRectangle(tube);
         });
 
+        // GUYINGS
+        if (this.svgId === 'Extended' ) {
+            this.data.mastTubes.forEach(tube => {
+                this.drawGuying(tube);
+            });
+        } 
 
         // DIM TEXT LINES
         this.data.mastTubes.forEach(tube => {
@@ -115,14 +126,31 @@ export default class MastDraw {
         this.sx = this.svgW / this.totalH
         this.sy = this.svgH / this.totalH
 
-        this.x0 = this.totalH * 0.495
+        this.x0 = this.totalH * this.coefficient
         this.y0 = this.totalH * this.MY / 100
 
         this.g = document.createElementNS('http://www.w3.org/2000/svg', 'g')
     }
 
 
+    drawGround() {
 
+        let r = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+
+        r.setAttribute('x1', this.sx * 2000)
+        r.setAttribute('y1', this.sy * (this.totalH - (this.y0 )))
+        r.setAttribute('x2', this.sx * 8000)
+        r.setAttribute('y2', this.sy * (this.totalH - (this.y0 )))
+
+        this.sy * (this.totalH - (this.y0))
+
+        // r.setAttribute('fill', '#654321')
+        // r.setAttribute('style', 'fill-opacity: .95;')
+        r.setAttribute('stroke', '#28272e')
+        r.setAttribute('stroke-width', '0.4')
+
+        this.g.appendChild(r)
+    }
 
 
 
@@ -481,7 +509,81 @@ export default class MastDraw {
 
 
 
+    drawGuying(tube) { 
 
+
+
+
+        let guyingRadius = 0.6*this.data.extendedHeight
+
+
+
+        console.log('Guying Radius:', guyingRadius);
+
+
+
+
+
+        let r = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+
+
+
+
+        r.setAttribute('x1', this.sx * (this.x0 - tube.od / 2))
+        //r.setAttribute('y2', this.sy * (this.y0 + parseInt(tube.length)))
+        r.setAttribute('y1', this.sy * (this.totalH - (tube.bottomCenterPointExtended + this.y0+ parseInt(tube.length))))
+
+        ///r.setAttribute('x2', this.sx * (this.x0- parseInt(guyingRadius)))
+
+        r.setAttribute('x2', this.sx * (2000))
+
+        //r.setAttribute('y2', this.sy * this.y0)
+
+        r.setAttribute('y2', this.sy * (this.totalH - (this.y0)))
+
+        r.setAttribute('stroke', '#929194ff')
+        r.setAttribute('stroke-width', '0.8')
+
+        this.g.appendChild(r)
+
+
+
+
+
+
+        // switch (this.svgId) {
+        //     case 'Extended':
+        //         y = tube.bottomCenterPointExtended
+        //         textValue = tube.bottomCenterPointExtended
+        //         break;
+
+        //     case 'Nested':
+        //     default:
+        //         y = tube.bottomCenterPointNested
+        //         textValue = tube.bottomCenterPointNested
+        //         break;
+        // }
+
+        // // BOTTOM FACE coordinates
+        // let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+
+        // l.setAttribute('x1', this.sx * (this.x0 + offset))
+        // l.setAttribute('y1', this.sy * (this.totalH - (y + this.y0)))
+        // l.setAttribute('x2', this.sx * (this.x0 + offset + textLeaderLength))
+        // l.setAttribute('y2', this.sy * (this.totalH - (y + this.y0)))
+        // l.setAttribute('stroke', '#4F6D7A')
+        // l.setAttribute('stroke-width', '0.5')
+
+
+
+
+
+
+
+
+
+        console.log('Guyings Drawing Not Implemented Yet',this.sx * (this.x0 - tube.od / 2));
+    } 
 
 
 

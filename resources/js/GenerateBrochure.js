@@ -259,6 +259,16 @@ export default class GenerateBrochure {
         this.pdf.text(['(Bottom to Top)'], 3 * this.mx, y + 24, { align: 'right' });
 
         this.pdf.addImage(document.getElementById(imageId), 'PNG', this.mx, 4 * this.my, 180, 180);
+
+        if (imageId === "ExtendedSvgImage") {
+
+            this.pdf.setFontSize(12);
+            this.pdf.setTextColor(24, 48, 89);
+
+            const guyingText = `(*) As a general rule of thumb, guying radius should be equal to extended mast height for optimal stability. Guying radius, number of guying and at which tubes guying to be fixed should be evaluated per payload, stability requirements and available space. Please contact Masttech for detailed guying recommendations.`
+        
+            this.pdf.text(this.pdf.splitTextToSize(guyingText, this.pageWidth - 2 * this.mx), this.mx, 240);
+        } 
     }
 
 
@@ -278,8 +288,8 @@ export default class GenerateBrochure {
 
             this.pdf.setTextColor(255, 255, 255);
 
-            this.pdf.text(this.mastCode, this.pageWidth / 2, 20, { align: 'center' });
-            this.pdf.text(title, this.pageWidth / 2, 30, { align: 'center' });
+            this.pdf.text(this.mastCode, this.pageWidth / 2, 15, { align: 'center' });
+            this.pdf.text(title, this.pageWidth / 2, 25, { align: 'center' });
         }
 
         // Footer

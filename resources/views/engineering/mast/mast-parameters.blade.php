@@ -16,6 +16,10 @@
                 <input type="radio" wire:model.live="mastType" value="MTPR"> MTPR Pneumatical Mast
             </label>
 
+            <label class="checkbox is-block">
+                <input type="radio" wire:model.live="mastType" value="TEST"> Testing Mast
+            </label>
+
         </div>
 
     </div>
@@ -129,7 +133,7 @@
             </div>
 
             <div class="cell my-2">
-                <label class="label">X-Offset <a wire:click="toggleHelpModal('mparams')">?</a><br>[mm] </label>
+                <label class="label">X-Offset <a wire:click="toggleModal('modalOffsets')">?</a><br>[mm] </label>
                 <div class="control">
                     <input class="input" type="number" placeholder="Payload X-Offset Distance" wire:model.live="xOffset"
                         min="50" max="3000" step="10">
@@ -137,7 +141,7 @@
             </div>
 
             <div class="cell my-2">
-                <label class="label">Z-Offset <a wire:click="toggleHelpModal('mparams')">?</a><br>[mm]</label>
+                <label class="label">Z-Offset <a wire:click="toggleModal('modalOffsets')">?</a><br>[mm]</label>
                 <div class="control">
                     <input class="input" type="number" placeholder="Payload Z-Offset Distance" wire:model.live="zOffset"
                         min="0" max="600" step="1">
@@ -145,7 +149,7 @@
             </div>
 
             <div class="cell my-2">
-                <label class="label">Terrain Category<br><a wire:click="toggleHelpModal('terrain')">?</a></label>
+                <label class="label">Terrain Category<br><a wire:click="toggleModal('modalTerrain')">?</a></label>
 
                 <div class="control">
 

@@ -75,5 +75,8 @@
           type: 'line',
             data: data
         });
+
+
+        console.log(data);
       </script>
 </div>

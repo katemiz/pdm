@@ -70,9 +70,12 @@ class LwStats extends Component
 
     public function graphData()
     {
-        for ($i = 0; $i <= 8; $i++ ) {
+        $noOfPoints = 24; 
+        $daysInterval = 30; 
 
-            $date = Carbon::today()->subDays((8-$i)*7)->toDateString();
+        for ($i = 0; $i <=$noOfPoints ; $i++ ) {
+
+            $date = Carbon::today()->subDays(($noOfPoints-$i)*$daysInterval)->toDateString();
 
             $this->labels[] = $date;
             
@@ -95,14 +98,3 @@ class LwStats extends Component
 
 
 }
-
-
-
-
-
-
-
-
-
-
-

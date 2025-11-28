@@ -2,7 +2,7 @@ export default class MastDraw {
 
     constructor(data, svgId) {
 
-        //console.log('MastDrawClass start:', data, svgId)
+        console.log('MastDrawClass start:', data, svgId)
 
         //console.log('Critical Load:', data.startTubeNo, data.endTubeNo, data.mastTubes)
 
@@ -32,6 +32,12 @@ export default class MastDraw {
             case 'Loads':
                 this.coefficient = 0.495
                 this.divId = 'divSvgLoads'
+                break;
+
+
+            case 'Capacity':
+                this.coefficient = 0.495
+                this.divId = 'divChartCapacity'
                 break;
 
         }

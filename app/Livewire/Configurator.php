@@ -10,15 +10,14 @@ class Configurator extends Component
 
     public $graphType = 'Nested';
 
-    public $showHelpModal = false;
+    public $showModalTerrain = false;
+    public $showModalOffsets = false;
 
     public $modalType;
 
     public $mastType = 'MTPR'; // 'MTPR' or 'MTWR'
 
     public $overlapDimension = 500;  // m
-
-    //public $headDimension = 55; // m
 
     public $n; // Number of Sections
 
@@ -51,8 +50,6 @@ class Configurator extends Component
     public $startTubeNo = 1;
 
     public $endTubeNo;
-
-    public $showModal = false;
 
     public $showOtherParams = false;
 
@@ -241,8 +238,29 @@ class Configurator extends Component
     public $maxPayloadCapacity = 1000; // kg
 
 
-    //public $isHeadDistanceInitializedMTWR = false; 
-    //public $isHeadDistanceInitializedMTPR = false; 
+    public $capacity =[
+
+        'MTPR' => [
+            'maxPayload' => 500,
+            'minPayload' => 16,
+            'maxExtendedHeight' => 25,
+            'minExtendedHeight' => 1.5,
+            'color' => 'blue',
+        ],
+        'MTWR' => [
+            'maxPayload' => 350,
+            'minPayload' => 16,
+            'maxExtendedHeight' => 25,
+            'minExtendedHeight' => 1.5,
+            'color' => 'red',
+        ]
+
+    ];
+
+    public $capacityChartDataset = [
+        'datasets' => [] 
+    ];
+
 
 
     public function mount()
@@ -264,6 +282,8 @@ class Configurator extends Component
 
             $this->endTubeNo = count($this->realTubeData);
         }
+
+       $this->runCapacityChartData();
     }
 
 
@@ -278,15 +298,14 @@ class Configurator extends Component
 
             $this->noOfActiveTubes = null;
             $this->error = 'End Tube Diameter must be greater than Start Tube Diameter';
+
         } else {
 
             $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1;
         }
 
         $this->MasttechProfiles();
-
         $this->WindLoadOnPayload();
-
         $this->getMastHeights();
         $this->calculateTubeWindLoads();
         $this->prepareAllData();
@@ -297,10 +316,19 @@ class Configurator extends Component
     }
 
 
-    public function toggleHelpModal($modalType)
+    public function toggleModal($modalType)
     {
         $this->modalType = $modalType;
-        $this->showHelpModal = ! $this->showHelpModal;
+
+
+        switch ($modalType) {
+            case 'modalTerrain':
+                $this->showModalTerrain = ! $this->showModalTerrain;
+                break;
+            case 'modalOffsets':
+                $this->showModalOffsets = ! $this->showModalOffsets;
+                break;
+        }
     }
 
 
@@ -310,12 +338,10 @@ class Configurator extends Component
     {
         if ($this->mastType == 'MTPR' ) {
             $this->headMTTubes = 55;
-            //$this->isHeadDistanceInitializedMTPR = true;
         }
 
         if ($this->mastType == 'MTWR' ) {
             $this->headMTTubes = 42;
-            //$this->isHeadDistanceInitializedMTWR = true;
         }
     }
 
@@ -441,9 +467,7 @@ class Configurator extends Component
         $this->allData['windspeed'] = $this->windspeed;
         $this->allData['sailarea'] = $this->sailarea;
 
-        $minCriticalLoad = collect($this->mastTubes)->min('criticalLoad') / 98.1; // Critical load is divided : kg
-
-        $this->maxPayloadCapacity = round(min($minCriticalLoad, 500), 0); // Critical load is divided : kg
+        $this->maxPayloadCapacity = $this->calculateMaxPayload();
 
         $this->allData['maxPayloadCapacity'] = $this->maxPayloadCapacity; // kg
 
@@ -837,6 +861,108 @@ class Configurator extends Component
         }
 
         return true;
+    }
+
+
+
+
+
+    public function calculateMaxPayload()
+    {
+
+        $minCriticalLoad = collect($this->mastTubes)->min('criticalLoad');  // N
+
+        // Divide by 10 and convert to kg
+        $minCriticalLoad = round($minCriticalLoad / 98.1, 0); //
+
+        $minPressureLoad = collect($this->mastTubes)->min('pressureLoad'); // N 
+
+        $this->maxPayloadCapacity = round(min($minCriticalLoad, 500), 0); // Critical load is divided : kg
+
+        if ($this->mastType == 'MTPR' ) {
+            $minCapability = min($minCriticalLoad, $minPressureLoad); // N
+            return round(min($minCapability, $this->capacity[$this->mastType]['maxPayload']), 0);
+        }
+
+        if ($this->mastType == 'MTWR' ) {
+            return round(min($minCriticalLoad, $this->capacity[$this->mastType]['maxPayload']), 0);
+        }
+
+    }
+
+
+
+    public function runCapacityChartData()
+    { 
+
+
+            // const data = {
+            // labels: @json($labels),
+            // datasets: [
+            //     {
+            //     label: 'Components',
+            //     data: @json($data["item"]),
+            //     borderColor: '#36A2EB',
+            //     backgroundColor: '#36A2EB',
+            //     },
+            //     {
+            //     label: 'Sellables',
+            //     data: @json($data['sellable']),
+            //     borderColor: '#FF6384',
+            //     backgroundColor: '#FF6384',
+            //     },
+            //     {
+            //     label: 'Documents',
+            //     data: @json($data['docs']),
+            //     borderColor: '#CCDDCC',
+            //     backgroundColor: '#CCDDCC',
+            //     }
+            // ]
+            // };
+
+
+
+       
+       
+        $maxHeight = collect($this->capacity)->pluck('maxExtendedHeight')->max();
+        $xAxisData = range(0, $maxHeight) ;
+
+
+
+        foreach ($this->capacity as $mastType => $capacityData) {
+
+
+
+            $data =[
+                [
+                    'x' => 0,
+                    'y' => $capacityData['maxPayload']
+                ],
+                [
+                    'x' => $capacityData['minExtendedHeight'],
+                    'y' => $capacityData['maxPayload']
+                ],
+                [
+                    'x' => $capacityData['maxExtendedHeight'],
+                    'y' => $capacityData['minPayload']      
+                ] 
+            ] ;
+
+            $this->capacityChartDataset['labels'] = $xAxisData;
+
+            array_push ($this->capacityChartDataset['datasets'] ,[
+                'label' => $mastType,
+                'data' => $data,
+                'backgroundColor' => $capacityData['color'],
+                'borderColor' => $capacityData['color'],
+            ]);
+
+        } 
+
+
+        //dd($this->capacityChartDataset);
+
+
     }
 
 }

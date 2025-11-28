@@ -1,12 +1,9 @@
 <section class="section container">
 
-      <script src="{{ asset('/js/charts.js') }}"></script>
+    <script src="{{ asset('/js/charts.js') }}"></script>
 
 
     <script>
-
-
-
 
         window.addEventListener("triggerCanvasDraw", function (e) {
 
@@ -30,7 +27,6 @@
             await brochure.init();  // ✅ Initialize QR code first
             brochure.run();
         }
-
 
         function toggleGraph(jsGraphType) {
 
@@ -66,10 +62,7 @@
             }
         }
 
-
-
         let capacityChartDrawn = false;
-
 
         function drawChart() {
 
@@ -85,14 +78,14 @@
                     scales: {
                         x: {
                             title: {
-                            color: 'red',
+                            color: 'blue',
                             display: true,
                             text: 'Maximum Extended Height (m)'
                             }
                         },
                         y: {
                             title: {
-                            color: 'red',
+                            color: 'blue',
                             display: true,
                             text: 'Maximum Payload (kg)'
                             }
@@ -102,21 +95,14 @@
                         title: {
                             display: true,
                             text: 'Mast Capacity Envelopes',
+                            color: 'blue',
                         }
                     }
                 }
             });
 
         }
-
-
-
-
-
-
-
     </script>
-
 
 
     <nav class="breadcrumb has-bullet-separator mb-5" aria-label="breadcrumbs">
@@ -125,8 +111,6 @@
             <li class="is-active"><a href="#" aria-current="page">Mast Configurator</a></li>
         </ul>
     </nav>
-
-
 
     <div class="fixed-grid has-2-cols">
 
@@ -151,41 +135,13 @@
 
     </div>
 
-
-
-
-
-
-
-
-
     @include('engineering.mast.mast-parameters')
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <div class="tabs" wire:ignore>
         <ul>
-
-
             <li id="liSvgCapacity">
                 <a href="javascript:void(0)" onclick="toggleGraph('Capacity')">Mast Capacity Envelopes</a>
             </li>
-
 
             <li id="liSvgLoads">
                 <a href="javascript:void(0)" onclick="toggleGraph('Loads')">Loads Analysis</a>
@@ -201,21 +157,12 @@
     </div>
 
 
-
-
-
     <div id='svgDivs' class="p-0" wire:ignore>
 
-
-
-
         <div id="divChartCapacity" class="is-hidden">
-
             {{-- Chart to be added dynamically here --}}
             <canvas id="capacityChart" class="p-6 "></canvas>
-
         </div>
-
 
         <div id="divSvgNested">
             {{-- svg to be added dynamically here --}}
@@ -229,20 +176,13 @@
 
     </div>
 
-
-
-
     @include('engineering.mast.info')
-
-
 
     {{-- // MODALS --}}
     <div class="modal {{ $showModalTerrain ? 'is-active' : '' }}" >
         <div class="modal-background" wire:click="toggleModal('modalTerrain')"></div>
         <div class="modal-content box">
-
             <h1 class="title">Terrain Categories</h1>
-
             <table class="table is-fullwidth">
                 <thead>
                     <tr>
@@ -262,15 +202,11 @@
                     @endforeach
                 </tbody>
             </table>
-
         </div>
-
         <button class="modal-close is-large" aria-label="close"
-            wire:click="toggleModal('modalTerrain')"></button>
+            wire:click="toggleModal('modalTerrain')">
+        </button>
     </div>
-
-
-
 
 
 

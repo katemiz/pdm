@@ -498,10 +498,36 @@ export default class MastDraw {
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
-        r.setAttribute('x1', this.sx * (this.x0 - tube.od / 2))
-        r.setAttribute('y1', this.sy * (this.totalH - (tube.bottomCenterPointExtended + this.y0+ parseInt(tube.length))))
-        r.setAttribute('x2', this.sx * (2000))
-        r.setAttribute('y2', this.sy * (this.totalH - (this.y0)))
+
+
+        const x1 = this.x0 - tube.od / 2
+        const y1 = this.totalH - (tube.bottomCenterPointExtended + this.y0 + parseInt(tube.length))
+        const y2 = this.totalH - (this.y0)  
+
+
+        const x2 = this.totalH * 0.1
+
+
+        //const x2 = this.x0 - this.data.extendedHeight*Math.tan(30)  
+
+        // console.log(" this.x0 ", this.x0)
+        // console.log("GUYING COORDS ", x1, y1, x2, y2)
+
+
+
+        r.setAttribute('x1', this.sx * x1)
+        r.setAttribute('y1', this.sy * y1)
+        r.setAttribute('x2', this.sx * x2)
+        r.setAttribute('y2', this.sy * y2)
+
+
+
+        
+
+        // r.setAttribute('x1', this.sx * (this.x0 - tube.od / 2))
+        // r.setAttribute('y1', this.sy * (this.totalH - (tube.bottomCenterPointExtended + this.y0+ parseInt(tube.length))))
+        // r.setAttribute('x2', this.sx * (2000))
+        // r.setAttribute('y2', this.sy * (this.totalH - (this.y0)))
 
         r.setAttribute('stroke', '#929194ff')
         r.setAttribute('stroke-width', '0.8')

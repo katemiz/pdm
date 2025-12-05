@@ -17,7 +17,7 @@ class Configurator extends Component
 
     public $mastType = 'MTPR'; // 'MTPR' or 'MTWR'
 
-    public $overlapDimension = 500;  // m
+    //public $overlapDimension = 500;  // m
 
     public $n; // Number of Sections
 
@@ -352,7 +352,6 @@ class Configurator extends Component
 
     public function getMastHeights()
     {
-
         if ($this->noOfActiveTubes == null || $this->lengthMTTubes == null || $this->overlapMTTubes == null || $this->headMTTubes == null) {
 
             $this->extendedHeight = 0;
@@ -376,7 +375,6 @@ class Configurator extends Component
 
     public function MasttechProfiles()
     {
-
         $id = $this->smallestTubeId;
         $t = $this->smallestTubeThickness;
         $od = $this->smallestTubeId + 2 * $this->smallestTubeThickness;
@@ -410,7 +408,6 @@ class Configurator extends Component
 
     public function getElementCoordinates()
     {
-
         $this->maxMastTubeDia = 0;
 
         $this->mastTubes = array_filter($this->allTubes, function ($element) {
@@ -428,7 +425,6 @@ class Configurator extends Component
             }
 
             $this->maxMastTubeDia = max($this->maxMastTubeDia, $tube['od']);
-
         }
 
         $this->allData['baseAdapter']['bottomCenterPointNested'] = 0;
@@ -441,7 +437,6 @@ class Configurator extends Component
 
     public function prepareAllData()
     {
-
         $this->allData['mastType'] = $this->mastType; 
         $this->allData['xOffset'] = floatval($this->xOffset);
         $this->allData['zOffset'] = floatval($this->zOffset);
@@ -712,164 +707,9 @@ class Configurator extends Component
     }
 
 
-    public function calculateTubeWindLoads()
-    {
-
-        /*
-        1. Calculate Reference Area
-        2. Calculate Reference Height
-        3. Calculate Terrain Factor kr
-        4. Calculate The roughness factor cr(ze) at the reference height
-        5. Cacculate Mean Velocity
-        6. Calculate Turbulence Intensity
-        7. Calculate Basic Velocity Pressure
-        8. Calculate Peak Velocity Pressure
-        9. Calculate Wind velocity corresponding to peak velocity pressure
-        10. Calculate Reynolds Number
-        11. Surface Roughness taken as 0.1 for Aluminum coated
-        12. Calculate Structural Factor
-        13. Calculate Effective Slenderness
-        14. Calculate End Effect factor for structural solidity of 1.0
-        15. Calculate Force Coefficient without End Effect
-        16. Calculate Force Coefficient
-        17. Calculate Total Wind Force
-
-        */
-
-        // $this->getElementCoordinates();
-
-        return true;
-
-        foreach ($this->allTubes as $key => $tube) {
-
-            // WindLoadParameters
-            $paramsArray = [];
-
-            // Reference Area
-            $refArea = ($tube['heights']['eth'] - $tube['heights']['kinkh']) * $tube['od'] / 1000000; // m2
-            $paramsArray['referenceArea'] = $refArea;
-
-            // Reference Height
-            $Ze = $tube['heights']['eth'] / 1000; // Extended top height in meters
-            $paramsArray['Ze'] = $Ze;
-
-            // Terrain Factor kr
-            $Z0 = $this->terrainCategory[$this->activeTerrainCategory]['z0']; // Roughness length in meters
-            $kr = 0.19 * pow($Z0 / 0.05, 0.07);
-            $paramsArray['kr'] = $kr;
-
-            // Roughness factor cr(ze) at the reference height
-            $maxHeight = max($Ze, $this->terrainCategory[$this->activeTerrainCategory]['zmin']);
-            $Cr = $kr * log($maxHeight / $Z0); // Roughness factor at the reference height
-
-            $paramsArray['Cr'] = $Cr;
-            $paramsArray['maxHeight'] = $maxHeight;
-
-            // Calculate the mean wind speed at the height of the tube
-            $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s
-            $paramsArray['Vm'] = $Vm;
-
-            // Turbulence Intensity
-            $TI = 1.0 / (1.0 * log($maxHeight / $Z0));
-            $paramsArray['TurbulenceIntensity'] = $TI; // Turbulence Intensity
-
-            // Basic Velocity Pressure
-            // Basic Velocity Pressure Formula: q = 0.5 * ρ * V^2
-
-            $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2
-            $paramsArray['BasicVelocityPressure'] = $q; // Basic velocity pressure in N/m2
-
-            // Peak Velocity Pressure
-            // Peak Velocity Pressure Formula: qp =[ 1+ 7* TI ] * 0.5 *  ρ *  Vm^2
-            $qp = (1 + 7 * $TI) * 0.5 * $this->airdensity * pow($Vm, 2); // Peak velocity pressure in N/m2
-            $paramsArray['PeakVelocityPressure'] = $qp; // Peak velocity pressure in N/m2
-
-            // Wind velocity corresponding to peak velocity pressure
-            // Wind Velocity Formula: Vp = sqrt(2 * qp / ρ)
-            $Vp = sqrt(2 * $qp / $this->airdensity); // Wind velocity in m/s corresponding to peak velocity pressure
-            $paramsArray['WindVelocityForPeakVelocityPressure'] = $Vp; // Wind velocity in m/s corresponding to peak velocity pressure
-
-            // Reynolds Number
-            // Reynolds Number Formula: Re = ρ * Vp * D / μ
-            // where:
-            // Re = Reynolds number (dimensionless)
-            // ρ = air density (kg/m3)
-            // Vp = wind velocity (m/s) corresponding to peak velocity pressure
-            // D = characteristic length (m) (outer diameter of the tube)
-            // μ = dynamic viscosity of air (kg/(m·s)) (assumed to be 1.81e-5 kg/(m·s) at 20°C)
-            $mu = 15e-6; // Dynamic viscosity of air in kg/(m·s) at 20°C
-            $Re = ($Vp * $tube['od'] / 1000) / $mu; // Reynolds number (dimensionless)
-            $paramsArray['ReynoldsNumber'] = $Re; // Reynolds number (dimensionless)
-
-            // Structural Factor
-            // Structural Factor is taken as 1.0 for this calculation
-            $structuralFactor = 1.0; // Structural Factor (dimensionless)
-
-            // Surface Roughness
-            // Surface Roughness is taken as 0.1 for Aluminum coated tubes
-            $surfaceRoughness = 0.2;
-            $paramsArray['SurfaceRoughness'] = $surfaceRoughness; // Surface Roughness in mm
-
-            // Effective Slenderness
-
-            $l_b = $tube['length'] / $tube['od']; // Convert length to meters
-            $paramsArray['l_b'] = $l_b; // Slenderness ratio (dimensionless)
-
-            if ($tube['length'] / 1000 <= 15) {
-
-                $effective_slenderness = min($l_b, 70); // Limit to a maximum of 70
-
-            } else {
-                $effective_slenderness = min(0.7 * $l_b, 70); // Limit to a maximum of 70
-            }
-
-            $paramsArray['EffectiveSlenderness'] = $effective_slenderness; // Effective Slenderness (dimensionless)
-
-            // End Effect Factor
-            if ($effective_slenderness <= 10) {
-                // $end_effect_factor = 0.01 * $effective_slenderness + 0.59; // For slenderness less than or equal to 10
-                $end_effect_factor = 0.6023079 * pow($effective_slenderness, 0.0657553); // For slenderness less than or equal to 10
-
-            } else {
-                $end_effect_factor = 0.698573 + 0.001977401 * $effective_slenderness + 0.00008741341 * pow($effective_slenderness, 2) - 0.00000103591 * pow($effective_slenderness, 3); // For slenderness greater than 10
-            }
-
-            $paramsArray['EndEffectFactor'] = $end_effect_factor; // End Effect Factor (dimensionless)
-
-            // Force Coefficient without End Effect
-            $k_b = $surfaceRoughness / $tube['od']; // Equivalent Roughness
-            $paramsArray['k_b'] = $k_b; // Equivalent Roughness (dimensionless)
-
-            $paramsArray['forceCoefficientWoEndEffect'] = $this->calculateForceCoefficientWOEndEffect($Re, $k_b);
-
-            // Force Coefficient
-            // EndEffect Facor * Force Coefficient without End Effect
-            // Force Coefficient Formula: Cf = Cfw * EndEffectFactor
-            // where:
-            // Cf = Force Coefficient (dimensionless)
-            // Cfw = Force Coefficient without End Effect (dimensionless)
-            // EndEffectFactor = End Effect Factor (dimensionless)
-            $forceCoefficient = $paramsArray['forceCoefficientWoEndEffect'] * $end_effect_factor; // Force Coefficient (dimensionless)
-            $paramsArray['forceCoefficient'] = $forceCoefficient; // Force Coefficient (dimensionless)
-
-            $this->allTubes[$key]['windLoadParameters'] = $paramsArray;
-
-            // Total Wind Force
-            // Total Wind Force Formula: Fw = Structural Factor * Force Coefficient * Peak Velocity Pressure * Reference Area
-            $this->allTubes[$key]['windForce'] = $structuralFactor * $forceCoefficient * $qp * $refArea;
-
-        }
-
-        return true;
-    }
-
-
-
-
 
     public function calculateMaxPayload()
     {
-
         $minCriticalLoad = collect($this->mastTubes)->min('criticalLoad');  // N
 
         // Divide by 10 and convert to kg
@@ -895,43 +735,10 @@ class Configurator extends Component
     public function runCapacityChartData()
     { 
 
-
-            // const data = {
-            // labels: @json($labels),
-            // datasets: [
-            //     {
-            //     label: 'Components',
-            //     data: @json($data["item"]),
-            //     borderColor: '#36A2EB',
-            //     backgroundColor: '#36A2EB',
-            //     },
-            //     {
-            //     label: 'Sellables',
-            //     data: @json($data['sellable']),
-            //     borderColor: '#FF6384',
-            //     backgroundColor: '#FF6384',
-            //     },
-            //     {
-            //     label: 'Documents',
-            //     data: @json($data['docs']),
-            //     borderColor: '#CCDDCC',
-            //     backgroundColor: '#CCDDCC',
-            //     }
-            // ]
-            // };
-
-
-
-       
-       
         $maxHeight = collect($this->capacity)->pluck('maxExtendedHeight')->max();
         $xAxisData = range(0, $maxHeight) ;
 
-
-
         foreach ($this->capacity as $mastType => $capacityData) {
-
-
 
             $data =[
                 [
@@ -958,11 +765,242 @@ class Configurator extends Component
             ]);
 
         } 
-
-
-        //dd($this->capacityChartDataset);
-
-
     }
+
+
+
+
+    /*
+    WIND LOADS ON EACH SECTION
+    */
+
+
+    function calculateTubeWindLoads() {
+
+        /*
+            1. Calculate Reference Area
+            2. Calculate Reference Height
+            3. Calculate Terrain Factor kr
+            4. Calculate The roughness factor cr(ze) at the reference height
+            5. Cacculate Mean Velocity
+            6. Calculate Turbulence Intensity
+            7. Calculate Basic Velocity Pressure
+            8. Calculate Peak Velocity Pressure
+            9. Calculate Wind velocity corresponding to peak velocity pressure
+            10. Calculate Reynolds Number
+            11. Surface Roughness taken as 0.1 for Aluminum coated
+            12. Calculate Structural Factor
+            13. Calculate Effective Slenderness
+            14. Calculate End Effect factor for structural solidity of 1.0
+            15. Calculate Force Coefficient without End Effect
+            16. Calculate Force Coefficient
+            17. Calculate Total Wind Force
+        */
+
+           $this->calculateReferenceArea(); 
+
+
+
+
+        foreach ($this->mastTubes as $key => $tube) {
+
+            // WindLoadParameters
+            $paramsArray = [];
+
+            // Reference Area
+            $paramsArray["referenceArea"] = $tube['referenceArea'];
+
+            // Reference Height
+            $Ze = ($tube["bottomCenterPointExtended"] +$tube["length"] ) / 1000; // Extended top height in meters
+            $paramsArray["Ze"] = $Ze;
+
+            // Terrain Factor kr
+            $Z0 = $this->terrainCategory[$this->activeTerrainCategory]["z0"]; // Roughness length in meters 
+            $kr = 0.19 * pow($Z0/0.05, 0.07);
+            $paramsArray["kr"] = $kr;
+            
+            // Roughness factor cr(ze) at the reference height
+            $maxHeight = max($Ze ,$this->terrainCategory[$this->activeTerrainCategory]["zmin"]);
+            $Cr = $kr * log($maxHeight / $Z0); // Roughness factor at the reference height
+
+            $paramsArray["Cr"] = $Cr;
+            $paramsArray["maxHeight"] = $maxHeight;
+
+            // Calculate the mean wind speed at the height of the tube
+            $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s  
+            $paramsArray["Vm"] = $Vm;
+
+            // Turbulence Intensity
+            $TI = 1.0 / ( 1.0 * log($maxHeight / $Z0) );
+            $paramsArray["TurbulenceIntensity"] = $TI; // Turbulence Intensity
+
+            // Basic Velocity Pressure
+            // Basic Velocity Pressure Formula: q = 0.5 * ρ * V^2
+
+            $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2 
+            $paramsArray["BasicVelocityPressure"] = $q; // Basic velocity pressure in N/m2
+
+            // Peak Velocity Pressure
+            // Peak Velocity Pressure Formula: qp =[ 1+ 7* TI ] * 0.5 *  ρ *  Vm^2
+            $qp = (1 + 7 * $TI) * 0.5 * $this->airdensity * pow($Vm, 2); // Peak velocity pressure in N/m2
+            $paramsArray["PeakVelocityPressure"] = $qp; // Peak velocity pressure in N/m2
+
+            // Wind velocity corresponding to peak velocity pressure
+            // Wind Velocity Formula: Vp = sqrt(2 * qp / ρ)
+            $Vp = sqrt(2 * $qp / $this->airdensity); // Wind velocity in m/s corresponding to peak velocity pressure
+            $paramsArray["WindVelocityForPeakVelocityPressure"] = $Vp; // Wind velocity in m/s corresponding to peak velocity pressure
+
+            // Reynolds Number
+            // Reynolds Number Formula: Re = ρ * Vp * D / μ
+            // where:
+            // Re = Reynolds number (dimensionless)
+            // ρ = air density (kg/m3)
+            // Vp = wind velocity (m/s) corresponding to peak velocity pressure
+            // D = characteristic length (m) (outer diameter of the tube)
+            // μ = dynamic viscosity of air (kg/(m·s)) (assumed to be 1.81e-5 kg/(m·s) at 20°C)
+            $mu = 15e-6; // Dynamic viscosity of air in kg/(m·s) at 20°C
+            $Re = ( $Vp * $tube["od"] / 1000) / $mu; // Reynolds number (dimensionless)
+            $paramsArray["ReynoldsNumber"] = $Re; // Reynolds number (dimensionless)
+
+            // Structural Factor
+            // Structural Factor is taken as 1.0 for this calculation
+            $structuralFactor = 1.0; // Structural Factor (dimensionless)
+
+            // Surface Roughness
+            // Surface Roughness is taken as 0.1 for Aluminum coated tubes
+            $surfaceRoughness = 0.2; 
+            $paramsArray["SurfaceRoughness"] = $surfaceRoughness; // Surface Roughness in mm
+
+            // Effective Slenderness
+
+            $l_b = $tube["length"] / $tube["od"]; // Convert length to meters
+            $paramsArray["l_b"] = $l_b; // Slenderness ratio (dimensionless)
+
+            if ($tube["length"]/1000 <= 15) {
+
+                $effective_slenderness  = min($l_b, 70); // Limit to a maximum of 70
+
+            } else {
+                $effective_slenderness  = min(0.7 * $l_b, 70); // Limit to a maximum of 70
+            }
+
+            $paramsArray["EffectiveSlenderness"] = $effective_slenderness; // Effective Slenderness (dimensionless)
+
+            // End Effect Factor
+            if ($effective_slenderness <= 10 ) {
+                // $end_effect_factor = 0.01 * $effective_slenderness + 0.59; // For slenderness less than or equal to 10
+                $end_effect_factor = 0.6023079 * pow($effective_slenderness,0.0657553); // For slenderness less than or equal to 10
+
+            } else {
+                $end_effect_factor = 0.698573 + 0.001977401 * $effective_slenderness + 0.00008741341 * pow($effective_slenderness, 2) - 0.00000103591 * pow($effective_slenderness, 3); // For slenderness greater than 10
+            } 
+
+            $paramsArray["EndEffectFactor"] = $end_effect_factor; // End Effect Factor (dimensionless)
+
+            // Force Coefficient without End Effect
+            $k_b = $surfaceRoughness / $tube["od"]; // Equivalent Roughness
+            $paramsArray["k_b"] = $k_b; // Equivalent Roughness (dimensionless)
+
+            $paramsArray["forceCoefficientWoEndEffect"] = $this->calculateForceCoefficientWOEndEffect($Re, $k_b);
+
+            // Force Coefficient
+            // EndEffect Facor * Force Coefficient without End Effect
+            // Force Coefficient Formula: Cf = Cfw * EndEffectFactor
+            // where:
+            // Cf = Force Coefficient (dimensionless)
+            // Cfw = Force Coefficient without End Effect (dimensionless)
+            // EndEffectFactor = End Effect Factor (dimensionless)
+            $forceCoefficient = $paramsArray["forceCoefficientWoEndEffect"] * $end_effect_factor; // Force Coefficient (dimensionless)
+            $paramsArray["forceCoefficient"] = $forceCoefficient; // Force Coefficient (dimensionless)
+
+            $this->mastTubes[$key]["windLoadParameters"] = $paramsArray;
+
+            // Total Wind Force
+            // Total Wind Force Formula: Fw = Structural Factor * Force Coefficient * Peak Velocity Pressure * Reference Area
+            $this->mastTubes[$key]["windForce"] = $structuralFactor * $forceCoefficient * $qp * $tube['referenceArea'];
+        }
+
+        return true;
+    }
+
+
+
+    function calculateReferenceArea(){
+
+        foreach ($this->mastTubes as $i => $tube) {
+
+            if ($i == 0 ){
+                $refArea = $tube['od']*$tube['length'];
+                $this->mastTubes[$i]['windLoadActingZ'] =$this->baseAdapterThk + $tube['length']/2;
+
+
+            } else{
+                $refArea = $tube['od']* ($tube['length'] - $this->overlapMTTubes);
+                $this->mastTubes[$i]['windLoadActingZ'] =$tube['bottomCenterPointExtended'] + ($tube['length'] + $this->overlapMTTubes) / 2;
+            } 
+
+            $this->mastTubes[$i]['referenceArea'] = $refArea/1000000;
+        }
+
+        //dd($this->mastTubes);
+    } 
+    
+    
+
+
+
+
+
+    function calculateForceCoefficientWOEndEffect($Re,$k_b) {
+
+        $coefficent = 1.2 + (0.18 * log10(10 * $k_b)) / (1 + 0.4 * log10($Re/1e6));
+
+        if ($Re < 1.8e5) {
+
+            // For Reynolds number less than 1.8e5, use a different formula
+            return 1.2;
+
+        } elseif ($Re >= 1.85e5 && $Re < 4e5) {
+
+            $tempcoefficient = 0.11 / pow($Re / 1e6,1.4);
+
+            if ( $coefficent > $tempcoefficient) {
+                return $coefficent;
+            } else {
+                return $tempcoefficient;
+            }
+        }
+
+        if ( $coefficent <= 0.4) {
+            return 0.4;
+        }
+
+        return $coefficent;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }

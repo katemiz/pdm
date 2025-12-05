@@ -30,7 +30,7 @@ export default class MastDraw {
                 break;
 
             case 'Loads':
-                this.coefficient = 0.495
+                this.coefficient = 0.695
                 this.divId = 'divSvgLoads'
                 break;
 
@@ -60,7 +60,7 @@ export default class MastDraw {
         });
 
         // GUYINGS
-        if (this.svgId === 'Extended' ) {
+        if (this.svgId === 'Extended'||  this.svgId === 'Loads') {
             this.data.mastTubes.forEach(tube => {
                 this.drawGuying(tube);
             });
@@ -82,6 +82,12 @@ export default class MastDraw {
         this.drawMastCenterline()
         this.drawDimTextLineTopBottom()
         this.svg.appendChild(this.g)
+
+
+        // LOADS
+        if (this.svgId === 'Loads') {
+            this.drawLoadArrows()
+        } 
 
         localStorage.setItem('data', JSON.stringify(this.data))
 
@@ -116,6 +122,7 @@ export default class MastDraw {
 
         if (this.svgId === 'Loads') {
             this.totalW = (this.data.extendedHeight + 2 * this.data.zOffset) / (1 - 2 * this.MX / 100)
+            this.totalH = (this.data.extendedHeight) / (1 - 2 * this.MX / 100)
         }
 
         if (this.svgId === 'Nested') {
@@ -147,6 +154,8 @@ export default class MastDraw {
         let y
 
         switch (this.svgId) {
+
+            case 'Loads':
             case 'Extended':
                 y = tube.bottomCenterPointExtended
                 break;
@@ -261,6 +270,29 @@ export default class MastDraw {
     }
 
 
+    drawLoadArrows(){
+
+
+        this.data.mastTubes.forEach(tube => {
+            
+            let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+
+            l.setAttribute('x1', this.getSvgX(0))
+            l.setAttribute('y1', this.getSvgY(tube.windLoadActingZ))
+            l.setAttribute('x2', this.getSvgX(0))
+            l.setAttribute('y2', this.getSvgY(tube.windLoadActingZ))
+
+            l.setAttribute('stroke', '#cc1f45ff')
+            l.setAttribute('stroke-width', '1.5')
+
+            console.log('drawing load arrows',tube['od'] )
+
+            this.g.appendChild(l)
+        });
+
+
+
+    } 
 
     drawDimTextLine(tube) {
 
@@ -274,6 +306,8 @@ export default class MastDraw {
         tube.length = parseInt(tube.length)
 
         switch (this.svgId) {
+
+            case 'Loads':
             case 'Extended':
                 y = tube.bottomCenterPointExtended
                 textValue = tube.bottomCenterPointExtended
@@ -498,36 +532,16 @@ export default class MastDraw {
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
-
-
         const x1 = this.x0 - tube.od / 2
         const y1 = this.totalH - (tube.bottomCenterPointExtended + this.y0 + parseInt(tube.length))
         const y2 = this.totalH - (this.y0)  
 
-
         const x2 = this.totalH * 0.1
-
-
-        //const x2 = this.x0 - this.data.extendedHeight*Math.tan(30)  
-
-        // console.log(" this.x0 ", this.x0)
-        // console.log("GUYING COORDS ", x1, y1, x2, y2)
-
-
 
         r.setAttribute('x1', this.sx * x1)
         r.setAttribute('y1', this.sy * y1)
         r.setAttribute('x2', this.sx * x2)
         r.setAttribute('y2', this.sy * y2)
-
-
-
-        
-
-        // r.setAttribute('x1', this.sx * (this.x0 - tube.od / 2))
-        // r.setAttribute('y1', this.sy * (this.totalH - (tube.bottomCenterPointExtended + this.y0+ parseInt(tube.length))))
-        // r.setAttribute('x2', this.sx * (2000))
-        // r.setAttribute('y2', this.sy * (this.totalH - (this.y0)))
 
         r.setAttribute('stroke', '#929194ff')
         r.setAttribute('stroke-width', '0.8')
@@ -723,15 +737,13 @@ export default class MastDraw {
 
 
 
+    getSvgX(x){
+        return this.sx * ( this.x0 + x)
+    } 
 
-
-
-
-
-
-
-
-
+    getSvgY(y){
+        return this.sy * (this.totalH - (y + this.y0))
+    } 
 
 
 

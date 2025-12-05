@@ -16,6 +16,10 @@
 
             let pExtended = new MastDraw(e.detail.data, 'Extended');
             pExtended.run()
+
+
+            let pLoads = new MastDraw(e.detail.data,'Loads');
+            pLoads.run();
         })
 
         async function exportToPdf() {

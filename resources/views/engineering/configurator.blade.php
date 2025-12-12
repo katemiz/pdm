@@ -180,6 +180,42 @@
 
     </div>
 
+
+    <div class="column has-background-warning">
+
+    <table class="table">
+
+
+
+
+
+        @foreach ($mastTubes as $tube )
+            <tr>
+                <td> {{ $tube['no'] }} </td>
+                <td class="has-text-right"> {{ sprintf("%.2f", round($tube["od"], 2)) }} mm</td>
+                <td class="has-text-right"> {{ round($tube["windForce"], 0) }} N</td>
+                                <td class="has-text-right"> {{ round($tube["windLoadActingZ"], 1) }} mm</td>
+
+            </tr>
+        @endforeach 
+
+
+        <tr>
+            <td> Payload </td>
+            <td class="has-text-right"> {{ sprintf("%.2f", round($sailarea, 1)) }} m<sup>2</sup></td>
+            <td class="has-text-right"> {{ round($allData["windLoadOnPayload"], 0) }} N</td>
+                            <td class="has-text-right"> {{ round($extendedHeight + $zOffset, 0) }} mm</td>
+
+        </tr>
+
+
+    </table>
+
+
+
+
+    </div>
+
     @include('engineering.mast.info')
 
     {{-- // MODALS --}}

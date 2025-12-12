@@ -797,7 +797,7 @@ class Configurator extends Component
             17. Calculate Total Wind Force
         */
 
-           $this->calculateReferenceArea(); 
+        $this->calculateReferenceArea(); 
 
 
 

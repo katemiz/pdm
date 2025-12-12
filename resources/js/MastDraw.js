@@ -273,19 +273,53 @@ export default class MastDraw {
     drawLoadArrows(){
 
 
+        // Length of tube is ASSUMED to be equal to maximum load value.
+        let factor = this.data.tubeLength / (this.data.windLoadOnPayload)
+
+        let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+
+        l.setAttribute('x1', this.getSvgX(0))
+        l.setAttribute('y1', this.getSvgY(this.data.extendedHeight+this.data.zOffset))
+        l.setAttribute('x2', this.getSvgX(-this.data.windLoadOnPayload * factor))
+        l.setAttribute('y2', this.getSvgY(this.data.extendedHeight+this.data.zOffset))
+
+        l.setAttribute('stroke', '#cc1f45ff')
+        l.setAttribute('stroke-width', '1.5')
+
+        this.g.appendChild(l)
+
+
+
+        // let arrowLength = 0.1 * this.data.windLoadOnPayload
+
+
+
+        // this.g.beginPath();
+        // this.g.moveTo(this.getSvgX(0), this.getSvgY(this.data.extendedHeight+this.data.zOffset));
+        // this.g.lineTo(this.getSvgX(-arrowLength), this.getSvgY(this.data.extendedHeight+this.data.zOffset - arrowLength));
+        // this.g.lineTo(this.getSvgX(-arrowLength), this.getSvgY(this.data.extendedHeight+this.data.zOffset + arrowLength));
+
+        // //this.g.lineWidth = arrowWidth;
+        // this.g.stroke();
+
+
+
+
+
+
         this.data.mastTubes.forEach(tube => {
             
             let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
             l.setAttribute('x1', this.getSvgX(0))
             l.setAttribute('y1', this.getSvgY(tube.windLoadActingZ))
-            l.setAttribute('x2', this.getSvgX(0))
+            l.setAttribute('x2', this.getSvgX(-tube.windForce * factor))
             l.setAttribute('y2', this.getSvgY(tube.windLoadActingZ))
 
             l.setAttribute('stroke', '#cc1f45ff')
             l.setAttribute('stroke-width', '1.5')
 
-            console.log('drawing load arrows',tube['od'] )
+            //console.log('drawing load arrows',tube['od'] ,tube['bottomCenterPointExtended'])
 
             this.g.appendChild(l)
         });
@@ -397,6 +431,7 @@ export default class MastDraw {
 
         switch (this.svgId) {
             case 'Extended':
+            case 'Loads':
                 y = parseInt(this.data.extendedHeight)
                 textValue = parseInt(this.data.extendedHeight)
                 break;
@@ -603,8 +638,6 @@ export default class MastDraw {
         var headlen = 10;
         var angle = Math.atan2(toy - fromy, tox - fromx);
 
-
-
         // let totalHeight = this.data.extendedHeight+this.data.zOffset
 
         // this.g.fillText(this.data.windLoad+'N',fromx-10,fromy-10);
@@ -738,11 +771,19 @@ export default class MastDraw {
 
 
     getSvgX(x){
-        return this.sx * ( this.x0 + x)
+
+        let result = this.sx * ( this.x0 + x)
+
+        //console.log('X',result)
+        return result
     } 
 
     getSvgY(y){
-        return this.sy * (this.totalH - (y + this.y0))
+
+        let result = this.sy * (this.totalH - (y + this.y0))
+        //console.log('y = > Y',y,result,this.totalH,this.y0)
+
+        return result
     } 
 
 

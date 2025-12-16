@@ -84,9 +84,12 @@ export default class MastDraw {
         this.svg.appendChild(this.g)
 
 
+
+
         // LOADS
         if (this.svgId === 'Loads') {
             this.drawLoadArrows()
+            this.drawSideAdapter()
         } 
 
         localStorage.setItem('data', JSON.stringify(this.data))
@@ -272,40 +275,23 @@ export default class MastDraw {
 
     drawLoadArrows(){
 
-
         // Length of tube is ASSUMED to be equal to maximum load value.
         let factor = this.data.tubeLength / (this.data.windLoadOnPayload)
 
         let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
         l.setAttribute('x1', this.getSvgX(0))
-        l.setAttribute('y1', this.getSvgY(this.data.extendedHeight+this.data.zOffset))
+        l.setAttribute('y1', this.getSvgY(this.data.extendedHeight+this.data.zOffset* 0.2))
         l.setAttribute('x2', this.getSvgX(-this.data.windLoadOnPayload * factor))
-        l.setAttribute('y2', this.getSvgY(this.data.extendedHeight+this.data.zOffset))
+        l.setAttribute('y2', this.getSvgY(this.data.extendedHeight+this.data.zOffset * 0.2))
 
         l.setAttribute('stroke', '#cc1f45ff')
         l.setAttribute('stroke-width', '1.5')
 
         this.g.appendChild(l)
 
-
-
-        // let arrowLength = 0.1 * this.data.windLoadOnPayload
-
-
-
-        // this.g.beginPath();
-        // this.g.moveTo(this.getSvgX(0), this.getSvgY(this.data.extendedHeight+this.data.zOffset));
-        // this.g.lineTo(this.getSvgX(-arrowLength), this.getSvgY(this.data.extendedHeight+this.data.zOffset - arrowLength));
-        // this.g.lineTo(this.getSvgX(-arrowLength), this.getSvgY(this.data.extendedHeight+this.data.zOffset + arrowLength));
-
-        // //this.g.lineWidth = arrowWidth;
-        // this.g.stroke();
-
-
-
-
-
+        // Load Arrow on Payload 
+        this.drawArrowHead (0,this.data.extendedHeight+this.data.zOffset* 0.2,this.data.windLoadOnPayload * factor,'left', '#cc1f45ff')
 
         this.data.mastTubes.forEach(tube => {
             
@@ -319,14 +305,61 @@ export default class MastDraw {
             l.setAttribute('stroke', '#cc1f45ff')
             l.setAttribute('stroke-width', '1.5')
 
-            //console.log('drawing load arrows',tube['od'] ,tube['bottomCenterPointExtended'])
-
             this.g.appendChild(l)
+
+            // ARROWS
+            let arrowLength = tube.windForce * factor
+            this.drawArrowHead (0,tube.windLoadActingZ,arrowLength,'left', '#cc1f45ff')
+
         });
-
-
-
     } 
+
+
+
+    drawSideAdapter() {
+
+        this.drawArrowHead (0,this.data.mastTubes[0].length*0.9,3*this.data.mastTubes[0].od,'left', '#0add50ff')
+        return true
+    } 
+
+
+    drawArrowHead (x,y,length,direction = 'left', color='#0add50ff') {
+
+        let x1,y1,y2
+
+        if ( direction == 'left'){
+
+            x1 = x - 0.5 * length
+
+            y1 = y + 0.25 * length
+            y2 = y - 0.25 * length
+        } 
+
+
+        if ( direction == 'toRight'){
+
+            x1 = x + 0.5 * length
+
+            y1 = y + 0.25 * length
+            y2 = y - 0.25 * length
+        } 
+
+        let points = this.getSvgX(x) + ',' + this.getSvgY(y) + ' ' + this.getSvgX(x1) + ',' + this.getSvgY(y1) + ' ' + this.getSvgX(x1) + ',' + this.getSvgY(y2)
+
+        let p = document.createElementNS('http://www.w3.org/2000/svg', 'polygon')
+
+        p.setAttribute('points', points)
+        p.setAttribute('fill', color)
+        p.setAttribute('style', 'fill-opacity: 1.0;')
+        p.setAttribute('stroke', '#28272e')
+        p.setAttribute('stroke-width', '0.11')
+
+        this.g.appendChild(p)
+    } 
+
+
+
+
 
     drawDimTextLine(tube) {
 
@@ -515,6 +548,8 @@ export default class MastDraw {
         let y
 
         switch (this.svgId) {
+
+            case 'Loads':
             case 'Extended':
                 y = smallestTube.bottomCenterPointExtended
                 break;

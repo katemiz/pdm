@@ -181,30 +181,37 @@
     </div>
 
 
-    <div class="column has-background-warning">
+    <div class="column">
 
-    <table class="table">
-
-
+    <table class="table is-fullwidth">
 
 
+        <caption class="has-tex-cenetered subtitle">Wind Loads Data on Mast and Sections</caption>
+
+        <thead>
+            <tr>
+                <th>Section Definition</th>
+                <th class="has-text-right">Geometric Parameter</th>
+                <th class="has-text-right">Load</th>
+                <th class="has-text-right">Load Acting Height</th>
+            </tr>
+        </thead>
 
         @foreach ($mastTubes as $tube )
             <tr>
                 <td> {{ $tube['no'] }} </td>
                 <td class="has-text-right"> {{ sprintf("%.2f", round($tube["od"], 2)) }} mm</td>
                 <td class="has-text-right"> {{ round($tube["windForce"], 0) }} N</td>
-                                <td class="has-text-right"> {{ round($tube["windLoadActingZ"], 1) }} mm</td>
+                <td class="has-text-right"> {{ round($tube["windLoadActingZ"], 1) }} mm</td>
 
             </tr>
         @endforeach 
-
 
         <tr>
             <td> Payload </td>
             <td class="has-text-right"> {{ sprintf("%.2f", round($sailarea, 1)) }} m<sup>2</sup></td>
             <td class="has-text-right"> {{ round($allData["windLoadOnPayload"], 0) }} N</td>
-                            <td class="has-text-right"> {{ round($extendedHeight + $zOffset, 0) }} mm</td>
+            <td class="has-text-right"> {{ round($extendedHeight + $zOffset, 0) }} mm</td>
 
         </tr>
 

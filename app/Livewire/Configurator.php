@@ -277,6 +277,7 @@ class Configurator extends Component
             $this->headMTTubes = floatval($qr[5]);
             $this->windspeed = floatval($qr[6]);
             $this->sailarea = floatval($qr[7]);
+            $this->mastType = floatval($qr[8]);
 
         } else {
 
@@ -475,6 +476,7 @@ class Configurator extends Component
             $this->headMTTubes,
             $this->windspeed,
             $this->sailarea,
+            $this->mastType 
         ];
 
         $this->allData['qr'] = url('/engineering/configurator?qr=').implode('-', $q);

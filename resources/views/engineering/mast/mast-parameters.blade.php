@@ -1,8 +1,5 @@
 <div class="column p-4">
 
-
-
-
     <div class="column">
         <label class="label">Mast Type</label>
 
@@ -24,7 +21,8 @@
 
     </div>
 
-    <br><br>
+    <br>
+    <br>
 
 
     @if ($error)
@@ -34,28 +32,7 @@
     @endif
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <div class="fixed-grid has-4-cols">
+    <div class="fixed-grid has-4-cols has-1-cols-mobile">
 
         <div class="grid">
 

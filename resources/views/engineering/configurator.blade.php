@@ -116,7 +116,7 @@
         </ul>
     </nav>
 
-    <div class="fixed-grid has-2-cols">
+    <div class="fixed-grid has-2-cols has-1-cols-mobile">
 
         <div class="grid">
 
@@ -129,7 +129,7 @@
 
             </div>
 
-            <div class="cell has-text-right">
+            <div class="cell has-text-right has-text-left-mobile">
                 <a href="javascript:exportToPdf('data')" class="button is-danger is-light">
                     <span class="icon has-text-danger"><x-carbon-document-pdf /></span>
                 </a>

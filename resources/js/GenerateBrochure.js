@@ -50,22 +50,29 @@ export default class GenerateBrochure {
             {
                 name: 'Side/Vehicle Adaptor',
                 text: ['For Lateral stability and Vehicle Connections', 'Guying Usage Depends on Payload and Mast Height'],
-                image: 'accessory1'
+                image: 'accessory1',
+                applicability:['MTWR','MTPR'] 
             },
             {
                 name: 'Floor/Side/Vehicle Adaptor',
                 text: ['For Lateral stability and Vehicle Connections', 'Guying Usage Depends on Payload and Mast Height'],
-                image: 'accessory2'
+                image: 'accessory2',
+                applicability:['MTWR','MTPR'] 
+
             },
             {
                 name: 'Compressor',
                 text: ['Pressurised Air System Needed'],
-                image: 'accessory4'
+                image: 'accessory4',
+                applicability:['MTPR'] 
+
             },
             {
                 name: 'Transport Lock',
                 text: ['For Heavy Vibration Environments'],
-                image: 'accessory3'
+                image: 'accessory3',
+                applicability:['MTWR','MTPR'] 
+
             },
         ]
 
@@ -204,19 +211,27 @@ export default class GenerateBrochure {
 
         this.pdf.setFontSize(14);
 
+        let sayac = 0
+
         this.accessories.forEach((accessory, key) => {
 
-            py = starty;
+            if (accessory.applicability.includes(this.data.mastType)){
 
-            if (key % 2 == 0) {
-                px = this.mx;
-            } else {
-                px = this.pageWidth / 2 + this.config.gap / 2;
-                starty += 120
-            }
+                py = starty;
 
-            this.pdf.text(String(accessory.name), px, py);
-            this.pdf.addImage(document.getElementById(accessory.image), 'JPG', px, py + 4, img_dim, img_dim);
+                if (sayac % 2 == 0) {
+                    px = this.mx;
+                } else {
+                    px = this.pageWidth / 2 + this.config.gap / 2;
+                    starty += 120
+                }
+
+                this.pdf.text(String(accessory.name), px, py);
+                this.pdf.addImage(document.getElementById(accessory.image), 'JPG', px, py + 4, img_dim, img_dim);
+
+                sayac++
+
+            } 
         });
     }
 

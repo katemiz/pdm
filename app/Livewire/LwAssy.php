@@ -25,6 +25,7 @@ use Mail;
 use App\Mail\AppMail;
 
 use Carbon\Carbon;
+use Request;
 
 
 class LwAssy extends Component
@@ -112,7 +113,17 @@ class LwAssy extends Component
     public $parents = [];
 
     public $config_number;
+    public $config_description; 
+
+    public $currentConfigId = false;
+    public $currentConfig = false;
     public $base_part = false;
+
+
+    public $conf_modal_show = false;
+
+    public $hasConfigurations = false;
+    public $configurations = [];
 
 
 
@@ -229,6 +240,7 @@ class LwAssy extends Component
         $this->version = $item->version;
         $this->weight = $item->weight;
         $this->unit = $item->unit;
+        $this->hasConfigurations = $item->hasConfigurations;
 
         $this->description = $item->description;
         $this->c_notice_id = $item->c_notice_id;
@@ -236,20 +248,22 @@ class LwAssy extends Component
         $this->status = $item->status;
         $this->is_latest = $item->is_latest;
 
-        $this->treeData =[];
+        // $this->treeData =[];
 
-        if ($item->bom) {
+        // if ($item->bom) {
 
-            $children = json_decode($item->bom);
+        //     $children = json_decode($item->bom);
 
-            foreach ($children as $i) {
-                $child = Item::find($i->id);
-                $i->part_type = $child->part_type;
-                $i->description = $child->description;
+        //     foreach ($children as $i) {
+        //         $child = Item::find($i->id);
+        //         $i->part_type = $child->part_type;
+        //         $i->description = $child->description;
 
-                array_push($this->treeData, $i);
-            }
-        }
+        //         array_push($this->treeData, $i);
+        //     }
+        // }
+
+        $this->setTreeData($item);   
 
         $this->created_by = User::find($item->user_id);
         $this->created_at = $item->created_at;
@@ -268,6 +282,9 @@ class LwAssy extends Component
             array_push($this->notes_id_array,$note->id);
         }
 
+        // Get Configurations
+        $this->getConfigurations();
+
         // Revisions
         foreach (Item::where('part_number',$this->part_number)->get() as $i) {
             $this->all_revs[$i->version] = $i->id;
@@ -282,6 +299,33 @@ class LwAssy extends Component
 
 
 
+    public function setTreeData($item) {
+  
+
+        $this->treeData =[];
+
+        if ($item->bom) {
+
+            $children = json_decode($item->bom);
+
+            foreach ($children as $i) {
+                $child = Item::find($i->id);
+                $i->part_type = $child->part_type;
+                $i->description = $child->description;
+
+                array_push($this->treeData, $i);
+            }
+        }
+
+
+
+
+    }
+
+
+    public function getConfigurations() {
+        $this->configurations = Item::where('basePartId',$this->uid)->get();
+    }
 
 
     public function storeItem()
@@ -295,6 +339,7 @@ class LwAssy extends Component
                 'part_number' => $this->getProductNo(),
                 'c_notice_id' => $this->c_notice_id,
                 'weight' => $this->weight,
+                'hasConfigurations' => $this->hasConfigurations,
                 'unit' => $this->unit,
                 'remarks' => $this->remarks,
                 'user_id' => Auth::id(),
@@ -338,6 +383,7 @@ class LwAssy extends Component
                 'description' => $this->description,
                 'c_notice_id' => $this->c_notice_id,
                 'weight' => $this->weight,
+                'hasConfigurations' => $this->hasConfigurations,
                 'unit' => $this->unit,
                 'remarks' => $this->remarks,
                 'updated_uid' => Auth::id()
@@ -562,7 +608,7 @@ class LwAssy extends Component
 
     public function checkIntegrity($id) {
         $this->checkAssyIntegrity($id);
-     }
+    }
 
 
 
@@ -779,12 +825,87 @@ class LwAssy extends Component
 
 
 
+    public function confModalToggle() {
+        $this->conf_modal_show = !$this->conf_modal_show;
+    }   
+
+
+    public function saveConfiguration($configurationId = false) {  
+
+
+        $this->validate([
+            'config_number' => 'required|string|max:255',
+        ]);
+
+
+        if ($configurationId) {
+            // Update Existing Configuration
+
+            $props['config_number'] = $this->config_number;
+            $props['description'] = $this->config_description;
+
+            $configItem = Item::find($configurationId);
+            $configItem->update($props);
+
+            $this->currentConfigId = $configItem->id;
+        } else {
+            // Create New Configuration
+            $props['hasConfigurations'] = false;
+            $props['config_number'] = $this->config_number;
+            $props['description'] = $this->config_description;
+            $props['basePartId'] = $this->uid;
+            $props['part_type'] = $this->part_type;
+            $props['part_number'] = $this->part_number;
+            $props['description'] = $this->description.' - '.$this->config_description;
+            $props['c_notice_id'] = $this->c_notice_id;
+            $props['weight'] = $this->weight;
+            $props['unit'] = $this->unit;
+            $props['remarks'] = $this->remarks;
+            $props['user_id'] = Auth::id();
+            $props['updated_uid'] = Auth::id();
+            $props['version'] = $this->version;
+            $props['is_latest'] = true;
+
+            $this->configItem =Item::create($props); 
+            $this->currentConfigId = $this->configItem->id;
+  
+
+        }
 
 
 
 
 
 
+        $this->getConfigurations();
+
+        $this->confModalToggle();
+
+        //dd($props);
+
+
+
+
+
+    }
+
+
+    public function setCurrentConfig($id) {
+
+        $this->setCurrentConfigId($id);
+        $this->confModalToggle();
+    }
+
+
+
+    public function setCurrentConfigId($id) {
+        $this->currentConfigId = $id;
+
+        $this->currentConfig = Item::find($id);
+
+        $this->config_number = $this->currentConfig->config_number;
+        $this->config_description = $this->currentConfig->description;
+    }
 
 
     public function releaseAssy($id) {

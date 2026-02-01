@@ -17,9 +17,7 @@
             if (part_type == 'Standard') {
                 console.log('Standard',partNumber)
                 full_part_number = partNumber
-
             } else {
-
                 console.log('Standard Değil',description)
                 full_part_number = description
             }

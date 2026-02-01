@@ -1,13 +1,5 @@
-{{-- <div> --}}
+<div id="tree" class="column"></div>
 
-
-<div id="tree" class="column" ></div>
-
-{{-- @if( count($treeData) < 1)
-<p class="has-text-centered">No parts yet</p>
-@endif --}}
-
-{{-- </div> --}}
 
 
 
@@ -17,17 +9,17 @@
 
     $(document).ready(function () {
 
-        $(function() {
+        $(function () {
             $('#tree').tree({
                 data: @json($treeData),
-                selectable:true,
+                selectable: true,
                 closedIcon: '+',
 
-                onCreateLi: function(node, $li) {
+                onCreateLi: function (node, $li) {
                     // Append a link to the jqtree-element div.
                     // The link has an url '#node-[id]' and a data property 'node-id'.
                     $li.find('.jqtree-element').append(
-                        '<span class="mx-1" data-node-id="'+ node.qty +'">['+ node.qty +']</span><a href="#node-'+ node.id +'" class="edit mx-1 has-text-danger" data-node-id="'+ node.id +'"> x</a>'
+                        '<span class="mx-1" data-node-id="' + node.qty + '">[' + node.qty + ']</span><a href="#node-' + node.id + '" class="edit mx-1 has-text-danger" data-node-id="' + node.id + '"> x</a>'
                     );
                 }
             });
@@ -54,7 +46,7 @@
     // ON NODE SELECT
     $('#tree').on(
         'tree.select',
-        function(event) {
+        function (event) {
             if (event.node) {
                 // node was selected
                 var node = event.node;
@@ -69,7 +61,7 @@
     );
 
     // Handle a click on the edit link
-    $('#tree').on( 'click', '.edit', function(e) {
+    $('#tree').on('click', '.edit', function (e) {
         // Get the id from the 'node-id' data property
         var node_id = $(e.target).data('node-id');
 
@@ -83,7 +75,7 @@
 
             if (node.qty > 1) {
 
-                let newqty = node.qty-1
+                let newqty = node.qty - 1
 
                 // console.log("reducing qty",newqty)
                 // console.log('before update',node)
@@ -91,13 +83,13 @@
                 let aaa = {
                     name: node.name,
                     id: node.id,
-                    qty:newqty
+                    qty: newqty
                 }
 
                 // console.log('aaa',aaa)
 
 
-                $('#tree').tree('updateNode',node, aaa)
+                $('#tree').tree('updateNode', node, aaa)
 
 
 
@@ -108,7 +100,7 @@
             }
 
 
-            Livewire.dispatch('saveTree', {idAssy: "500"})
+            Livewire.dispatch('saveTree', { idAssy: "500" })
 
 
 
@@ -118,15 +110,15 @@
 
 
 
-    $('#tree').on('tree.contextmenu', function(event) {
-            // The clicked node is 'event.node'
-            var node = event.node;
-            alert(node.name);
-        }
+    $('#tree').on('tree.contextmenu', function (event) {
+        // The clicked node is 'event.node'
+        var node = event.node;
+        alert(node.name);
+    }
     );
 
 
-    window.addEventListener('refreshTree',function(e) {
+    window.addEventListener('refreshTree', function (e) {
         data = e.detail.data
 
         // console.log("Refreshing")
@@ -163,4 +155,3 @@
 
 
 </script>
-

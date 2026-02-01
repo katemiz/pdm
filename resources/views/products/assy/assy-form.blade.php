@@ -35,11 +35,16 @@
 
                 @if ($uid)
                 <p class="card-header-title">{{ $part_number}}-{{ $version }}</p>
+                    <a wire:click="$toggle('showNodeGui')" class="card-header-icon has-text-link" aria-label="more options">
+
+                    @if(!$hasConfigurations)
+                    <span class="icon"><x-carbon-edit /></span>
+                    @endif
+                </a>
+                @else
+                    <p class="card-header-title">New Assembly</p>
                 @endif
 
-                <a wire:click="$toggle('showNodeGui')" class="card-header-icon has-text-link" aria-label="more options">
-                    <span class="icon"><x-carbon-edit /></span>
-                </a>
             </header>
         </div>
 
@@ -47,14 +52,89 @@
 
 
 
+        @if ($uid)
+        <h2 class="subtitle has-text-weight-light">{{ $hasConfigurations ? 'Configurations':'Product Tree' }}</h2>
+        @endif
 
 
 
-        <h2 class="subtitle has-text-weight-light">Product Tree</h2>
+
+        @if ($uid && $hasConfigurations)
+
+            @if (count($configurations) > 0)
+
+                <div class="accordion">
+
+                    @foreach ($configurations as $configuration)
+                    
+                        <div class="card my-1">
+                            
+                            <header class="card-header">
+                                <p class="card-header-title" wire:click="setCurrentConfigId({{ $configuration->id }})">{{ $configuration->part_number }}-{{ $configuration->config_number }}</p>
+                                <button class="card-header-icon" aria-label="more options">
+                                <span wire:click="setCurrentConfig({{ $configuration->id }})" class="icon has-text-link"><x-carbon-edit /></span>
+                                <span class="icon has-text-link"><x-carbon-tree-view /></span>
+
+                                </button>
+                            </header>
+
+                            @if ($currentConfigId == $configuration->id)
+
+                            <div class="card-content">
+                                {{-- <div class="content">
+                                Lorem ipsum leo risus, porta ac $ ac, vestibulum at eros. Donec
+                                id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus
+                                et magnis dis parturient montes, nascetur ridiculus mus. Cras mattis
+                                consectetur purus sit amet fermentum.
+                                </div> --}}
+
+                                        <livewire:lw-tree :treeData="$treeData"/>
+
+                            </div>
+
+                            @endif
+
+                        </div>
+
+                    @endforeach
+                </div>
+
+            @else
+
+                <div class="notification is-warning is-light">No configurations found for this assembly.</div>  
+
+            @endif
+
+            <button  wire:click="confModalToggle()" class="button is-dark is-fullwidth my-3">Add New Configuration</button>
+
+        @endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
         <livewire:lw-tree :treeData="$treeData"/>
+
+
+
+
+
+
 
     </div>
 
@@ -107,6 +187,43 @@
                     <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
                     @enderror
                 </div>
+
+
+
+
+
+
+
+
+                <div class="field">
+                    <label class="label">Has Configurations?</label>
+
+                    <div class="control">
+                        <label class="checkbox is-block">
+                            <input type="radio" wire:model="hasConfigurations" value="1"> Yes
+                        </label>
+
+                        <label class="checkbox is-block">
+                            <input type="radio" wire:model="hasConfigurations" value="0"> No
+                        </label>
+
+                    </div>
+
+                    @error('hasConfigurations')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+
+
+
+
+
+
+
+
+
+
 
 
                 <div class="field">
@@ -473,5 +590,80 @@
 
     </div>
     @endif
+
+
+
+
+
+
+
+
+
+
+
+
+    {{-- MODAL FOR CONFIRMATION --}}
+
+    <div class="modal {{ $conf_modal_show ? 'is-active' : '' }}">
+        <div class="modal-background" wire:click="confModalToggle()"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Configurations</p>
+                <button class="delete" aria-label="close"  wire:click="confModalToggle()"></button>
+            </header>
+
+            <section class="modal-card-body">
+
+                <div class="field is-3">
+
+                    <label class="label" for="topic">Configuration No</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="C04" wire:model="config_number">
+                    </div>
+
+                    @error('config_number')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="field ">
+
+                    <label class="label" for="topic">Configuration Description</label>
+                    <div class="control">
+                        <input class="input" type="text" placeholder="Configuration Description" wire:model="config_description">
+                    </div>
+
+                    @error('config_description')
+                    <div class="notification is-danger is-light is-size-7 p-1 mt-1">{{ $message }}</div>
+                    @enderror
+                </div>
+
+            </section>
+            
+            <footer class="modal-card-foot">
+                <div class="buttons">
+                    <button class="button is-success" wire:click="saveConfiguration({{ $currentConfigId }})">{{ $currentConfigId ? 'Update Configuration' : 'Add New Configuration' }}</button>
+                    <button class="button" wire:click="confModalToggle()">Cancel</button>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </div>

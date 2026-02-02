@@ -1,9 +1,9 @@
 <script src="{{ asset('/ckeditor5/ckeditor.js') }}"></script>
 
-<script src="{{ asset('/js/jquery-3.7.1.min.js') }}"></script>
-<script src="{{ asset('/js/tree.jquery.js') }}"></script>
+{{-- <script src="{{ asset('/js/jquery-3.7.1.min.js') }}"></script> --}}
+{{-- <script src="{{ asset('/js/tree.jquery.js') }}"></script> --}}
 
-<link rel="stylesheet" href="{{ asset('/css/jqtree.css')}}">
+{{-- <link rel="stylesheet" href="{{ asset('/css/jqtree.css')}}"> --}}
 
 <header class="mb-6">
     <h1 class="title has-text-weight-light is-size-1">Assembled Products</h1>
@@ -81,14 +81,8 @@
                             @if ($currentConfigId == $configuration->id)
 
                             <div class="card-content">
-                                {{-- <div class="content">
-                                Lorem ipsum leo risus, porta ac $ ac, vestibulum at eros. Donec
-                                id elit non mi porta gravida at eget metus. Cum sociis natoque penatibus
-                                et magnis dis parturient montes, nascetur ridiculus mus. Cras mattis
-                                consectetur purus sit amet fermentum.
-                                </div> --}}
 
-                                        <livewire:lw-tree :treeData="$treeData"/>
+                                <livewire:lw-tree :components="$item->components"/>
 
                             </div>
 
@@ -128,7 +122,7 @@
 
 
 
-        <livewire:lw-tree :treeData="$treeData"/>
+        <livewire:lw-tree :components="$item->components"/>
 
 
 
@@ -567,9 +561,15 @@
                                     <span class="icon"><x-carbon-checkmark /></span>
                                 </a>
                             @else
-                                <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},'{{ $record->full_part_number }}','{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
+                                {{-- <a href="javascript:addNodeJS({{ $uid ? $uid : 0 }},{{ $record->id }},'{{ $record->full_part_number }}','{{ addslashes($record->description) }}','{{ $record->version }}','{{ $record->part_type }}')">
+                                    <span class="icon"><x-carbon-checkmark /></span>
+                                </a> --}}
+
+                                <a wire:click="addChild({{ $uid }},{{ $record->id }})" class="ml-2">
                                     <span class="icon"><x-carbon-checkmark /></span>
                                 </a>
+
+
                             @endif
 
                         </td>

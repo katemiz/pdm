@@ -8,17 +8,19 @@ use Illuminate\Support\Collection;
 
 class LwTree extends Component
 {
-    public $treeData;
+    public $components;
 
-    public function mount( $treeData = [])
+    public function mount( $components = [])
     {
-        $this->treeData = $treeData;
+        $this->components = $components;
     }
 
     public function render()
     {
+
+        // dd($this->components);
         return view('components.elements.bom-tree', [
-            'treeData' => json_encode($this->treeData),
+            'components' => json_encode($this->components),
         ]);
     }
 

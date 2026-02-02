@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+
 class Item extends Model
 {
     use HasFactory;
@@ -80,5 +81,50 @@ class Item extends Model
     {
         return $this->hasMany(Fnote::class);
     }
+
+
+
+
+
+
+    /**
+     * Get all child products (components) of this product
+     */
+    public function components(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Item::class,
+            'product_components',
+            'parent_id',
+            'child_id'
+        )
+        ->withPivot('quantity')
+        ->withTimestamps()
+        ->orderBy('product_components.parent_id');
+    }
+
+
+
+
+
+    /**
+     * Get all parent products that include this product as a component
+     */
+    public function usedIn(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Item::class,
+            'product_components',
+            'child_id',
+            'parent_id'
+        )
+        ->withPivot('quantity')
+        ->withTimestamps();
+    }
+
+
+
+
+
 
 }

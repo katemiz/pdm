@@ -9,13 +9,9 @@ use Livewire\WithPagination;
 
 use Illuminate\Support\Facades\Auth;
 
-
-use App\Livewire\LwTree;
-
 use App\Models\Attachment;
 use App\Models\CNotice;
 use App\Models\Counter;
-use App\Models\Company;
 use App\Models\Fnote;
 use App\Models\Item;
 use App\Models\NoteCategory;
@@ -25,7 +21,6 @@ use Mail;
 use App\Mail\AppMail;
 
 use Carbon\Carbon;
-use Request;
 
 
 class LwAssy extends Component
@@ -65,7 +60,7 @@ class LwAssy extends Component
 
     public $item;
 
-    public $treeData = [];
+    // public $treeData = [];
     public $part_number;
     public $remarks;
 
@@ -110,7 +105,7 @@ class LwAssy extends Component
 
     public $release_integrity_ok = false;
 
-    public $parents = [];
+    // public $parents = [];
 
     public $config_number;
     public $config_description; 
@@ -229,24 +224,25 @@ class LwAssy extends Component
             return true;
         }
 
-        $item = Item::find($this->uid);
+        $this->item = Item::find($this->uid);
+
+        //dd($item->components);
 
         // if ($item->status == 'WIP') {
         //     $this->isItemEditable = true;
         //     $this->isItemDeleteable = true;
         // }
 
-        $this->part_number = $item->part_number;
-        $this->version = $item->version;
-        $this->weight = $item->weight;
-        $this->unit = $item->unit;
-        $this->hasConfigurations = $item->hasConfigurations;
-
-        $this->description = $item->description;
-        $this->c_notice_id = $item->c_notice_id;
-        $this->remarks = $item->remarks;
-        $this->status = $item->status;
-        $this->is_latest = $item->is_latest;
+        $this->part_number = $this->item->part_number;
+        $this->version = $this->item->version;
+        $this->weight = $this->item->weight;
+        $this->unit = $this->item->unit;
+        $this->hasConfigurations = $this->item->hasConfigurations;
+        $this->description = $this->item->description;
+        $this->c_notice_id = $this->item->c_notice_id;
+        $this->remarks = $this->item->remarks;
+        $this->status = $this->item->status;
+        $this->is_latest = $this->item->is_latest;
 
         // $this->treeData =[];
 
@@ -263,22 +259,22 @@ class LwAssy extends Component
         //     }
         // }
 
-        $this->setTreeData($item);   
+        // $this->setTreeData($this->item);   
 
-        $this->created_by = User::find($item->user_id);
-        $this->created_at = $item->created_at;
-        $this->updated_by = User::find($item->updated_uid);
-        $this->updated_at = $item->updated_at;
-        // $this->checked_by = User::find($item->checker_id);
-        // $this->approved_by = User::find($item->approver_id);
+        $this->created_by = User::find($this->item->user_id);
+        $this->created_at = $this->item->created_at;
+        $this->updated_by = User::find($this->item->updated_uid);
+        $this->updated_at = $this->item->updated_at;
+        // $this->checked_by = User::find($this->item->checker_id);
+        // $this->approved_by = User::find($this->item->approver_id);
 
-        // $this->check_reviewed_at = $item->check_reviewed_at;
-        // $this->app_reviewed_at = $item->app_reviewed_at;
+        // $this->check_reviewed_at = $this->item->check_reviewed_at;
+        // $this->app_reviewed_at = $this->item->app_reviewed_at;
 
         $this->notes_id_array = [];
-        $this->notes = $item->pnotes;
+        $this->notes = $this->item->pnotes;
 
-        foreach ($item->pnotes as $note) {
+        foreach ($this->item->pnotes as $note) {
             array_push($this->notes_id_array,$note->id);
         }
 
@@ -299,7 +295,7 @@ class LwAssy extends Component
 
 
 
-    public function setTreeData($item) {
+    public function SILsetTreeData($item) {
   
 
         $this->treeData =[];
@@ -318,6 +314,23 @@ class LwAssy extends Component
         }
 
 
+
+
+    }
+
+
+
+    public function addChild($idAssy,$idChild) {
+
+        $item = Item::find($idAssy);
+
+        // Attach components
+        $item->components()->attach($idChild, [
+            'quantity' => 1,
+        ]);
+
+        // Refresh entire model (reloads all relationships)
+        $item->refresh();
 
 
     }

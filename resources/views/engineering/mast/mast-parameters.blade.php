@@ -5,8 +5,14 @@
 
         <div class="control">
 
+
             <label class="checkbox is-block">
-                <input type="radio" wire:model.live="mastType" value="MTWR"> MTWR Electromechanical Mast with Steel Ropes
+                <input type="radio" wire:model.live="mastType" value="MTNX"> MTNX Electromechanical Mast
+            </label>
+
+            <label class="checkbox is-block">
+                <input type="radio" wire:model.live="mastType" value="MTWR"> MTWR Electromechanical Mast with Steel
+                Ropes
             </label>
 
             <label class="checkbox is-block">
@@ -184,8 +190,8 @@
 
                 <label class="label">Maximum Payload<br>Capacity [kg]</label>
                 <div class="control">
-                    <input class="input" type="number" placeholder="Max Payload Capacity" wire:model.live="maxPayloadCapacity"
-                        step="1">
+                    <input class="input" type="number" placeholder="Max Payload Capacity"
+                        wire:model.live="maxPayloadCapacity" step="1">
                 </div>
             </div>
 

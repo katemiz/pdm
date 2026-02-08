@@ -7,48 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+use Illuminate\Support\Collection;
 
 class Item extends Model
 {
     use HasFactory;
 
     protected $table = 'items';
-
-    // protected $fillable = [
-    //     'user_id',
-    //     'updated_uid',
-    //     'part_type',
-    //     'c_notice_id',
-    //     'malzeme_id',
-    //     'unit',
-    //     'part_number',
-    //     'description',
-    //     'part_number_mt',
-    //     'part_number_wb',
-    //     'has_mirror',
-    //     'is_mirror_of',
-    //     'standard_family_id',
-    //     'standard_number',
-    //     'std_params',
-    //     'bom',
-    //     'makefrom_part_number',
-    //     'version',
-    //     'is_latest',
-    //     'vendor',
-    //     'vendor_part_no',
-    //     'url',
-    //     'weight',
-    //     'material_text',
-    //     'finish_text',
-    //     'remarks',
-    //     'status',
-    //     'checker_id',
-    //     'approver_id',
-    //     'reject_reason_check',
-    //     'reject_reason_app',
-    //     'check_reviewed_at',
-    //     'app_reviewed_at',
-    // ];
 
     protected $guarded = [];
 
@@ -105,6 +70,12 @@ class Item extends Model
 
 
 
+    public function getHasAssyComponent()
+    {
+        return $this->components()->where('part_type', 'Assy')->exists();
+    }
+
+
 
 
     /**
@@ -121,6 +92,115 @@ class Item extends Model
         ->withPivot('quantity')
         ->withTimestamps();
     }
+
+
+
+
+
+
+
+    /**
+     * Get all components recursively with quantities adjusted for assembly count
+     * 
+     * @param int $assemblyQuantity Number of assemblies to build
+     * @param int $maxDepth Maximum recursion depth
+     * @return Collection
+     */
+    public function getAllComponents($assemblyQuantity = 1, $maxDepth = 20)
+    {
+        if ($this->part_type !== 'Assy') {
+            return collect();
+        }
+
+        // Eager load to prevent N+1 queries
+        $this->loadRecursiveComponents($maxDepth);
+
+        return $this->getComponentsRecursive(1, $maxDepth, [], $assemblyQuantity);
+    }
+
+    /**
+     * Eager load nested components up to max depth
+     */
+    protected function loadRecursiveComponents($depth)
+    {
+        $with = 'components';
+        $relations = [$with];
+
+        for ($i = 1; $i < $depth; $i++) {
+            $with .= '.components';
+            $relations[] = $with;
+        }
+
+        $this->load($relations);
+    }
+
+    /**
+     * Recursive component retrieval with proper quantity calculation
+     */
+    protected function getComponentsRecursive(
+        $currentLevel = 1,
+        $maxDepth = 10,
+        $parentPath = [],
+        $parentQuantity = 1
+    ) {
+        // Depth limit
+        if ($currentLevel > $maxDepth) {
+            return collect();
+        }
+
+        // Circular reference check
+        if (in_array($this->id, $parentPath)) {
+            Log::warning("Circular reference detected", [
+                'item_id' => $this->id,
+                'path' => $parentPath
+            ]);
+            return collect();
+        }
+
+        $allComponents = collect();
+        $parentPath[] = $this->id;
+
+        foreach ($this->components as $index => $component) {
+            // Calculate total quantity needed
+            // parentQuantity already includes assembly quantity from top level
+            $totalQuantity = $parentQuantity * $component->pivot->quantity;
+
+            // Build component data
+            $componentData = [
+                'id' => $component->id,
+                'part_number' => $component->part_number,
+                'version' => $component->version,
+                'description' => $component->description ?? '',
+                'part_type' => $component->part_type,
+                'level' => $currentLevel,
+                'unit_quantity' => $component->pivot->quantity, // Qty per parent
+                'total_quantity' => $totalQuantity, // Total qty needed
+                'sort_order' => $component->pivot->sort_order ?? $index,
+                'parent_id' => $this->id,
+                'path' => implode(' → ', [...$parentPath, $component->id]),
+                'path_ids' => [...$parentPath, $component->id],
+                'indent' => str_repeat('  ', $currentLevel - 1),
+            ];
+
+            $allComponents->push($componentData);
+
+            // Recursively get sub-components if this is an assembly
+            if ($component->part_type === 'Assy') {
+                $subComponents = $component->getComponentsRecursive(
+                    $currentLevel + 1,
+                    $maxDepth,
+                    $parentPath,
+                    $totalQuantity // Pass total quantity down the chain
+                );
+
+                $allComponents = $allComponents->merge($subComponents);
+            }
+        }
+
+        return $allComponents;
+    }
+
+
 
 
 

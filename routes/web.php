@@ -11,6 +11,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CkImgController;
+use App\Http\Controllers\BomTransfer;
 
 use App\Livewire\Cr;
 use App\Livewire\Ecn;
@@ -66,6 +67,8 @@ Route::get('/svg', function () {
     return view('svg');
 });
 
+
+Route::get('/bom-transfer', [BomTransfer::class, 'index']);
 
 require __DIR__.'/auth.php';
 

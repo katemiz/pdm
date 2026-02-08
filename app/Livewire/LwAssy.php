@@ -6,6 +6,8 @@ use Livewire\Component;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Validate;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\DB;
+
 
 use Illuminate\Support\Facades\Auth;
 
@@ -37,7 +39,6 @@ class LwAssy extends Component
     public $item_view_url = '/products-assy/view';
 
     public $has_material = false;
-    public $has_bom = true;
     public $has_notes = true;
     public $has_flag_notes = true;
     public $has_vendor = false;
@@ -49,7 +50,9 @@ class LwAssy extends Component
     public $sortDirection = 'DESC';
 
     public $action;
-    public $showNodeGui = false;
+    public $showSelectComponentsDiv = false;
+
+    public $showFirstLevelBOM = true;
     public $constants;
 
     #[Validate('required', message: 'Please enter description')]
@@ -60,10 +63,10 @@ class LwAssy extends Component
 
     public $item;
 
-    // public $treeData = [];
     public $part_number;
     public $remarks;
 
+    public $isSellable = false;
 
     public $has_mirror = false;
     public $is_mirror_of = false;
@@ -238,6 +241,7 @@ class LwAssy extends Component
         $this->weight = $this->item->weight;
         $this->unit = $this->item->unit;
         $this->hasConfigurations = $this->item->hasConfigurations;
+        $this->isSellable = $this->item->isSellable;
         $this->description = $this->item->description;
         $this->c_notice_id = $this->item->c_notice_id;
         $this->remarks = $this->item->remarks;
@@ -295,44 +299,40 @@ class LwAssy extends Component
 
 
 
-    public function SILsetTreeData($item) {
-  
 
-        $this->treeData =[];
-
-        if ($item->bom) {
-
-            $children = json_decode($item->bom);
-
-            foreach ($children as $i) {
-                $child = Item::find($i->id);
-                $i->part_type = $child->part_type;
-                $i->description = $child->description;
-
-                array_push($this->treeData, $i);
-            }
-        }
-
-
-
-
-    }
 
 
 
     public function addChild($idAssy,$idChild) {
 
-        $item = Item::find($idAssy);
+        // Check if child already exists in the same assy
+        $existing = Item::find($idAssy)->components()->where('child_id',$idChild)->first();
+
+        if ($existing) {
+            // Increase Quantity
+            Item::find($this->uid)
+                ->components()
+                ->updateExistingPivot($existing->id, [
+                    'quantity' => DB::raw('quantity + 1'),
+                ]);
+
+            // Refresh Tree
+            $this->dispatch('components-updated');
+            return;
+        }
+
+        $this->item = Item::find($idAssy);
 
         // Attach components
-        $item->components()->attach($idChild, [
+        $this->item->components()->attach($idChild, [
             'quantity' => 1,
         ]);
 
         // Refresh entire model (reloads all relationships)
-        $item->refresh();
+        $this->item->refresh();
 
-
+        // Refresh Tree
+        $this->dispatch('components-updated');
     }
 
 
@@ -353,6 +353,7 @@ class LwAssy extends Component
                 'c_notice_id' => $this->c_notice_id,
                 'weight' => $this->weight,
                 'hasConfigurations' => $this->hasConfigurations,
+                'isSellable' => $this->isSellable,
                 'unit' => $this->unit,
                 'remarks' => $this->remarks,
                 'user_id' => Auth::id(),
@@ -397,6 +398,7 @@ class LwAssy extends Component
                 'c_notice_id' => $this->c_notice_id,
                 'weight' => $this->weight,
                 'hasConfigurations' => $this->hasConfigurations,
+                'isSellable' => $this->isSellable,
                 'unit' => $this->unit,
                 'remarks' => $this->remarks,
                 'updated_uid' => Auth::id()
@@ -468,20 +470,20 @@ class LwAssy extends Component
 
 
 
-    #[On('addTreeToDB')]
-    public function addTreeToDB($bomData) {
+    // #[On('addTreeToDB')]
+    // public function addTreeToDB($bomData) {
 
-        if ($this->uid) {
+    //     if ($this->uid) {
 
-            $props['bom'] = $bomData;
+    //         $props['bom'] = $bomData;
 
-            $i = Item::find($this->uid);
-            $sonuc = $i->update($props);
+    //         $i = Item::find($this->uid);
+    //         $sonuc = $i->update($props);
 
-            // Log::info($i);
-            // Log::info($props);
-        }
-    }
+    //         // Log::info($i);
+    //         // Log::info($props);
+    //     }
+    // }
 
 
 
@@ -658,7 +660,7 @@ class LwAssy extends Component
         }
 
 
-        if ( strlen($item->bom) < 1 ) {
+        if ( count($item->components) < 1 ) {
 
             $this->release_errors[$item->part_number][] = [
                 'id' => $item->id,
@@ -668,7 +670,7 @@ class LwAssy extends Component
 
         } else {
 
-            foreach ( json_decode($item->bom) as $children) {
+            foreach ( $item->components as $children) {
 
                 switch ($children->part_type) {
 
@@ -937,7 +939,7 @@ class LwAssy extends Component
 
         $rel->update($props);
 
-        foreach ( json_decode($rel->bom) as $children) {
+        foreach ( $rel->components as $children) {
 
             switch ($children->part_type) {
 

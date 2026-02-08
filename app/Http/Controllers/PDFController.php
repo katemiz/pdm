@@ -241,12 +241,12 @@ class PDFController extends Controller
             $pdf->writeHTML($remarks, true, false, false, false, '');
         }
 
-        if ($item->bom) {
+        if ( count($item->components) > 0) {
 
             $pdf->setY($pdf->GetY()+10);
             $pdf->SetFont('dejavusans', '', 10);
 
-            $records = json_decode($item->bom);
+            $records = $item->components;
 
             if (count($records) > 30) {
                 $pages = array_chunk($records, 30);
@@ -271,10 +271,10 @@ class PDFController extends Controller
                     foreach ($page_rows as $i) {
                         $table .= '
                         <tr>
-                            <td style="width:15%;background-color: #feffea;">'.$i->name.'-'.$i->version.'</td>
+                            <td style="width:15%;background-color: #feffea;">'.$i->part_number.'-'.$i->version.'</td>
                             <td style="width:10%">'.$i->part_type.'</td>
                             <td style="width:60%">'.$i->description.'</td>
-                            <td style="width:15%;text-align:right;">'.$i->qty.'</td>
+                            <td style="width:15%;text-align:right;">'.$i->pivot->quantity.'</td>
                         </tr>';
                     }
 

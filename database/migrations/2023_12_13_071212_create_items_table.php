@@ -20,6 +20,7 @@ return new class extends Migration
             $table->id();
             $table->integer('updated_uid');
             $table->string('part_type');
+            $table->boolean(column: 'isSellable')->default(false);
             $table->foreignIdFor(User::class);
             $table->foreignIdFor(CNotice::class)->nullable();
             $table->foreignIdFor(Malzeme::class)->nullable();

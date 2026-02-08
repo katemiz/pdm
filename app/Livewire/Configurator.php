@@ -15,7 +15,7 @@ class Configurator extends Component
 
     public $modalType;
 
-    public $mastType = 'MTPR'; // 'MTPR' or 'MTWR'
+    public $mastType = 'MTPR'; // 'MTPR' , 'MTWR' or 'MTNX'
 
     //public $overlapDimension = 500;  // m
 
@@ -244,15 +244,23 @@ class Configurator extends Component
             'maxPayload' => 500,
             'minPayload' => 16,
             'maxExtendedHeight' => 25,
-            'minExtendedHeight' => 1.5,
+            'minExtendedHeight' => 3.0,
             'color' => 'blue',
         ],
         'MTWR' => [
             'maxPayload' => 350,
             'minPayload' => 16,
             'maxExtendedHeight' => 25,
-            'minExtendedHeight' => 1.5,
+            'minExtendedHeight' => 3.0,
             'color' => 'red',
+        ],
+
+        'MTNX' => [
+            'maxPayload' => 550,
+            'minPayload' => 50,
+            'maxExtendedHeight' => 25,
+            'minExtendedHeight' => 4.0,
+            'color' => 'green',
         ]
 
     ];
@@ -343,6 +351,13 @@ class Configurator extends Component
 
         if ($this->mastType == 'MTWR' ) {
             $this->headMTTubes = 42;
+        }
+
+
+        if ($this->mastType == 'MTNX' ) {
+            $this->headMTTubes = 55;
+            $this->topAdapterThk = 15;
+            $this->baseAdapterThk = 50;
         }
     }
 
@@ -729,6 +744,12 @@ class Configurator extends Component
         if ($this->mastType == 'MTWR' ) {
             return round(min($minCriticalLoad, $this->capacity[$this->mastType]['maxPayload']), 0);
         }
+
+        if ($this->mastType == 'MTNX' ) {
+            return round(min($minCriticalLoad, $this->capacity[$this->mastType]['maxPayload']), 0);
+        }
+
+
 
     }
 

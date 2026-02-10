@@ -27,9 +27,8 @@
             <header class="card-header">
 
                 @if ($uid)
-                        <p class="card-header-title">{{ $part_number}}-{{ $version }}</p>
-                        <a wire:click="$toggle('showSelectComponentsDiv')" class="card-header-icon has-text-link" aria-label="more options">
-
+                    <p class="card-header-title">{{ $part_number}}-{{ $config_number ? $config_number.'-' : '' }}{{ $version }}</p>
+                    <a wire:click="$toggle('showSelectComponentsDiv')" class="card-header-icon has-text-link" aria-label="more options">
                         @if(!$hasConfigurations)
                             <span class="icon"><x-carbon-tree-view /></span>
                         @endif
@@ -44,7 +43,7 @@
         @if ($uid)
 
             <h2 class="subtitle has-text-weight-light">{{ $hasConfigurations ? 'Configurations' : 'Assy Components' }}</h2>
-            <livewire:lw-tree :uid="$uid"/>
+
 
             @if ($hasConfigurations)
 
@@ -58,9 +57,8 @@
                                 <header class="card-header">
                                     <p class="card-header-title" wire:click="setCurrentConfigId({{ $configuration->id }})">{{ $configuration->part_number }}-{{ $configuration->config_number }}</p>
                                     <button class="card-header-icon" aria-label="more options">
-                                    <span wire:click="setCurrentConfig({{ $configuration->id }})" class="icon has-text-link"><x-carbon-edit /></span>
-                                    <span class="icon has-text-link"><x-carbon-tree-view /></span>
-
+                                        <span wire:click="setCurrentConfig({{ $configuration->id }})" class="icon has-text-link"><x-carbon-edit /></span>
+                                        <span class="icon has-text-link" wire:click="setCurrentConfigTree({{ $configuration->id }})"><x-carbon-tree-view /></span>
                                     </button>
                                 </header>
 
@@ -82,6 +80,9 @@
                 @endif
 
                 <button  wire:click="confModalToggle()" class="button is-dark is-fullwidth my-3">Add New Configuration</button>
+
+            @else
+                <livewire:lw-tree :uid="$uid"/>
 
             @endif
 

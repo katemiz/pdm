@@ -913,6 +913,32 @@ class LwAssy extends Component
 
 
 
+
+
+
+
+    public function setCurrentConfigTree($id) {
+
+
+
+        $this->uid = $id;
+
+        $this->showSelectComponentsDiv = true;
+
+        // $this->setCurrentConfigId($id);
+        // $this->dispatch('refreshTree',id: $id,name: $this->currentConfig->description);
+    }
+
+
+
+
+
+
+
+
+
+
+
     public function setCurrentConfigId($id) {
         $this->currentConfigId = $id;
 

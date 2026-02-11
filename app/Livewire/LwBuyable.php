@@ -44,6 +44,8 @@ class LwBuyable extends Component
     public $uid;
     public $action = 'LIST'; // LIST,FORM,VIEW
 
+    public $item; 
+
     public $query = '';
     public $sortField = 'created_at';
     public $sortDirection = 'DESC';
@@ -263,6 +265,8 @@ class LwBuyable extends Component
         if ($this->uid && in_array($this->action,['VIEW','FORM']) ) {
 
             $buyable = Item::find($this->uid);
+
+            $this->item =$buyable;  
 
             $this->part_number = $buyable->part_number;
             $this->part_number_mt = $buyable->part_number_mt;

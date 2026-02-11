@@ -148,7 +148,7 @@
                                             </a>
                                             @break
 
-                                        @case('Standard')
+                                        @case('Standard')            
                                             <a href="/details/Standard/view/{{$part['id']}}" target="_blank">
                                                 {{ $part['standard_number'] }} {{ $part['std_params'] }} 
                                             </a>

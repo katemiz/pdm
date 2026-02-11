@@ -577,21 +577,27 @@
 
 
         {{-- BOM --}}
-        @if ($item->part_type == 'Assy' && $item->hasConfigurations   ) 
+        @if ($item->part_type == 'Assy' ) 
 
-            @if (count($item->configurations) > 0 )  
+            @if ( $item->hasConfigurations )
 
-                @foreach($item->configurations as $configuration) 
-                    <livewire:lw-bom-table :item="$configuration" wire:key="configuration-{{ $configuration->id }}"/>
-                @endforeach 
+                @if (count($item->configurations) > 0 )  
+
+                    @foreach($item->configurations as $configuration) 
+                        <livewire:lw-bom-table :item="$configuration" wire:key="configuration-{{ $configuration->id }}"/>
+                    @endforeach 
+
+                @else
+
+                    <div class="notification is-warning is-light">
+                        No configurations found for this assembly.
+                    </div>  
+
+                @endif 
 
             @else
-
-                <div class="notification is-warning is-light">
-                    No configurations found for this assembly.
-                </div>  
-
-            @endif 
+                <livewire:lw-bom-table :item="$item" wire:key="item-{{ $item->id }}"/>          
+            @endif
 
         @endif 
 

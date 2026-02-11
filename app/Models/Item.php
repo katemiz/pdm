@@ -189,6 +189,8 @@ class Item extends Model
                 'version' => $component->version,
                 'description' => $component->description ?? '',
                 'part_type' => $component->part_type,
+                'standard_number' => $component->standard_number ?? '',
+                'std_params' => $component->std_params ?? '',
                 'level' => $currentLevel,
                 'unit_quantity' => $component->pivot->quantity, // Qty per parent
                 'total_quantity' => $totalQuantity, // Total qty needed
@@ -198,6 +200,8 @@ class Item extends Model
                 'path_ids' => [...$parentPath, $component->id],
                 'indent' => str_repeat('  ', $currentLevel - 1),
             ];
+
+
 
             $allComponents->push($componentData);
 

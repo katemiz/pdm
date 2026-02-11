@@ -52,7 +52,7 @@
 
                                     @case('Detail')
                                         <a href="/details/Detail/view/{{$component->id}}" target="_blank">
-                                            {{ $component->part_number }}-{{ $component->config_number ?  $component->config_number .'-':''}} {{ $component->version }} 
+                                            {{ $component->part_number }}-{{ $component->config_number ?  $component->config_number .'-':''}}{{ $component->version }} 
                                         </a>
                                         @break
 

@@ -50,6 +50,23 @@ class Item extends Model
 
 
 
+    /**
+     * Get all configurations of this product
+     */
+    public function configurations(): BelongsToMany
+    {
+        return $this->belongsToMany(
+            Item::class,
+            'product_configurations',
+            'base_id',
+            'configuration_id'
+        )
+        ->withTimestamps()
+        ->orderBy('product_configurations.configuration_id');
+    }
+
+
+
 
 
     /**

@@ -1,6 +1,9 @@
 <div>
 
+
     @if (count($this->components) > 0)
+
+    
 
         <table class="table is-fullwidth">
 
@@ -15,7 +18,7 @@
                             </a>
                         @else
                             <a href="/details/{{ $component->part_type }}/view/{{$component->id}}" target="_blank">
-                                {{ $component->part_number }} {{ $component->version }}
+                                {{ $component->part_number }}-{{ $component->config_number ?  $component->config_number .'-':''}}{{ $component->version }}
                             </a>
                         @endif
 
@@ -40,6 +43,9 @@
             @endforeach
 
         </table>
+
+        <span class="is-size-7">{{$this->uid}}</span>
+
     @else
 
         <div class="notification is-warning is-light">

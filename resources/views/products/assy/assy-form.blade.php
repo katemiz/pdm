@@ -21,13 +21,13 @@
 <div class="columns">
 
 
-    <div class="column is-3 has-background-warning">
+    <div class="column is-3 has-background-white-ter">
 
         <div class="card">
             <header class="card-header">
 
                 @if ($uid)
-                    <p class="card-header-title">{{ $part_number}}-{{ $config_number ? $config_number.'-' : '' }}{{ $version }}</p>
+                    <p class="card-header-title">{{ $part_number}}-{{ $version }}</p>
                     <a wire:click="$toggle('showSelectComponentsDiv')" class="card-header-icon has-text-link" aria-label="more options">
                         @if(!$hasConfigurations)
                             <span class="icon"><x-carbon-tree-view /></span>
@@ -44,28 +44,27 @@
 
             <h2 class="subtitle has-text-weight-light">{{ $hasConfigurations ? 'Configurations' : 'Assy Components' }}</h2>
 
-
             @if ($hasConfigurations)
 
-                @if (count($configurations) > 0)
+                @if (count($item->configurations) > 0)
 
                     <div class="accordion">
-                        @foreach ($configurations as $configuration)
+                        @foreach ($item->configurations as $configuration)
 
-                            <div class="card my-1">
+                            <div class="card my-1 has-ackground-info">
 
                                 <header class="card-header">
                                     <p class="card-header-title" wire:click="setCurrentConfigId({{ $configuration->id }})">{{ $configuration->part_number }}-{{ $configuration->config_number }}</p>
                                     <button class="card-header-icon" aria-label="more options">
-                                        <span wire:click="setCurrentConfig({{ $configuration->id }})" class="icon has-text-link"><x-carbon-edit /></span>
+                                        <span wire:click="editConfig({{ $configuration->id }})" class="icon has-text-link"><x-carbon-edit /></span>
                                         <span class="icon has-text-link" wire:click="setCurrentConfigTree({{ $configuration->id }})"><x-carbon-tree-view /></span>
                                     </button>
                                 </header>
 
-                                @if ($currentConfigId == $configuration->id)
+                                @if ($ccid == $configuration->id)
 
-                                    <div class="card-content">
-                                        <livewire:lw-tree :uid="$uid"/>
+                                    <div class="card-content" >
+                                        <livewire:lw-tree :uid="$ccid" wire:key="tree-{{ $ccid }}"/>
                                     </div>
 
                                 @endif
@@ -79,7 +78,7 @@
                     <div class="notification is-warning is-light">No configurations found for this assembly.</div>  
                 @endif
 
-                <button  wire:click="confModalToggle()" class="button is-dark is-fullwidth my-3">Add New Configuration</button>
+                <button  wire:click="addConfiguration()" class="button is-dark is-fullwidth my-3">Add New Configuration</button>
 
             @else
                 <livewire:lw-tree :uid="$uid"/>
@@ -180,7 +179,7 @@
                                     <td>{{ $record->created_at }}</td>
 
                                     <td class="has-text-right">
-                                        <a wire:click="addChild({{ $uid }},{{ $record->id }})" class="ml-2">
+                                        <a wire:click="addChild({{ $record->id }})" class="ml-2">
                                             <span class="icon"><x-carbon-add-child-node /></span>
                                         </a>
                                     </td>
@@ -622,8 +621,8 @@
         
         <footer class="modal-card-foot">
             <div class="buttons">
-                <button class="button is-success" wire:click="saveConfiguration({{ $currentConfigId }})">{{ $currentConfigId ? 'Update Configuration' : 'Add New Configuration' }}</button>
-                <button class="button" wire:click="confModalToggle()">Cancel</button>
+                <button class="button is-success" wire:click="saveConfiguration({{ $currentConfigId }})">{{ $ccid ? 'Update Configuration' : 'Add New Configuration' }}</button>
+                <button class="button" wire:click="confModalCancel()">Cancel</button>
             </div>
         </footer>
     </div>

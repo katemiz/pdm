@@ -44,6 +44,7 @@ class LwAssy extends Component
     public $has_vendor = false;
 
     public $uid;
+    public $ccid = false; // Current Configuration id
 
     public $query = '';
     public $sortField = 'part_number';
@@ -229,12 +230,11 @@ class LwAssy extends Component
 
         $this->item = Item::find($this->uid);
 
-        //dd($item->components);
+        //dd($this->item->components);
+        //dd($this->item->configurations);
 
-        // if ($item->status == 'WIP') {
-        //     $this->isItemEditable = true;
-        //     $this->isItemDeleteable = true;
-        // }
+
+
 
         $this->part_number = $this->item->part_number;
         $this->version = $this->item->version;
@@ -248,32 +248,12 @@ class LwAssy extends Component
         $this->status = $this->item->status;
         $this->is_latest = $this->item->is_latest;
 
-        // $this->treeData =[];
-
-        // if ($item->bom) {
-
-        //     $children = json_decode($item->bom);
-
-        //     foreach ($children as $i) {
-        //         $child = Item::find($i->id);
-        //         $i->part_type = $child->part_type;
-        //         $i->description = $child->description;
-
-        //         array_push($this->treeData, $i);
-        //     }
-        // }
-
-        // $this->setTreeData($this->item);   
 
         $this->created_by = User::find($this->item->user_id);
         $this->created_at = $this->item->created_at;
         $this->updated_by = User::find($this->item->updated_uid);
         $this->updated_at = $this->item->updated_at;
-        // $this->checked_by = User::find($this->item->checker_id);
-        // $this->approved_by = User::find($this->item->approver_id);
 
-        // $this->check_reviewed_at = $this->item->check_reviewed_at;
-        // $this->app_reviewed_at = $this->item->app_reviewed_at;
 
         $this->notes_id_array = [];
         $this->notes = $this->item->pnotes;
@@ -283,7 +263,7 @@ class LwAssy extends Component
         }
 
         // Get Configurations
-        $this->getConfigurations();
+        //$this->getConfigurations();
 
         // Revisions
         foreach (Item::where('part_number',$this->part_number)->get() as $i) {
@@ -303,7 +283,18 @@ class LwAssy extends Component
 
 
 
-    public function addChild($idAssy,$idChild) {
+    public function addChild($idChild) {
+
+        /*
+        If ccid is set then it means; we are working on configuration
+        if not uid is valid
+        */
+
+        if ($this->ccid) {
+           $idAssy =$this->ccid;  
+        } else {
+           $idAssy =$this->uid;  
+        } 
 
         // Check if child already exists in the same assy
         $existing = Item::find($idAssy)->components()->where('child_id',$idChild)->first();
@@ -336,9 +327,9 @@ class LwAssy extends Component
     }
 
 
-    public function getConfigurations() {
-        $this->configurations = Item::where('basePartId',$this->uid)->get();
-    }
+    // public function getConfigurations() {
+    //     $this->configurations = Item::where('basePartId',$this->uid)->get();
+    // }
 
 
     public function storeItem()
@@ -842,36 +833,37 @@ class LwAssy extends Component
 
     public function confModalToggle() {
         $this->conf_modal_show = !$this->conf_modal_show;
-    }   
+    }  
+    
+    
+    public function confModalCancel() {
+        $this->conf_modal_show = !$this->conf_modal_show;
+        $this->ccid = false; 
+    } 
 
 
-    public function saveConfiguration($configurationId = false) {  
+    public function saveConfiguration() {  
 
 
         $this->validate([
             'config_number' => 'required|string|max:255',
         ]);
 
+        $props['config_number'] = strtoupper($this->config_number);
+        $props['description'] = $this->config_description;
 
-        if ($configurationId) {
+
+        if ($this->ccid) {
             // Update Existing Configuration
 
-            $props['config_number'] = $this->config_number;
-            $props['description'] = $this->config_description;
+            Item::find($this->ccid)->update($props);
 
-            $configItem = Item::find($configurationId);
-            $configItem->update($props);
-
-            $this->currentConfigId = $configItem->id;
         } else {
             // Create New Configuration
             $props['hasConfigurations'] = false;
-            $props['config_number'] = $this->config_number;
-            $props['description'] = $this->config_description;
-            $props['basePartId'] = $this->uid;
             $props['part_type'] = $this->part_type;
             $props['part_number'] = $this->part_number;
-            $props['description'] = $this->description.' - '.$this->config_description;
+            $props['description'] = $this->config_description;
             $props['c_notice_id'] = $this->c_notice_id;
             $props['weight'] = $this->weight;
             $props['unit'] = $this->unit;
@@ -882,9 +874,13 @@ class LwAssy extends Component
             $props['is_latest'] = true;
 
             $this->configItem =Item::create($props); 
-            $this->currentConfigId = $this->configItem->id;
-  
+            $this->ccid = $this->configItem->id;
 
+            // Base item
+
+            // Attach Configurations
+            $this->item->configurations()->attach($this->ccid);
+  
         }
 
 
@@ -892,17 +888,35 @@ class LwAssy extends Component
 
 
 
-        $this->getConfigurations();
+        // $this->getConfigurations();
 
         $this->confModalToggle();
 
         //dd($props);
+
+        $this->ccid = false; 
 
 
 
 
 
     }
+
+
+    public function editConfig($id) {
+
+        $configItem = Item::find($id);
+
+        $this->config_number =  $configItem->config_number;
+        $this->config_description =  $configItem->description;
+
+
+        $this->setCurrentConfigId($id);
+        $this->confModalToggle();
+    }
+
+
+
 
 
     public function setCurrentConfig($id) {
@@ -913,6 +927,27 @@ class LwAssy extends Component
 
 
 
+    public function setCurrentConfigId($id) {
+
+        if ($this->ccid){
+            $this->ccid = false;
+        } else{
+            $this->ccid = $id;
+        } 
+
+        // $this->currentConfig = Item::find($id);
+
+        // $this->config_number = $this->currentConfig->config_number;
+        // $this->config_description = $this->currentConfig->description;
+    }
+
+    public function addConfiguration (){
+
+        $this->config_number = '';
+        $this->config_description = '';
+
+        $this->confModalToggle();
+    } 
 
 
 
@@ -921,12 +956,11 @@ class LwAssy extends Component
 
 
 
-        $this->uid = $id;
+        $this->ccid = $id;
 
         $this->showSelectComponentsDiv = true;
 
-        // $this->setCurrentConfigId($id);
-        // $this->dispatch('refreshTree',id: $id,name: $this->currentConfig->description);
+
     }
 
 
@@ -939,14 +973,6 @@ class LwAssy extends Component
 
 
 
-    public function setCurrentConfigId($id) {
-        $this->currentConfigId = $id;
-
-        $this->currentConfig = Item::find($id);
-
-        $this->config_number = $this->currentConfig->config_number;
-        $this->config_description = $this->currentConfig->description;
-    }
 
 
     public function releaseAssy($id) {

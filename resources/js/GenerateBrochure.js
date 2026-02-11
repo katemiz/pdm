@@ -219,7 +219,7 @@ export default class GenerateBrochure {
 
                 py = starty;
 
-                if (sayac % 2 == 0) {
+                if (key % 2 == 0) {
                     px = this.mx;
                 } else {
                     px = this.pageWidth / 2 + this.config.gap / 2;

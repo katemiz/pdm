@@ -13,15 +13,10 @@ class LwTree extends Component
 {
     public $uid;
 
-
     public function mount($uid)
     {
         $this->uid = $uid;
     }
-
-
-
-
 
 
     // Computed property - always fresh
@@ -31,15 +26,11 @@ class LwTree extends Component
     }
 
 
-
     #[On('components-updated')]
     public function refreshComponent()
     {
         // Just being here triggers re-render
     }
-
-
-
 
 
     public function increaseQty($componentId)
@@ -72,30 +63,5 @@ class LwTree extends Component
     {
         return view('components.elements.bom-tree');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }

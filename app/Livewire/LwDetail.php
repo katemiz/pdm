@@ -40,6 +40,8 @@ class LwDetail extends Component
     public $page_view_title = 'Detail Parts';
     public $page_view_subtitle = 'Detail Part Properties';
 
+    public $item; 
+
     public $list_all_url = '/parts/list';
     public $item_edit_url;
     public $item_view_url = '/details/Detail/view';
@@ -275,6 +277,8 @@ class LwDetail extends Component
     public function getProps() {
 
         $item = Item::find($this->uid);
+
+        $this->item =$item;  
 
         $this->malzeme_id = $item->malzeme_id;
         $this->part_type = $item->part_type;

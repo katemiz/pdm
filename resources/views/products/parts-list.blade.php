@@ -99,63 +99,31 @@
         <tbody>
 
             @foreach ($items as $record)
-            @if ($record->basePartId === 0)
-            <tr wire:key="{{ $record->id }}">
+                @if (strlen(trim($record->config_number)) < 1 )
+                <tr wire:key="{{ $record->id }}">
 
-                <td>{{ $record->full_part_number }}</td>
-                <td>{{ $record->part_type }}</td>
-                <td>
-                    <a href="/parts/list?parts_by_ecn={{$record->c_notice_id}}" target="_blank">
-                        {{ $record->c_notice_id }}
-                    </a>               
-                </td>
-                <td>{{ $record->description }}</td>
-                <td>{{ $record->created_at }}</td>
+                    <td>{{ $record->full_part_number }}</td>
+                    <td>{{ $record->part_type }}</td>
+                    <td>
+                        <a href="/parts/list?parts_by_ecn={{$record->c_notice_id}}" target="_blank">
+                            {{ $record->c_notice_id }}
+                        </a>               
+                    </td>
+                    <td>{{ $record->description }}</td>
+                    <td>{{ $record->created_at }}</td>
 
-                <td class="has-text-right">
-
-                    @switch($record->part_type)
-                        @case('Buyable')
-                            <a href="/buyables/view/{{ $record->id}}">
-                                <span class="icon"><x-carbon-view/></span>
-                            </a>
-                            @break
-
-                        @case('Assy')
-                            <a href="/products-assy/view/{{ $record->id}}">
-                                <span class="icon"><x-carbon-view/></span>
-                            </a>
-                            @break
-
-                        @case('Detail')
-                        @case('MakeFrom')
-                        @case('Standard')
-                        @case('MultipleConfigured')
-
-                            <a href="/details/{{ $record->part_type }}/view/{{ $record->id}}">
-                                <span class="icon"><x-carbon-view/></span>
-                            </a>
-                            @break
-
-                        @default
-
-                    @endswitch
-
-
-                    @if (in_array($record->status,['WIP']))
-                    @role(['admin','EngineeringDepartment'])
+                    <td class="has-text-right">
 
                         @switch($record->part_type)
-
                             @case('Buyable')
-                                <a href="/buyables/form/{{ $record->id}}">
-                                    <span class="icon"><x-carbon-edit /></span>
+                                <a href="/buyables/view/{{ $record->id}}">
+                                    <span class="icon"><x-carbon-view/></span>
                                 </a>
                                 @break
 
                             @case('Assy')
-                                <a href="/products-assy/form/{{ $record->id}}">
-                                    <span class="icon"><x-carbon-edit /></span>
+                                <a href="/products-assy/view/{{ $record->id}}">
+                                    <span class="icon"><x-carbon-view/></span>
                                 </a>
                                 @break
 
@@ -164,20 +132,52 @@
                             @case('Standard')
                             @case('MultipleConfigured')
 
-                                <a href="/details/{{ $record->part_type }}/form/{{ $record->id}}">
-                                    <span class="icon"><x-carbon-edit /></span>
+                                <a href="/details/{{ $record->part_type }}/view/{{ $record->id}}">
+                                    <span class="icon"><x-carbon-view/></span>
                                 </a>
                                 @break
 
+                            @default
+
                         @endswitch
 
-                    @endrole
-                    @endif
 
-                </td>
+                        @if (in_array($record->status,['WIP']))
+                        @role(['admin','EngineeringDepartment'])
 
-            </tr>
-            @endif
+                            @switch($record->part_type)
+
+                                @case('Buyable')
+                                    <a href="/buyables/form/{{ $record->id}}">
+                                        <span class="icon"><x-carbon-edit /></span>
+                                    </a>
+                                    @break
+
+                                @case('Assy')
+                                    <a href="/products-assy/form/{{ $record->id}}">
+                                        <span class="icon"><x-carbon-edit /></span>
+                                    </a>
+                                    @break
+
+                                @case('Detail')
+                                @case('MakeFrom')
+                                @case('Standard')
+                                @case('MultipleConfigured')
+
+                                    <a href="/details/{{ $record->part_type }}/form/{{ $record->id}}">
+                                        <span class="icon"><x-carbon-edit /></span>
+                                    </a>
+                                    @break
+
+                            @endswitch
+
+                        @endrole
+                        @endif
+
+                    </td>
+
+                </tr>
+                @endif
             @endforeach
 
         </tbody>

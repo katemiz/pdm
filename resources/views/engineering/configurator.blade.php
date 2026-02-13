@@ -1,6 +1,6 @@
 <section class="section container">
 
-    <script src="{{ asset('/js/charts.js') }}"></script>
+    <!-- <script src="{{ asset('/js/charts.js') }}"></script> -->
 
 
     <script>
@@ -20,6 +20,8 @@
 
             let pLoads = new MastDraw(e.detail.data,'Loads');
             pLoads.run();
+
+            generateConfigTable(e.detail.data.mastTubes)
         })
 
         async function exportToPdf() {
@@ -45,6 +47,7 @@
             document.getElementById('liSvgCapacity').classList.remove('is-active');
 
             if (jsGraphType === 'Nested') {
+
                 document.getElementById('divSvgNested').classList.remove('is-hidden');
                 document.getElementById('liSvgNested').classList.add('is-active');
 
@@ -63,6 +66,11 @@
                 document.getElementById('liSvgCapacity').classList.add('is-active');
 
                 drawChart();
+
+            } else if (jsGraphType === 'SectionConfigurations') {
+                document.getElementById('divSectionConfigurations').classList.remove('is-hidden');
+                document.getElementById('liSectionConfigurations').classList.add('is-active');
+
             }
         }
 
@@ -106,6 +114,156 @@
             });
 
         }
+
+
+
+
+
+
+        function generateConfigTable(tubes) {
+
+            const tubeConfigs = [
+                { "config_suffix": "-", "description": "Movable Inner", "pipe_cuts_motor_gear": false, "keys_splines": true, "bottom_nut_rib": true, "locking_mechanism": true, "euler_part": false, "load_interface": false },
+                { "config_suffix": "B", "description": "Fixed Base", "pipe_cuts_motor_gear": true, "keys_splines": false, "bottom_nut_rib": false, "locking_mechanism": false, "euler_part": false, "load_interface": false },
+                { "config_suffix": "T", "description": "Top Load", "pipe_cuts_motor_gear": false, "keys_splines": true, "bottom_nut_rib": true, "locking_mechanism": false, "euler_part": true, "load_interface": true },
+                { "config_suffix": "TM", "description": "Sub-Head", "pipe_cuts_motor_gear": false, "keys_splines": true, "bottom_nut_rib": true, "locking_mechanism": true, "euler_part": false, "load_interface": false }
+            ];
+
+
+
+
+
+
+
+            const sectionWeights = [
+                {
+                    "section": "S15",
+                    "configurations": [
+                    { "config": "C15B", "weight": 32.0 },
+                    { "config": "C15TM", "weight": null }
+                    ]
+                },
+                {
+                    "section": "S14",
+                    "configurations": [
+                    { "config": "C14B", "weight": null },
+                    { "config": "C14", "weight": 33.7 },
+                    { "config": "C14TM", "weight": null }
+                    ]
+                },
+                {
+                    "section": "S13",
+                    "configurations": [
+                    { "config": "C13B", "weight": null },
+                    { "config": "C13", "weight": 30.6 },
+                    { "config": "C13TM", "weight": null }
+                    ]
+                },
+                {
+                    "section": "S12",
+                    "configurations": [
+                    { "config": "C12B", "weight": null },
+                    { "config": "C12", "weight": 27.8 },
+                    { "config": "C12TM", "weight": null }
+                    ]
+                },
+                {
+                    "section": "S11",
+                    "configurations": [
+                    { "config": "C11B", "weight": null },
+                    { "config": "C11", "weight": 25.2 }
+                    ]
+                },
+                {
+                    "section": "S10",
+                    "configurations": [
+                    { "config": "C10", "weight": 20.4 },
+                    { "config": "C10T", "weight": 24.9 },
+                    { "config": "C10TM", "weight": 20.4 }
+                    ]
+                },
+                {
+                    "section": "S09",
+                    "configurations": [
+                    { "config": "C09", "weight": 18.2 },
+                    { "config": "C09T", "weight": 21.8 },
+                    { "config": "C09TM", "weight": 19.0 }
+                    ]
+                },
+                {
+                    "section": "S08",
+                    "configurations": [
+                    { "config": "C08", "weight": 16.2 },
+                    { "config": "C08T", "weight": null },
+                    { "config": "C08TM", "weight": 16.0 }
+                    ]
+                },
+                {
+                    "section": "S07",
+                    "configurations": [
+                    { "config": "C07", "weight": 14.0 },
+                    { "config": "C07T", "weight": null },
+                    { "config": "C07TM", "weight": 14.0 }
+                    ]
+                },
+                {
+                    "section": "S06",
+                    "configurations": [
+                    { "config": "C06", "weight": 12.2 },
+                    { "config": "C06T", "weight": 14.5 },
+                    { "config": "C06TM", "weight": 12.7 }
+                    ]
+                }
+            ]
+
+
+
+
+
+
+
+
+
+
+            const tbody = document.getElementById('configTable');
+
+            tbody.innerHTML = '' 
+
+            const sortedODs = tubes.map(t => t.od).sort((a, b) => a - b);
+            const minOD = sortedODs[0];
+            const secondMinOD = sortedODs[1];
+            const maxOD = sortedODs[sortedODs.length - 1];
+
+            //const tbody = document.getElementById('tableBody');
+            
+            tubes.forEach(tube => {
+                let suffix = "-";
+                if (tube.od === maxOD) suffix = "B";
+                else if (tube.od === minOD) suffix = "T";
+                else if (tube.od === secondMinOD) suffix = "TM";
+
+                const conf = tubeConfigs.find(c => c.config_suffix === suffix);
+                const row = `
+                    <tr>
+                        <td>${tube.no}</td>
+                        <td>${tube.od}</td>
+                        <td><span class="suffix-badge">${suffix}</span></td>
+                        <td>${conf.description}</td>
+                        <td class="${conf.pipe_cuts_motor_gear ? 'status-true' : 'status-false'}">${conf.pipe_cuts_motor_gear ? 'YES' : 'NO'}</td>
+                        <td class="${conf.keys_splines ? 'status-true' : 'status-false'}">${conf.keys_splines ? 'YES' : 'NO'}</td>
+                        <td class="${conf.bottom_nut_rib ? 'status-true' : 'status-false'}">${conf.bottom_nut_rib ? 'YES' : 'NO'}</td>
+                        <td class="${conf.locking_mechanism ? 'status-true' : 'status-false'}">${conf.locking_mechanism ? 'YES' : 'NO'}</td>
+                        <td class="${conf.euler_part ? 'status-true' : 'status-false'}">${conf.euler_part ? 'YES' : 'NO'}</td>
+                        <td class="${conf.load_interface ? 'status-true' : 'status-false'}">${conf.load_interface ? 'YES' : 'NO'}</td>
+                    </tr>`;
+                tbody.innerHTML += row;
+            });
+        }
+
+
+
+
+
     </script>
 
 
@@ -157,6 +315,11 @@
             <li id="liSvgNested" class="is-active">
                 <a href="javascript:void(0)" onclick="toggleGraph('Nested')">Nested Position</a>
             </li>
+
+            <li id="liSectionConfigurations" >
+                <a href="javascript:void(0)" onclick="toggleGraph('SectionConfigurations')">Section Configurations</a>
+            </li>
+
         </ul>
     </div>
 
@@ -171,11 +334,37 @@
         <div id="divSvgNested">
             {{-- svg to be added dynamically here --}}
         </div>
+
         <div id="divSvgExtended" class="is-hidden">
             {{-- svg to be added dynamically here --}}
         </div>
+
         <div id="divSvgLoads" class="is-hidden">
             {{-- svg to be added dynamically here --}}
+        </div>
+
+        <div id="divSectionConfigurations" class="is-hidden">
+
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>OD (mm)</th>
+                        <th>Suffix</th>
+                        <th>Description</th>
+                        <th>Motor/Gear Cut</th>
+                        <th>Keys/Splines</th>
+                        <th>Nut Rib</th>
+                        <th>Lock Mech.</th>
+                        <th>Euler Part</th>
+                        <th>Load Int.</th>
+                    </tr>
+                </thead>
+                <tbody id="configTable">
+                {{-- section Contig Table to be added dynamically here --}}
+                </tbody>
+            </table>
+
         </div>
 
     </div>
@@ -310,13 +499,10 @@
 
         <img src="{{ asset(path: 'images/dot-outline.png') }}" alt="icon" id="dot">
 
-
         <img src="{{ asset(path: 'images/Accessory1.jpg') }}" alt="icon" id="accessory1">
         <img src="{{ asset(path: 'images/Accessory2.jpg') }}" alt="icon" id="accessory2">
         <img src="{{ asset(path: 'images/Accessory3.jpg') }}" alt="icon" id="accessory3">
         <img src="{{ asset(path: 'images/Accessory4.jpg') }}" alt="icon" id="accessory4">
-
-
 
     </div>
 

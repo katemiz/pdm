@@ -200,6 +200,7 @@ class LwAssy extends Component
 
             return Item::where('part_number', 'LIKE', "%".$this->query."%")
                 ->orWhere('standard_number', 'LIKE', "%".$this->query."%")
+                ->orWhere('std_params', 'LIKE', "%".$this->query."%")
                 ->orWhere('description', 'LIKE', "%".$this->query."%")
                 ->orderBy($this->sortField,$this->sortDirection)
                 ->paginate(env('RESULTS_PER_PAGE'));

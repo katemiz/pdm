@@ -110,6 +110,7 @@ class LwItem extends Component
                 [
                     'part_number',
                     'standard_number',
+                    'std_params',
                     'description'
                 ] ,
                 'LIKE',

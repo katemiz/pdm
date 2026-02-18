@@ -44,7 +44,7 @@
 
 
 
-<div class="card has-background-lighter">
+<div class="card  {{$item->isSellable ? 'has-background-warning-light': 'has-background-lighter' }}  ">
 
     <div class="card-content">
 
@@ -179,7 +179,12 @@
 
                     @switch($part_type)
                         @case('Assy')
-                            <x-carbon-asset />
+
+                            @if ($item->isSellable) 
+                                <x-carbon-gift />
+                            @else
+                                <x-carbon-asset />
+                            @endif 
                             @break
 
                         @case('Detail')
@@ -689,60 +694,69 @@
         </div>
         @endif
 
+
+
+
+
+
         <div class="column">
             <label class="label">Where Used / Parent Assemblies</label>
 
-            {{-- <div class="notification"> --}}
+                @if ($item->isSellable) 
 
-                @if (count($item->usedIn) > 0)
-                    <table class="table is-fullwidth">
-                    <tbody>
-                        @foreach ($item->usedIn as $key => $parent)
-                        <tr>
-                            <th class="is-narrow">
+                    Sellable Product.
+                    No parent assy exists
 
-                                @switch($parent->part_type)
+                @else 
 
-                                    @case('Detail')
-                                        <a href="/details/Detail/view/{{$parent->id}}" target="_blank">
-                                        @break
+                    @if (count($item->usedIn) > 0)
+                        <table class="table is-fullwidth">
+                        <tbody>
+                            @foreach ($item->usedIn as $key => $parent)
+                            <tr>
+                                <th class="is-narrow">
 
-                                    @case('Assy')
-                                        <a href="/products-assy/view/{{$parent->id}}" target="_blank">
-                                        @break
+                                    @switch($parent->part_type)
 
-                                    @case('Buyable')
-                                        <a href="/buyables/view/{{$parent->id}}" target="_blank">
-                                        @break
+                                        @case('Detail')
+                                            <a href="/details/Detail/view/{{$parent->id}}" target="_blank">
+                                            @break
 
-                                    @case('MakeFrom')
-                                        <a href="/details/MakeFrom/view/{{$parent->id}}" target="_blank">
-                                        @break
+                                        @case('Assy')
+                                            <a href="/products-assy/view/{{$parent->id}}" target="_blank">
+                                            @break
 
-                                    @case('Standard')
-                                        <a href="/details/Standard/view/{{$parent->id}}" target="_blank">
-                                        @break
+                                        @case('Buyable')
+                                            <a href="/buyables/view/{{$parent->id}}" target="_blank">
+                                            @break
 
-                                @endswitch
-                                {{ $parent->part_number }}-{{ $parent->version }}
-                                </a>
-                            </th>
-                            <td>{{ $parent->description }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                    </table>
-                @else
+                                        @case('MakeFrom')
+                                            <a href="/details/MakeFrom/view/{{$parent->id}}" target="_blank">
+                                            @break
 
-                No parent assembly exists.
+                                        @case('Standard')
+                                            <a href="/details/Standard/view/{{$parent->id}}" target="_blank">
+                                            @break
 
-                @endif
+                                    @endswitch
+                                    {{ $parent->part_number }}-{{ $parent->version }}
+                                    </a>
+                                </th>
+                                <td>{{ $parent->description }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                        </table>
+                    @else
 
-            {{-- </div> --}}
+                    No parent assembly exists.
+
+                    @endif
+
+                @endif 
+
+
         </div>
-
-
-
 
 
 

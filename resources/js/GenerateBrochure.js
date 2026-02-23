@@ -28,7 +28,19 @@ export default class GenerateBrochure {
                 { name: 'personIcon', text: ['New patented low friction', 'slide mechanism'] },
                 { name: 'heightIcon', text: ['Heights Up To', '25m'] },
             ]
-        } else {
+        } 
+        
+        if (this.data.mastType == 'MTNX') {
+            this.props = [
+                { name: 'barbellIcon', text: ['Increased Payload Capacity', 'UHD - up to 550 kg '] },
+                { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'Low twist and deflection'] },
+                { name: 'engineIcon', text: ['Power Screw Driven', 'AC/DC Motor'] },
+                { name: 'autoLockingIcon', text: ['Automatic','Mechanical Locks'] },
+                { name: 'heightIcon', text: ['Heights Up To', '25m'] },
+            ]
+        } 
+                
+        if (this.data.mastType == 'MTPR') {
             this.props = [
                 { name: 'barbellIcon', text: ['High Payload Capacity', 'Low Twist/Deflection', 'with new AL stiffened tube profiles'] },
                 // { name: 'windIcon', text: ['Aluminium Stiffened Profiles', 'for low twist and deflection'] },
@@ -40,7 +52,7 @@ export default class GenerateBrochure {
             ]
         }
 
-        this.image_warning = 'Image shown in cover page is for illustration purposes only shows heavy duty mast.'
+        this.image_warning = 'Image shown in cover page is for illustration purposes only.'
 
         this.mastCode = (this.data.extendedHeight / 1000).toFixed(0) + this.data.mastType + '-' + (this.data.nestedHeight / 1000).toFixed(1) + '-' + this.data.mastTubes.length
 
@@ -51,7 +63,7 @@ export default class GenerateBrochure {
                 name: 'Side/Vehicle Adaptor',
                 text: ['For Lateral stability and Vehicle Connections', 'Guying Usage Depends on Payload and Mast Height'],
                 image: 'accessory1',
-                applicability:['MTWR','MTPR'] 
+                applicability:['MTWR','MTPR','MTNX'] 
             },
             {
                 name: 'Floor/Side/Vehicle Adaptor',

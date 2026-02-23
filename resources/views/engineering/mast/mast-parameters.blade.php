@@ -97,6 +97,10 @@
                     <input class="input" type="number" placeholder="Tube Lengths" wire:model.live="lengthMTTubes"
                         min="500" max="10000" step="50">
                 </div>
+
+               @if ($mastType == 'MTNX') 
+                <p class="is-size-7 has-text-danger">Add 5 mm to tube length for top flange</p>
+               @endif 
             </div>
 
             <div class="cell my-2">

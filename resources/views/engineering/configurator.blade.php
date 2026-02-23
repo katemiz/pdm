@@ -1,6 +1,6 @@
 <section class="section container">
 
-    <!-- <script src="{{ asset('/js/charts.js') }}"></script> -->
+    <script src="{{ asset('/js/charts.js') }}"></script>
 
 
     <script>
@@ -480,6 +480,7 @@
         <img id="graphImage" alt="Mast Configurator Diagram">
         <img src="{{ asset(path: 'images/mtwr_background.jpg') }}" alt="MTWR" id="MTWR">
         <img src="{{ asset(path: 'images/mtpr_background.jpg') }}" alt="MTPR" id="MTPR">
+        <img src="{{ asset(path: 'images/mtnx_background.png') }}" alt="MTNX" id="MTNX">
 
         <img id="NestedSvgImage" alt="Nested Position Diagram">
         <img id="ExtendedSvgImage" alt="Extended Position Diagram">

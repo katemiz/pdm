@@ -15,7 +15,7 @@ class Configurator extends Component
 
     public $modalType;
 
-    public $mastType = 'MTPR'; // 'MTPR' , 'MTWR' or 'MTNX'
+    public $mastType = 'MTNX'; // 'MTPR' , 'MTWR' or 'MTNX'
 
     //public $overlapDimension = 500;  // m
 
@@ -317,6 +317,10 @@ class Configurator extends Component
         $this->WindLoadOnPayload();
         $this->getMastHeights();
         $this->calculateTubeWindLoads();
+        $this->CalculateDeflection();
+
+
+
         $this->prepareAllData();
 
         $this->dispatch('triggerCanvasDraw', data : $this->allData);
@@ -1014,11 +1018,67 @@ class Configurator extends Component
 
 
 
+    function CalculateDeflection(){
+
+        //dd($this->mastTubes);
+
+        // foreach ($this->mastTubes as $key => $tube) {
+
+        // } 
+
+
+    } 
 
 
 
 
 
+    function deflectionForOneLoadOnCantileverBeam ($a, $x,$l,$P) {
+
+        /*
+        y = Px^2(3a-x)/[6EI] when 0<x<a
+        y = Px^2(3a-x)/[6EI] when a<x<l
+
+        $a : Distance from root to LOAD acting point
+        $x : Distance at which deflection is calculated
+        $l: Length of Beam
+        $P: Load in N   
+
+        $deflection : deflection value WITHOUT 1/EI 
+        */
+
+        if ($x > 0 & $x < $a ) {
+           $deflection = $P * pow($x,2) * (3 * $a - $x);
+        }
+
+        if ($x > $a & $x < $l ) {
+           $deflection = $P * pow($a,2) * (3 * $x - $a);
+        }
+
+        return $deflection/6; // NOTICE: Without 1/EI
+    }
+
+
+
+
+
+    function deflectionForCoupleMomentAtFreeEndCantileverBeam ($x,$M) {
+
+        /*
+        y = Mx^2/[2EI]
+
+        $x : Distance at which deflection is calculated
+        $M: Couple Moment at FREE end of cantilever beam   
+
+        $deflection : deflection value WITHOUT 1/EI 
+        */
+
+        if ($x > 0 & $x < $a ) {
+           $deflection = $M * pow($x,2) / 2;
+        }
+
+        return $deflection; // NOTICE: Without 1/EI
+    }
 
 
 

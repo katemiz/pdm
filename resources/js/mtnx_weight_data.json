@@ -1,0 +1,958 @@
+{
+    "bottom_structure":{
+        "C15":{
+            "welded_structure":{
+                "weight":13.9,
+                "source":"CAD"
+            },
+            "with_accessories":{
+                "weight":16.2,
+                "source":"CAD"
+            }
+        },
+
+        "C14":{
+            "welded_structure":{
+                "weight":12.6,
+                "source":"CAD"
+            },
+            "with_accessories":{
+                "weight":14.9,
+                "source":"CAD"
+            }
+        },
+
+        "C13":{
+            "welded_structure":{
+                "weight":11.4,
+                "source":"CAD"
+            },
+            "with_accessories":{
+                "weight":13.6,
+                "source":"CAD"
+            }
+        },
+
+        "C12":{
+            "welded_structure":{
+                "weight":10.3,
+                "source":"CAD"
+            },
+            "with_accessories":{
+                "weight":12.4,
+                "source":"CAD"
+            }
+        },
+
+        "C11":{
+            "welded_structure":{
+                "weight":9.2,
+                "source":"CAD"
+            },
+            "with_accessories":{
+                "weight":11.3,
+                "source":"CAD"
+            }
+        },
+
+        "C10":{
+            "welded_structure":{
+                "weight":9.2,
+                "source":"Regression"
+            },
+            "with_accessories":{
+                "weight":11.3,
+                "source":"Regression"
+            }
+        }
+
+
+
+
+    },
+
+    "sections":{
+
+        "tubes": {
+            "C15": {
+                "weight_m": 14.96,
+                "source": "CAD"
+            },
+            "C14": {
+                "weight_m": 13.47,
+                "source": "CAD"
+            },
+            "C13": {
+                "weight_m": 12.08,
+                "source": "CAD"
+            },
+            "C12": {
+                "weight_m": 10.78,
+                "source": "CAD"
+            },
+            "C11": {
+                "weight_m": 9.57,
+                "source": "CAD"
+            },
+            "C10": {
+                "weight_m": 7.84,
+                "source": "CAD"
+            },
+            "C9": {
+                "weight_m": 6.81,
+                "source": "CAD"
+            },
+            "C8": {
+                "weight_m": 5.86,
+                "source": "CAD"
+            },
+            "C7": {
+                "weight_m": 4.99,
+                "source": "CAD"
+            },
+            "C6": {
+                "weight_m": 4.20,
+                "source": "CAD"
+            },
+            "C5": {
+                "weight_m": 3.49,
+                "source": "CAD"
+            },
+            "C4": {
+                "weight_m": 2.86,
+                "source": "CAD"
+            },
+            "C3": {
+                "weight_m": 2.30,
+                "source": "CAD"
+            },
+            "C2": {
+                "weight_m": 1.78,
+                "source": "CAD"
+            },
+            "C1": {
+                "weight_m": 1.44,
+                "source": "CAD"
+            }
+        },
+
+        "fixed_flange":{
+
+                "C15": {
+                    "when_bottom_tube": { "weight": 1.54, "source": "CAD" },
+                    "when_intermediate_tube": { "weight": 1.47, "source": "regression" },
+                    "when_top_tube": { "weight": 1.69, "source": "regression" },
+                    "average": { "weight": 1.57, "source": "CAD" }
+                    },
+                "C14": {
+                    "when_bottom_tube": { "weight": 1.41, "source": "CAD" },
+                    "when_intermediate_tube": { "weight": 1.39, "source": "CAD" },
+                    "when_top_tube": { "weight": 1.60, "source": "regression" },
+                    "average": { "weight": 1.47, "source": "CAD" }
+                    },
+                "C13": {
+                    "when_bottom_tube": { "weight": 1.33, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 1.28, "source": "CAD" },
+                    "when_top_tube": { "weight": 1.48, "source": "regression" },
+                    "average": { "weight": 1.36, "source": "CAD" }
+                    },
+                "C12": {
+                    "when_bottom_tube": { "weight": 1.23, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 1.19, "source": "CAD" },
+                    "when_top_tube": { "weight": 1.37, "source": "regression" },
+                    "average": { "weight": 1.26, "source": "CAD" }
+                    },
+                "C11": {
+                    "when_bottom_tube": { "weight": 1.11, "source": "CAD" },
+                    "when_intermediate_tube": { "weight": 1.08, "source": "CAD" },
+                    "when_top_tube": { "weight": 1.27, "source": "CAD" },
+                    "average": { "weight": 1.15, "source": "CAD" }
+                    },
+                "C10": {
+                    "when_bottom_tube": { "weight": 1.13, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 1.09, "source": "CAD" },
+                    "when_top_tube": { "weight": 1.25, "source": "regression" },
+                    "average": { "weight": 1.16, "source": "CAD" }
+                    },
+                "C9": {
+                    "when_bottom_tube": { "weight": 1.03, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 0.99, "source": "CAD" },
+                    "when_top_tube": { "weight": 1.11, "source": "CAD" },
+                    "average": { "weight": 1.04, "source": "CAD" }
+                    },
+                "C8": {
+                    "when_bottom_tube": { "weight": 0.93, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 0.90, "source": "CAD" },
+                    "when_top_tube": { "weight": 1.05, "source": "regression" },
+                    "average": { "weight": 0.96, "source": "CAD" }
+                    },
+                "C7": {
+                    "when_bottom_tube": { "weight": 0.84, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 0.81, "source": "CAD" },
+                    "when_top_tube": { "weight": 0.95, "source": "regression" },
+                    "average": { "weight": 0.87, "source": "CAD" }
+                    },
+                "C6": {
+                    "when_bottom_tube": { "weight": 0.75, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 0.72, "source": "CAD" },
+                    "when_top_tube": { "weight": 0.85, "source": "CAD" },
+                    "average": { "weight": 0.77, "source": "CAD" }
+                    },
+                "C5": {
+                    "when_bottom_tube": { "weight": 0.66, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 0.64, "source": "CAD" },
+                    "when_top_tube": { "weight": 0.75, "source": "regression" },
+                    "average": { "weight": 0.68, "source": "CAD" }
+                    },
+                "C4": {
+                    "when_bottom_tube": { "weight": 0.60, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 0.58, "source": "CAD" },
+                    "when_top_tube": { "weight": 0.68, "source": "regression" },
+                    "average": { "weight": 0.62, "source": "CAD" }
+                    },
+                "C3": {
+                    "when_bottom_tube": { "weight": 0.53, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 0.51, "source": "CAD" },
+                    "when_top_tube": { "weight": 0.59, "source": "regression" },
+                    "average": { "weight": 0.54, "source": "CAD" }
+                    },
+                "C2": {
+                    "when_bottom_tube": { "weight": 0.43, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 0.41, "source": "regression" },
+                    "when_top_tube": { "weight": 0.48, "source": "regression" },
+                    "average": { "weight": 0.44, "source": "CAD" }
+                    },
+                "C1": {
+                    "when_bottom_tube": { "weight": 0.35, "source": "regression" },
+                    "when_intermediate_tube": { "weight": 0.33, "source": "regression" },
+                    "when_top_tube": { "weight": 0.38, "source": "regression" },
+                    "average": { "weight": 0.35, "source": "CAD" }
+                    }
+        },
+
+        "ice_breaker":{
+            "C15": {
+                "weight": 1.21,
+                "source": "CAD"
+            },
+            "C14": {
+                "weight": 1.12,
+                "source": "CAD"
+            },
+            "C13": {
+                "weight": 1.03,
+                "source": "CAD"
+            },
+            "C12": {
+                "weight": 0.94,
+                "source": "CAD"
+            },
+            "C11": {
+                "weight_m": 0.86,
+                "source": "CAD"
+            },
+            "C10": {
+                "weight_m": 0.82,
+                "source": "CAD"
+            },
+            "C9": {
+                "weight": 0.74,
+                "source": "CAD"
+            },
+            "C8": {
+                "weight": 0.67,
+                "source": "CAD"
+            },
+            "C7": {
+                "weight": 0.59,
+                "source": "CAD"
+            },
+            "C6": {
+                "weight": 0.52,
+                "source": "CAD"
+            },
+            "C5": {
+                "weight": 0.45,
+                "source": "CAD"
+            },
+            "C4": {
+                "weight": 0.38,
+                "source": "CAD"
+            },
+            "C3": {
+                "weight": 0.31,
+                "source": "regression"
+            },
+            "C2": {
+                "weight": 0.23,
+                "source": "regression"
+            },
+            "C1": {
+                "weight": 0.16,
+                "source": "regression"
+            }
+        },
+
+        "power_screw_frame":{
+
+            "C1": {
+                "frame": { "weight": 0.32, "source": "Regression" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.14, "source": "CAD" }
+            },
+            "C2": {
+                "frame": { "weight": 0.42, "source": "Regression" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.24, "source": "CAD" }
+            },
+            "C3": {
+                "frame": { "weight": 0.52, "source": "Regression" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.34, "source": "CAD" }
+            },
+            "C4": {
+                "frame": { "weight": 0.62, "source": "Regression" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.44, "source": "CAD" }
+            },
+            "C5": {
+                "frame": { "weight": 0.72, "source": "Regression" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.54, "source": "CAD" }
+            },
+            "C6": {
+                "frame": { "weight": 0.83, "source": "Regression" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.65, "source": "CAD" }
+            },
+            "C7": {
+                "frame": { "weight": 0.93, "source": "Regression" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.75, "source": "CAD" }
+            },
+            "C8": {
+                "frame": { "weight": 1.03, "source": "CAD" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.85, "source": "CAD" }
+            },
+            "C9": {
+                "frame": { "weight": 1.04, "source": "CAD" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.86, "source": "CAD" }
+            },
+            "C10": {
+                "frame": { "weight": 1.12, "source": "CAD" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 1.94, "source": "CAD" }
+            },
+            "C11": {
+                "frame": { "weight": 1.42, "source": "CAD" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 2.24, "source": "CAD" }
+            },
+            "C12": {
+                "frame": { "weight": 1.53, "source": "CAD" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 2.35, "source": "CAD" }
+            },
+            "C13": {
+                "frame": { "weight": 1.64, "source": "CAD" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 2.46, "source": "CAD" }
+            },
+            "C14": {
+                "frame": { "weight": 1.75, "source": "CAD" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 2.57, "source": "CAD" }
+            },
+            "C15": {
+                "frame": { "weight": 1.86, "source": "CAD" },
+                "nut": { "weight": 0.12, "source": "CAD" },
+                "nut_housing": { "weight": 0.53, "source": "CAD" },
+                "housing_cap": { "weight": 0.17, "source": "CAD" },
+                "assy": { "weight": 2.68, "source": "CAD" }
+            }
+
+        },
+
+        "lower_key_guides":{
+
+            "C1": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C2": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C3": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C4": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C5": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C6": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C7": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C8": {
+                "weight": 0.15,
+                "source": "CAD"
+            },  
+            
+            "C9": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C10": {
+                "weight": 0.15,
+                "source": "CAD"
+            },            
+
+            "C11": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C12": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C13": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C14": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C15": {
+                "weight": 0.15,
+                "source": "CAD"
+            }
+
+        },
+
+        "upper_key_guides":{
+            "C1": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C2": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C3": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C4": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C5": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C6": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C7": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C8": {
+                "weight": 0.115,
+                "source": "CAD"
+            },  
+            
+            "C9": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C10": {
+                "weight": 0.115,
+                "source": "CAD"
+            },            
+
+            "C11": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C12": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C13": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C14": {
+                "weight": 0.115,
+                "source": "CAD"
+            },
+
+            "C15": {
+                "weight": 0.115,
+                "source": "CAD"
+            }
+        },
+
+        "euler_fixer":{
+
+            "C1": {
+                "weight": 0.61,
+                "source": "regression"
+            },
+            "C2": {
+                "weight": 0.71,
+                "source": "regression"
+            },
+            "C3": {
+                "weight": 0.82,
+                "source": "regression"
+            },
+            "C4": {
+                "weight": 0.93,
+                "source": "regression"
+            },
+            "C5": {
+                "weight": 0.95,
+                "source": "CAD"
+            },
+            "C6": {
+                "weight": 1.20,
+                "source": "CAD"
+            },
+            "C7": {
+                "weight": 1.29,
+                "source": "CAD"
+            },
+            "C8": {
+                "weight": 1.37,
+                "source": "CAD"
+            },
+            "C9": {
+                "weight": 1.46,
+                "source": "CAD"
+            },
+            "C10": {
+                "weight": 1.55,
+                "source": "CAD"
+            },
+            "C11": {
+                "weight": 1.67,
+                "source": "CAD"
+            },
+            "C12": {
+                "weight": 1.77,
+                "source": "CAD"
+            },
+            "C13": {
+                "weight": 1.89,
+                "source": "regression"
+            },
+            "C14": {
+                "weight": 1.99,
+                "source": "regression"
+            },
+            "C15": {
+                "weight": 2.10,
+                "source": "regression"
+            }
+
+        },
+
+        "payload_interface": {
+
+            "C1": {
+                "weight": 1.00,
+                "source": "CAD"
+            },
+            "C2": {
+                "weight": 1.23,
+                "source": "CAD"
+            },
+            "C3": {
+                "weight": 1.49,
+                "source": "CAD"
+            },
+            "C4": {
+                "weight": 1.76,
+                "source": "CAD"
+            },
+            "C5": {
+                "weight": 2.08,
+                "source": "CAD"
+            },
+            "C6": {
+                "weight": 2.43,
+                "source": "CAD"
+            },
+            "C7": {
+                "weight": 2.80,
+                "source": "CAD"
+            },
+            "C8": {
+                "weight": 3.22,
+                "source": "CAD"
+            },
+            "C9": {
+                "weight": 3.67,
+                "source": "CAD"
+            },
+            "C10": {
+                "weight": 4.16,
+                "source": "CAD"
+            },
+            "C11": {
+                "weight": 4.63,
+                "source": "CAD"
+            },
+            "C12": {
+                "weight": 5.20,
+                "source": "CAD"
+            },
+            "C13": {
+                "weight": 5.81,
+                "source": "CAD"
+            },
+            "C14": {
+                "weight": 6.47,
+                "source": "CAD"
+            },
+            "C15": {
+                "weight": 7.17,
+                "source": "CAD"
+            }
+
+        },
+
+        "lock_stopper_on_tubes": {
+            "C1": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C2": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C3": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C4": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C5": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C6": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C7": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C8": {
+                "weight": 0.03,
+                "source": "CAD"
+            },  
+            
+            "C9": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C10": {
+                "weight": 0.03,
+                "source": "CAD"
+            },            
+
+            "C11": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C12": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C13": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C14": {
+                "weight": 0.03,
+                "source": "CAD"
+            },
+
+            "C15": {
+                "weight": 0.03,
+                "source": "CAD"
+            }            
+        },
+
+        "lock_key":{
+            "C1": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C2": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C3": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C4": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C5": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C6": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C7": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C8": {
+                "weight": 0.02,
+                "source": "CAD"
+            },  
+            
+            "C9": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C10": {
+                "weight": 0.02,
+                "source": "CAD"
+            },            
+
+            "C11": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C12": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C13": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C14": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C15": {
+                "weight": 0.02,
+                "source": "CAD"
+            }    
+        },
+
+        "lock_mechanism": {
+ 
+            "C1": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C2": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C3": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C4": {
+                "weight": 0.02,
+                "source": "CAD"
+            },
+
+            "C5": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C6": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C7": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C8": {
+                "weight": 0.15,
+                "source": "CAD"
+            },  
+            
+            "C9": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C10": {
+                "weight": 0.15,
+                "source": "CAD"
+            },            
+
+            "C11": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C12": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C13": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C14": {
+                "weight": 0.15,
+                "source": "CAD"
+            },
+
+            "C15": {
+                "weight": 0.15,
+                "source": "CAD"
+            }                
+        }
+    },
+
+    "power_screw": {
+        "diameter": 30
+    },
+
+    "gear_box":{
+        "weight":5,
+        "source":"CAD"
+    },
+
+    "motor": {
+        "weight":5,
+        "source":"CAD"
+    },
+
+
+    "key_numbers" : {
+        "C1": 4,
+        "C2": 4,
+        "C3": 4,
+        "C4": 4,
+        "C5": 4,
+        "C6": 4,
+        "C7": 4,
+        "C8": 4,
+        "C9": 4,
+        "C10": 4,
+        "C11": 8,
+        "C12": 8,
+        "C13": 8,
+        "C14": 8,
+        "C15": 8
+    }
+
+}

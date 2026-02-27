@@ -235,8 +235,8 @@
 
             <div class="level-item has-text-centered">
                 <div>
-                    <p class="heading">Mast Weight [Estimation] </p>
-                    <p class="title">{{ round($mastWeight, 0) }}</p>
+                    <p class="heading">Mast Lifted Weight / Mast Total Weight</p>
+                    <p class="title">{{ round($mastLiftedWeight, 0) }} / {{ round($mastWeight, 0) }}</p>
                     <p class="heading">kg</p>
                 </div>
             </div>

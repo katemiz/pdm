@@ -1,73 +1,66 @@
 {
     "bottom_structure":{
-        "C15":{
-            "welded_structure":{
-                "weight":13.9,
-                "source":"CAD"
-            },
-            "with_accessories":{
-                "weight":16.2,
-                "source":"CAD"
-            }
-        },
 
-        "C14":{
-            "welded_structure":{
-                "weight":12.6,
-                "source":"CAD"
-            },
-            "with_accessories":{
-                "weight":14.9,
-                "source":"CAD"
-            }
+        "C1": {
+            "welded_structure": { "weight": 0, "source": "regression" },
+            "with_accessories": { "weight": 0, "source": "regression" }
         },
-
-        "C13":{
-            "welded_structure":{
-                "weight":11.4,
-                "source":"CAD"
-            },
-            "with_accessories":{
-                "weight":13.6,
-                "source":"CAD"
-            }
+        "C2": {
+            "welded_structure": { "weight": 0, "source": "regression" },
+            "with_accessories": { "weight": 0, "source": "regression" }
         },
-
-        "C12":{
-            "welded_structure":{
-                "weight":10.3,
-                "source":"CAD"
-            },
-            "with_accessories":{
-                "weight":12.4,
-                "source":"CAD"
-            }
+        "C3": {
+            "welded_structure": { "weight": 0, "source": "regression" },
+            "with_accessories": { "weight": 0, "source": "regression" }
         },
-
-        "C11":{
-            "welded_structure":{
-                "weight":9.2,
-                "source":"CAD"
-            },
-            "with_accessories":{
-                "weight":11.3,
-                "source":"CAD"
-            }
+        "C4": {
+            "welded_structure": { "weight": 0, "source": "regression" },
+            "with_accessories": { "weight": 0, "source": "regression" }
         },
-
-        "C10":{
-            "welded_structure":{
-                "weight":9.2,
-                "source":"Regression"
-            },
-            "with_accessories":{
-                "weight":11.3,
-                "source":"Regression"
-            }
+        "C5": {
+            "welded_structure": { "weight": 0, "source": "regression" },
+            "with_accessories": { "weight": 0, "source": "regression" }
+        },
+        "C6": {
+            "welded_structure": { "weight": 0, "source": "regression" },
+            "with_accessories": { "weight": 0, "source": "regression" }
+        },
+        "C7": {
+            "welded_structure": { "weight": 0, "source": "regression" },
+            "with_accessories": { "weight": 0, "source": "regression" }
+        },
+        "C8": {
+            "welded_structure": { "weight": 5.7, "source": "regression" },
+            "with_accessories": { "weight": 7.8, "source": "regression" }
+        },
+        "C9": {
+            "welded_structure": { "weight": 6.8, "source": "regression" },
+            "with_accessories": { "weight": 8.9, "source": "regression" }
+        },
+        "C10": {
+            "welded_structure": { "weight": 8, "source": "regression" },
+            "with_accessories": { "weight": 10.1, "source": "regression" }
+        },
+        "C11": {
+            "welded_structure": { "weight": 9.2, "source": "CAD" },
+            "with_accessories": { "weight": 11.3, "source": "CAD" }
+        },
+        "C12": {
+            "welded_structure": { "weight": 10.3, "source": "CAD" },
+            "with_accessories": { "weight": 12.4, "source": "CAD" }
+        },
+        "C13": {
+            "welded_structure": { "weight": 11.4, "source": "CAD" },
+            "with_accessories": { "weight": 13.6, "source": "CAD" }
+        },
+        "C14": {
+            "welded_structure": { "weight": 12.6, "source": "CAD" },
+            "with_accessories": { "weight": 14.9, "source": "CAD" }
+        },
+        "C15": {
+            "welded_structure": { "weight": 13.9, "source": "CAD" },
+            "with_accessories": { "weight": 16.2, "source": "CAD" }
         }
-
-
-
 
     },
 
@@ -248,11 +241,11 @@
                 "source": "CAD"
             },
             "C11": {
-                "weight_m": 0.86,
+                "weight": 0.86,
                 "source": "CAD"
             },
             "C10": {
-                "weight_m": 0.82,
+                "weight": 0.82,
                 "source": "CAD"
             },
             "C9": {
@@ -861,7 +854,7 @@
             },
 
             "C4": {
-                "weight": 0.02,
+                "weight": 0.15,
                 "source": "CAD"
             },
 
@@ -923,7 +916,9 @@
     },
 
     "power_screw": {
-        "diameter": 30
+        "diameter": 30,
+        "density": 7850,
+        "source": "CAD"
     },
 
     "gear_box":{

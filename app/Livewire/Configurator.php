@@ -55,9 +55,9 @@ class Configurator extends Component
 
     public $error;
 
-    public $noOfMTTubes = 16; // quantity
+    public $noOfMTTubes = 15; // quantity
 
-    public $noOfActiveTubes = 16; // quantity
+    public $noOfActiveTubes = 15; // quantity
 
     public $allData = [];
 
@@ -153,11 +153,6 @@ class Configurator extends Component
             'area' => 5532.44,
             'inertia' => 78621879.48,
         ],
-        [
-            'no' => 16,
-            'area' => 6118.30,
-            'inertia' => 99656139.01,
-        ],
 
     ];
 
@@ -233,7 +228,9 @@ class Configurator extends Component
     public $thicknessIncrement = 0.2; // mm
 
     public $mastWeight = 0; // kg
+    public $mastLiftedWeight = 0; // kg
     public $mastWeightBreakdown = []; // kg
+
 
     public $maxPayloadCapacity = 1000; // kg
 
@@ -486,6 +483,8 @@ class Configurator extends Component
 
         $this->allData['maxPayloadCapacity'] = $this->maxPayloadCapacity; // kg
 
+        $this->allData['mastLiftedWeight'] = $this->mastLiftedWeight;
+
         $q = [
             $this->maxPayloadCapacity,
             $this->startTubeNo,
@@ -598,131 +597,18 @@ class Configurator extends Component
 
     public function calculateMastWeight()
     {
-        $this->mastWeight = 0;
-        $this->mastWeightBreakdown = [];
 
-        $tubesWeight = 0;
-
-        foreach ($this->mastTubes as $key => $value) {
-            $tubesWeight += $value['mass'] * $this->lengthMTTubes / 1000; // kg;
+        switch ($this->mastType) {
+            case 'MTPR':
+                $this->calculateMTPRMass();
+                break;
+            case 'MTWR':
+                $this->calculateMTWRMass();
+                break;
+            case 'MTNX':
+                $this->calculateMTNXMass();
+                break;
         }
-
-        $this->mastWeightBreakdown['tubes'] = $tubesWeight; // kg
-
-        // PNEUMATIC MAST EQUATIONS
-
-        if ($this->mastType == 'MTPR') {
-
-            // Base Fitting Interface
-            $this->mastWeightBreakdown['baseFlange'] = 0.755 * ($this->endTubeNo - 4) + 3.3; // kg
-
-            // Fixed Tube Head Flanges
-            $fixedFlangeWeight = 0;
-
-            foreach ($this->mastTubes as $key => $tube) {
-                $fixedFlangeWeight += 0.047 * ($tube['no'] - 10) + 0.8; // kg
-            }
-
-            $this->mastWeightBreakdown['fixedTubeHeadFlanges'] = $fixedFlangeWeight;
-
-            // Ring Holder Flanges
-            $ringHolderFlangeWeight = 0;
-
-            foreach ($this->mastTubes as $key => $tube) {
-
-                if ($tube['no'] != $this->endTubeNo) {
-                    $ringHolderFlangeWeight += 0.133 * ($tube['no'] - 8) + 2; // kg
-                }
-            }
-
-            $this->mastWeightBreakdown['ringHolderFlanges'] = $ringHolderFlangeWeight;
-
-            // Rings
-            $ringWeight = 0;
-            foreach ($this->mastTubes as $key => $tube) {
-
-                if ($tube['no'] != $this->endTubeNo) {
-                    $ringWeight += 0.157 * ($tube['no'] - 11) + 1.6; // kg
-                }
-            }
-
-            $this->mastWeightBreakdown['rings'] = $ringWeight;
-
-            // Ice Breakers
-            $iceBreakerWeight = 0;
-            foreach ($this->mastTubes as $key => $tube) {
-
-                if ($tube['no'] != $this->endTubeNo) {
-                    $iceBreakerWeight += 0.014 * ($tube['no'] - 11) + 0.3; // kg
-                }
-            }
-            $this->mastWeightBreakdown['iceBreakers'] = $iceBreakerWeight;
-
-            // Payload Adapter
-            $this->mastWeightBreakdown['payloadAdapter'] = 0.3 * ($this->startTubeNo - 9) + 2.9; // kg
-        }
-
-
-        if ($this->mastType == 'MTWR') {
-
-            // Fixed Tube Head Flanges
-            $fixedFlangeWeight = 0;
-
-            foreach ($this->mastTubes as $key => $tube) {
-                $fixedFlangeWeight += 0.0688 * ($tube['no'] - 6) + 0.35; // kg
-            }
-
-            $this->mastWeightBreakdown['fixedTubeHeadFlanges'] = $fixedFlangeWeight;
-
-            // Top Roller Holder Flanges
-            $topRollerHolderFlangeWeight = 0;
-
-            foreach ($this->mastTubes as $key => $tube) {
-
-                if ($tube['no'] != $this->endTubeNo) {
-                    $topRollerHolderFlangeWeight += 0.05556 * ($tube['no'] - 6) + 0.75; // kg
-                }
-            }
-
-            $this->mastWeightBreakdown['topRollerHolderFlanges'] = $topRollerHolderFlangeWeight;
-
-            //Roller Weights
-            $noOfRollers = count($this->mastTubes) *2;
-
-            $this->mastWeightBreakdown['rollerWeights'] = 0.12* $noOfRollers; // 0.12 kg/roller
-
-
-            // Base Adapter weight: Only one base adapter for MTWR
-            $this->mastWeightBreakdown['baseAdapter'] = 0.32225 * ($this->endTubeNo - 6) + 3.5; // kg
-
-
-            // Bottom Roller Holder Flanges
-            $bottomRollerHolderFlangeWeight = 0;
-
-            foreach ($this->mastTubes as $key => $tube) {
-
-                if ($tube['no'] != $this->endTubeNo) {
-                    $bottomRollerHolderFlangeWeight += 0.08889 * ($tube['no'] - 6) + 0.4; // kg
-                }
-            }
-
-            $this->mastWeightBreakdown['bottomRollerHolderFlanges'] = $bottomRollerHolderFlangeWeight;
-
-            // Fıxed Rollers Holder Part Weigts
-            $noOfFixedRollerHolderParts = (count($this->mastTubes) -2) *2;
-
-            $this->mastWeightBreakdown['fixedRollerHolderParts'] = 0.04 * $noOfFixedRollerHolderParts; // 0.04 kg/roller
-
-            // Payload Adapter
-            $this->mastWeightBreakdown['payloadAdapter'] = 0.3567 * ($this->startTubeNo - 6) + 1.74; // kg
-
-            // Steel Wire Weight
-            $wireLength = 2.05*count($this->mastTubes) * $this->lengthMTTubes / 1000; // meters
-            $this->mastWeightBreakdown['steelWire'] = 0.12 * $wireLength; // kg (2.5 kg/meter)
-        }
-
-
-        $this->mastWeight = array_sum($this->mastWeightBreakdown) * 1.05; // kg with 5% extra for bolts and nuts
 
         return true;
     }
@@ -750,10 +636,12 @@ class Configurator extends Component
         }
 
         if ($this->mastType == 'MTNX' ) {
+
+
+            $this->calculateMTNXMass();
+
             return round(min($minCriticalLoad, $this->capacity[$this->mastType]['maxPayload']), 0);
         }
-
-
 
     }
 
@@ -1080,6 +968,299 @@ class Configurator extends Component
         return $deflection; // NOTICE: Without 1/EI
     }
 
+
+
+
+
+
+    public function calculateMTPRMass()
+    {
+        $this->mastWeight = 0;
+        $this->mastWeightBreakdown = [];
+        $this->mastLiftedWeight = 0;
+
+        foreach ($this->mastTubes as $key => $section) {
+            $tube_weight = $section['mass'] * $this->lengthMTTubes / 1000; // kg
+            $this->mastWeightBreakdown['tubes'][$section['no']] = $tube_weight;
+            $this->mastWeight += $tube_weight; // kg;
+        }
+
+        // PNEUMATIC MAST EQUATIONS
+        // Base Fitting Interface
+        $this->mastWeightBreakdown['baseFlange'] = 0.755 * ($this->endTubeNo - 4) + 3.3; // kg
+
+        $this->mastWeight += $this->mastWeightBreakdown['baseFlange']; // kg;
+
+        // Fixed Tube Head Flanges
+        foreach ($this->mastTubes as $key => $tube) {
+            $fixedFlangeWeight = 0.047 * ($tube['no'] - 10) + 0.8; // kg
+            $this->mastWeightBreakdown['fixedTubeHeadFlanges'][$tube['no']] = $fixedFlangeWeight; // kg
+            $this->mastWeight += $fixedFlangeWeight; // kg;
+        }
+
+        // Ring Holder Flanges
+        foreach ($this->mastTubes as $key => $tube) {
+            if ($tube['no'] != $this->endTubeNo) {
+                $ringHolderFlangeWeight = 0.133 * ($tube['no'] - 8) + 2; // kg
+                $this->mastWeightBreakdown['ringHolderFlanges'][$tube['no']] = $ringHolderFlangeWeight; // kg
+                $this->mastWeight += $ringHolderFlangeWeight; // kg 
+            }
+        }
+
+        // Rings
+        foreach ($this->mastTubes as $key => $tube) {
+            if ($tube['no'] != $this->endTubeNo) {
+                $ringWeight = 0.157 * ($tube['no'] - 11) + 1.6; // kg
+                $this->mastWeightBreakdown['rings'][$tube['no']] = $ringWeight; // kg
+                $this->mastWeight += $ringWeight; // kg
+            }
+        }
+
+
+        // Ice Breakers
+        foreach ($this->mastTubes as $key => $tube) {
+            if ($tube['no'] != $this->endTubeNo) {
+                $iceBreakerWeight = 0.014 * ($tube['no'] - 11) + 0.3; // kg
+                $this->mastWeightBreakdown['iceBreakers'][$tube['no']] = $iceBreakerWeight; // kg
+                $this->mastWeight += $iceBreakerWeight; // kg
+            }
+        }
+
+        // Payload Adapter
+        $this->mastWeightBreakdown['payloadAdapter'] = 0.3 * ($this->startTubeNo - 9) + 2.9; // kg
+        $this->mastWeight += $this->mastWeightBreakdown['payloadAdapter']* 1.05; // kg with 5% extra for bolts and nuts
+
+        return true;
+    }
+
+
+    public function calculateMTWRMass()
+    {
+        $this->mastWeight = 0;
+        $this->mastWeightBreakdown = [];
+        $this->mastLiftedWeight = 0;
+
+        foreach ($this->mastTubes as $key => $tube) {
+            $tube_weight = $tube['mass'] * $this->lengthMTTubes / 1000; // kg
+            $this->mastWeightBreakdown['tubes'][$tube['no']] = $tube_weight;
+            $this->mastWeight += $tube_weight; // kg;
+        }
+
+        // WIRE ROPE MAST EQUATIONS
+        // Fixed Tube Head Flanges
+        foreach ($this->mastTubes as $key => $tube) {
+            $fixedFlangeWeight = 0.0688 * ($tube['no'] - 6) + 0.35; // kg
+            $this->mastWeightBreakdown['fixedTubeHeadFlanges'][$tube['no']] = $fixedFlangeWeight; // kg
+            $this->mastWeight += $fixedFlangeWeight; // kg;
+        }
+
+        // Top Roller Holder Flanges
+        foreach ($this->mastTubes as $key => $tube) {
+
+            if ($tube['no'] != $this->endTubeNo) {
+                $topRollerHolderFlangeWeight = 0.05556 * ($tube['no'] - 6) + 0.75; // kg
+                $this->mastWeightBreakdown['topRollerHolderFlanges'][$tube['no']] = $topRollerHolderFlangeWeight; // kg
+                $this->mastWeight += $topRollerHolderFlangeWeight; // kg;
+            }
+        }
+
+        //Roller Weights
+        $noOfRollers = count($this->mastTubes) *2;
+
+        $this->mastWeightBreakdown['rollerWeights'] = 0.12* $noOfRollers; // 0.12 kg/roller
+        $this->mastWeight += $this->mastWeightBreakdown['rollerWeights']; // kg;
+
+        // Base Adapter weight: Only one base adapter for MTWR
+        $this->mastWeightBreakdown['baseAdapter'] = 0.32225 * ($this->endTubeNo - 6) + 3.5; // kg
+        $this->mastWeight += $this->mastWeightBreakdown['baseAdapter']; // kg;
+
+        // Bottom Roller Holder Flanges
+        foreach ($this->mastTubes as $key => $tube) {
+
+            if ($tube['no'] != $this->endTubeNo) {
+                $bottomRollerHolderFlangeWeight = 0.08889 * ($tube['no'] - 6) + 0.4; // kg
+                $this->mastWeightBreakdown['bottomRollerHolderFlanges'][$tube['no']] = $bottomRollerHolderFlangeWeight; // kg
+                $this->mastWeight += $bottomRollerHolderFlangeWeight; // kg;
+            }
+        }
+
+        // Fixed Rollers Holder Part Weigts
+        $noOfFixedRollerHolderParts = (count($this->mastTubes) -2) *2;
+        $this->mastWeightBreakdown['fixedRollerHolderParts'] = 0.04 * $noOfFixedRollerHolderParts; // 0.04 kg/roller
+        $this->mastWeight += $this->mastWeightBreakdown['fixedRollerHolderParts']; // kg;
+
+        // Payload Adapter
+        $this->mastWeightBreakdown['payloadAdapter'] = 0.3567 * ($this->startTubeNo - 6) + 1.74; // kg
+        $this->mastWeight += $this->mastWeightBreakdown['payloadAdapter']* 1.05; // kg with 5% extra for bolts and nuts
+
+        // Steel Wire Weight
+        $wireLength = 2.05*count($this->mastTubes) * $this->lengthMTTubes / 1000; // meters
+        $this->mastWeightBreakdown['steelWire'] = 0.12 * $wireLength; // kg (2.5 kg/meter)
+        $this->mastWeight += $this->mastWeightBreakdown['steelWire']; // kg;
+
+        $this->mastWeight = $this->mastWeight * 1.05; // kg with 5% extra for bolts and nuts
+        return true;
+    }
+
+
+    public function calculateMTNXMass() {
+
+        $totalMass = 0;
+        $fixed_weight = 0;
+
+        $is_bottom_tube = false;
+        $is_top_tube = false;
+
+        $path = resource_path('js/mtnx_weight_data.json');
+        $json  = file_get_contents($path);
+        $mtnx_weight_data = json_decode($json, true);  // associative array
+
+        $weight_breakdown = [];
+
+        foreach ($this->mastTubes as $tube) {
+
+            // Check if the tube is the bottom tube
+            if ( $this->mastTubes["0"]["no"] === $tube["no"]) {
+                $is_bottom_tube = true;
+            } else {
+                $is_bottom_tube = false;
+            }
+
+            // Check if the tube is the top tube
+            if ( $this->mastTubes[count($this->mastTubes)-1]["no"] === $tube["no"]) {
+                $is_top_tube = true;
+            } else {
+                $is_top_tube = false;   
+            }
+
+            // Base Structure Mass Calculation
+            if ($is_bottom_tube) {
+                $base_structure_weight = $mtnx_weight_data['bottom_structure']['C'. $tube['no']]['with_accessories']['weight'];
+                $weight_breakdown['base_structure']['C'. $tube['no']] = $base_structure_weight;
+                $totalMass += $base_structure_weight;
+
+                $fixed_weight += $base_structure_weight;
+            }
+
+            // Tubes Weight Calculation
+            $tube_weight = $mtnx_weight_data['sections']['tubes']['C'. $tube['no']]['weight_m']*$this->allData["tubeLength"]/1000; // kg
+            $weight_breakdown['tubes']['C'. $tube['no']] = $tube_weight;
+            $totalMass += $tube_weight;
+
+            if ($is_bottom_tube) {
+                $fixed_weight += $tube_weight;
+            }
+
+            // Fixed Flange Weight Calculation
+            $fixed_flange_weight = $mtnx_weight_data['sections']['fixed_flange']['C'. $tube['no']]["average"]['weight'];
+            $weight_breakdown['fixed_flange']['C'. $tube['no']] = $fixed_flange_weight;
+            $totalMass += $fixed_flange_weight;
+
+            if ($is_bottom_tube) {
+                $fixed_weight += $fixed_flange_weight;
+            }
+
+            // Ice Breaker Mass Calculation
+            if (!$is_top_tube) {
+                $ice_breaker_weight = $mtnx_weight_data['sections']['ice_breaker']['C'. $tube['no']]['weight'];
+                $weight_breakdown['ice_breaker']['C'. $tube['no']] = $ice_breaker_weight;
+                $totalMass += $ice_breaker_weight;
+            }
+
+            if ($is_bottom_tube) {
+                $fixed_weight += $ice_breaker_weight;
+            }
+
+            // Power Screw Frame Breaker Mass Calculation
+            if (!$is_bottom_tube) {
+                $weight_breakdown['power_screw_frame']['C'. $tube['no']] = $mtnx_weight_data['sections']['power_screw_frame']['C'. $tube['no']]["assy"]['weight'];
+                $totalMass += $weight_breakdown['power_screw_frame']['C'. $tube['no']];
+            }
+
+            // Lower Key Guides Mass Calculation
+            if (!$is_bottom_tube) {
+                $numberOfLowerKeyGuides = $mtnx_weight_data['key_numbers']['C'. $tube['no']];
+                $weight_breakdown['lower_key_guides']['C'. $tube['no']] = $mtnx_weight_data['sections']['lower_key_guides']['C'. $tube['no']]['weight'] * $numberOfLowerKeyGuides;
+                $totalMass += $weight_breakdown['lower_key_guides']['C'. $tube['no']];
+            }
+            
+            // Upper Key Guides Mass Calculation
+            if (!$is_top_tube) {
+                $numberOfUpperKeyGuides = $mtnx_weight_data['key_numbers']['C'. $tube['no']];
+                $upper_keys_weight = $mtnx_weight_data['sections']['upper_key_guides']['C'. $tube['no']]['weight'] * $numberOfUpperKeyGuides;
+                $weight_breakdown['upper_key_guides']['C'. $tube['no']] = $upper_keys_weight;
+                $totalMass += $upper_keys_weight ;
+            }
+
+            if ($is_bottom_tube) {
+                $fixed_weight += $upper_keys_weight;
+            }
+            
+            // Euler Fixer Mass Calculation
+            if ($is_top_tube) {
+                $weight_breakdown['euler_fixer']['C'. $tube['no']] = $mtnx_weight_data['sections']['euler_fixer']['C'. $tube['no']]['weight'];
+                $totalMass += $weight_breakdown['euler_fixer']['C'. $tube['no']];
+            }
+
+            // Payload Interface Mass Calculation
+            if ($is_top_tube) {
+                $weight_breakdown['payload_interface']['C'. $tube['no']] = $mtnx_weight_data['sections']['payload_interface']['C'. $tube['no']]['weight'];
+                $totalMass += $weight_breakdown['payload_interface']['C'. $tube['no']];
+            }
+
+            // Lock Stopper Mass Calculation
+            if (!$is_bottom_tube) {
+                $weight_breakdown['lock_stopper_on_tubes']['C'. $tube['no']] = $mtnx_weight_data['sections']['lock_stopper_on_tubes']['C'. $tube['no']]['weight']*2;
+                $totalMass += $weight_breakdown['lock_stopper_on_tubes']['C'. $tube['no']];
+            }
+
+            // Lock Key Mass Calculation
+            if (!$is_top_tube) {
+                $weight_breakdown['lock_key']['C'. $tube['no']] = $mtnx_weight_data['sections']['lock_key']['C'. $tube['no']]['weight']*2; // 2 lock keys per tube
+                $totalMass += $weight_breakdown['lock_key']['C'. $tube['no']];
+            }
+
+            // Lock Mechanism Mass Calculation
+            if (!$is_top_tube && !$is_bottom_tube) {
+                $weight_breakdown['lock_mechanism']['C'. $tube['no']] = $mtnx_weight_data['sections']['lock_mechanism']['C'. $tube['no']]['weight']*2; // 2 lock mechanisms per tube
+                $totalMass += $weight_breakdown['lock_mechanism']['C'. $tube['no']];
+            }
+
+            if ($is_bottom_tube) {
+                $fixed_weight += $weight_breakdown['lock_key']['C'. $tube['no']];
+            }
+        }
+
+        // Power Screw Mass Calculation
+        $power_screw_length = ($this->allData['nestedHeight'] -75) / 1000; // Convert to meters
+        $power_screw_volume = pi() * pow($mtnx_weight_data['power_screw']['diameter']/1000, 2) / 4 * $power_screw_length; // Volume of the power screw in m3 (assuming diameter of 50mm)
+        $power_screw_mass = $power_screw_volume * $mtnx_weight_data['power_screw']['density']; // Mass of the power screw in kg (assuming density of steel is 7850 kg/m3)
+        $weight_breakdown['power_screw'] = $power_screw_mass*0.9; // 10% weight reduction for threads and undercuts the power screw
+        $totalMass += $weight_breakdown['power_screw'];
+
+        $fixed_weight += $weight_breakdown['power_screw'];
+
+        // Gear Box Mass Calculation
+        $weight_breakdown['gear_box'] = $mtnx_weight_data['gear_box']['weight'];
+        $totalMass += $weight_breakdown['gear_box'];
+
+        $fixed_weight += $weight_breakdown['gear_box'];
+
+        // Motor Mass Calculation
+        $weight_breakdown['motor'] = $mtnx_weight_data['motor']['weight'];
+        $totalMass += $weight_breakdown['motor'] ;
+
+        $fixed_weight += $weight_breakdown['motor'];
+
+
+        //dd($totalMass, $weight_breakdown);
+        $this->mastWeight = $totalMass;
+        $this->mastWeightBreakdown = $weight_breakdown;
+
+        $this->mastLiftedWeight = $totalMass - $fixed_weight; // kg
+
+        return true;
+    }
 
 
 

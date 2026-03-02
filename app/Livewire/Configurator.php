@@ -238,13 +238,16 @@ class Configurator extends Component
     public $capacity =[
 
         'MTPR' => [
+            'maxZLoad' => 700,
             'maxPayload' => 500,
             'minPayload' => 16,
             'maxExtendedHeight' => 25,
             'minExtendedHeight' => 3.0,
             'color' => 'blue',
         ],
+
         'MTWR' => [
+            'maxZLoad' => 700,
             'maxPayload' => 350,
             'minPayload' => 16,
             'maxExtendedHeight' => 25,
@@ -253,6 +256,7 @@ class Configurator extends Component
         ],
 
         'MTNX' => [
+            'maxZLoad' => 700,
             'maxPayload' => 550,
             'minPayload' => 50,
             'maxExtendedHeight' => 25,
@@ -908,11 +912,17 @@ class Configurator extends Component
 
     function CalculateDeflection(){
 
+
+        $maxZload = $this->capacity[$this->mastType]['maxZLoad'];
+
+        $moment_at_top_for_x = $maxZload * $this->xOffset / 1000; // Nm
+        $moment_at_top_for_z = $this->WindLoadOnPayload * ($this->extendedHeight+$this->zOffset) / 1000; // Nm
+
         //dd($this->mastTubes);
 
-        // foreach ($this->mastTubes as $key => $tube) {
+        foreach ($this->mastTubes as $key => $tube) {
 
-        // } 
+        } 
 
 
     } 

@@ -506,7 +506,15 @@
         @if ($has_material)
         <div class="column">
             <label class="label">Material</label>
-            <a href="/material/view/{{$malzeme_id}}" target="_blank">{{ $material_definition }}</a>
+
+            @if ($item->part_type == 'Detail' && $item->basePartId > 0)
+                <p>See Base Part</p>
+            @else
+                <a href="/material/view/{{$malzeme_id}}" target="_blank">{{ $material_definition }}</a>
+
+            @endif
+
+
         </div>
         @endif
 
@@ -514,11 +522,16 @@
         @if ($has_notes && $part_type != 'Standard')
         <div class="column content">
             <label class="label">General Part Notes</label>
-            <ol>
-                @foreach ($notes as $note)
-                <li>{{ $note->text_tr }}</li>
-                @endforeach
-            </ol>
+
+            @if ($item->part_type == 'Detail' && $item->basePartId > 0)
+                <p>See Base Part</p>
+            @else
+                <ol>
+                    @foreach ($notes as $note)
+                    <li>{{ $note->text_tr }}</li>
+                    @endforeach
+                </ol>
+            @endif
         </div>
         @endif
 

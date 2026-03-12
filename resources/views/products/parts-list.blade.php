@@ -63,6 +63,7 @@
     </nav>
 
     @if ($items->count() > 0)
+    
     <table class="table is-fullwidth has-background-lighter">
 
         <caption>{{ $items->total() }} {{ $items->total() > 1 ? ' Records' :' Record' }}</caption>
@@ -99,7 +100,6 @@
         <tbody>
 
             @foreach ($items as $record)
-                @if (strlen(trim($record->config_number)) < 1 )
                 <tr wire:key="{{ $record->id }}">
 
                     <td>{{ $record->full_part_number }}</td>
@@ -132,9 +132,15 @@
                             @case('Standard')
                             @case('MultipleConfigured')
 
-                                <a href="/details/{{ $record->part_type }}/view/{{ $record->id}}">
-                                    <span class="icon"><x-carbon-view/></span>
-                                </a>
+                                @if ($record->part_type == 'Detail' && $record->basePartId > 0)
+                                    <a href="/details/{{ $record->part_type }}/view/{{ $record->basePartId }}">
+                                        <span class="icon"><x-carbon-view/></span>
+                                    </a>
+                                @else
+                                    <a href="/details/{{ $record->part_type }}/view/{{ $record->id}}">
+                                        <span class="icon"><x-carbon-view/></span>
+                                    </a>
+                                @endif
                                 @break
 
                             @default
@@ -164,9 +170,16 @@
                                 @case('Standard')
                                 @case('MultipleConfigured')
 
-                                    <a href="/details/{{ $record->part_type }}/form/{{ $record->id}}">
-                                        <span class="icon"><x-carbon-edit /></span>
-                                    </a>
+                                    @if ($record->part_type == 'Detail' && $record->basePartId > 0)
+                                        <a href="/details/{{ $record->part_type }}/form/{{ $record->basePartId }}">
+                                            <span class="icon"><x-carbon-edit /></span>
+                                        </a>
+                                    @else
+                                        <a href="/details/{{ $record->part_type }}/form/{{ $record->id}}">
+                                            <span class="icon"><x-carbon-edit /></span>
+                                        </a>
+                                    @endif
+
                                     @break
 
                             @endswitch
@@ -177,7 +190,6 @@
                     </td>
 
                 </tr>
-                @endif
             @endforeach
 
         </tbody>

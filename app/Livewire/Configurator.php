@@ -318,7 +318,7 @@ class Configurator extends Component
         $this->WindLoadOnPayload();
         $this->getMastHeights();
         $this->calculateTubeWindLoads();
-        $this->CalculateDeflection();
+        //$this->CalculateDeflection();
 
 
 

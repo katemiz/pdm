@@ -12,6 +12,7 @@ class Configurator extends Component
 
     public $showModalTerrain = false;
     public $showModalOffsets = false;
+    public $showModalLoad    = false;
 
     public $modalType;
 
@@ -267,7 +268,7 @@ class Configurator extends Component
     ];
 
     public $capacityChartDataset = [
-        'datasets' => [] 
+        'datasets' => []
     ];
 
 
@@ -300,7 +301,7 @@ class Configurator extends Component
     public function render()
     {
 
-        $this->initializeHeadDimensison(); 
+        $this->initializeHeadDimensison();
 
         $this->error = null;
 
@@ -334,7 +335,6 @@ class Configurator extends Component
     {
         $this->modalType = $modalType;
 
-
         switch ($modalType) {
             case 'modalTerrain':
                 $this->showModalTerrain = ! $this->showModalTerrain;
@@ -342,6 +342,10 @@ class Configurator extends Component
             case 'modalOffsets':
                 $this->showModalOffsets = ! $this->showModalOffsets;
                 break;
+            case 'loadCalc':
+                $this->showModalLoad = ! $this->showModalLoad;
+                break;
+
         }
     }
 
@@ -458,7 +462,7 @@ class Configurator extends Component
 
     public function prepareAllData()
     {
-        $this->allData['mastType'] = $this->mastType; 
+        $this->allData['mastType'] = $this->mastType;
         $this->allData['xOffset'] = floatval($this->xOffset);
         $this->allData['zOffset'] = floatval($this->zOffset);
         $this->allData['extendedHeight'] = $this->extendedHeight;
@@ -498,7 +502,7 @@ class Configurator extends Component
             $this->headMTTubes,
             $this->windspeed,
             $this->sailarea,
-            $this->mastType 
+            $this->mastType
         ];
 
         $this->allData['qr'] = url('/engineering/configurator?qr=').implode('-', $q);
@@ -626,7 +630,7 @@ class Configurator extends Component
         // Divide by 10 and convert to kg
         $minCriticalLoad = round($minCriticalLoad / 98.1, 0); //
 
-        $minPressureLoad = collect($this->mastTubes)->min('pressureLoad'); // N 
+        $minPressureLoad = collect($this->mastTubes)->min('pressureLoad'); // N
 
         $this->maxPayloadCapacity = round(min($minCriticalLoad, 500), 0); // Critical load is divided : kg
 
@@ -652,7 +656,7 @@ class Configurator extends Component
 
 
     public function runCapacityChartData()
-    { 
+    {
 
         $maxHeight = collect($this->capacity)->pluck('maxExtendedHeight')->max();
         $xAxisData = range(0, $maxHeight) ;
@@ -670,8 +674,8 @@ class Configurator extends Component
                 ],
                 [
                     'x' => $capacityData['maxExtendedHeight'],
-                    'y' => $capacityData['minPayload']      
-                ] 
+                    'y' => $capacityData['minPayload']
+                ]
             ] ;
 
             $this->capacityChartDataset['labels'] = $xAxisData;
@@ -683,7 +687,7 @@ class Configurator extends Component
                 'borderColor' => $capacityData['color'],
             ]);
 
-        } 
+        }
     }
 
 
@@ -716,7 +720,7 @@ class Configurator extends Component
             17. Calculate Total Wind Force
         */
 
-        $this->calculateReferenceArea(); 
+        $this->calculateReferenceArea();
 
 
 
@@ -734,10 +738,10 @@ class Configurator extends Component
             $paramsArray["Ze"] = $Ze;
 
             // Terrain Factor kr
-            $Z0 = $this->terrainCategory[$this->activeTerrainCategory]["z0"]; // Roughness length in meters 
+            $Z0 = $this->terrainCategory[$this->activeTerrainCategory]["z0"]; // Roughness length in meters
             $kr = 0.19 * pow($Z0/0.05, 0.07);
             $paramsArray["kr"] = $kr;
-            
+
             // Roughness factor cr(ze) at the reference height
             $maxHeight = max($Ze ,$this->terrainCategory[$this->activeTerrainCategory]["zmin"]);
             $Cr = $kr * log($maxHeight / $Z0); // Roughness factor at the reference height
@@ -746,7 +750,7 @@ class Configurator extends Component
             $paramsArray["maxHeight"] = $maxHeight;
 
             // Calculate the mean wind speed at the height of the tube
-            $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s  
+            $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s
             $paramsArray["Vm"] = $Vm;
 
             // Turbulence Intensity
@@ -756,7 +760,7 @@ class Configurator extends Component
             // Basic Velocity Pressure
             // Basic Velocity Pressure Formula: q = 0.5 * ρ * V^2
 
-            $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2 
+            $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2
             $paramsArray["BasicVelocityPressure"] = $q; // Basic velocity pressure in N/m2
 
             // Peak Velocity Pressure
@@ -787,7 +791,7 @@ class Configurator extends Component
 
             // Surface Roughness
             // Surface Roughness is taken as 0.1 for Aluminum coated tubes
-            $surfaceRoughness = 0.2; 
+            $surfaceRoughness = 0.2;
             $paramsArray["SurfaceRoughness"] = $surfaceRoughness; // Surface Roughness in mm
 
             // Effective Slenderness
@@ -812,7 +816,7 @@ class Configurator extends Component
 
             } else {
                 $end_effect_factor = 0.698573 + 0.001977401 * $effective_slenderness + 0.00008741341 * pow($effective_slenderness, 2) - 0.00000103591 * pow($effective_slenderness, 3); // For slenderness greater than 10
-            } 
+            }
 
             $paramsArray["EndEffectFactor"] = $end_effect_factor; // End Effect Factor (dimensionless)
 
@@ -856,15 +860,15 @@ class Configurator extends Component
             } else{
                 $refArea = $tube['od']* ($tube['length'] - $this->overlapMTTubes);
                 $this->mastTubes[$i]['windLoadActingZ'] =$tube['bottomCenterPointExtended'] + ($tube['length'] + $this->overlapMTTubes) / 2;
-            } 
+            }
 
             $this->mastTubes[$i]['referenceArea'] = $refArea/1000000;
         }
 
         //dd($this->mastTubes);
-    } 
-    
-    
+    }
+
+
 
 
 
@@ -922,10 +926,10 @@ class Configurator extends Component
 
         foreach ($this->mastTubes as $key => $tube) {
 
-        } 
+        }
 
 
-    } 
+    }
 
 
 
@@ -940,9 +944,9 @@ class Configurator extends Component
         $a : Distance from root to LOAD acting point
         $x : Distance at which deflection is calculated
         $l: Length of Beam
-        $P: Load in N   
+        $P: Load in N
 
-        $deflection : deflection value WITHOUT 1/EI 
+        $deflection : deflection value WITHOUT 1/EI
         */
 
         if ($x > 0 & $x < $a ) {
@@ -966,9 +970,9 @@ class Configurator extends Component
         y = Mx^2/[2EI]
 
         $x : Distance at which deflection is calculated
-        $M: Couple Moment at FREE end of cantilever beam   
+        $M: Couple Moment at FREE end of cantilever beam
 
-        $deflection : deflection value WITHOUT 1/EI 
+        $deflection : deflection value WITHOUT 1/EI
         */
 
         if ($x > 0 & $x < $a ) {
@@ -1013,7 +1017,7 @@ class Configurator extends Component
             if ($tube['no'] != $this->endTubeNo) {
                 $ringHolderFlangeWeight = 0.133 * ($tube['no'] - 8) + 2; // kg
                 $this->mastWeightBreakdown['ringHolderFlanges'][$tube['no']] = $ringHolderFlangeWeight; // kg
-                $this->mastWeight += $ringHolderFlangeWeight; // kg 
+                $this->mastWeight += $ringHolderFlangeWeight; // kg
             }
         }
 
@@ -1140,7 +1144,7 @@ class Configurator extends Component
             if ( $this->mastTubes[count($this->mastTubes)-1]["no"] === $tube["no"]) {
                 $is_top_tube = true;
             } else {
-                $is_top_tube = false;   
+                $is_top_tube = false;
             }
 
             // Base Structure Mass Calculation
@@ -1193,7 +1197,7 @@ class Configurator extends Component
                 $weight_breakdown['lower_key_guides']['C'. $tube['no']] = $mtnx_weight_data['sections']['lower_key_guides']['C'. $tube['no']]['weight'] * $numberOfLowerKeyGuides;
                 $totalMass += $weight_breakdown['lower_key_guides']['C'. $tube['no']];
             }
-            
+
             // Upper Key Guides Mass Calculation
             if (!$is_top_tube) {
                 $numberOfUpperKeyGuides = $mtnx_weight_data['key_numbers']['C'. $tube['no']];
@@ -1205,7 +1209,7 @@ class Configurator extends Component
             if ($is_bottom_tube) {
                 $fixed_weight += $upper_keys_weight;
             }
-            
+
             // Euler Fixer Mass Calculation
             if ($is_top_tube) {
                 $weight_breakdown['euler_fixer']['C'. $tube['no']] = $mtnx_weight_data['sections']['euler_fixer']['C'. $tube['no']]['weight'];

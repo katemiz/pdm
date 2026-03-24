@@ -227,7 +227,7 @@
 
             const tbody = document.getElementById('configTable');
 
-            tbody.innerHTML = '' 
+            tbody.innerHTML = ''
 
             const sortedODs = tubes.map(t => t.od).sort((a, b) => a - b);
             const minOD = sortedODs[0];
@@ -235,7 +235,7 @@
             const maxOD = sortedODs[sortedODs.length - 1];
 
             //const tbody = document.getElementById('tableBody');
-            
+
             tubes.forEach(tube => {
                 let suffix = "-";
                 if (tube.od === maxOD) suffix = "B";
@@ -374,14 +374,13 @@
 
     <table class="table is-fullwidth">
 
-
         <caption class="has-tex-cenetered subtitle">Wind Loads Data on Mast and Sections</caption>
 
         <thead>
             <tr>
                 <th>Section Definition</th>
                 <th class="has-text-right">Geometric Parameter</th>
-                <th class="has-text-right">Load</th>
+                <th class="has-text-right">Load <a wire:click="toggleModal('loadCalc')">?</a></th>
                 <th class="has-text-right">Load Acting Height</th>
             </tr>
         </thead>
@@ -392,23 +391,17 @@
                 <td class="has-text-right"> {{ sprintf("%.2f", round($tube["od"], 2)) }} mm</td>
                 <td class="has-text-right"> {{ round($tube["windForce"], 0) }} N</td>
                 <td class="has-text-right"> {{ round($tube["windLoadActingZ"], 1) }} mm</td>
-
             </tr>
-        @endforeach 
+        @endforeach
 
         <tr>
             <td> Payload </td>
             <td class="has-text-right"> {{ sprintf("%.2f", round($sailarea, 1)) }} m<sup>2</sup></td>
             <td class="has-text-right"> {{ round($allData["windLoadOnPayload"], 0) }} N</td>
             <td class="has-text-right"> {{ round($extendedHeight + $zOffset, 0) }} mm</td>
-
         </tr>
 
-
     </table>
-
-
-
 
     </div>
 
@@ -462,7 +455,45 @@
     </div>
 
 
+    {{-- LOADS CALCULATION DOCUMENTATION MODAL --}}
+    <div class="modal {{ $showModalLoad ? 'is-active' : '' }}" >
+        <div class="modal-background" wire:click="toggleModal('loadCalc')"></div>
+        <div class="modal-content box">
+            <h1 class="title">Load Calculation</h1>
 
+            <article class="message is-info my-6">
+            <div class="message-header has-background-grey-lighter">
+                Wind Load on Payloads
+            </div>
+            <div class="message-body has-background-white-bis">
+                Dynamic pressure formula is used to calculate wind load on payloads.
+            </div>
+            </article>
+
+            <article class="message">
+            <div class="message-header has-background-grey-lighter">
+                Wind Load Circular Mast Sections
+            </div>
+            <div class="message-body has-background-white-bis">
+
+                Eurocode 1: Actions on structures - Part 1-4: General actions - Wind actions<br>
+
+                <a href="https://www.phd.eng.br/wp-content/uploads/2015/12/en.1991.1.4.2005.pdf">
+                    EN 1991-1-4:2005+A1:2010 Section 7.9.2</a>
+                <br>
+                Cylindrical structures, isolated cylindrical elements<br>
+
+                All load calculations on mast sections are performed per above document.
+
+                <a href="https://eurocodeapplied.com/design/en1991/wind-force-cylinder">Eurocode Implementation</a>
+            </div>
+            </article>
+        </div>
+
+        <button class="modal-close is-large" aria-label="close"
+            wire:click="toggleModal('loadCalc')">
+        </button>
+    </div>
 
 
 

@@ -21,7 +21,7 @@
             let pLoads = new MastDraw(e.detail.data,'Loads');
             pLoads.run();
 
-            generateConfigTable(e.detail.data.mastTubes)
+            //generateConfigTable(e.detail.data.mastTubes)
         })
 
         async function exportToPdf() {
@@ -71,7 +71,12 @@
                 document.getElementById('divSectionConfigurations').classList.remove('is-hidden');
                 document.getElementById('liSectionConfigurations').classList.add('is-active');
 
+            } else if (jsGraphType === 'Deflection') {
+                document.getElementById('divDeflection').classList.remove('is-hidden');
+                document.getElementById('liDeflection').classList.add('is-active');
             }
+
+
         }
 
         let capacityChartDrawn = false;
@@ -120,7 +125,7 @@
 
 
 
-        function generateConfigTable(tubes) {
+        function SILgenerateConfigTable(tubes) {
 
             const tubeConfigs = [
                 { "config_suffix": "-", "description": "Movable Inner", "pipe_cuts_motor_gear": false, "keys_splines": true, "bottom_nut_rib": true, "locking_mechanism": true, "euler_part": false, "load_interface": false },
@@ -316,8 +321,9 @@
                 <a href="javascript:void(0)" onclick="toggleGraph('Nested')">Nested Position</a>
             </li>
 
-            <li id="liSectionConfigurations" >
-                <a href="javascript:void(0)" onclick="toggleGraph('SectionConfigurations')">Section Configurations</a>
+
+            <li id="liDeflection" >
+                <a href="javascript:void(0)" onclick="toggleGraph('Deflection')">Mast Deflection</a>
             </li>
 
         </ul>
@@ -343,28 +349,8 @@
             {{-- svg to be added dynamically here --}}
         </div>
 
-        <div id="divSectionConfigurations" class="is-hidden">
-
-            <table class="table is-fullwidth">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>OD (mm)</th>
-                        <th>Suffix</th>
-                        <th>Description</th>
-                        <th>Motor/Gear Cut</th>
-                        <th>Keys/Splines</th>
-                        <th>Nut Rib</th>
-                        <th>Lock Mech.</th>
-                        <th>Euler Part</th>
-                        <th>Load Int.</th>
-                    </tr>
-                </thead>
-                <tbody id="configTable">
-                {{-- section Contig Table to be added dynamically here --}}
-                </tbody>
-            </table>
-
+        <div id="divDeflection" class="is-hidden">
+            {{-- svg to be added dynamically here --}}
         </div>
 
     </div>
@@ -462,12 +448,12 @@
             <h1 class="title">Load Calculation</h1>
 
             <article class="message is-info my-6">
-            <div class="message-header has-background-grey-lighter">
-                Wind Load on Payloads
-            </div>
-            <div class="message-body has-background-white-bis">
-                Dynamic pressure formula is used to calculate wind load on payloads.
-            </div>
+                <div class="message-header has-background-grey-lighter">
+                    Wind Load on Payloads
+                </div>
+                <div class="message-body has-background-white-bis">
+                    Dynamic pressure formula is used to calculate wind load on payloads.
+                </div>
             </article>
 
             <article class="message">

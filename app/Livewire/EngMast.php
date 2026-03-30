@@ -75,7 +75,7 @@ class EngMast extends Component
 
     public $data;
     public $error;
-    public $modalType; 
+    public $modalType;
 
 
     public $realTubeData = [
@@ -162,20 +162,20 @@ class EngMast extends Component
             "inertia" => 99656139.01,
         ],
 
-    ];   
+    ];
 
 
 
 
     public $terrainCategory =[
 
-       "0" => [ 
+       "0" => [
             "no" => "0",
             "description" => "Sea or coastal area exposed to the open sea",
             "z0" => 0.003, // Roughness length in meters
             "zmin" => 1, // Minimum height in meters
         ],
-       "1" => [ 
+       "1" => [
             "no" => "I",
             "description" => "Lakes or flat and horizontal area with negligible vegetation and without obstacles",
             "z0" => 0.01, // Roughness length in meters
@@ -202,7 +202,7 @@ class EngMast extends Component
        ],
     ];
 
-    public $activeTerrainCategory = 2; // Default to category II 
+    public $activeTerrainCategory = 2; // Default to category II
 
 
     public function mount()
@@ -215,15 +215,15 @@ class EngMast extends Component
 
     public function render()
     {
-       $this->error = null; 
+       $this->error = null;
 
         if ($this->endTubeNo <= $this->startTubeNo) {
 
             $this->noOfActiveTubes = null;
-            $this->error = "End Tube Diameter must be greater than Start Tube Diameter"; 
+            $this->error = "End Tube Diameter must be greater than Start Tube Diameter";
         } else {
 
-            $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1; 
+            $this->noOfActiveTubes = $this->endTubeNo - $this->startTubeNo + 1;
         }
 
         switch ($this->action) {
@@ -485,7 +485,7 @@ class EngMast extends Component
 
     function toggleHelpModal($modalType) {
 
-        $this->modalType = $modalType; 
+        $this->modalType = $modalType;
         $this->showHelpModal = !$this->showHelpModal;
     }
 
@@ -496,7 +496,7 @@ class EngMast extends Component
         // M = σ * I / y
 
         $this->tubeData[$i]['momentBasic'] = $this->yieldStrength*pi()*(pow($od,4)-pow($id,4))/(32*$od*1000); // Nm
-        $this->tubeData[$i]['moment'] = $this->yieldStrength*$this->realTubeData[$i]['inertia']/(0.5*$od*1000); // Nm
+        $this->tubeData[$i]['moment_capacity'] = $this->yieldStrength*$this->realTubeData[$i]['inertia']/(0.5*$od*1000*$this->factorOfSafety); // Nm
 
         return true;
     }
@@ -570,11 +570,11 @@ class EngMast extends Component
         // E = Young's Modulus
         // I = Moment of Inertia
 
-       $this->tubeData[$i]['EI'] = $this->E*$this->realTubeData[$i]['inertia']; // Nmm2 
+       $this->tubeData[$i]['EI'] = $this->E*$this->realTubeData[$i]['inertia']; // Nmm2
 
         //return $this->E*$this->HollowTubeInertia($od,$id);
     }
-    
+
 
 
     function calculateTubeWindLoads() {
@@ -615,10 +615,10 @@ class EngMast extends Component
             $paramsArray["Ze"] = $Ze;
 
             // Terrain Factor kr
-            $Z0 = $this->terrainCategory[$this->activeTerrainCategory]["z0"]; // Roughness length in meters 
+            $Z0 = $this->terrainCategory[$this->activeTerrainCategory]["z0"]; // Roughness length in meters
             $kr = 0.19 * pow($Z0/0.05, 0.07);
             $paramsArray["kr"] = $kr;
-            
+
             // Roughness factor cr(ze) at the reference height
             $maxHeight = max($Ze ,$this->terrainCategory[$this->activeTerrainCategory]["zmin"]);
             $Cr = $kr * log($maxHeight / $Z0); // Roughness factor at the reference height
@@ -627,7 +627,7 @@ class EngMast extends Component
             $paramsArray["maxHeight"] = $maxHeight;
 
             // Calculate the mean wind speed at the height of the tube
-            $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s  
+            $Vm = $Cr * $this->windspeed / 3.6; // Convert to m/s
             $paramsArray["Vm"] = $Vm;
 
             // Turbulence Intensity
@@ -637,7 +637,7 @@ class EngMast extends Component
             // Basic Velocity Pressure
             // Basic Velocity Pressure Formula: q = 0.5 * ρ * V^2
 
-            $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2 
+            $q = 0.5 * $this->airdensity * pow($this->windspeed / 3.6, 2); // Basic velocity pressure in N/m2
             $paramsArray["BasicVelocityPressure"] = $q; // Basic velocity pressure in N/m2
 
             // Peak Velocity Pressure
@@ -668,7 +668,7 @@ class EngMast extends Component
 
             // Surface Roughness
             // Surface Roughness is taken as 0.1 for Aluminum coated tubes
-            $surfaceRoughness = 0.2; 
+            $surfaceRoughness = 0.2;
             $paramsArray["SurfaceRoughness"] = $surfaceRoughness; // Surface Roughness in mm
 
             // Effective Slenderness
@@ -693,7 +693,7 @@ class EngMast extends Component
 
             } else {
                 $end_effect_factor = 0.698573 + 0.001977401 * $effective_slenderness + 0.00008741341 * pow($effective_slenderness, 2) - 0.00000103591 * pow($effective_slenderness, 3); // For slenderness greater than 10
-            } 
+            }
 
             $paramsArray["EndEffectFactor"] = $end_effect_factor; // End Effect Factor (dimensionless)
 

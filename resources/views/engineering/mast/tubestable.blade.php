@@ -4,14 +4,18 @@
     <thead>
         <tr>
             <th class="has-text-left font-bold">#</th>
-            <th class="has-text-right">OD</th>
-            <th class="has-text-right">ID</th>
-            <th class="has-text-right">THK</th>
-            <th class="has-text-right">Mass <br>(per m)</th>
-            <th class="has-text-right">Moment<br>Capacity</th>
+            <th class="has-text-right">OD<br>(mm)</th>
+            <th class="has-text-right">ID<br>(mm)</th>
+            <th class="has-text-right">THK<br>(mm)</th>
+            <th class="has-text-right">Mass <br>(kg/m)</th>
+            <th class="has-text-right">
+                Moment<br>Capacity<br>
+                <span class="is-size-7">(Factor of Safety : {{$factorOfSafety}})</span>
+                <br>(Nm)
+            </th>
 
             @if ($action == 'deflection')
-                <th class="has-text-right">Wind<br>Load</th>
+                <th class="has-text-right">Wind<br>Load<br></th>
             @endif
 
             <th class="has-text-centered has-background-white-ter" colspan="2">Pneumatic<br>Load Capacity<sup>(1)</sup>
@@ -57,11 +61,11 @@
                     <th>
                         <a wire:click="GetMore({{ $i }})">MT-{{ sprintf("%02d", $i + 1) }}</a>
                     </th>
-                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["od"], 2)) }} mm</td>
-                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["id"], 2)) }} mm</td>
-                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["thk"], 2)) }} mm</td>
-                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["mass"], 2)) }} kg/m</td>
-                    <td class="has-text-right">{{ round($tube["moment"], 0) }} Nm</td>
+                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["od"], 2)) }}</td>
+                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["id"], 2)) }}</td>
+                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["thk"], 2)) }}</td>
+                    <td class="has-text-right">{{ sprintf("%.2f", round($tube["mass"], 2)) }}</td>
+                    <td class="has-text-right">{{ round($tube["moment_capacity"], 0) }} Nm</td>
 
                     @if ($action == 'deflection')
                         <td class="has-text-right">{{ round($tube["windForce"], 0) }} N</td>

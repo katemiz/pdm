@@ -64,7 +64,7 @@ export default class MastDraw {
             this.data.mastTubes.forEach(tube => {
                 this.drawGuying(tube);
             });
-        } 
+        }
 
         // DIM TEXT LINES
         this.data.mastTubes.forEach(tube => {
@@ -90,7 +90,7 @@ export default class MastDraw {
         if (this.svgId === 'Loads') {
             this.drawLoadArrows()
             this.drawSideAdapter()
-        } 
+        }
 
         localStorage.setItem('data', JSON.stringify(this.data))
 
@@ -290,11 +290,11 @@ export default class MastDraw {
 
         this.g.appendChild(l)
 
-        // Load Arrow on Payload 
+        // Load Arrow on Payload
         this.drawArrowHead (0,this.data.extendedHeight+this.data.zOffset* 0.2,this.data.windLoadOnPayload * factor,'left', '#cc1f45ff')
 
         this.data.mastTubes.forEach(tube => {
-            
+
             let l = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
             l.setAttribute('x1', this.getSvgX(0))
@@ -312,15 +312,15 @@ export default class MastDraw {
             this.drawArrowHead (0,tube.windLoadActingZ,arrowLength,'left', '#cc1f45ff')
 
         });
-    } 
+    }
 
 
 
     drawSideAdapter() {
 
-        this.drawArrowHead (0,this.data.mastTubes[0].length*0.9,3*this.data.mastTubes[0].od,'left', '#0add50ff')
+        this.drawArrowHead (0,this.data.sideAdapterZ,3*this.data.mastTubes[0].od,'left', '#0add50ff')
         return true
-    } 
+    }
 
 
     drawArrowHead (x,y,length,direction = 'left', color='#0add50ff') {
@@ -333,7 +333,7 @@ export default class MastDraw {
 
             y1 = y + 0.25 * length
             y2 = y - 0.25 * length
-        } 
+        }
 
 
         if ( direction == 'toRight'){
@@ -342,7 +342,7 @@ export default class MastDraw {
 
             y1 = y + 0.25 * length
             y2 = y - 0.25 * length
-        } 
+        }
 
         let points = this.getSvgX(x) + ',' + this.getSvgY(y) + ' ' + this.getSvgX(x1) + ',' + this.getSvgY(y1) + ' ' + this.getSvgX(x1) + ',' + this.getSvgY(y2)
 
@@ -355,7 +355,7 @@ export default class MastDraw {
         p.setAttribute('stroke-width', '0.11')
 
         this.g.appendChild(p)
-    } 
+    }
 
 
 
@@ -598,13 +598,13 @@ export default class MastDraw {
 
 
 
-    drawGuying(tube) { 
+    drawGuying(tube) {
 
         let r = document.createElementNS('http://www.w3.org/2000/svg', 'line')
 
         const x1 = this.x0 - tube.od / 2
         const y1 = this.totalH - (tube.bottomCenterPointExtended + this.y0 + parseInt(tube.length))
-        const y2 = this.totalH - (this.y0)  
+        const y2 = this.totalH - (this.y0)
 
         const x2 = this.totalH * 0.1
 
@@ -617,7 +617,7 @@ export default class MastDraw {
         r.setAttribute('stroke-width', '0.8')
 
         this.g.appendChild(r)
-    } 
+    }
 
 
 
@@ -811,7 +811,7 @@ export default class MastDraw {
 
         //console.log('X',result)
         return result
-    } 
+    }
 
     getSvgY(y){
 
@@ -819,7 +819,7 @@ export default class MastDraw {
         //console.log('y = > Y',y,result,this.totalH,this.y0)
 
         return result
-    } 
+    }
 
 
 
